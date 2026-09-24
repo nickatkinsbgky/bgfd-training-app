@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BGFD Training Performance App</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d;
+    --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 "Segoe UI", system-ui, sans-serif; }
+  header {
+    background: linear-gradient(90deg,#3b0a0a,#1a0a0a 40%,#0d1117);
+    border-bottom:3px solid var(--gold);
+    padding:14px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .badge { width:44px; height:44px; border-radius:50%; background:#7a1212; border:2px solid var(--gold);
+    display:grid; place-items:center; font-weight:800; color:var(--gold); }
+  h1 { margin:0; font-size:18px; }
+  h1 span { display:block; font-size:12px; color:var(--muted); font-weight:500; }
+  nav { display:flex; gap:6px; margin-left:auto; flex-wrap:wrap; }
+  nav button {
+    background:transparent; color:var(--text); border:1px solid var(--line); border-radius:6px;
+    padding:8px 12px; cursor:pointer; font-weight:600;
+  }
+  nav button.active { background:var(--red); border-color:var(--red); }
+  nav button:hover { border-color:var(--gold); }
+  main { padding:18px 22px 48px; max-width:1280px; margin:0 auto; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:16px; }
+  h2 { margin:0 0 12px; font-size:16px; color:var(--gold); }
+  label { display:block; font-size:12px; color:var(--muted); margin:8px 0 4px; }
+  input, select, textarea {
+    width:100%; background:var(--panel2); color:var(--text); border:1px solid var(--line);
+    border-radius:6px; padding:8px 10px;
+  }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px 14px; }
+  .btn { background:var(--red); color:#fff; border:0; border-radius:6px; padding:9px 16px; font-weight:700; cursor:pointer; }
+  .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); }
+  .btn.gold { background:var(--gold); color:#1a1200; }
+  .btn.sm { padding:4px 8px; font-size:12px; }
+  .row-actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; vertical-align:top; }
+  th { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.4px; }
+  tr:hover td { background:#1f2633; }
+  .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
+  .Completed { background:#16351f; color:#3fb950; }
+  .InProgress { background:#132f4c; color:#58a6ff; }
+  .NotStarted { background:#2d333b; color:#8b949e; }
+  .AtRisk { background:#3d2a00; color:#e3b341; }
+  .Overdue { background:#3d1111; color:#ff7b72; }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:16px; }
+  .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  .kpi b { display:block; font-size:22px; color:var(--gold); }
+  .kpi span { color:var(--muted); font-size:12px; }
+  .muted { color:var(--muted); }
+  .split { display:grid; grid-template-columns:280px 1fr; gap:16px; }
+  @media (max-width:860px){ .split { grid-template-columns:1fr; } }
+  .plist { max-height:70vh; overflow:auto; }
+  .plist button { width:100%; text-align:left; background:transparent; color:var(--text); border:0;
+    border-bottom:1px solid var(--line); padding:8px 6px; cursor:pointer; }
+  .plist button:hover, .plist button.on { background:#2a1313; }
+  .plist small { color:var(--muted); display:block; }
+  .cat-block { margin-top:18px; }
+  .note { font-size:12px; color:var(--muted); margin-top:8px; }
+  .ok { color:#3fb950; } .no { color:#ff7b72; }
+  .chart-wrap { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px; margin:12px 0 18px; position:relative; height:320px; }
+  .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:900px){ .chart-grid { grid-template-columns:1fr; } }
+  .tag { display:inline-flex; align-items:center; gap:8px; background:var(--panel2); border:1px solid var(--line);
+    border-radius:999px; padding:6px 10px; margin:4px; }
+  dialog { border:1px solid var(--line); border-radius:10px; background:var(--panel); color:var(--text); padding:18px; width:min(720px,94vw); }
+  dialog::backdrop { background:rgba(0,0,0,.6); }
+  .warn { color:#ff7b72; font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">FD</div>
+  <h1>Bowling Green Fire Department<span>Training Division • Personnel Performance App</span></h1>
+  <nav>
+    <button class="active" data-tab="input">Enter / edit</button>
+    <button data-tab="person">By personnel</button>
+    <button data-tab="personavg">Person averages</button>
+    <button data-tab="dept">Department averages</button>
+    <button data-tab="charts">Charts</button>
+    <button data-tab="cats">Categories</button>
+    <button data-tab="roster">Roster / catalog</button>
+  </nav>
+</header>
+<main>
+  <section id="tab-input" class="card">
+    <h2 id="form-title">Log an assignment / evolution</h2>
+    <p class="muted" id="form-hint">Pick a member and task, then enter status and times. Saved in this browser.</p>
+    <input type="hidden" id="f-id" />
+    <div class="grid">
+      <div><label>Personnel</label><input list="dl-people" id="f-person" placeholder="Last, First" /></div>
+      <div><label>Task</label><select id="f-task"></select></div>
+      <div><label>Category</label><select id="f-cat"></select></div>
+      <div><label>Status</label>
+        <select id="f-status">
+          <option>Completed</option><option>In Progress</option><option>Not Started</option>
+          <option>At Risk</option><option>Overdue</option>
+        </select>
+      </div>
+      <div><label>Priority</label>
+        <select id="f-priority"><option></option><option>High</option><option>Medium</option><option>Low</option></select>
+      </div>
+      <div><label>Date due</label><input type="date" id="f-due" /></div>
+      <div><label>Date completed</label><input type="date" id="f-done" /></div>
+      <div><label>Completion time (mm:ss or hh:mm:ss)</label><input id="f-ctime" placeholder="01:24" /></div>
+      <div><label>Department standard time</label><input id="f-std" placeholder="00:01:00" /></div>
+      <div><label>Notes</label><input id="f-notes" /></div>
+    </div>
+    <div class="row-actions">
+      <button class="btn" id="btn-save">Save assignment</button>
+      <button class="btn ghost" id="btn-reset">New record</button>
+      <button class="btn ghost" id="btn-delete" hidden>Delete this record</button>
+      <button class="btn gold" id="btn-export">Export JSON</button>
+      <button class="btn ghost" id="btn-import">Import JSON</button>
+      <input type="file" id="file-import" accept="application/json" hidden />
+    </div>
+    <p class="note" id="save-msg"></p>
+    <div class="cat-block">
+      <h2>Recent / all assignments</h2>
+      <div class="grid" style="max-width:560px">
+        <div><label>Filter by person</label><input list="dl-people" id="list-person" placeholder="All people" /></div>
+        <div><label>Filter by task</label><input id="list-task" placeholder="All tasks" /></div>
+      </div>
+      <div style="overflow:auto;max-height:420px;margin-top:10px" id="all-table"></div>
+    </div>
+  </section>
+
+  <section id="tab-person" class="card" hidden>
+    <h2>All data by category • by personnel</h2>
+    <div class="split">
+      <div>
+        <input id="p-search" placeholder="Filter roster…" />
+        <div class="plist" id="p-list"></div>
+      </div>
+      <div id="p-detail"><p class="muted">Select a name.</p></div>
+    </div>
+  </section>
+
+  <section id="tab-personavg" class="card" hidden>
+    <h2>Averages by category • by personnel</h2>
+    <div class="grid" style="max-width:420px">
+      <div><label>Personnel</label><input list="dl-people" id="a-person" /></div>
+    </div>
+    <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
+    <div id="a-out"></div>
+  </section>
+
+  <section id="tab-dept" class="card" hidden>
+    <h2>Department averages by category</h2>
+    <div class="chart-wrap"><canvas id="chart-dept-avg"></canvas></div>
+    <div id="d-out"></div>
+  </section>
+
+  <section id="tab-charts" class="card" hidden>
+    <h2>Interactive charts</h2>
+    <div class="grid" style="max-width:640px">
+      <div><label>Person (optional — leave blank for department)</label><input list="dl-people" id="c-person" /></div>
+      <div><label>Category filter</label><select id="c-cat"><option value="">All categories</option></select></div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-compare"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-status"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-met"></canvas></div>
+    </div>
+    <p class="note">Hover a point or bar for the exact time. Trend charts sort by date completed. Lower minutes = faster.</p>
+  </section>
+
+  <section id="tab-cats" class="card" hidden>
+    <h2>Categories</h2>
+    <p class="muted">Add, rename, or delete categories. Deleting asks where existing tasks and assignments should move.</p>
+    <div class="grid" style="max-width:720px">
+      <div><label>New category name</label><input id="cat-new" placeholder="e.g. Truck Operations" /></div>
+      <div style="align-self:end"><button class="btn" id="btn-add-cat">Add category</button></div>
+    </div>
+    <div id="cat-list" style="margin-top:14px"></div>
+  </section>
+
+  <section id="tab-roster" class="card" hidden>
+    <h2>Roster and task catalog</h2>
+    <input type="hidden" id="n-orig-person" />
+    <div class="grid">
+      <div><label>Person (Last, First)</label><input id="n-name" placeholder="Last, First" /></div>
+      <div><label>Rank</label><input id="n-rank" /></div>
+      <div><label>Active</label>
+        <select id="n-active"><option>Yes</option><option>No</option></select>
+      </div>
+      <div><label>Notes</label><input id="n-pnotes" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-person">Save person</button>
+        <button class="btn ghost" id="btn-reset-person">New person</button>
+        <button class="btn" id="btn-delete-person" hidden>Delete person</button>
+      </div>
+    </div>
+    <p class="note" id="person-msg"></p>
+    <div class="grid" style="margin-top:10px">
+      <input type="hidden" id="n-orig-task" />
+      <div><label>Task name</label><input id="n-task" /></div>
+      <div><label>Category</label><select id="n-cat"></select></div>
+      <div><label>Standard time</label><input id="n-std" placeholder="00:01:00" /></div>
+      <div><label>Task ID</label><input id="n-tid" placeholder="auto" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-task">Save task</button>
+        <button class="btn ghost" id="btn-reset-task">New task</button>
+        <button class="btn" id="btn-delete-task" hidden>Delete task</button>
+      </div>
+    </div>
+    <p class="note" id="task-msg"></p>
+    <div id="r-out" style="margin-top:16px"></div>
+  </section>
+</main>
+<datalist id="dl-people"></datalist>
+
+<dialog id="dlg-del-task">
+  <h2>Delete task</h2>
+  <p id="dlg-del-task-msg"></p>
+  <label>Reassign existing assignment rows to</label>
+  <select id="dlg-task-move"></select>
+  <p class="warn">Choose the same task only if you intend to remove those rows instead — pick another task to keep the times under a new name, or leave blank and confirm to delete the rows.</p>
+  <div class="row-actions">
+    <button class="btn" id="dlg-confirm-del-task">Delete task</button>
+    <button class="btn ghost" id="dlg-cancel-del-task">Cancel</button>
+  </div>
+</dialog>
+
+<dialog id="dlg-del-person">
+  <h2>Delete personnel</h2>
+  <p id="dlg-del-person-msg"></p>
+  <label>Reassign existing assignment rows to</label>
+  <select id="dlg-person-move"></select>
+  <p class="warn">Leave blank to delete that person’s assignment rows. Pick another name to keep the times under a different person.</p>
+  <div class="row-actions">
+    <button class="btn" id="dlg-confirm-del-person">Delete person</button>
+    <button class="btn ghost" id="dlg-cancel-del-person">Cancel</button>
+  </div>
+</dialog>
+
+<dialog id="dlg-del-cat">
+  <h2>Delete category</h2>
+  <p id="dlg-del-msg"></p>
+  <label>Move existing items to</label>
+  <select id="dlg-move-to"></select>
+  <div class="row-actions">
+    <button class="btn" id="dlg-confirm-del">Delete and move</button>
+    <button class="btn ghost" id="dlg-cancel-del">Cancel</button>
+  </div>
+</dialog>
+
+<script src="seed.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
