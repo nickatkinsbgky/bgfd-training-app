@@ -133,6 +133,7 @@
       <div style="overflow:auto;max-height:420px;margin-top:10px" id="all-table"></div>
     </div>
   </section>
+
   <section id="tab-person" class="card" hidden>
     <h2>All data by category • by personnel</h2>
     <div class="split">
@@ -143,6 +144,7 @@
       <div id="p-detail"><p class="muted">Select a name.</p></div>
     </div>
   </section>
+
   <section id="tab-personavg" class="card" hidden>
     <h2>Averages by category • by personnel</h2>
     <div class="grid" style="max-width:420px">
@@ -151,11 +153,13 @@
     <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
     <div id="a-out"></div>
   </section>
+
   <section id="tab-dept" class="card" hidden>
     <h2>Department averages by category</h2>
     <div class="chart-wrap"><canvas id="chart-dept-avg"></canvas></div>
     <div id="d-out"></div>
   </section>
+
   <section id="tab-charts" class="card" hidden>
     <h2>Interactive charts</h2>
     <div class="grid" style="max-width:640px">
@@ -170,6 +174,7 @@
     </div>
     <p class="note">Hover a point or bar for the exact time. Trend charts sort by date completed. Lower minutes = faster.</p>
   </section>
+
   <section id="tab-cats" class="card" hidden>
     <h2>Categories</h2>
     <p class="muted">Add, rename, or delete categories. Deleting asks where existing tasks and assignments should move.</p>
@@ -179,6 +184,7 @@
     </div>
     <div id="cat-list" style="margin-top:14px"></div>
   </section>
+
   <section id="tab-roster" class="card" hidden>
     <h2>Roster and task catalog</h2>
     <input type="hidden" id="n-orig-person" />
@@ -213,6 +219,7 @@
   </section>
 </main>
 <datalist id="dl-people"></datalist>
+
 <dialog id="dlg-del-task">
   <h2>Delete task</h2>
   <p id="dlg-del-task-msg"></p>
@@ -224,6 +231,7 @@
     <button class="btn ghost" id="dlg-cancel-del-task">Cancel</button>
   </div>
 </dialog>
+
 <dialog id="dlg-del-person">
   <h2>Delete personnel</h2>
   <p id="dlg-del-person-msg"></p>
@@ -235,6 +243,7 @@
     <button class="btn ghost" id="dlg-cancel-del-person">Cancel</button>
   </div>
 </dialog>
+
 <dialog id="dlg-del-cat">
   <h2>Delete category</h2>
   <p id="dlg-del-msg"></p>
@@ -245,11 +254,753 @@
     <button class="btn ghost" id="dlg-cancel-del">Cancel</button>
   </div>
 </dialog>
-<script src="seed-personnel.js"></script>
-<script src="seed-tasks.js"></script>
-<script src="seed-assignments.js"></script>
-<script src="seed.js"></script>
-<script src="app-part1.js"></script>
-<script src="app-part2.js"></script>
+
+<script>
+const SEED = {"personnel": [{"fullName": "Adams, Jerry", "lastName": "Adams", "firstName": "Jerry", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Akins, Brad", "lastName": "Akins", "firstName": "Brad", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Anthony, Isaac", "lastName": "Anthony", "firstName": "Isaac", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Anthony, Levi", "lastName": "Anthony", "firstName": "Levi", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Ashley, Daniel", "lastName": "Ashley", "firstName": "Daniel", "rank": "BATTALION CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Atkins, Nick", "lastName": "Atkins", "firstName": "Nick", "rank": "TRAINING INSTRUCTOR", "active": "Yes", "notes": ""}, {"fullName": "Barnhart, Zach", "lastName": "Barnhart", "firstName": "Zach", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Barrick, Ayden", "lastName": "Barrick", "firstName": "Ayden", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Bates, Christopher", "lastName": "Bates", "firstName": "Christopher", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Bean, Michael", "lastName": "Bean", "firstName": "Michael", "rank": "BATTALION CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Blair, Dustin", "lastName": "Blair", "firstName": "Dustin", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Blair, Scott", "lastName": "Blair", "firstName": "Scott", "rank": "ADVANCED FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Britton, Chris", "lastName": "Britton", "firstName": "Chris", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Brooks, Jason", "lastName": "Brooks", "firstName": "Jason", "rank": "ASSISTANT CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Brooks, Justin", "lastName": "Brooks", "firstName": "Justin", "rank": "CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Brown, Mike", "lastName": "Brown", "firstName": "Mike", "rank": "PROJECT COORDINATOR", "active": "Yes", "notes": ""}, {"fullName": "Buchanon, Chris", "lastName": "Buchanon", "firstName": "Chris", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Burton, Cole", "lastName": "Burton", "firstName": "Cole", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Buselmeier, DJ", "lastName": "Buselmeier", "firstName": "DJ", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Bush, Alan", "lastName": "Bush", "firstName": "Alan", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Caffey, Brad", "lastName": "Caffey", "firstName": "Brad", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Calixte, Ketler", "lastName": "Calixte", "firstName": "Ketler", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Candela, Steve", "lastName": "Candela", "firstName": "Steve", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Cannon, Tyler", "lastName": "Cannon", "firstName": "Tyler", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Carter, David", "lastName": "Carter", "firstName": "David", "rank": "ADVANCED FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Carter, Tristen", "lastName": "Carter", "firstName": "Tristen", "rank": "RECRUIT", "active": "Yes", "notes": ""}, {"fullName": "Carver, Mark", "lastName": "Carver", "firstName": "Mark", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Cassady, Drew", "lastName": "Cassady", "firstName": "Drew", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Chandler, Bryce", "lastName": "Chandler", "firstName": "Bryce", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Chidester, John", "lastName": "Chidester", "firstName": "John", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Childress, Jarrid", "lastName": "Childress", "firstName": "Jarrid", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Clapp, Adam", "lastName": "Clapp", "firstName": "Adam", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Clark, Tim", "lastName": "Clark", "firstName": "Tim", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Cline, Brandon", "lastName": "Cline", "firstName": "Brandon", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Coleman, Steve", "lastName": "Coleman", "firstName": "Steve", "rank": "INSPECTION SUPERVISOR", "active": "Yes", "notes": ""}, {"fullName": "Compton, Dominique", "lastName": "Compton", "firstName": "Dominique", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Conner, Austin", "lastName": "Conner", "firstName": "Austin", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Cowles, Ryan", "lastName": "Cowles", "firstName": "Ryan", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Cranor, Logan", "lastName": "Cranor", "firstName": "Logan", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Crawford, Andy", "lastName": "Crawford", "firstName": "Andy", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Cross, Colton", "lastName": "Cross", "firstName": "Colton", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Daniels, Dalton", "lastName": "Daniels", "firstName": "Dalton", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Davis, Charles", "lastName": "Davis", "firstName": "Charles", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Dezern, Alan", "lastName": "Dezern", "firstName": "Alan", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Donnelly, Brian", "lastName": "Donnelly", "firstName": "Brian", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Donnelly, Justin", "lastName": "Donnelly", "firstName": "Justin", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Dukes, Mark", "lastName": "Dukes", "firstName": "Mark", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Durbin, Chris", "lastName": "Durbin", "firstName": "Chris", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Dylan, Matthew", "lastName": "Dylan", "firstName": "Matthew", "rank": "INVESTIGATOR", "active": "Yes", "notes": ""}, {"fullName": "Embrey, John", "lastName": "Embrey", "firstName": "John", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Embry, Andy", "lastName": "Embry", "firstName": "Andy", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Ennis, Chad", "lastName": "Ennis", "firstName": "Chad", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Estes, Stephen", "lastName": "Estes", "firstName": "Stephen", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Ferguson, Matt", "lastName": "Ferguson", "firstName": "Matt", "rank": "BATTALION CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Ferizovic, Esmir", "lastName": "Ferizovic", "firstName": "Esmir", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Flora, Greg", "lastName": "Flora", "firstName": "Greg", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Gaoa, Solomona", "lastName": "Gaoa", "firstName": "Solomona", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Gentry, Justin", "lastName": "Gentry", "firstName": "Justin", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Gerald, Ryan", "lastName": "Gerald", "firstName": "Ryan", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Gilliam, Brandon", "lastName": "Gilliam", "firstName": "Brandon", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Graves, Christen", "lastName": "Graves", "firstName": "Christen", "rank": "COMM RISK REDUCTION/ED COOR", "active": "Yes", "notes": ""}, {"fullName": "Graves, Ross", "lastName": "Graves", "firstName": "Ross", "rank": "INVESTIGATOR", "active": "Yes", "notes": ""}, {"fullName": "Green, Austin", "lastName": "Green", "firstName": "Austin", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Grenier, Madison", "lastName": "Grenier", "firstName": "Madison", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Hamilton, Sean", "lastName": "Hamilton", "firstName": "Sean", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Hampton, Kyle", "lastName": "Hampton", "firstName": "Kyle", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Harbin, Joe", "lastName": "Harbin", "firstName": "Joe", "rank": "BATTALION CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Harp, Angie", "lastName": "Harp", "firstName": "Angie", "rank": "OFFICE ASSOCIATE", "active": "Yes", "notes": ""}, {"fullName": "Harrell, Jonathan", "lastName": "Harrell", "firstName": "Jonathan", "rank": "ADVANCED FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Harvey, Mike", "lastName": "Harvey", "firstName": "Mike", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Hawkins, Dylan", "lastName": "Hawkins", "firstName": "Dylan", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Hawthorne, Bryce", "lastName": "Hawthorne", "firstName": "Bryce", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Hernandez, Joey", "lastName": "Hernandez", "firstName": "Joey", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Hochstetler, Merv", "lastName": "Hochstetler", "firstName": "Merv", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Hollis, Greg", "lastName": "Hollis", "firstName": "Greg", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Hope, Brian", "lastName": "Hope", "firstName": "Brian", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Houchins, Garrett", "lastName": "Houchins", "firstName": "Garrett", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Hulsey, Caleb", "lastName": "Hulsey", "firstName": "Caleb", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Hurt, Ben", "lastName": "Hurt", "firstName": "Ben", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Ibarra, Mario", "lastName": "Ibarra", "firstName": "Mario", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Jaggers, Brandon", "lastName": "Jaggers", "firstName": "Brandon", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "James, Kenny", "lastName": "James", "firstName": "Kenny", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "James, Phillip", "lastName": "James", "firstName": "Phillip", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Johnston, James", "lastName": "Johnston", "firstName": "James", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Jones, Bill", "lastName": "Jones", "firstName": "Bill", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Jones, Dustin", "lastName": "Jones", "firstName": "Dustin", "rank": "ASSISTANT CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Jones, Jack", "lastName": "Jones", "firstName": "Jack", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Jones, Matt", "lastName": "Jones", "firstName": "Matt", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Jones, Matthew", "lastName": "Jones", "firstName": "Matthew", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Jonker, Elyse", "lastName": "Jonker", "firstName": "Elyse", "rank": "EXECUTIVE ASSISTANT", "active": "Yes", "notes": ""}, {"fullName": "Justis, Dakota", "lastName": "Justis", "firstName": "Dakota", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Keown, Travis", "lastName": "Keown", "firstName": "Travis", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "King, Cary", "lastName": "King", "firstName": "Cary", "rank": "RECRUIT", "active": "Yes", "notes": ""}, {"fullName": "Kiser, Taylor", "lastName": "Kiser", "firstName": "Taylor", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Kozak, Bryan", "lastName": "Kozak", "firstName": "Bryan", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Lashley, Kevin", "lastName": "Lashley", "firstName": "Kevin", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Mahaney, Corey", "lastName": "Mahaney", "firstName": "Corey", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Martin, Sean", "lastName": "Martin", "firstName": "Sean", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "May, Keaton", "lastName": "May", "firstName": "Keaton", "rank": "ADVANCED FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Maynard, Jeremy", "lastName": "Maynard", "firstName": "Jeremy", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "McCarty, Ben", "lastName": "McCarty", "firstName": "Ben", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "McGuire, Jared", "lastName": "McGuire", "firstName": "Jared", "rank": "ADVANCED FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "McKee, Chase", "lastName": "McKee", "firstName": "Chase", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Meisel, Jason", "lastName": "Meisel", "firstName": "Jason", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Meredith, Carsen", "lastName": "Meredith", "firstName": "Carsen", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Meredith, Justin", "lastName": "Meredith", "firstName": "Justin", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Michael, Mason", "lastName": "Michael", "firstName": "Mason", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Miller, Marshall", "lastName": "Miller", "firstName": "Marshall", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Miller, Micheal", "lastName": "Miller", "firstName": "Micheal", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Mitchell, Kris", "lastName": "Mitchell", "firstName": "Kris", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Mock, Ben", "lastName": "Mock", "firstName": "Ben", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Montelli, Dylan", "lastName": "Montelli", "firstName": "Dylan", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Moore, William", "lastName": "Moore", "firstName": "William", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Morris, Doug", "lastName": "Morris", "firstName": "Doug", "rank": "DEPUTY CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Morrow, Jim", "lastName": "Morrow", "firstName": "Jim", "rank": "PROJECT COORDINATOR", "active": "Yes", "notes": ""}, {"fullName": "Moyers, Jon", "lastName": "Moyers", "firstName": "Jon", "rank": "ADVANCED FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Muniz-Allgeier, Samuel", "lastName": "Muniz-Allgeier", "firstName": "Samuel", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Napier, Curtis", "lastName": "Napier", "firstName": "Curtis", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Napier, Matt", "lastName": "Napier", "firstName": "Matt", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Napier, Todd", "lastName": "Napier", "firstName": "Todd", "rank": "INSPECTOR", "active": "Yes", "notes": ""}, {"fullName": "Napolitano, Tom", "lastName": "Napolitano", "firstName": "Tom", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Nickel, Dakota", "lastName": "Nickel", "firstName": "Dakota", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "O'Banion, Shane", "lastName": "O'Banion", "firstName": "Shane", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Orberson, Nick", "lastName": "Orberson", "firstName": "Nick", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Paredes, Miguel", "lastName": "Paredes", "firstName": "Miguel", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Parsley, William", "lastName": "Parsley", "firstName": "William", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Perkins, Nathan", "lastName": "Perkins", "firstName": "Nathan", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Perkinson, Alex", "lastName": "Perkinson", "firstName": "Alex", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Pierce, Dimitri", "lastName": "Pierce", "firstName": "Dimitri", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Pitchford, Brett", "lastName": "Pitchford", "firstName": "Brett", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Poland, Drake", "lastName": "Poland", "firstName": "Drake", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Potter, John", "lastName": "Potter", "firstName": "John", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Reckart, Josiah", "lastName": "Reckart", "firstName": "Josiah", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Reesy, Justin", "lastName": "Reesy", "firstName": "Justin", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Reynolds, Matt", "lastName": "Reynolds", "firstName": "Matt", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Rhoton, Luke", "lastName": "Rhoton", "firstName": "Luke", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Rich, Brittany", "lastName": "Rich", "firstName": "Brittany", "rank": "INSPECTOR", "active": "Yes", "notes": ""}, {"fullName": "Rodgers, Roy", "lastName": "Rodgers", "firstName": "Roy", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Ross, TJ", "lastName": "Ross", "firstName": "TJ", "rank": "ADVANCED FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Sanborn, Bob", "lastName": "Sanborn", "firstName": "Bob", "rank": "TRAINING INSTRUCTOR", "active": "Yes", "notes": ""}, {"fullName": "Scali, Mauro", "lastName": "Scali", "firstName": "Mauro", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Scott, Eric", "lastName": "Scott", "firstName": "Eric", "rank": "BATTALION CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Scott, Josh", "lastName": "Scott", "firstName": "Josh", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Shehan, Scotty", "lastName": "Shehan", "firstName": "Scotty", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Shuffett, Clayton", "lastName": "Shuffett", "firstName": "Clayton", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Shuffett, Zach", "lastName": "Shuffett", "firstName": "Zach", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Smith, Bret", "lastName": "Smith", "firstName": "Bret", "rank": "DEPUTY CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Smith, Jon", "lastName": "Smith", "firstName": "Jon", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Sowders, Jason", "lastName": "Sowders", "firstName": "Jason", "rank": "CODE INSPECTOR", "active": "Yes", "notes": ""}, {"fullName": "Spainhoward, Griffin", "lastName": "Spainhoward", "firstName": "Griffin", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Stafford, Chris", "lastName": "Stafford", "firstName": "Chris", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Stine, Cameron", "lastName": "Stine", "firstName": "Cameron", "rank": "RECRUIT", "active": "Yes", "notes": ""}, {"fullName": "Stivaletti, Kristina", "lastName": "Stivaletti", "firstName": "Kristina", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Stoll, Stephen", "lastName": "Stoll", "firstName": "Stephen", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Storey, Ben", "lastName": "Storey", "firstName": "Ben", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Sutton, Nate", "lastName": "Sutton", "firstName": "Nate", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Tabor, Zach", "lastName": "Tabor", "firstName": "Zach", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Tarrance, Phillip", "lastName": "Tarrance", "firstName": "Phillip", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Taylor, Trace", "lastName": "Taylor", "firstName": "Trace", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Valentine, Austin", "lastName": "Valentine", "firstName": "Austin", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Vance, Joshua", "lastName": "Vance", "firstName": "Joshua", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Voorhees, Chase", "lastName": "Voorhees", "firstName": "Chase", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Wallace, Cameron", "lastName": "Wallace", "firstName": "Cameron", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Wehr, Larry", "lastName": "Wehr", "firstName": "Larry", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "Weisbrodt, Wade", "lastName": "Weisbrodt", "firstName": "Wade", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "White, Craig", "lastName": "White", "firstName": "Craig", "rank": "BATTALION CHIEF", "active": "Yes", "notes": ""}, {"fullName": "Wilson, Adam", "lastName": "Wilson", "firstName": "Adam", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Wilson, Jordan", "lastName": "Wilson", "firstName": "Jordan", "rank": "ENGINEER", "active": "Yes", "notes": ""}, {"fullName": "Witherington, Joe", "lastName": "Witherington", "firstName": "Joe", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Wolf, Dennis", "lastName": "Wolf", "firstName": "Dennis", "rank": "INVESTIGATOR", "active": "Yes", "notes": ""}, {"fullName": "Woodward, Lane", "lastName": "Woodward", "firstName": "Lane", "rank": "FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Woosley, Jeff", "lastName": "Woosley", "firstName": "Jeff", "rank": "CAPTAIN", "active": "Yes", "notes": ""}, {"fullName": "York, Luke", "lastName": "York", "firstName": "Luke", "rank": "PROBATIONARY FIREFIGHTER", "active": "Yes", "notes": ""}, {"fullName": "Young, Anderson", "lastName": "Young", "firstName": "Anderson", "rank": "RECRUIT", "active": "Yes", "notes": ""}], "tasks": [{"taskId": "T-001", "taskName": "Individual Turnout Time", "category": "PPE", "stdTime": "00:01:00", "active": "Yes"}, {"taskId": "T-002", "taskName": "Individual Mask Up Time", "category": "PPE", "stdTime": "00:00:30", "active": "Yes"}, {"taskId": "T-003", "taskName": "Forcible Entry", "category": "Truck Operations", "stdTime": "", "active": "Yes"}, {"taskId": "T-004", "taskName": "VEIS - 2nd Floor", "category": "Truck Operations", "stdTime": "", "active": "Yes"}, {"taskId": "T-005", "taskName": "Rig To Door", "category": "Engine Company", "stdTime": "", "active": "Yes"}, {"taskId": "T-006", "taskName": "O-Course", "category": "Physical Fitness", "stdTime": "00:14:30", "active": "Yes"}, {"taskId": "T-007", "taskName": "Time to Vibe Alert on O-Course", "category": "Physical Fitness", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Annual Bloodborne Pathogens Refresher", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "SCBA Fit Test", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "SCBA Quarterly Skills", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "CPR / AED Recertification", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "HazMat Operations Refresher", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Driver / Operator Continuing Education", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Hose Testing (Assigned Section)", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Ground Ladder Testing (Assigned Section)", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Hydrant Inspection / Flow (Assigned District)", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Live Fire / Evolutions Participation", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Mayday / RIT Skills", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Forcible Entry / Ventilation Skills", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Peer Support / Behavioral Health Briefing", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Officer Development Module", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "Recruit Task Book Sign-Off", "category": "Other", "stdTime": "", "active": "Yes"}, {"taskId": "", "taskName": "NIMS / ICS Refresh (IS-100/200/700 as assigned)", "category": "Other", "stdTime": "", "active": "Yes"}], "assignments": [{"task": "Individual Turnout Time", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "High", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:01:00", "completionTime": "00:01:01", "metStandard": "No", "notes": "", "assignmentId": "001-Individu", "taskId": "T-001", "category": "PPE"}, {"task": "Annual Bloodborne Pathogens Refresher", "personnel": "Brooks, Justin", "rank": "CHIEF", "status": "Not Started", "priority": "High", "dateDue": "2026-08-26", "dateCompleted": "2026-09-09", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "002-AnnualBl", "taskId": "", "category": "Other"}, {"task": "Annual Bloodborne Pathogens Refresher", "personnel": "Harbin, Joe", "rank": "BATTALION CHIEF", "status": "In Progress", "priority": "High", "dateDue": "2026-09-25", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "003-AnnualBl", "taskId": "", "category": "Other"}, {"task": "Annual Bloodborne Pathogens Refresher", "personnel": "White, Craig", "rank": "BATTALION CHIEF", "status": "Not Started", "priority": "High", "dateDue": "2026-09-27", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "004-AnnualBl", "taskId": "", "category": "Other"}, {"task": "SCBA Fit Test", "personnel": "Kiser, Taylor", "rank": "ENGINEER", "status": "Completed", "priority": "Medium", "dateDue": "2026-09-10", "dateCompleted": "2026-09-14", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "005-SCBAFitT", "taskId": "", "category": "Other"}, {"task": "SCBA Fit Test", "personnel": "Michael, Mason", "rank": "ENGINEER", "status": "At Risk", "priority": "Medium", "dateDue": "2026-09-18", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "006-SCBAFitT", "taskId": "", "category": "Other"}, {"task": "O-Course", "personnel": "Atkins, Nick", "rank": "TRAINING INSTRUCTOR", "status": "Overdue", "priority": "Low", "dateDue": "2027-03-01", "dateCompleted": "", "stdTime": "00:14:30", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "007-O-Course", "taskId": "T-006", "category": "Physical Fitness"}, {"task": "SCBA Quarterly Skills", "personnel": "Buchanon, Chris", "rank": "CAPTAIN", "status": "In Progress", "priority": "High", "dateDue": "2026-09-29", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "008-SCBAQuar", "taskId": "", "category": "Other"}, {"task": "SCBA Quarterly Skills", "personnel": "Shehan, Scotty", "rank": "CAPTAIN", "status": "Not Started", "priority": "High", "dateDue": "2026-10-06", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "009-SCBAQuar", "taskId": "", "category": "Other"}, {"task": "CPR / AED Recertification", "personnel": "May, Keaton", "rank": "ADVANCED FIREFIGHTER", "status": "Completed", "priority": "High", "dateDue": "2026-09-13", "dateCompleted": "2026-09-13", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "010-CPR/AEDR", "taskId": "", "category": "Other"}, {"task": "CPR / AED Recertification", "personnel": "Moyers, Jon", "rank": "ADVANCED FIREFIGHTER", "status": "In Progress", "priority": "High", "dateDue": "2026-09-22", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "011-CPR/AEDR", "taskId": "", "category": "Other"}, {"task": "HazMat Operations Refresher", "personnel": "Akins, Brad", "rank": "CAPTAIN", "status": "Not Started", "priority": "Medium", "dateDue": "2026-10-15", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "012-HazMatOp", "taskId": "", "category": "Other"}, {"task": "HazMat Operations Refresher", "personnel": "Donnelly, Justin", "rank": "CAPTAIN", "status": "At Risk", "priority": "Medium", "dateDue": "2026-09-20", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "013-HazMatOp", "taskId": "", "category": "Other"}, {"task": "Driver / Operator Continuing Education", "personnel": "Hope, Brian", "rank": "ENGINEER", "status": "Completed", "priority": "Medium", "dateDue": "2026-09-05", "dateCompleted": "2026-09-07", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "014-Driver/O", "taskId": "", "category": "Other"}, {"task": "Hose Testing (Assigned Section)", "personnel": "Jones, Jack", "rank": "FIREFIGHTER", "status": "In Progress", "priority": "Low", "dateDue": "2026-10-03", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "015-HoseTest", "taskId": "", "category": "Other"}, {"task": "Ground Ladder Testing (Assigned Section)", "personnel": "Flora, Greg", "rank": "CAPTAIN", "status": "Not Started", "priority": "Low", "dateDue": "2026-10-25", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "016-GroundLa", "taskId": "", "category": "Other"}, {"task": "Hydrant Inspection / Flow (Assigned District)", "personnel": "Scott, Eric", "rank": "BATTALION CHIEF", "status": "In Progress", "priority": "Medium", "dateDue": "2026-09-30", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "017-HydrantI", "taskId": "", "category": "Other"}, {"task": "Live Fire / Evolutions Participation", "personnel": "Bean, Michael", "rank": "BATTALION CHIEF", "status": "Completed", "priority": "High", "dateDue": "2026-09-14", "dateCompleted": "2026-09-15", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "018-LiveFire", "taskId": "", "category": "Other"}, {"task": "Mayday / RIT Skills", "personnel": "Ferguson, Matt", "rank": "BATTALION CHIEF", "status": "Overdue", "priority": "High", "dateDue": "2026-09-07", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "019-Mayday/R", "taskId": "", "category": "Other"}, {"task": "Forcible Entry / Ventilation Skills", "personnel": "Ashley, Daniel", "rank": "BATTALION CHIEF", "status": "Not Started", "priority": "Medium", "dateDue": "2026-10-10", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "020-Forcible", "taskId": "", "category": "Other"}, {"task": "Peer Support / Behavioral Health Briefing", "personnel": "Atkins, Nick", "rank": "TRAINING INSTRUCTOR", "status": "Completed", "priority": "Medium", "dateDue": "2026-08-31", "dateCompleted": "2026-09-03", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "021-PeerSupp", "taskId": "", "category": "Other"}, {"task": "Officer Development Module", "personnel": "Brooks, Jason", "rank": "ASSISTANT CHIEF", "status": "In Progress", "priority": "High", "dateDue": "2026-10-05", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "022-OfficerD", "taskId": "", "category": "Other"}, {"task": "Recruit Task Book Sign-Off", "personnel": "Sanborn, Bob", "rank": "TRAINING INSTRUCTOR", "status": "In Progress", "priority": "High", "dateDue": "2026-09-24", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "023-RecruitT", "taskId": "", "category": "Other"}, {"task": "NIMS / ICS Refresh (IS-100/200/700 as assigned)", "personnel": "Morris, Doug", "rank": "DEPUTY CHIEF", "status": "Not Started", "priority": "Low", "dateDue": "2026-10-30", "dateCompleted": "", "stdTime": "", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "024-NIMS/ICS", "taskId": "", "category": "Other"}, {"task": "Individual Turnout Time", "personnel": "Bates, Christopher", "rank": "CAPTAIN", "status": "Not Started", "priority": "Low", "dateDue": "", "dateCompleted": "", "stdTime": "00:01:00", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "025-Individu", "taskId": "T-001", "category": "PPE"}, {"task": "Individual Turnout Time", "personnel": "Abell, Jeremy", "rank": "ENGINEER", "status": "Not Started", "priority": "", "dateDue": "", "dateCompleted": "", "stdTime": "00:01:00", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "026-Individu", "taskId": "T-001", "category": "PPE"}, {"task": "Individual Turnout Time", "personnel": "Atkins, Nick", "rank": "TRAINING INSTRUCTOR", "status": "In Progress", "priority": "", "dateDue": "", "dateCompleted": "", "stdTime": "00:01:00", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "027-Individu", "taskId": "T-001", "category": "PPE"}, {"task": "O-Course", "personnel": "Atkins, Nick", "rank": "TRAINING INSTRUCTOR", "status": "Completed", "priority": "", "dateDue": "", "dateCompleted": "", "stdTime": "00:14:30", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "028-O-Course", "taskId": "T-006", "category": "Physical Fitness"}, {"task": "Individual Turnout Time", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "High", "dateDue": "", "dateCompleted": "", "stdTime": "00:01:00", "completionTime": "", "metStandard": "", "notes": "", "assignmentId": "029-Individu", "taskId": "T-001", "category": "PPE"}, {"task": "Individual Mask Up Time", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "High", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:00:30", "completionTime": "00:00:43", "metStandard": "No", "notes": "", "assignmentId": "030-Individu", "taskId": "T-002", "category": "PPE"}, {"task": "Time to Vibe Alert on O-Course", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "High", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:00:00", "completionTime": "00:12:00", "metStandard": "No", "notes": "", "assignmentId": "031-TimetoVi", "taskId": "T-007", "category": "Physical Fitness"}, {"task": "O-Course", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "High", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:14:30", "completionTime": "00:09:09", "metStandard": "Yes", "notes": "", "assignmentId": "032-O-Course", "taskId": "T-006", "category": "Physical Fitness"}, {"task": "Rig To Door", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:41", "metStandard": "No", "notes": "No Dump", "assignmentId": "033-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Individual Turnout Time", "personnel": "Young, Anderson", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:01:00", "completionTime": "00:01:03", "metStandard": "No", "notes": "", "assignmentId": "034-Individu", "taskId": "T-001", "category": "PPE"}, {"task": "Individual Mask Up Time", "personnel": "Young, Anderson", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:00:30", "completionTime": "00:00:45", "metStandard": "No", "notes": "", "assignmentId": "035-Individu", "taskId": "T-002", "category": "PPE"}, {"task": "Time to Vibe Alert on O-Course", "personnel": "Young, Anderson", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:00:00", "completionTime": "00:12:08", "metStandard": "No", "notes": "", "assignmentId": "036-TimetoVi", "taskId": "T-007", "category": "Physical Fitness"}, {"task": "O-Course", "personnel": "Young, Anderson", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:14:30", "completionTime": "00:08:35", "metStandard": "Yes", "notes": "", "assignmentId": "037-O-Course", "taskId": "T-006", "category": "Physical Fitness"}, {"task": "Rig To Door", "personnel": "Young, Anderson", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:42", "metStandard": "No", "notes": "", "assignmentId": "038-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Individual Turnout Time", "personnel": "King, Cary", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:01:00", "completionTime": "00:01:12", "metStandard": "No", "notes": "", "assignmentId": "039-Individu", "taskId": "T-001", "category": "PPE"}, {"task": "Individual Mask Up Time", "personnel": "King, Cary", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:00:30", "completionTime": "00:00:34", "metStandard": "No", "notes": "", "assignmentId": "040-Individu", "taskId": "T-002", "category": "PPE"}, {"task": "Time to Vibe Alert on O-Course", "personnel": "King, Cary", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:00:00", "completionTime": "00:09:00", "metStandard": "No", "notes": "", "assignmentId": "041-TimetoVi", "taskId": "T-007", "category": "Physical Fitness"}, {"task": "O-Course", "personnel": "King, Cary", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:14:30", "completionTime": "00:08:38", "metStandard": "Yes", "notes": "", "assignmentId": "042-O-Course", "taskId": "T-006", "category": "Physical Fitness"}, {"task": "Rig To Door", "personnel": "King, Cary", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:41", "metStandard": "No", "notes": "", "assignmentId": "043-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Individual Turnout Time", "personnel": "Carter, Tristen", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:01:00", "completionTime": "00:01:04", "metStandard": "No", "notes": "", "assignmentId": "044-Individu", "taskId": "T-001", "category": "PPE"}, {"task": "Individual Mask Up Time", "personnel": "Carter, Tristen", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:00:30", "completionTime": "00:00:38", "metStandard": "No", "notes": "", "assignmentId": "045-Individu", "taskId": "T-002", "category": "PPE"}, {"task": "Time to Vibe Alert on O-Course", "personnel": "Carter, Tristen", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:00:00", "completionTime": "00:13:31", "metStandard": "No", "notes": "", "assignmentId": "046-TimetoVi", "taskId": "T-007", "category": "Physical Fitness"}, {"task": "O-Course", "personnel": "Carter, Tristen", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-10", "dateCompleted": "2026-09-10", "stdTime": "00:14:30", "completionTime": "00:08:27", "metStandard": "Yes", "notes": "", "assignmentId": "047-O-Course", "taskId": "T-006", "category": "Physical Fitness"}, {"task": "Rig To Door", "personnel": "Carter, Tristen", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:46", "metStandard": "No", "notes": "", "assignmentId": "048-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Carter, Tristen", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:30", "metStandard": "No", "notes": "", "assignmentId": "049-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "King, Cary", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:24", "metStandard": "No", "notes": "", "assignmentId": "050-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Young, Anderson", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:20", "metStandard": "No", "notes": "", "assignmentId": "051-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:46", "metStandard": "No", "notes": "", "assignmentId": "052-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:34", "metStandard": "No", "notes": "", "assignmentId": "053-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Carter, Tristen", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:52", "metStandard": "No", "notes": "Evolution with Truck 1", "assignmentId": "054-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "King, Cary", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:24", "metStandard": "No", "notes": "Evolution with E4", "assignmentId": "055-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Young, Anderson", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:02:05", "metStandard": "No", "notes": "Evolution with T1", "assignmentId": "056-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:54", "metStandard": "No", "notes": "Evolution with E4", "assignmentId": "057-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "King, Cary", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:27", "metStandard": "No", "notes": "Evolution with T1", "assignmentId": "058-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Carter, Tristen", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:43", "metStandard": "No", "notes": "Evolution with E4", "assignmentId": "059-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Stine, Cameron", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:02:45", "metStandard": "No", "notes": "Evolution with T1", "assignmentId": "060-RigToDoo", "taskId": "T-005", "category": "Engine Company"}, {"task": "Rig To Door", "personnel": "Young, Anderson", "rank": "RECRUIT", "status": "Completed", "priority": "", "dateDue": "2026-09-16", "dateCompleted": "2026-09-16", "stdTime": "00:00:00", "completionTime": "00:01:40", "metStandard": "No", "notes": "Evolution with E4", "assignmentId": "061-RigToDoo", "taskId": "T-005", "category": "Engine Company"}]};
+const KEY = 'bgfd-training-app-v2';
+
+function defaultCategories(db) {
+  const set = new Set();
+  (db.tasks||[]).forEach(t => t.category && set.add(t.category));
+  (db.assignments||[]).forEach(a => a.category && set.add(a.category));
+  ['PPE','Physical Fitness','Engine Company','Truck Operations','Other'].forEach(c => set.add(c));
+  return [...set].sort();
+}
+function migrate(db) {
+  if (!db.categories || !db.categories.length) db.categories = defaultCategories(db);
+  (db.assignments||[]).forEach((a,i) => {
+    if (!a.assignmentId) a.assignmentId = 'A-' + String(i+1).padStart(4,'0');
+    if (!a.category) a.category = 'Other';
+  });
+  (db.tasks||[]).forEach(t => { if (!t.category) t.category = 'Other'; });
+  return db;
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY) || localStorage.getItem('bgfd-training-app-v1');
+    if (raw) return migrate(JSON.parse(raw));
+  } catch(e) {}
+  return migrate(structuredClone(SEED));
+}
+function save(db) { localStorage.setItem(KEY, JSON.stringify(db)); }
+
+let db = load();
+let charts = {};
+
+function timeToSec(t) {
+  if (!t) return null;
+  const parts = String(t).trim().split(':').map(Number);
+  if (parts.some(isNaN)) return null;
+  if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
+  if (parts.length === 2) return parts[0]*60 + parts[1];
+  if (parts.length === 1) return parts[0];
+  return null;
+}
+function fmtMin(m) {
+  if (m == null || isNaN(m)) return '—';
+  const total = Math.round(m*60);
+  const mm = Math.floor(total/60);
+  const ss = total % 60;
+  return mm + ':' + String(ss).padStart(2,'0') + ' (' + m.toFixed(2) + ' min)';
+}
+function taskMeta(name) { return db.tasks.find(t => t.taskName === name) || {}; }
+function peopleNames() { return db.personnel.map(p => p.fullName).sort((a,b)=>a.localeCompare(b)); }
+function catOf(row) { return row.category || taskMeta(row.task).category || 'Other'; }
+
+function fillSelect(sel, items, extraFirst) {
+  const cur = sel.value;
+  sel.innerHTML = (extraFirst || '') + items.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+}
+function esc(s) { return String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function fillPeople() {
+  document.getElementById('dl-people').innerHTML = peopleNames().map(n => `<option value="${esc(n)}"></option>`).join('');
+  fillSelect(document.getElementById('f-task'), db.tasks.map(t => t.taskName));
+  fillCats();
+}
+function fillCats() {
+  const cats = [...db.categories].sort();
+  fillSelect(document.getElementById('f-cat'), cats);
+  fillSelect(document.getElementById('n-cat'), cats);
+  fillSelect(document.getElementById('c-cat'), cats, '<option value="">All categories</option>');
+}
+
+function nextId() {
+  const nums = db.assignments.map(a => parseInt(String(a.assignmentId||'').replace(/\D/g,''),10)).filter(n=>!isNaN(n));
+  return 'A-' + String((Math.max(0,...nums)+1)).padStart(4,'0');
+}
+
+function setForm(rec) {
+  document.getElementById('f-id').value = rec ? rec.assignmentId : '';
+  document.getElementById('f-person').value = rec ? rec.personnel : '';
+  if (rec && rec.task) document.getElementById('f-task').value = rec.task;
+  document.getElementById('f-cat').value = rec ? (rec.category || taskMeta(rec.task).category || '') : '';
+  document.getElementById('f-status').value = rec ? rec.status : 'Completed';
+  document.getElementById('f-priority').value = rec ? (rec.priority||'') : '';
+  document.getElementById('f-due').value = rec ? (rec.dateDue||'') : '';
+  document.getElementById('f-done').value = rec ? (rec.dateCompleted||'') : '';
+  document.getElementById('f-ctime').value = rec ? (rec.completionTime||'') : '';
+  document.getElementById('f-std').value = rec ? (rec.stdTime || taskMeta(rec.task).stdTime || '') : '';
+  document.getElementById('f-notes').value = rec ? (rec.notes||'') : '';
+  document.getElementById('form-title').textContent = rec ? 'Edit assignment ' + rec.assignmentId : 'Log an assignment / evolution';
+  document.getElementById('btn-delete').hidden = !rec;
+}
+
+document.getElementById('f-task').addEventListener('change', () => {
+  if (document.getElementById('f-id').value) return;
+  const meta = taskMeta(document.getElementById('f-task').value);
+  if (meta.category) document.getElementById('f-cat').value = meta.category;
+  if (meta.stdTime) document.getElementById('f-std').value = meta.stdTime;
+});
+
+document.querySelectorAll('nav button').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    ['input','person','personavg','dept','charts','cats','roster'].forEach(id => {
+      document.getElementById('tab-'+id).hidden = id !== b.dataset.tab;
+    });
+    if (b.dataset.tab === 'person') renderPersonList();
+    if (b.dataset.tab === 'personavg') renderPersonAvg();
+    if (b.dataset.tab === 'dept') renderDept();
+    if (b.dataset.tab === 'charts') renderCharts();
+    if (b.dataset.tab === 'cats') renderCats();
+    if (b.dataset.tab === 'roster') renderRoster();
+    if (b.dataset.tab === 'input') renderAllTable();
+  };
+});
+
+function collectForm() {
+  const person = document.getElementById('f-person').value.trim();
+  const task = document.getElementById('f-task').value;
+  const recP = db.personnel.find(p => p.fullName.toLowerCase() === person.toLowerCase());
+  const meta = taskMeta(task);
+  const ctime = document.getElementById('f-ctime').value.trim();
+  const std = document.getElementById('f-std').value.trim() || meta.stdTime || '';
+  let met = '';
+  if (ctime && std) {
+    const a = timeToSec(ctime), b = timeToSec(std);
+    if (a != null && b != null) met = a <= b ? 'Yes' : 'No';
+  }
+  return {
+    person, task, recP, meta, ctime, std, met,
+    category: document.getElementById('f-cat').value || meta.category || 'Other'
+  };
+}
+
+document.getElementById('btn-save').onclick = () => {
+  const f = collectForm();
+  if (!f.person || !f.task) { document.getElementById('save-msg').textContent = 'Personnel and task are required.'; return; }
+  const id = document.getElementById('f-id').value;
+  const row = {
+    task: f.task,
+    personnel: f.recP ? f.recP.fullName : f.person,
+    rank: f.recP ? f.recP.rank : '',
+    status: document.getElementById('f-status').value,
+    priority: document.getElementById('f-priority').value,
+    dateDue: document.getElementById('f-due').value,
+    dateCompleted: document.getElementById('f-done').value,
+    stdTime: f.std,
+    completionTime: f.ctime,
+    metStandard: f.met,
+    notes: document.getElementById('f-notes').value,
+    assignmentId: id || nextId(),
+    taskId: f.meta.taskId || '',
+    category: f.category
+  };
+  if (id) {
+    const i = db.assignments.findIndex(a => a.assignmentId === id);
+    if (i >= 0) db.assignments[i] = row;
+    else db.assignments.push(row);
+  } else db.assignments.push(row);
+  if (!f.recP) {
+    const parts = f.person.split(',');
+    db.personnel.push({ fullName: f.person, lastName: (parts[0]||'').trim(), firstName:(parts[1]||'').trim(), rank:'', active:'Yes', notes:'' });
+    fillPeople();
+  }
+  const t = db.tasks.find(x => x.taskName === f.task);
+  if (t) t.category = f.category;
+  save(db);
+  document.getElementById('save-msg').textContent = (id ? 'Updated ' : 'Saved ') + f.task + ' for ' + row.personnel + '.';
+  setForm(null);
+  renderAllTable();
+};
+
+document.getElementById('btn-reset').onclick = () => {
+  setForm(null);
+  document.getElementById('save-msg').textContent = '';
+};
+document.getElementById('btn-delete').onclick = () => {
+  const id = document.getElementById('f-id').value;
+  if (!id || !confirm('Delete this assignment?')) return;
+  db.assignments = db.assignments.filter(a => a.assignmentId !== id);
+  save(db);
+  setForm(null);
+  document.getElementById('save-msg').textContent = 'Deleted ' + id + '.';
+  renderAllTable();
+};
+
+document.getElementById('btn-export').onclick = () => {
+  const blob = new Blob([JSON.stringify(db,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bgfd-training-data.json';
+  a.click();
+};
+document.getElementById('btn-import').onclick = () => document.getElementById('file-import').click();
+document.getElementById('file-import').onchange = (e) => {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = () => { db = migrate(JSON.parse(r.result)); save(db); fillPeople(); renderAllTable(); document.getElementById('save-msg').textContent = 'Imported.'; };
+  r.readAsText(file);
+};
+
+function rowsFor(name) { return db.assignments.filter(a => a.personnel === name); }
+function groupByCat(rows) {
+  const g = {};
+  rows.forEach(r => { const c = catOf(r); (g[c] ||= []).push(r); });
+  return g;
+}
+function pill(st) {
+  const cls = String(st||'').replace(/\s+/g,'');
+  return `<span class="pill ${cls}">${esc(st||'')}</span>`;
+}
+
+function renderAllTable() {
+  const pf = (document.getElementById('list-person').value||'').trim().toLowerCase();
+  const tf = (document.getElementById('list-task').value||'').trim().toLowerCase();
+  const rows = [...db.assignments].reverse().filter(a =>
+    (!pf || String(a.personnel).toLowerCase().includes(pf)) &&
+    (!tf || String(a.task).toLowerCase().includes(tf))
+  );
+  let html = `<table><thead><tr><th></th><th>ID</th><th>Personnel</th><th>Task</th><th>Category</th><th>Status</th><th>Completed</th><th>Time</th><th>Met</th></tr></thead><tbody>`;
+  rows.forEach(r => {
+    html += `<tr>
+      <td><button class="btn sm ghost" data-edit="${esc(r.assignmentId)}">Edit</button></td>
+      <td>${esc(r.assignmentId)}</td><td>${esc(r.personnel)}</td><td>${esc(r.task)}</td>
+      <td>${esc(catOf(r))}</td><td>${pill(r.status)}</td><td>${esc(r.dateCompleted||'')}</td>
+      <td>${esc(r.completionTime||'')}</td>
+      <td>${r.metStandard==='Yes'?'<span class="ok">Yes</span>':r.metStandard==='No'?'<span class="no">No</span>':'—'}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('all-table').innerHTML = html;
+  document.getElementById('all-table').querySelectorAll('[data-edit]').forEach(b => {
+    b.onclick = () => {
+      const rec = db.assignments.find(a => a.assignmentId === b.dataset.edit);
+      if (rec) { setForm(rec); window.scrollTo({top:0,behavior:'smooth'}); }
+    };
+  });
+}
+document.getElementById('list-person').oninput = renderAllTable;
+document.getElementById('list-task').oninput = renderAllTable;
+
+function renderPersonList() {
+  const q = (document.getElementById('p-search').value || '').toLowerCase();
+  const box = document.getElementById('p-list');
+  box.innerHTML = peopleNames().filter(n => n.toLowerCase().includes(q)).map(n => {
+    const p = db.personnel.find(x => x.fullName===n);
+    const nAss = rowsFor(n).length;
+    return `<button data-name="${esc(n)}"><strong>${esc(n)}</strong><small>${esc(p?p.rank:'')} • ${nAss} assignment${nAss===1?'':'s'}</small></button>`;
+  }).join('');
+  box.querySelectorAll('button').forEach(b => b.onclick = () => {
+    box.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    renderPersonDetail(b.dataset.name);
+  });
+}
+document.getElementById('p-search').oninput = renderPersonList;
+
+function renderPersonDetail(name) {
+  const p = db.personnel.find(x => x.fullName===name) || {rank:'', notes:''};
+  const rows = rowsFor(name).sort((a,b) => String(a.dateCompleted||a.dateDue||'').localeCompare(String(b.dateCompleted||b.dateDue||'')));
+  const grouped = groupByCat(rows);
+  let html = `<h2 style="color:var(--text)">${esc(name)}</h2><p class="muted">${esc(p.rank||'')} • ${rows.length} records</p>`;
+  if (!rows.length) html += '<p class="muted">No assignments yet.</p>';
+  Object.keys(grouped).sort().forEach(cat => {
+    html += `<div class="cat-block"><h2>${esc(cat)}</h2><table><thead><tr>
+      <th></th><th>Task</th><th>Status</th><th>Due</th><th>Completed</th><th>Time</th><th>Standard</th><th>Met?</th><th>Notes</th>
+    </tr></thead><tbody>`;
+    grouped[cat].forEach(r => {
+      const met = r.metStandard === 'Yes' ? '<span class="ok">Yes</span>' : (r.metStandard === 'No' ? '<span class="no">No</span>' : '—');
+      html += `<tr><td><button class="btn sm ghost" data-edit="${esc(r.assignmentId)}">Edit</button></td>
+        <td>${esc(r.task)}</td><td>${pill(r.status)}</td><td>${esc(r.dateDue||'')}</td><td>${esc(r.dateCompleted||'')}</td>
+        <td>${esc(r.completionTime||'')}</td><td>${esc(r.stdTime||'')}</td><td>${met}</td><td>${esc(r.notes||'')}</td></tr>`;
+    });
+    html += '</tbody></table></div>';
+  });
+  document.getElementById('p-detail').innerHTML = html;
+  document.getElementById('p-detail').querySelectorAll('[data-edit]').forEach(b => {
+    b.onclick = () => {
+      const rec = db.assignments.find(a => a.assignmentId === b.dataset.edit);
+      if (!rec) return;
+      document.querySelector('[data-tab="input"]').click();
+      setForm(rec);
+    };
+  });
+}
+
+function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+const COLORS = ['#d4a017','#58a6ff','#3fb950','#ff7b72','#bc8cff','#f0883e','#79c0ff','#e3b341'];
+
+function renderPersonAvg() {
+  const name = document.getElementById('a-person').value.trim();
+  const out = document.getElementById('a-out');
+  destroyChart('personAvg');
+  if (!name) { out.innerHTML = '<p class="muted">Choose a name to see category averages.</p>'; return; }
+  const rows = rowsFor(name);
+  const grouped = groupByCat(rows);
+  let html = `<div class="kpis">
+    <div class="kpi"><b>${rows.length}</b><span>Assignments</span></div>
+    <div class="kpi"><b>${rows.filter(r=>r.status==='Completed').length}</b><span>Completed</span></div>
+    <div class="kpi"><b>${rows.filter(r=>r.metStandard==='Yes').length}</b><span>Met standard</span></div>
+    <div class="kpi"><b>${rows.filter(r=>r.metStandard==='No').length}</b><span>Missed standard</span></div>
+  </div>`;
+  const labels = [], data = [];
+  html += '<table><thead><tr><th>Category</th><th>Task</th><th>N timed</th><th>Avg time</th><th>Best</th><th>Latest</th><th>Standard</th></tr></thead><tbody>';
+  Object.keys(grouped).sort().forEach(cat => {
+    const byTask = {};
+    grouped[cat].forEach(r => (byTask[r.task] ||= []).push(r));
+    Object.keys(byTask).sort().forEach(task => {
+      const list = byTask[task];
+      const secs = list.map(r => timeToSec(r.completionTime)).filter(s => s!=null);
+      const avg = secs.length ? secs.reduce((a,b)=>a+b,0)/secs.length/60 : null;
+      const best = secs.length ? Math.min(...secs)/60 : null;
+      const latest = [...list].reverse().find(r => r.completionTime);
+      if (avg != null) { labels.push(task); data.push(+avg.toFixed(3)); }
+      html += `<tr><td>${esc(cat)}</td><td>${esc(task)}</td><td>${secs.length}</td><td>${fmtMin(avg)}</td><td>${fmtMin(best)}</td>
+        <td>${latest? esc(latest.completionTime) + (latest.dateCompleted? ' on '+latest.dateCompleted:'') : '—'}</td>
+        <td>${esc(taskMeta(task).stdTime || list[0].stdTime || '—')}</td></tr>`;
+    });
+  });
+  html += '</tbody></table>';
+  out.innerHTML = html;
+  charts.personAvg = new Chart(document.getElementById('chart-person-avg'), {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Avg minutes — ' + name, data, backgroundColor: COLORS[0] }] },
+    options: chartOpts('Person average time (minutes)')
+  });
+}
+document.getElementById('a-person').oninput = renderPersonAvg;
+document.getElementById('a-person').onchange = renderPersonAvg;
+
+function chartOpts(title) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: title, color: '#e6edf3' },
+      legend: { labels: { color: '#e6edf3' } },
+      tooltip: { callbacks: { label: ctx => {
+        const v = ctx.parsed.y ?? ctx.parsed;
+        return typeof v === 'number' ? ctx.dataset.label + ': ' + v.toFixed(2) + ' min' : '';
+      }}}
+    },
+    scales: {
+      x: { ticks: { color: '#8b949e', maxRotation: 45 }, grid: { color: '#30363d' } },
+      y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' }, title: { display:true, text:'Minutes', color:'#8b949e' } }
+    }
+  };
+}
+
+function renderDept() {
+  const out = document.getElementById('d-out');
+  const timed = db.assignments.filter(a => timeToSec(a.completionTime) != null);
+  const cats = {};
+  timed.forEach(a => { const c = catOf(a); (cats[c] ||= []).push(a); });
+  let html = `<div class="kpis">
+    <div class="kpi"><b>${db.assignments.length}</b><span>Total assignments</span></div>
+    <div class="kpi"><b>${timed.length}</b><span>Timed evolutions</span></div>
+    <div class="kpi"><b>${db.assignments.filter(a=>a.status==='Completed').length}</b><span>Completed</span></div>
+    <div class="kpi"><b>${new Set(db.assignments.map(a=>a.personnel)).size}</b><span>People with records</span></div>
+  </div>`;
+  const barLabels = [], barData = [];
+  Object.keys(cats).sort().forEach(cat => {
+    html += `<div class="cat-block"><h2>${esc(cat)}</h2>`;
+    const byTask = {};
+    cats[cat].forEach(r => (byTask[r.task] ||= []).push(r));
+    html += '<table><thead><tr><th>Task</th><th>N timed</th><th>Dept avg</th><th>Fastest</th><th>Slowest</th><th>Standard</th><th>% met</th></tr></thead><tbody>';
+    Object.keys(byTask).sort().forEach(task => {
+      const list = byTask[task];
+      const secs = list.map(r => timeToSec(r.completionTime)).filter(s=>s!=null);
+      const avg = secs.reduce((a,b)=>a+b,0)/secs.length/60;
+      const lo = Math.min(...secs)/60, hi = Math.max(...secs)/60;
+      const std = taskMeta(task).stdTime || list.find(x=>x.stdTime)?.stdTime || '';
+      const judged = list.filter(r => r.metStandard==='Yes' || r.metStandard==='No');
+      const pct = judged.length ? (100*judged.filter(r=>r.metStandard==='Yes').length/judged.length).toFixed(0)+'%' : '—';
+      barLabels.push(task); barData.push(+avg.toFixed(3));
+      html += `<tr><td>${esc(task)}</td><td>${secs.length}</td><td>${fmtMin(avg)}</td><td>${fmtMin(lo)}</td><td>${fmtMin(hi)}</td><td>${esc(std||'—')}</td><td>${pct}</td></tr>`;
+    });
+    const all = cats[cat].map(r => timeToSec(r.completionTime)).filter(s=>s!=null);
+    const cavg = all.reduce((a,b)=>a+b,0)/all.length/60;
+    html += `</tbody></table><p class="note">Category mix average for ${esc(cat)}: <strong>${fmtMin(cavg)}</strong> across ${all.length} times.</p></div>`;
+  });
+  const byDate = {};
+  timed.forEach(a => { const d = a.dateCompleted || a.dateDue || 'undated'; (byDate[d] ||= []).push(a); });
+  html += '<div class="cat-block"><h2>Timed work by date (department)</h2><table><thead><tr><th>Date</th><th>N</th><th>Avg minutes</th><th>Tasks</th></tr></thead><tbody>';
+  Object.keys(byDate).sort().forEach(d => {
+    const list = byDate[d];
+    const secs = list.map(r => timeToSec(r.completionTime)).filter(s=>s!=null);
+    const avg = secs.reduce((a,b)=>a+b,0)/secs.length/60;
+    html += `<tr><td>${esc(d)}</td><td>${secs.length}</td><td>${fmtMin(avg)}</td><td>${esc([...new Set(list.map(x=>x.task))].join(', '))}</td></tr>`;
+  });
+  html += '</tbody></table></div>';
+  out.innerHTML = html;
+  destroyChart('deptAvg');
+  charts.deptAvg = new Chart(document.getElementById('chart-dept-avg'), {
+    type: 'bar',
+    data: { labels: barLabels, datasets: [{ label: 'Department avg minutes', data: barData, backgroundColor: COLORS }] },
+    options: chartOpts('Department average by task (minutes)')
+  });
+}
+
+function filteredTimed() {
+  const person = (document.getElementById('c-person').value||'').trim();
+  const cat = document.getElementById('c-cat').value;
+  return db.assignments.filter(a => {
+    if (timeToSec(a.completionTime) == null) return false;
+    if (person && a.personnel !== person) return false;
+    if (cat && catOf(a) !== cat) return false;
+    return true;
+  });
+}
+
+function renderCharts() {
+  const rows = filteredTimed().slice().sort((a,b) => String(a.dateCompleted||a.dateDue||'').localeCompare(String(b.dateCompleted||b.dateDue||'')));
+  const person = (document.getElementById('c-person').value||'').trim();
+  const scope = person || 'Department';
+
+  // trend by task over date
+  const byTask = {};
+  rows.forEach(r => (byTask[r.task] ||= []).push(r));
+  const dates = [...new Set(rows.map(r => r.dateCompleted || r.dateDue || ''))].filter(Boolean).sort();
+  destroyChart('trend');
+  charts.trend = new Chart(document.getElementById('chart-trend'), {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: Object.keys(byTask).map((task,i) => ({
+        label: task,
+        data: dates.map(d => {
+          const hits = byTask[task].filter(r => (r.dateCompleted||r.dateDue) === d);
+          if (!hits.length) return null;
+          const secs = hits.map(h => timeToSec(h.completionTime)).filter(s=>s!=null);
+          return secs.length ? +(secs.reduce((a,b)=>a+b,0)/secs.length/60).toFixed(3) : null;
+        }),
+        borderColor: COLORS[i % COLORS.length],
+        backgroundColor: COLORS[i % COLORS.length],
+        spanGaps: true, tension: 0.2
+      }))
+    },
+    options: chartOpts(scope + ' — time trend by date')
+  });
+
+  // compare people (or tasks if person selected)
+  destroyChart('compare');
+  if (person) {
+    const labels = Object.keys(byTask);
+    const data = labels.map(t => {
+      const secs = byTask[t].map(r => timeToSec(r.completionTime)).filter(s=>s!=null);
+      return secs.length ? +(secs.reduce((a,b)=>a+b,0)/secs.length/60).toFixed(3) : 0;
+    });
+    charts.compare = new Chart(document.getElementById('chart-compare'), {
+      type: 'bar',
+      data: { labels, datasets: [{ label: 'Avg min', data, backgroundColor: COLORS }] },
+      options: chartOpts(person + ' — task comparison')
+    });
+  } else {
+    const people = {};
+    rows.forEach(r => (people[r.personnel] ||= []).push(r));
+    const labels = Object.keys(people).sort();
+    const data = labels.map(n => {
+      const secs = people[n].map(r => timeToSec(r.completionTime)).filter(s=>s!=null);
+      return secs.length ? +(secs.reduce((a,b)=>a+b,0)/secs.length/60).toFixed(3) : 0;
+    });
+    charts.compare = new Chart(document.getElementById('chart-compare'), {
+      type: 'bar',
+      data: { labels, datasets: [{ label: 'Avg min (mixed tasks)', data, backgroundColor: COLORS[1] }] },
+      options: chartOpts('People comparison — average minutes')
+    });
+  }
+
+  destroyChart('status');
+  const statuses = ['Completed','In Progress','Not Started','At Risk','Overdue'];
+  const pool = person ? rowsFor(person) : db.assignments;
+  charts.status = new Chart(document.getElementById('chart-status'), {
+    type: 'doughnut',
+    data: {
+      labels: statuses,
+      datasets: [{ data: statuses.map(s => pool.filter(a => a.status === s).length), backgroundColor: ['#3fb950','#58a6ff','#8b949e','#e3b341','#ff7b72'] }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ title:{display:true,text:scope+' — status mix',color:'#e6edf3'}, legend:{labels:{color:'#e6edf3'}} } }
+  });
+
+  destroyChart('met');
+  const yes = pool.filter(a => a.metStandard==='Yes').length;
+  const no = pool.filter(a => a.metStandard==='No').length;
+  const unk = pool.filter(a => a.metStandard!=='Yes' && a.metStandard!=='No').length;
+  charts.met = new Chart(document.getElementById('chart-met'), {
+    type: 'doughnut',
+    data: { labels: ['Met standard','Missed','No standard / not timed'], datasets: [{ data:[yes,no,unk], backgroundColor:['#3fb950','#ff7b72','#8b949e'] }] },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ title:{display:true,text:scope+' — standard time',color:'#e6edf3'}, legend:{labels:{color:'#e6edf3'}} } }
+  });
+}
+document.getElementById('c-person').oninput = renderCharts;
+document.getElementById('c-person').onchange = renderCharts;
+document.getElementById('c-cat').onchange = renderCharts;
+
+let pendingDeleteCat = null;
+function renderCats() {
+  const box = document.getElementById('cat-list');
+  box.innerHTML = db.categories.sort().map(c => {
+    const nT = db.tasks.filter(t => t.category === c).length;
+    const nA = db.assignments.filter(a => catOf(a) === c).length;
+    return `<div class="tag">
+      <strong>${esc(c)}</strong>
+      <span class="muted">${nT} tasks / ${nA} records</span>
+      <button class="btn sm ghost" data-ren="${esc(c)}">Rename</button>
+      <button class="btn sm" data-del="${esc(c)}">Delete</button>
+    </div>`;
+  }).join('');
+  box.querySelectorAll('[data-ren]').forEach(b => b.onclick = () => renameCat(b.dataset.ren));
+  box.querySelectorAll('[data-del]').forEach(b => b.onclick = () => startDeleteCat(b.dataset.del));
+}
+function renameCat(oldName) {
+  const neu = prompt('Rename category', oldName);
+  if (!neu || neu === oldName) return;
+  if (db.categories.includes(neu)) { alert('That category already exists.'); return; }
+  db.categories = db.categories.map(c => c === oldName ? neu : c);
+  db.tasks.forEach(t => { if (t.category === oldName) t.category = neu; });
+  db.assignments.forEach(a => { if (a.category === oldName) a.category = neu; });
+  save(db); fillCats(); renderCats();
+}
+function startDeleteCat(name) {
+  pendingDeleteCat = name;
+  const nT = db.tasks.filter(t => t.category === name).length;
+  const nA = db.assignments.filter(a => catOf(a) === name).length;
+  document.getElementById('dlg-del-msg').textContent = `"${name}" has ${nT} tasks and ${nA} assignments. Choose a category to move them into.`;
+  fillSelect(document.getElementById('dlg-move-to'), db.categories.filter(c => c !== name));
+  document.getElementById('dlg-del-cat').showModal();
+}
+document.getElementById('dlg-cancel-del').onclick = () => document.getElementById('dlg-del-cat').close();
+document.getElementById('dlg-confirm-del').onclick = () => {
+  const name = pendingDeleteCat;
+  const dest = document.getElementById('dlg-move-to').value || 'Other';
+  if (!db.categories.includes(dest)) db.categories.push(dest);
+  db.tasks.forEach(t => { if (t.category === name) t.category = dest; });
+  db.assignments.forEach(a => { if (a.category === name) a.category = dest; });
+  db.categories = db.categories.filter(c => c !== name);
+  save(db); fillCats(); renderCats();
+  document.getElementById('dlg-del-cat').close();
+};
+document.getElementById('btn-add-cat').onclick = () => {
+  const name = document.getElementById('cat-new').value.trim();
+  if (!name) return;
+  if (db.categories.includes(name)) { alert('Already exists.'); return; }
+  db.categories.push(name);
+  save(db); fillCats(); renderCats();
+  document.getElementById('cat-new').value = '';
+};
+
+function setTaskForm(t) {
+  document.getElementById('n-orig-task').value = t ? t.taskName : '';
+  document.getElementById('n-task').value = t ? t.taskName : '';
+  document.getElementById('n-cat').value = t ? (t.category || '') : document.getElementById('n-cat').value;
+  document.getElementById('n-std').value = t ? (t.stdTime || '') : '';
+  document.getElementById('n-tid').value = t ? (t.taskId || '') : '';
+  document.getElementById('btn-delete-task').hidden = !t;
+  document.getElementById('task-msg').textContent = t ? 'Editing “' + t.taskName + '”. Save to apply, or Delete.' : '';
+}
+function setPersonForm(p) {
+  document.getElementById('n-orig-person').value = p ? p.fullName : '';
+  document.getElementById('n-name').value = p ? p.fullName : '';
+  document.getElementById('n-rank').value = p ? (p.rank || '') : '';
+  document.getElementById('n-active').value = p ? (p.active || 'Yes') : 'Yes';
+  document.getElementById('n-pnotes').value = p ? (p.notes || '') : '';
+  document.getElementById('btn-delete-person').hidden = !p;
+  document.getElementById('person-msg').textContent = p ? 'Editing “' + p.fullName + '”. Save to apply, or Delete.' : '';
+}
+function splitName(name) {
+  const parts = name.split(',');
+  return { lastName: (parts[0]||'').trim(), firstName: (parts.slice(1).join(',')||'').trim() };
+}
+function renderRoster() {
+  const out = document.getElementById('r-out');
+  const people = [...db.personnel].sort((a,b) => a.fullName.localeCompare(b.fullName));
+  out.innerHTML = `<p><strong>${db.personnel.length}</strong> personnel • <strong>${db.tasks.length}</strong> tasks</p>
+    <h2>Personnel</h2>
+    <table><thead><tr><th></th><th>Name</th><th>Rank</th><th>Active</th><th>Records</th><th>Notes</th></tr></thead><tbody>
+    ${people.map(p => {
+      const n = db.assignments.filter(a => a.personnel === p.fullName).length;
+      return `<tr>
+        <td><button class="btn sm ghost" data-editperson="${esc(p.fullName)}">Edit</button></td>
+        <td>${esc(p.fullName)}</td><td>${esc(p.rank||'')}</td>
+        <td>${esc(p.active||'')}</td><td>${n}</td><td>${esc(p.notes||'')}</td></tr>`;
+    }).join('')}
+    </tbody></table>
+    <h2 style="margin-top:22px">Tasks</h2>
+    <table><thead><tr><th></th><th>ID</th><th>Task</th><th>Category</th><th>Standard</th><th>Records</th></tr></thead><tbody>
+    ${db.tasks.map(t => {
+      const n = db.assignments.filter(a => a.task === t.taskName).length;
+      return `<tr>
+        <td><button class="btn sm ghost" data-edittask="${esc(t.taskName)}">Edit</button></td>
+        <td>${esc(t.taskId||'')}</td><td>${esc(t.taskName)}</td>
+        <td>${esc(t.category||'')}</td><td>${esc(t.stdTime||'')}</td><td>${n}</td></tr>`;
+    }).join('')}
+    </tbody></table>`;
+  out.querySelectorAll('[data-edittask]').forEach(b => {
+    b.onclick = () => {
+      const t = db.tasks.find(x => x.taskName === b.dataset.edittask);
+      if (t) { setTaskForm(t); window.scrollTo({top:0,behavior:'smooth'}); }
+    };
+  });
+  out.querySelectorAll('[data-editperson]').forEach(b => {
+    b.onclick = () => {
+      const p = db.personnel.find(x => x.fullName === b.dataset.editperson);
+      if (p) { setPersonForm(p); window.scrollTo({top:0,behavior:'smooth'}); }
+    };
+  });
+}
+document.getElementById('btn-reset-person').onclick = () => setPersonForm(null);
+document.getElementById('btn-add-person').onclick = () => {
+  const name = document.getElementById('n-name').value.trim();
+  const orig = document.getElementById('n-orig-person').value;
+  const rank = document.getElementById('n-rank').value.trim();
+  const active = document.getElementById('n-active').value || 'Yes';
+  const notes = document.getElementById('n-pnotes').value;
+  const msg = document.getElementById('person-msg');
+  if (!name) { msg.textContent = 'Name is required (Last, First).'; return; }
+  const clash = db.personnel.find(p => p.fullName.toLowerCase() === name.toLowerCase() && p.fullName !== orig);
+  if (clash) { msg.textContent = 'Another person already uses that name.'; return; }
+  const parts = splitName(name);
+  if (orig) {
+    const p = db.personnel.find(x => x.fullName === orig);
+    if (!p) return;
+    p.fullName = name;
+    p.lastName = parts.lastName;
+    p.firstName = parts.firstName;
+    p.rank = rank;
+    p.active = active;
+    p.notes = notes;
+    db.assignments.forEach(a => {
+      if (a.personnel === orig) {
+        a.personnel = name;
+        a.rank = rank;
+      }
+    });
+    msg.textContent = 'Updated “' + name + '” and synced assignment rows.';
+  } else {
+    db.personnel.push({ fullName:name, lastName:parts.lastName, firstName:parts.firstName, rank, active, notes });
+    msg.textContent = 'Added “' + name + '”.';
+  }
+  save(db); fillPeople(); setPersonForm(null); renderRoster();
+};
+let pendingDeletePerson = null;
+document.getElementById('btn-delete-person').onclick = () => {
+  const orig = document.getElementById('n-orig-person').value;
+  if (!orig) return;
+  pendingDeletePerson = orig;
+  const n = db.assignments.filter(a => a.personnel === orig).length;
+  document.getElementById('dlg-del-person-msg').textContent = '“' + orig + '” has ' + n + ' assignment row(s). Move those rows to another person, or leave blank to delete them.';
+  const others = peopleNames().filter(n => n !== orig);
+  const sel = document.getElementById('dlg-person-move');
+  sel.innerHTML = '<option value="">(delete those assignment rows)</option>' + others.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+  document.getElementById('dlg-del-person').showModal();
+};
+document.getElementById('dlg-cancel-del-person').onclick = () => document.getElementById('dlg-del-person').close();
+document.getElementById('dlg-confirm-del-person').onclick = () => {
+  const name = pendingDeletePerson;
+  const dest = document.getElementById('dlg-person-move').value;
+  if (dest) {
+    const pDest = db.personnel.find(p => p.fullName === dest);
+    db.assignments.forEach(a => {
+      if (a.personnel === name) {
+        a.personnel = dest;
+        if (pDest) a.rank = pDest.rank || a.rank;
+      }
+    });
+  } else {
+    db.assignments = db.assignments.filter(a => a.personnel !== name);
+  }
+  db.personnel = db.personnel.filter(p => p.fullName !== name);
+  save(db); fillPeople(); setPersonForm(null); renderRoster(); renderAllTable();
+  document.getElementById('dlg-del-person').close();
+  document.getElementById('person-msg').textContent = 'Deleted “' + name + '”.';
+};
+document.getElementById('btn-reset-task').onclick = () => setTaskForm(null);
+document.getElementById('btn-add-task').onclick = () => {
+  const name = document.getElementById('n-task').value.trim();
+  const orig = document.getElementById('n-orig-task').value;
+  const cat = document.getElementById('n-cat').value || 'Other';
+  const std = document.getElementById('n-std').value.trim();
+  const tid = document.getElementById('n-tid').value.trim();
+  if (!name) { document.getElementById('task-msg').textContent = 'Task name is required.'; return; }
+  const clash = db.tasks.find(t => t.taskName === name && t.taskName !== orig);
+  if (clash) { document.getElementById('task-msg').textContent = 'Another task already uses that name.'; return; }
+  if (orig) {
+    const t = db.tasks.find(x => x.taskName === orig);
+    if (!t) return;
+    const oldName = t.taskName, oldStd = t.stdTime, oldId = t.taskId, oldCat = t.category;
+    t.taskName = name; t.category = cat; t.stdTime = std; t.taskId = tid || t.taskId;
+    db.assignments.forEach(a => {
+      if (a.task === oldName) {
+        a.task = name;
+        if (t.taskId) a.taskId = t.taskId;
+        a.category = cat;
+        if (a.stdTime === oldStd || !a.stdTime) a.stdTime = std;
+        if (a.completionTime && a.stdTime) {
+          const x = timeToSec(a.completionTime), y = timeToSec(a.stdTime);
+          if (x != null && y != null) a.metStandard = x <= y ? 'Yes' : 'No';
+        }
+      }
+    });
+    document.getElementById('task-msg').textContent = 'Updated task “' + name + '” and synced assignment rows.';
+  } else {
+    db.tasks.push({ taskId: tid || ('T-X'+String(db.tasks.length+1).padStart(2,'0')), taskName:name, category:cat, stdTime:std, active:'Yes' });
+    document.getElementById('task-msg').textContent = 'Added task “' + name + '”.';
+  }
+  save(db); fillPeople(); setTaskForm(null); renderRoster();
+};
+let pendingDeleteTask = null;
+document.getElementById('btn-delete-task').onclick = () => {
+  const orig = document.getElementById('n-orig-task').value;
+  if (!orig) return;
+  pendingDeleteTask = orig;
+  const n = db.assignments.filter(a => a.task === orig).length;
+  document.getElementById('dlg-del-task-msg').textContent = '“' + orig + '” is used on ' + n + ' assignment row(s). Move those rows to another task, or choose “(delete rows)” to remove them.';
+  const others = db.tasks.filter(t => t.taskName !== orig).map(t => t.taskName);
+  const sel = document.getElementById('dlg-task-move');
+  sel.innerHTML = '<option value="">(delete those assignment rows)</option>' + others.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+  document.getElementById('dlg-del-task').showModal();
+};
+document.getElementById('dlg-cancel-del-task').onclick = () => document.getElementById('dlg-del-task').close();
+document.getElementById('dlg-confirm-del-task').onclick = () => {
+  const name = pendingDeleteTask;
+  const dest = document.getElementById('dlg-task-move').value;
+  if (dest) {
+    const tDest = db.tasks.find(t => t.taskName === dest);
+    db.assignments.forEach(a => {
+      if (a.task === name) {
+        a.task = dest;
+        if (tDest) {
+          a.taskId = tDest.taskId || a.taskId;
+          a.category = tDest.category || a.category;
+          if (tDest.stdTime) a.stdTime = tDest.stdTime;
+        }
+      }
+    });
+  } else {
+    db.assignments = db.assignments.filter(a => a.task !== name);
+  }
+  db.tasks = db.tasks.filter(t => t.taskName !== name);
+  save(db); fillPeople(); setTaskForm(null); renderRoster(); renderAllTable();
+  document.getElementById('dlg-del-task').close();
+  document.getElementById('task-msg').textContent = 'Deleted task “' + name + '”.';
+};
+
+fillPeople();
+renderAllTable();
+</script>
 </body>
 </html>
