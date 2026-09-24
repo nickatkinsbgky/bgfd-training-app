@@ -133,7 +133,6 @@
       <div style="overflow:auto;max-height:420px;margin-top:10px" id="all-table"></div>
     </div>
   </section>
-
   <section id="tab-person" class="card" hidden>
     <h2>All data by category • by personnel</h2>
     <div class="split">
@@ -144,7 +143,6 @@
       <div id="p-detail"><p class="muted">Select a name.</p></div>
     </div>
   </section>
-
   <section id="tab-personavg" class="card" hidden>
     <h2>Averages by category • by personnel</h2>
     <div class="grid" style="max-width:420px">
@@ -153,13 +151,11 @@
     <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
     <div id="a-out"></div>
   </section>
-
   <section id="tab-dept" class="card" hidden>
     <h2>Department averages by category</h2>
     <div class="chart-wrap"><canvas id="chart-dept-avg"></canvas></div>
     <div id="d-out"></div>
   </section>
-
   <section id="tab-charts" class="card" hidden>
     <h2>Interactive charts</h2>
     <div class="grid" style="max-width:640px">
@@ -174,7 +170,6 @@
     </div>
     <p class="note">Hover a point or bar for the exact time. Trend charts sort by date completed. Lower minutes = faster.</p>
   </section>
-
   <section id="tab-cats" class="card" hidden>
     <h2>Categories</h2>
     <p class="muted">Add, rename, or delete categories. Deleting asks where existing tasks and assignments should move.</p>
@@ -184,7 +179,6 @@
     </div>
     <div id="cat-list" style="margin-top:14px"></div>
   </section>
-
   <section id="tab-roster" class="card" hidden>
     <h2>Roster and task catalog</h2>
     <input type="hidden" id="n-orig-person" />
@@ -219,7 +213,6 @@
   </section>
 </main>
 <datalist id="dl-people"></datalist>
-
 <dialog id="dlg-del-task">
   <h2>Delete task</h2>
   <p id="dlg-del-task-msg"></p>
@@ -231,7 +224,6 @@
     <button class="btn ghost" id="dlg-cancel-del-task">Cancel</button>
   </div>
 </dialog>
-
 <dialog id="dlg-del-person">
   <h2>Delete personnel</h2>
   <p id="dlg-del-person-msg"></p>
@@ -243,7 +235,6 @@
     <button class="btn ghost" id="dlg-cancel-del-person">Cancel</button>
   </div>
 </dialog>
-
 <dialog id="dlg-del-cat">
   <h2>Delete category</h2>
   <p id="dlg-del-msg"></p>
@@ -254,8 +245,11 @@
     <button class="btn ghost" id="dlg-cancel-del">Cancel</button>
   </div>
 </dialog>
-
+<script src="seed-personnel.js"></script>
+<script src="seed-tasks.js"></script>
+<script src="seed-assignments.js"></script>
 <script src="seed.js"></script>
-<script src="app.js"></script>
+<script src="app-part1.js"></script>
+<script src="app-part2.js"></script>
 </body>
 </html>
