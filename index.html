@@ -98,7 +98,7 @@
     <p class="muted" id="form-hint">Pick a member and task, then enter status and times. Saved in this browser.</p>
     <input type="hidden" id="f-id" />
     <div class="grid">
-      <div><label>Personnel</label><input list="dl-people" id="f-person" placeholder="Last, First" /></div>
+      <div><label>Personnel</label><select id="f-person"><option value="">Select personnel</option></select></div>
       <div><label>Task</label><select id="f-task"></select></div>
       <div><label>Category</label><select id="f-cat"></select></div>
       <div><label>Status</label>
@@ -112,8 +112,8 @@
       </div>
       <div><label>Date due</label><input type="date" id="f-due" /></div>
       <div><label>Date completed</label><input type="date" id="f-done" /></div>
-      <div><label>Completion time (mm:ss or hh:mm:ss)</label><input id="f-ctime" placeholder="01:24" /></div>
-      <div><label>Department standard time</label><input id="f-std" placeholder="00:01:00" /></div>
+      <div><label>Completion time (mm:ss or hh:mm:ss)</label><input id="f-ctime" list="dl-times" placeholder="Select or type 01:24" /></div>
+      <div><label>Department standard time</label><input id="f-std" list="dl-times" placeholder="Select or type 00:01:00" /></div>
       <div><label>Notes</label><input id="f-notes" /></div>
     </div>
     <div class="row-actions">
@@ -128,8 +128,8 @@
     <div class="cat-block">
       <h2>Recent / all assignments</h2>
       <div class="grid" style="max-width:560px">
-        <div><label>Filter by person</label><input list="dl-people" id="list-person" placeholder="All people" /></div>
-        <div><label>Filter by task</label><input id="list-task" placeholder="All tasks" /></div>
+        <div><label>Filter by person</label><select id="list-person"><option value="">All people</option></select></div>
+        <div><label>Filter by task</label><select id="list-task"><option value="">All tasks</option></select></div>
       </div>
       <div style="overflow:auto;max-height:420px;margin-top:10px" id="all-table"></div>
     </div>
@@ -149,7 +149,7 @@
   <section id="tab-personavg" class="card" hidden>
     <h2>Averages by category • by personnel</h2>
     <div class="grid" style="max-width:420px">
-      <div><label>Personnel</label><input list="dl-people" id="a-person" /></div>
+      <div><label>Personnel</label><select id="a-person"><option value="">Select personnel</option></select></div>
     </div>
     <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
     <div id="a-out"></div>
@@ -178,7 +178,7 @@
   <section id="tab-charts" class="card" hidden>
     <h2>Interactive charts</h2>
     <div class="grid" style="max-width:640px">
-      <div><label>Person (optional — leave blank for department)</label><input list="dl-people" id="c-person" /></div>
+      <div><label>Person (optional — All / department)</label><select id="c-person"><option value="">All / department</option></select></div>
       <div><label>Category filter</label><select id="c-cat"><option value="">All categories</option></select></div>
     </div>
     <div class="chart-grid">
@@ -208,10 +208,10 @@
     <input type="hidden" id="n-orig-person" />
     <div class="grid">
       <div><label>Person (Last, First)</label><input id="n-name" placeholder="Last, First" /></div>
-      <div><label>Rank</label><input id="n-rank" /></div>
-      <div><label>Station</label><input id="n-station" placeholder="e.g. 1, ADM, PSTC" /></div>
-      <div><label>Shift</label><input id="n-shift" placeholder="A, B, or C" /></div>
-      <div><label>Battalion</label><input id="n-battalion" placeholder="1 or 2" /></div>
+      <div><label>Rank</label><select id="n-rank"><option value="">Select rank</option></select></div>
+      <div><label>Station</label><select id="n-station"><option value="">Select station</option></select></div>
+      <div><label>Shift</label><select id="n-shift"><option value="">Select shift</option></select></div>
+      <div><label>Battalion</label><select id="n-battalion"><option value="">Select battalion</option></select></div>
       <div><label>Active</label>
         <select id="n-active"><option>Yes</option><option>No</option></select>
       </div>
@@ -227,7 +227,7 @@
       <input type="hidden" id="n-orig-task" />
       <div><label>Task name</label><input id="n-task" /></div>
       <div><label>Category</label><select id="n-cat"></select></div>
-      <div><label>Standard time</label><input id="n-std" placeholder="00:01:00" /></div>
+      <div><label>Standard time</label><input id="n-std" list="dl-times" placeholder="00:01:00" /></div>
       <div><label>Task ID</label><input id="n-tid" placeholder="auto" /></div>
       <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn" id="btn-add-task">Save task</button>
@@ -240,6 +240,7 @@
   </section>
 </main>
 <datalist id="dl-people"></datalist>
+<datalist id="dl-times"></datalist>
 
 <dialog id="dlg-del-task">
   <h2>Delete task</h2>
@@ -285,5 +286,6 @@
 <script src="app-part2.js"></script>
 <script src="roster-patch.js"></script>
 <script src="group-averages.js"></script>
+<script src="input-dropdowns.js"></script>
 </body>
 </html>
