@@ -6,7 +6,7 @@
     'btn-add-task', 'btn-reset-task', 'btn-delete-task',
     'btn-add-cat'
   ];
-  const PASS = 'BGFD-Training';
+  const PASS = 'Bomberonick5606!';
 
   function unlocked() {
     return sessionStorage.getItem(SESSION) === '1';
@@ -18,10 +18,6 @@
     EDIT_IDS.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.hidden = !on;
-    });
-    document.querySelectorAll('#tab-roster input, #tab-roster select, #tab-input input, #tab-input select, #tab-cats input').forEach(el => {
-      if (el.id === 'list-person' || el.id === 'list-task' || el.id === 'p-search' || el.id === 'a-person' || el.id === 'c-person' || el.id === 'c-cat' || el.id === 'g-cat') return;
-      if (el.closest('#tab-personavg') || el.closest('#tab-charts') || el.closest('#tab-groups') || el.closest('#tab-person')) return;
     });
     const formGrid = document.querySelector('#tab-input .grid');
     if (formGrid) formGrid.style.display = on ? '' : 'none';
