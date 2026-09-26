@@ -86,6 +86,7 @@
     <button data-tab="person">By personnel</button>
     <button data-tab="personavg">Person averages</button>
     <button data-tab="dept">Department averages</button>
+    <button data-tab="groups">Group averages</button>
     <button data-tab="charts">Charts</button>
     <button data-tab="cats">Categories</button>
     <button data-tab="roster">Roster / catalog</button>
@@ -160,6 +161,20 @@
     <div id="d-out"></div>
   </section>
 
+  <section id="tab-groups" class="card" hidden>
+    <h2>Group averages</h2>
+    <p class="muted">Average completion times for timed evolutions, grouped from each member’s station, shift, and battalion on the roster. Lower minutes = faster.</p>
+    <div class="grid" style="max-width:320px">
+      <div><label>Category filter</label><select id="g-cat"><option value="">All categories</option></select></div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-wrap"><canvas id="chart-g-shift"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-station"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-battalion"></canvas></div>
+    </div>
+    <div id="g-out"></div>
+  </section>
+
   <section id="tab-charts" class="card" hidden>
     <h2>Interactive charts</h2>
     <div class="grid" style="max-width:640px">
@@ -171,8 +186,11 @@
       <div class="chart-wrap"><canvas id="chart-compare"></canvas></div>
       <div class="chart-wrap"><canvas id="chart-status"></canvas></div>
       <div class="chart-wrap"><canvas id="chart-met"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-shift"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-station"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-battalion"></canvas></div>
     </div>
-    <p class="note">Hover a point or bar for the exact time. Trend charts sort by date completed. Lower minutes = faster.</p>
+    <p class="note">Hover a point or bar for the exact time. Trend charts sort by date completed. Lower minutes = faster. Group bars use roster station, shift, and battalion.</p>
   </section>
 
   <section id="tab-cats" class="card" hidden>
@@ -266,5 +284,6 @@
 <script src="app-part1.js"></script>
 <script src="app-part2.js"></script>
 <script src="roster-patch.js"></script>
+<script src="group-averages.js"></script>
 </body>
 </html>
