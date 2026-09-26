@@ -1,5 +1,70 @@
 (function () {
   if (typeof db === 'undefined' || typeof SEED === 'undefined') return;
+
+  function assignKey(a) {
+    if (a && a.assignmentId) return 'id:' + String(a.assignmentId);
+    return ['row', a && a.personnel, a && a.task, a && a.dateCompleted, a && a.completionTime, a && a.dateDue, a && a.status].join('|');
+  }
+
+  function mergeStore(src) {
+    if (!src || typeof src !== 'object') return { people: 0, tasks: 0, rows: 0, cats: 0 };
+    if (!Array.isArray(db.personnel)) db.personnel = [];
+    if (!Array.isArray(db.tasks)) db.tasks = [];
+    if (!Array.isArray(db.assignments)) db.assignments = [];
+    if (!Array.isArray(db.categories)) db.categories = [];
+
+    let people = 0, tasks = 0, rows = 0, cats = 0;
+    const haveP = new Set(db.personnel.map(p => p.fullName));
+    (src.personnel || []).forEach(p => {
+      if (!p || !p.fullName) return;
+      if (!haveP.has(p.fullName)) {
+        db.personnel.push(Object.assign({}, p));
+        haveP.add(p.fullName);
+        people++;
+      } else {
+        const dest = db.personnel.find(x => x.fullName === p.fullName);
+        ['rank', 'station', 'shift', 'battalion', 'active', 'notes'].forEach(f => {
+          if ((!dest[f] || dest[f] === '') && p[f]) dest[f] = p[f];
+        });
+      }
+    });
+
+    const haveT = new Set(db.tasks.map(t => t.taskName));
+    (src.tasks || []).forEach(t => {
+      if (!t || !t.taskName) return;
+      if (!haveT.has(t.taskName)) {
+        db.tasks.push(Object.assign({}, t));
+        haveT.add(t.taskName);
+        tasks++;
+      }
+    });
+
+    const haveA = new Set(db.assignments.map(assignKey));
+    (src.assignments || []).forEach(a => {
+      if (!a) return;
+      const k = assignKey(a);
+      if (!haveA.has(k)) {
+        db.assignments.push(Object.assign({}, a));
+        haveA.add(k);
+        rows++;
+      }
+    });
+
+    const haveC = new Set(db.categories);
+    (src.categories || []).forEach(c => {
+      if (c && !haveC.has(c)) {
+        db.categories.push(c);
+        haveC.add(c);
+        cats++;
+      }
+    });
+    return { people: people, tasks: tasks, rows: rows, cats: cats };
+  }
+
+  let v1 = null;
+  try { v1 = JSON.parse(localStorage.getItem('bgfd-training-app-v1') || 'null'); } catch (e) { v1 = null; }
+  const fromV1 = mergeStore(v1);
+
   const seedByName = {};
   (SEED.personnel || []).forEach(p => { seedByName[p.fullName] = p; });
   (db.personnel || []).forEach(p => {
@@ -15,8 +80,15 @@
       have.add(p.fullName);
     }
   });
+
   if (typeof save === 'function') save(db);
   if (typeof fillPeople === 'function') fillPeople();
+
+  const note = document.getElementById('save-msg');
+  if (note && v1 && (fromV1.rows || fromV1.people || fromV1.tasks)) {
+    note.textContent = 'Imported v1 database into v2: ' +
+      fromV1.rows + ' assignments, ' + fromV1.people + ' people, ' + fromV1.tasks + ' tasks.';
+  }
 
   window.setPersonForm = function (p) {
     document.getElementById('n-orig-person').value = p ? p.fullName : '';
@@ -37,7 +109,7 @@
   window.renderRoster = function () {
     const out = document.getElementById('r-out');
     const people = [...db.personnel].sort((a, b) => a.fullName.localeCompare(b.fullName));
-    out.innerHTML = '<p><strong>' + db.personnel.length + '</strong> personnel \u2022 <strong>' + db.tasks.length + '</strong> tasks</p>' +
+    out.innerHTML = '<p><strong>' + db.personnel.length + '</strong> personnel \u2022 <strong>' + db.tasks.length + '</strong> tasks \u2022 <strong>' + db.assignments.length + '</strong> assignments</p>' +
       '<h2>Personnel</h2>' +
       '<table><thead><tr><th></th><th>Name</th><th>Rank</th><th>Station</th><th>Shift</th><th>Battalion</th><th>Active</th><th>Records</th><th>Notes</th></tr></thead><tbody>' +
       people.map(p => {
