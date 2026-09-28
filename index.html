@@ -126,6 +126,15 @@
       <input type="file" id="file-import" accept="application/json" hidden />
     </div>
     <p class="note" id="save-msg"></p>
+    <p class="note" id="sync-msg"></p>
+    <div class="grid" style="max-width:720px;margin-top:8px">
+      <div><label>GitHub token (to upload shared data)</label><input id="sync-token" type="password" autocomplete="off" placeholder="ghp_…" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn gold" id="btn-save-token">Save token</button>
+        <button class="btn ghost" id="btn-pull">Load site data</button>
+        <button class="btn ghost" id="btn-push">Upload to site</button>
+      </div>
+    </div>
     <div class="cat-block">
       <h2>Recent / all assignments</h2>
       <div class="grid" style="max-width:560px">
@@ -283,11 +292,12 @@
 <script src="seed-tasks.js?v=20260926-2"></script>
 <script src="seed-assignments.js?v=20260926-2"></script>
 <script src="seed.js?v=20260926-2"></script>
-<script src="app-part1.js?v=20260926-2"></script>
+<script src="app-part1.js?v=20260928-1"></script>
 <script src="app-part2.js?v=20260926-2"></script>
 <script src="roster-patch.js?v=20260926-3"></script>
 <script src="group-averages.js?v=20260926-2"></script>
 <script src="input-dropdowns.js?v=20260926-2"></script>
 <script src="lock.js?v=20260926-3"></script>
+<script src="sync.js?v=20260928-1"></script>
 </body>
 </html>
