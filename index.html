@@ -31,23 +31,22 @@
   th { color:var(--muted); font-size:11px; text-transform:uppercase; }
   .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
   .Completed { background:#16351f; color:#3fb950; } .InProgress { background:#132f4c; color:#58a6ff; }
-  .NotStarted { background:#2d333b; color:#8b949e; } .AtRisk { background:#3d2a00; color:#e3b341; } .Overdue { background:#3d1111; color:#ff7b72; }
-  .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
-  .kpi b { display:block; font-size:22px; color:var(--gold); } .kpi span { color:var(--muted); font-size:12px; }
-  .muted, .note { color:var(--muted); } .ok { color:#3fb950; } .no { color:#ff7b72; }
+  .muted, .note { color:var(--muted); font-size:13px; } .ok { color:#3fb950; } .no { color:#ff7b72; }
   .split { display:grid; grid-template-columns:280px 1fr; gap:16px; }
   .plist { max-height:70vh; overflow:auto; }
   .plist button { width:100%; text-align:left; background:transparent; color:var(--text); border:0; border-bottom:1px solid var(--line); padding:8px 6px; cursor:pointer; }
   .plist button.on, .plist button:hover { background:#2a1313; }
   .plist small { color:var(--muted); display:block; }
-  .cat-block { margin-top:18px; }
-  .chart-wrap { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px; margin:12px 0 18px; position:relative; height:320px; }
+  .chart-wrap { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px; margin:12px 0 18px; height:320px; }
   .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  @media (max-width:900px){ .chart-grid { grid-template-columns:1fr; } .split { grid-template-columns:1fr; } }
   .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:16px; }
+  .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  .kpi b { display:block; font-size:22px; color:var(--gold); }
+  body.view-only .owner-only { display:none !important; }
+  @media (max-width:900px){ .chart-grid,.split { grid-template-columns:1fr; } }
 </style>
 </head>
-<body>
+<body class="view-only">
 <header>
   <img class="logo" src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20260926-2" alt="BGFD" />
   <h1>Bowling Green Fire Department<span>Training Division • Personnel Performance App</span></h1>
@@ -58,21 +57,36 @@
     <button data-tab="dept">Department averages</button>
     <button data-tab="groups">Group averages</button>
     <button data-tab="charts">Charts</button>
-    <button data-tab="cats">Categories</button>
     <button data-tab="roster">Roster / catalog</button>
   </nav>
 </header>
 <main>
   <section id="tab-input" class="card">
     <h2>Log an assignment / evolution</h2>
-    <p class="muted" id="form-hint">Loading…</p>
-    <div class="grid">
+    <p class="muted" id="form-hint">View only until the owner signs in.</p>
+    <div class="grid owner-only">
       <div><label>Personnel</label><select id="f-person"><option value="">Select personnel</option></select></div>
       <div><label>Task</label><select id="f-task"></select></div>
       <div><label>Category</label><select id="f-cat"></select></div>
       <div><label>Status</label><select id="f-status"><option>Completed</option><option>In Progress</option><option>Not Started</option><option>At Risk</option><option>Overdue</option></select></div>
+      <div><label>Date completed</label><input type="date" id="f-done" /></div>
+      <div><label>Completion time</label><input id="f-ctime" placeholder="mm:ss" /></div>
+      <div><label>Standard time</label><input id="f-std" placeholder="mm:ss" /></div>
+      <div><label>Notes</label><input id="f-notes" /></div>
     </div>
-    <div class="row-actions"><button class="btn gold" id="btn-export">Export JSON</button></div>
+    <div class="row-actions owner-only">
+      <button class="btn" id="btn-save">Save assignment</button>
+    </div>
+    <p class="note" id="save-msg"></p>
+    <p class="note" id="sync-msg"></p>
+    <div class="grid owner-only" style="max-width:720px;margin-top:8px">
+      <div><label>GitHub token (required on each device you edit from)</label><input id="sync-token" type="password" autocomplete="off" placeholder="ghp_…" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn gold" id="btn-save-token" type="button">Save token</button>
+        <button class="btn ghost" id="btn-pull" type="button">Load site data</button>
+        <button class="btn ghost" id="btn-push" type="button">Upload to site</button>
+      </div>
+    </div>
     <div id="all-table" style="overflow:auto;max-height:420px;margin-top:12px"></div>
   </section>
   <section id="tab-person" class="card" hidden>
@@ -83,19 +97,18 @@
     </div>
   </section>
   <section id="tab-personavg" class="card" hidden>
-    <h2>Averages by category • by personnel</h2>
+    <h2>Averages by personnel</h2>
     <div class="grid" style="max-width:420px"><div><label>Personnel</label><select id="a-person"><option value="">Select personnel</option></select></div></div>
     <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
     <div id="a-out"></div>
   </section>
   <section id="tab-dept" class="card" hidden>
-    <h2>Department averages by category</h2>
+    <h2>Department averages</h2>
     <div class="chart-wrap"><canvas id="chart-dept-avg"></canvas></div>
     <div id="d-out"></div>
   </section>
   <section id="tab-groups" class="card" hidden>
     <h2>Group averages</h2>
-    <p class="muted">Averages for timed evolutions by station, shift, and battalion from the roster.</p>
     <div class="grid" style="max-width:320px"><div><label>Category filter</label><select id="g-cat"><option value="">All categories</option></select></div></div>
     <div class="chart-grid">
       <div class="chart-wrap"><canvas id="chart-g-shift"></canvas></div>
@@ -105,10 +118,10 @@
     <div id="g-out"></div>
   </section>
   <section id="tab-charts" class="card" hidden>
-    <h2>Interactive charts</h2>
+    <h2>Charts</h2>
     <div class="grid" style="max-width:640px">
-      <div><label>Person (optional — All / department)</label><select id="c-person"><option value="">All / department</option></select></div>
-      <div><label>Category filter</label><select id="c-cat"><option value="">All categories</option></select></div>
+      <div><label>Person</label><select id="c-person"><option value="">All / department</option></select></div>
+      <div><label>Category</label><select id="c-cat"><option value="">All categories</option></select></div>
     </div>
     <div class="chart-grid">
       <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
@@ -120,9 +133,10 @@
       <div class="chart-wrap"><canvas id="chart-c-battalion"></canvas></div>
     </div>
   </section>
-  <section id="tab-cats" class="card" hidden><h2>Categories</h2><div id="cat-list"></div></section>
   <section id="tab-roster" class="card" hidden><h2>Roster / catalog</h2><div id="r-out"></div></section>
 </main>
+<select id="list-person" hidden></select>
+<select id="list-task" hidden></select>
 <select id="n-cat" hidden></select>
 <script src="seed-personnel-a.js?v=20260926-2"></script>
 <script src="seed-personnel-b.js?v=20260926-2"></script>
@@ -133,5 +147,8 @@
 <script src="app-part1.js?v=20260928-10"></script>
 <script src="app-part2.js?v=20260928-10"></script>
 <script src="group-averages.js?v=20260926-2"></script>
+<script src="owner-edit.js?v=20260928-11"></script>
+<script src="lock.js?v=20260928-4"></script>
+<script src="sync.js?v=20260928-11"></script>
 </body>
 </html>
