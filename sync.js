@@ -38,7 +38,12 @@ async function pullRemote() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const remote = migrate(await res.json());
     const remoteCount = (remote.assignments || []).length;
+    const remotePeople = (remote.personnel || []).length;
     const localCount = (db.assignments || []).length;
+    if (!remotePeople && !remoteCount) {
+      setSyncMsg('Site file is empty. Keeping the ' + localCount + ' assignment(s) already in this browser. Upload to fill the site copy.');
+      return remote;
+    }
     if (localCount > remoteCount) {
       setSyncMsg('This browser has more assignment rows (' + localCount + ') than the site (' + remoteCount + '). Click Upload to site to keep the fuller copy.');
       return remote;
@@ -47,7 +52,7 @@ async function pullRemote() {
     localStorage.setItem(KEY, JSON.stringify(db));
     if (typeof fillPeople === 'function') fillPeople();
     if (typeof renderAllTable === 'function') renderAllTable();
-    setSyncMsg('Using shared data from the site (' + remoteCount + ' assignments, ' + (db.personnel||[]).length + ' personnel).', true);
+    setSyncMsg('Using shared data from the site (' + remoteCount + ' assignments, ' + remotePeople + ' personnel).', true);
     return remote;
   } catch (err) {
     setSyncMsg('Could not load the site copy (' + err.message + '). Using this browser\u2019s data.');
