@@ -1,4 +1,22 @@
 (function () {
+  (function ensureGroupFilters() {
+    const tab = document.getElementById('tab-groups');
+    if (!tab || document.getElementById('g-by')) return;
+    const box = document.createElement('div');
+    box.className = 'grid';
+    box.style.maxWidth = '980px';
+    box.innerHTML =
+      '<div><label>Group by</label><select id="g-by">' +
+      '<option value="">All (shift, station, battalion)</option>' +
+      '<option value="shift">By shift</option>' +
+      '<option value="station">By station</option>' +
+      '<option value="battalion">By battalion</option></select></div>' +
+      '<div><label>Group</label><select id="g-value"><option value="">All groups</option></select></div>';
+    const existing = tab.querySelector('.grid');
+    if (existing) tab.insertBefore(box, existing);
+    else tab.insertBefore(box, tab.children[1] || null);
+  })();
+
   function personMeta(name) {
     return db.personnel.find(p => p.fullName === name) || {};
   }
@@ -60,16 +78,9 @@
       const byTask = {};
       list.forEach(r => (byTask[r.task] ||= []).push(r));
       return {
-        key: k,
-        n: list.length,
-        people: people.size,
-        avg: avgMinutes(list),
+        key: k, n: list.length, people: people.size, avg: avgMinutes(list),
         pctMet: judged.length ? (100 * met / judged.length) : null,
-        tasks: Object.keys(byTask).sort().map(task => ({
-          task: task,
-          n: byTask[task].length,
-          avg: avgMinutes(byTask[task])
-        }))
+        tasks: Object.keys(byTask).sort().map(task => ({ task: task, n: byTask[task].length, avg: avgMinutes(byTask[task]) }))
       };
     });
   }
@@ -141,9 +152,7 @@
       else hideChart(ids[f][0]);
     });
     const out = document.getElementById('g-out');
-    if (out) {
-      out.innerHTML = fields.map(f => tableFor(ids[f][2], f, cat, value)).join('');
-    }
+    if (out) out.innerHTML = fields.map(f => tableFor(ids[f][2], f, cat, value)).join('');
   };
   window.renderGroupChartsOnChartsTab = function () {
     const cat = document.getElementById('c-cat') ? document.getElementById('c-cat').value : '';
@@ -172,10 +181,7 @@
   const gCat = document.getElementById('g-cat');
   if (gCat) gCat.onchange = renderGroupAvgs;
   const gBy = document.getElementById('g-by');
-  if (gBy) gBy.onchange = function () {
-    fillValueSelect(gBy.value);
-    renderGroupAvgs();
-  };
+  if (gBy) gBy.onchange = function () { fillValueSelect(gBy.value); renderGroupAvgs(); };
   const gVal = document.getElementById('g-value');
   if (gVal) gVal.onchange = renderGroupAvgs;
   const cCat = document.getElementById('c-cat');
