@@ -1,1 +1,6 @@
-{"personnel":[{"fullName":"Abell, Jeremy","lastName":"Abell","firstName":"Jeremy","rank":"","active":"Yes","notes":"","station":"8","shift":"C","battalion":"1"}],"tasks":[],"assignments":[],"categories":["Engine Company","Other","PPE","Physical Fitness","Truck Operations"]}
+{
+  "personnel": [],
+  "tasks": [],
+  "assignments": [],
+  "categories": ["PPE", "Physical Fitness", "Engine Company", "Truck Operations", "Other"]
+}
