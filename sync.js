@@ -26,13 +26,22 @@ function utf8ToB64(str) {
   return btoa(bin);
 }
 
+function applyBuiltInData() {
+  const seed = (typeof SEED !== 'undefined') ? SEED : { personnel: [], tasks: [], assignments: [] };
+  db = migrate(structuredClone(seed));
+  localStorage.setItem(KEY, JSON.stringify(db));
+  if (typeof fillPeople === 'function') fillPeople();
+  if (typeof renderAllTable === 'function') renderAllTable();
+  setSyncMsg('Loaded department data already in the app (' + (db.assignments||[]).length + ' assignments, ' + (db.personnel||[]).length + ' personnel).', true);
+}
+
 async function pullRemote() {
   setSyncMsg('Loading shared data from the site…');
   try {
     const url = `https://raw.githubusercontent.com/${REMOTE.owner}/${REMOTE.repo}/${REMOTE.branch}/${REMOTE.path}?t=${Date.now()}`;
     const res = await fetch(url);
     if (res.status === 404) {
-      setSyncMsg('No shared file on the site yet. First save with a token will create it.');
+      applyBuiltInData();
       return null;
     }
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -40,8 +49,10 @@ async function pullRemote() {
     const remoteCount = (remote.assignments || []).length;
     const remotePeople = (remote.personnel || []).length;
     const localCount = (db.assignments || []).length;
+    const seedCount = (typeof SEED !== 'undefined' && SEED.assignments) ? SEED.assignments.length : 0;
     if (!remotePeople && !remoteCount) {
-      setSyncMsg('Site file is empty. Keeping the ' + localCount + ' assignment(s) already in this browser. Upload to fill the site copy.');
+      if (localCount < seedCount) applyBuiltInData();
+      else setSyncMsg('Using the ' + localCount + ' assignment(s) already on this device.', true);
       return remote;
     }
     if (localCount > remoteCount) {
