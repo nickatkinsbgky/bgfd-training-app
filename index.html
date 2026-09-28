@@ -111,7 +111,18 @@
   </section>
   <section id="tab-groups" class="card" hidden>
     <h2>Group averages</h2>
-    <div class="grid" style="max-width:320px"><div><label>Category filter</label><select id="g-cat"><option value="">All categories</option></select></div></div>
+    <div class="grid" style="max-width:980px">
+      <div><label>Group by</label>
+        <select id="g-by">
+          <option value="">All (shift, station, battalion)</option>
+          <option value="shift">By shift</option>
+          <option value="station">By station</option>
+          <option value="battalion">By battalion</option>
+        </select>
+      </div>
+      <div><label>Group</label><select id="g-value"><option value="">All groups</option></select></div>
+      <div><label>Category filter</label><select id="g-cat"><option value="">All categories</option></select></div>
+    </div>
     <div class="chart-grid">
       <div class="chart-wrap"><canvas id="chart-g-shift"></canvas></div>
       <div class="chart-wrap"><canvas id="chart-g-station"></canvas></div>
@@ -187,7 +198,7 @@
 <script src="seed.js?v=20260926-2"></script>
 <script src="app-part1.js?v=20260928-10"></script>
 <script src="app-part2.js?v=20260928-10"></script>
-<script src="group-averages.js?v=20260926-2"></script>
+<script src="group-averages.js?v=20260928-14"></script>
 <script src="crud.js?v=20260928-12"></script>
 <script src="lock.js?v=20260928-4"></script>
 <script src="sync.js?v=20260928-13"></script>
