@@ -37,11 +37,17 @@ async function pullRemote() {
     }
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const remote = migrate(await res.json());
+    const remoteCount = (remote.assignments || []).length;
+    const localCount = (db.assignments || []).length;
+    if (localCount > remoteCount) {
+      setSyncMsg('This browser has more assignment rows (' + localCount + ') than the site (' + remoteCount + '). Click Upload to site to keep the fuller copy.');
+      return remote;
+    }
     db = remote;
     localStorage.setItem(KEY, JSON.stringify(db));
     if (typeof fillPeople === 'function') fillPeople();
     if (typeof renderAllTable === 'function') renderAllTable();
-    setSyncMsg('Using shared data from the site.', true);
+    setSyncMsg('Using shared data from the site (' + remoteCount + ' assignments, ' + (db.personnel||[]).length + ' personnel).', true);
     return remote;
   } catch (err) {
     setSyncMsg('Could not load the site copy (' + err.message + '). Using this browser\u2019s data.');
@@ -113,6 +119,14 @@ function bindSyncUi() {
   };
   if (pullBtn) pullBtn.onclick = pullRemote;
   if (pushBtn) pushBtn.onclick = pushRemote;
+}
+
+if (typeof save === 'function') {
+  const _save = save;
+  save = function (data) {
+    _save(data);
+    schedulePush();
+  };
 }
 
 bindSyncUi();
