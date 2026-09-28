@@ -26,13 +26,38 @@ function utf8ToB64(str) {
   return btoa(bin);
 }
 
+function getDb() {
+  if (typeof window.db !== 'undefined' && window.db) return window.db;
+  try {
+    if (typeof db !== 'undefined' && db) {
+      window.db = db;
+      return db;
+    }
+  } catch (e) {}
+  const raw = localStorage.getItem('bgfd-training-app-v2') || localStorage.getItem('bgfd-training-app-v1');
+  if (raw) {
+    window.db = migrate(JSON.parse(raw));
+    return window.db;
+  }
+  if (typeof SEED !== 'undefined') {
+    window.db = migrate(structuredClone(SEED));
+    return window.db;
+  }
+  return null;
+}
+
+function setDb(next) {
+  window.db = next;
+  try { db = next; } catch (e) {}
+}
+
 function applyBuiltInData() {
   const seed = (typeof SEED !== 'undefined') ? SEED : { personnel: [], tasks: [], assignments: [] };
-  db = migrate(structuredClone(seed));
-  localStorage.setItem(KEY, JSON.stringify(db));
+  setDb(migrate(structuredClone(seed)));
+  localStorage.setItem(KEY, JSON.stringify(window.db));
   if (typeof fillPeople === 'function') fillPeople();
   if (typeof renderAllTable === 'function') renderAllTable();
-  setSyncMsg('Loaded department data already in the app (' + (db.assignments||[]).length + ' assignments, ' + (db.personnel||[]).length + ' personnel).', true);
+  setSyncMsg('Loaded department data already in the app (' + (window.db.assignments||[]).length + ' assignments, ' + (window.db.personnel||[]).length + ' personnel).', true);
 }
 
 async function pullRemote() {
@@ -48,7 +73,8 @@ async function pullRemote() {
     const remote = migrate(await res.json());
     const remoteCount = (remote.assignments || []).length;
     const remotePeople = (remote.personnel || []).length;
-    const localCount = (db.assignments || []).length;
+    const local = getDb() || { assignments: [], personnel: [] };
+    const localCount = (local.assignments || []).length;
     const seedCount = (typeof SEED !== 'undefined' && SEED.assignments) ? SEED.assignments.length : 0;
     if (!remotePeople && !remoteCount) {
       if (localCount < seedCount) applyBuiltInData();
@@ -59,8 +85,8 @@ async function pullRemote() {
       setSyncMsg('This browser has more assignment rows (' + localCount + ') than the site (' + remoteCount + '). Click Upload to site to keep the fuller copy.');
       return remote;
     }
-    db = remote;
-    localStorage.setItem(KEY, JSON.stringify(db));
+    setDb(remote);
+    localStorage.setItem(KEY, JSON.stringify(window.db));
     if (typeof fillPeople === 'function') fillPeople();
     if (typeof renderAllTable === 'function') renderAllTable();
     setSyncMsg('Using shared data from the site (' + remoteCount + ' assignments, ' + remotePeople + ' personnel).', true);
@@ -83,6 +109,11 @@ async function pushRemote() {
     setSyncMsg('Saved on this device only. Paste a GitHub token below to upload to the site.');
     return;
   }
+  const payload = getDb();
+  if (!payload) {
+    setSyncMsg('Upload failed: app data is not ready. Hard-refresh and try again.', false);
+    return;
+  }
   setSyncMsg('Uploading to the site…');
   try {
     const api = `https://api.github.com/repos/${REMOTE.owner}/${REMOTE.repo}/contents/${REMOTE.path}`;
@@ -99,7 +130,7 @@ async function pushRemote() {
     }
     const body = {
       message: 'Sync training data ' + new Date().toISOString(),
-      content: utf8ToB64(JSON.stringify(db)),
+      content: utf8ToB64(JSON.stringify(payload)),
       branch: REMOTE.branch
     };
     if (sha) body.sha = sha;
@@ -140,10 +171,12 @@ function bindSyncUi() {
 if (typeof save === 'function') {
   const _save = save;
   save = function (data) {
+    if (data) window.db = data;
     _save(data);
     schedulePush();
   };
 }
 
+window.db = getDb();
 bindSyncUi();
 pullRemote();
