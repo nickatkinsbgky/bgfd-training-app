@@ -54,7 +54,6 @@
   .AtRisk { background:#3d2a00; color:#e3b341; }
   .Overdue { background:#3d1111; color:#ff7b72; }
   .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:16px; }
-  .kpis .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
   .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
   .kpi b { display:block; font-size:22px; color:var(--gold); }
   .kpi span { color:var(--muted); font-size:12px; }
@@ -124,6 +123,7 @@
       <button class="btn ghost" id="btn-delete" hidden>Delete this record</button>
       <button class="btn gold" id="btn-export">Export JSON</button>
       <button class="btn ghost" id="btn-import">Import JSON</button>
+      <button class="btn gold" id="btn-restore-original" type="button">Restore original data</button>
       <input type="file" id="file-import" accept="application/json" hidden />
     </div>
     <p class="note" id="save-msg"></p>
@@ -298,7 +298,8 @@
 <script src="roster-patch.js?v=20260926-3"></script>
 <script src="group-averages.js?v=20260926-2"></script>
 <script src="input-dropdowns.js?v=20260926-2"></script>
-<script src="lock.js?v=20260926-3"></script>
+<script src="lock.js?v=20260928-4"></script>
+<script src="restore-original.js?v=20260928-1"></script>
 <script src="sync.js?v=20260928-2"></script>
 </body>
 </html>
