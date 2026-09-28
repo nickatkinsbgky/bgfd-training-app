@@ -29,9 +29,7 @@
   table { width:100%; border-collapse:collapse; font-size:13px; }
   th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; }
   th { color:var(--muted); font-size:11px; text-transform:uppercase; }
-  .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
-  .Completed { background:#16351f; color:#3fb950; } .InProgress { background:#132f4c; color:#58a6ff; }
-  .muted, .note { color:var(--muted); font-size:13px; } .ok { color:#3fb950; } .no { color:#ff7b72; }
+  .muted, .note { color:var(--muted); font-size:13px; }
   .split { display:grid; grid-template-columns:280px 1fr; gap:16px; }
   .plist { max-height:70vh; overflow:auto; }
   .plist button { width:100%; text-align:left; background:transparent; color:var(--text); border:0; border-bottom:1px solid var(--line); padding:8px 6px; cursor:pointer; }
@@ -57,13 +55,15 @@
     <button data-tab="dept">Department averages</button>
     <button data-tab="groups">Group averages</button>
     <button data-tab="charts">Charts</button>
+    <button data-tab="cats">Categories</button>
     <button data-tab="roster">Roster / catalog</button>
   </nav>
 </header>
 <main>
   <section id="tab-input" class="card">
-    <h2>Log an assignment / evolution</h2>
+    <h2 id="form-title">Log an assignment / evolution</h2>
     <p class="muted" id="form-hint">View only until the owner signs in.</p>
+    <input type="hidden" id="f-id" />
     <div class="grid owner-only">
       <div><label>Personnel</label><select id="f-person"><option value="">Select personnel</option></select></div>
       <div><label>Task</label><select id="f-task"></select></div>
@@ -76,11 +76,13 @@
     </div>
     <div class="row-actions owner-only">
       <button class="btn" id="btn-save">Save assignment</button>
+      <button class="btn ghost" id="btn-reset" type="button">New record</button>
+      <button class="btn ghost" id="btn-delete" type="button" hidden>Delete assignment</button>
     </div>
     <p class="note" id="save-msg"></p>
     <p class="note" id="sync-msg"></p>
     <div class="grid owner-only" style="max-width:720px;margin-top:8px">
-      <div><label>GitHub token (required on each device you edit from)</label><input id="sync-token" type="password" autocomplete="off" placeholder="ghp_…" /></div>
+      <div><label>GitHub token</label><input id="sync-token" type="password" autocomplete="off" placeholder="ghp_ or github_pat_" /></div>
       <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn gold" id="btn-save-token" type="button">Save token</button>
         <button class="btn ghost" id="btn-pull" type="button">Load site data</button>
@@ -90,14 +92,14 @@
     <div id="all-table" style="overflow:auto;max-height:420px;margin-top:12px"></div>
   </section>
   <section id="tab-person" class="card" hidden>
-    <h2>All data by category • by personnel</h2>
+    <h2>By personnel</h2>
     <div class="split">
       <div><input id="p-search" placeholder="Filter roster…" /><div class="plist" id="p-list"></div></div>
       <div id="p-detail"><p class="muted">Select a name.</p></div>
     </div>
   </section>
   <section id="tab-personavg" class="card" hidden>
-    <h2>Averages by personnel</h2>
+    <h2>Person averages</h2>
     <div class="grid" style="max-width:420px"><div><label>Personnel</label><select id="a-person"><option value="">Select personnel</option></select></div></div>
     <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
     <div id="a-out"></div>
@@ -133,11 +135,50 @@
       <div class="chart-wrap"><canvas id="chart-c-battalion"></canvas></div>
     </div>
   </section>
-  <section id="tab-roster" class="card" hidden><h2>Roster / catalog</h2><div id="r-out"></div></section>
+  <section id="tab-cats" class="card" hidden>
+    <h2>Categories</h2>
+    <div class="grid owner-only" style="max-width:720px">
+      <div><label>New category</label><input id="cat-new" /></div>
+      <div style="align-self:end"><button class="btn" id="btn-add-cat" type="button">Add category</button></div>
+    </div>
+    <div id="cat-list" style="margin-top:14px"></div>
+  </section>
+  <section id="tab-roster" class="card" hidden>
+    <h2>Roster and task catalog</h2>
+    <input type="hidden" id="n-orig-person" />
+    <div class="grid owner-only">
+      <div><label>Person (Last, First)</label><input id="n-name" placeholder="Last, First" /></div>
+      <div><label>Rank</label><input id="n-rank" /></div>
+      <div><label>Station</label><input id="n-station" /></div>
+      <div><label>Shift</label><input id="n-shift" /></div>
+      <div><label>Battalion</label><input id="n-battalion" /></div>
+      <div><label>Active</label><select id="n-active"><option>Yes</option><option>No</option></select></div>
+      <div><label>Notes</label><input id="n-pnotes" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-person" type="button">Save person</button>
+        <button class="btn ghost" id="btn-reset-person" type="button">New person</button>
+        <button class="btn ghost" id="btn-delete-person" type="button" hidden>Delete person</button>
+      </div>
+    </div>
+    <p class="note" id="person-msg"></p>
+    <input type="hidden" id="n-orig-task" />
+    <div class="grid owner-only" style="margin-top:12px">
+      <div><label>Task name</label><input id="n-task" /></div>
+      <div><label>Category</label><select id="n-cat"></select></div>
+      <div><label>Standard time</label><input id="n-std" /></div>
+      <div><label>Task ID</label><input id="n-tid" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-task" type="button">Save task</button>
+        <button class="btn ghost" id="btn-reset-task" type="button">New task</button>
+        <button class="btn ghost" id="btn-delete-task" type="button" hidden>Delete task</button>
+      </div>
+    </div>
+    <p class="note" id="task-msg"></p>
+    <div id="r-out" style="margin-top:16px"></div>
+  </section>
 </main>
 <select id="list-person" hidden></select>
 <select id="list-task" hidden></select>
-<select id="n-cat" hidden></select>
 <script src="seed-personnel-a.js?v=20260926-2"></script>
 <script src="seed-personnel-b.js?v=20260926-2"></script>
 <script src="seed-personnel.js?v=20260926-2"></script>
@@ -147,7 +188,7 @@
 <script src="app-part1.js?v=20260928-10"></script>
 <script src="app-part2.js?v=20260928-10"></script>
 <script src="group-averages.js?v=20260926-2"></script>
-<script src="owner-edit.js?v=20260928-11"></script>
+<script src="crud.js?v=20260928-12"></script>
 <script src="lock.js?v=20260928-4"></script>
 <script src="sync.js?v=20260928-11"></script>
 </body>
