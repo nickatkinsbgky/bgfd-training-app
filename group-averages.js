@@ -16,10 +16,26 @@
       return String(a).localeCompare(String(b), undefined, { numeric: true });
     });
   }
-  function timedRows(cat) {
+  function labelFor(field, key) {
+    if (key === 'Unassigned') return 'Unassigned';
+    if (field === 'shift') return 'Shift ' + key;
+    if (field === 'battalion') return 'Battalion ' + key;
+    if (field === 'station') return (String(key).match(/^\d+$/) ? 'Station ' : '') + key;
+    return key;
+  }
+  function allValues(field) {
+    const set = new Set();
+    (db.personnel || []).forEach(p => {
+      const v = String(p[field] || '').trim();
+      set.add(v || 'Unassigned');
+    });
+    return sortGroupKeys([...set], field);
+  }
+  function timedRows(cat, field, value) {
     return db.assignments.filter(a => {
       if (timeToSec(a.completionTime) == null) return false;
       if (cat && catOf(a) !== cat) return false;
+      if (field && value && groupKey(a, field) !== value) return false;
       return true;
     });
   }
@@ -28,8 +44,8 @@
     if (!secs.length) return null;
     return secs.reduce((a, b) => a + b, 0) / secs.length / 60;
   }
-  function groupStats(field, cat) {
-    const rows = timedRows(cat);
+  function groupStats(field, cat, value) {
+    const rows = timedRows(cat, field, value);
     const buckets = {};
     rows.forEach(r => {
       const k = groupKey(r, field);
@@ -57,62 +73,84 @@
       };
     });
   }
-
-  function tableFor(title, field, cat) {
-    const stats = groupStats(field, cat);
+  function tableFor(title, field, cat, value) {
+    const stats = groupStats(field, cat, value);
     if (!stats.length) return '<p class="muted">No timed records for ' + esc(title.toLowerCase()) + '.</p>';
     let html = '<div class="cat-block"><h2>' + esc(title) + '</h2>';
     html += '<table><thead><tr><th>' + esc(title.replace(/ averages$/i, '')) + '</th><th>People</th><th>Timed N</th><th>Avg time</th><th>% met</th><th>By task</th></tr></thead><tbody>';
     stats.forEach(s => {
       const taskBits = s.tasks.map(t => esc(t.task) + ' ' + fmtMin(t.avg) + ' (n=' + t.n + ')').join('<br>');
-      html += '<tr><td>' + esc(s.key) + '</td><td>' + s.people + '</td><td>' + s.n + '</td><td>' + fmtMin(s.avg) + '</td><td>' +
+      html += '<tr><td>' + esc(labelFor(field, s.key)) + '</td><td>' + s.people + '</td><td>' + s.n + '</td><td>' + fmtMin(s.avg) + '</td><td>' +
         (s.pctMet == null ? '\u2014' : s.pctMet.toFixed(0) + '%') + '</td><td>' + taskBits + '</td></tr>';
     });
     html += '</tbody></table></div>';
     return html;
   }
-
-  function drawGroupBar(canvasId, chartKey, field, title, cat) {
+  function drawGroupBar(canvasId, chartKey, field, title, cat, value) {
     const el = document.getElementById(canvasId);
     if (!el) return;
-    const stats = groupStats(field, cat);
+    const wrap = el.closest('.chart-wrap');
+    if (wrap) wrap.style.display = '';
+    const stats = groupStats(field, cat, value);
     destroyChart(chartKey);
     charts[chartKey] = new Chart(el, {
       type: 'bar',
       data: {
-        labels: stats.map(s => field === 'shift' && s.key !== 'Unassigned' ? ('Shift ' + s.key) : (field === 'battalion' && s.key !== 'Unassigned' ? ('Battalion ' + s.key) : (field === 'station' && s.key !== 'Unassigned' ? ('Sta ' + s.key) : s.key))),
+        labels: stats.map(s => labelFor(field, s.key)),
         datasets: [{ label: 'Avg minutes', data: stats.map(s => s.avg == null ? 0 : +s.avg.toFixed(3)), backgroundColor: COLORS }]
       },
       options: chartOpts(title)
     });
   }
-
+  function hideChart(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const wrap = el.closest('.chart-wrap');
+    if (wrap) wrap.style.display = 'none';
+  }
+  function fillValueSelect(field) {
+    const sel = document.getElementById('g-value');
+    if (!sel) return;
+    const keep = sel.value;
+    if (!field) {
+      sel.innerHTML = '<option value="">All groups</option>';
+      sel.disabled = true;
+      return;
+    }
+    sel.disabled = false;
+    const vals = allValues(field);
+    sel.innerHTML = '<option value="">All ' + field + 's</option>' +
+      vals.map(v => '<option value="' + esc(v) + '">' + esc(labelFor(field, v)) + '</option>').join('');
+    if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
+  }
   window.renderGroupAvgs = function () {
     const catSel = document.getElementById('g-cat');
     if (catSel && !catSel.dataset.filled) {
-      const cats = [...db.categories].sort();
-      catSel.innerHTML = '<option value="">All categories</option>' + cats.map(c => '<option value="' + esc(c) + '">' + esc(c) + '</option>').join('');
+      catSel.innerHTML = '<option value="">All categories</option>' + [...db.categories].sort().map(c => '<option value="' + esc(c) + '">' + esc(c) + '</option>').join('');
       catSel.dataset.filled = '1';
     }
+    const bySel = document.getElementById('g-by');
+    const field = bySel ? bySel.value : '';
+    fillValueSelect(field);
     const cat = catSel ? catSel.value : '';
-    drawGroupBar('chart-g-shift', 'gShift', 'shift', 'Average minutes by shift', cat);
-    drawGroupBar('chart-g-station', 'gStation', 'station', 'Average minutes by station', cat);
-    drawGroupBar('chart-g-battalion', 'gBattalion', 'battalion', 'Average minutes by battalion', cat);
+    const value = document.getElementById('g-value') ? document.getElementById('g-value').value : '';
+    const fields = field ? [field] : ['shift', 'station', 'battalion'];
+    const ids = { shift: ['chart-g-shift', 'gShift', 'Shift averages'], station: ['chart-g-station', 'gStation', 'Station averages'], battalion: ['chart-g-battalion', 'gBattalion', 'Battalion averages'] };
+    Object.keys(ids).forEach(f => {
+      if (fields.indexOf(f) >= 0) drawGroupBar(ids[f][0], ids[f][1], f, 'Average minutes by ' + f, cat, value);
+      else hideChart(ids[f][0]);
+    });
     const out = document.getElementById('g-out');
     if (out) {
-      out.innerHTML = tableFor('Shift averages', 'shift', cat) +
-        tableFor('Station averages', 'station', cat) +
-        tableFor('Battalion averages', 'battalion', cat);
+      out.innerHTML = fields.map(f => tableFor(ids[f][2], f, cat, value)).join('');
     }
   };
-
   window.renderGroupChartsOnChartsTab = function () {
     const cat = document.getElementById('c-cat') ? document.getElementById('c-cat').value : '';
-    drawGroupBar('chart-c-shift', 'cShift', 'shift', 'Charts \u2014 average minutes by shift', cat);
-    drawGroupBar('chart-c-station', 'cStation', 'station', 'Charts \u2014 average minutes by station', cat);
-    drawGroupBar('chart-c-battalion', 'cBattalion', 'battalion', 'Charts \u2014 average minutes by battalion', cat);
+    drawGroupBar('chart-c-shift', 'cShift', 'shift', 'Charts \u2014 average minutes by shift', cat, '');
+    drawGroupBar('chart-c-station', 'cStation', 'station', 'Charts \u2014 average minutes by station', cat, '');
+    drawGroupBar('chart-c-battalion', 'cBattalion', 'battalion', 'Charts \u2014 average minutes by battalion', cat, '');
   };
-
   document.querySelectorAll('nav button').forEach(b => {
     b.onclick = function () {
       document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
@@ -126,14 +164,20 @@
       if (b.dataset.tab === 'dept') renderDept();
       if (b.dataset.tab === 'groups') renderGroupAvgs();
       if (b.dataset.tab === 'charts') { renderCharts(); renderGroupChartsOnChartsTab(); }
-      if (b.dataset.tab === 'cats') renderCats();
+      if (b.dataset.tab === 'cats' && typeof renderCats === 'function') renderCats();
       if (b.dataset.tab === 'roster') renderRoster();
       if (b.dataset.tab === 'input') renderAllTable();
     };
   });
-
   const gCat = document.getElementById('g-cat');
   if (gCat) gCat.onchange = renderGroupAvgs;
+  const gBy = document.getElementById('g-by');
+  if (gBy) gBy.onchange = function () {
+    fillValueSelect(gBy.value);
+    renderGroupAvgs();
+  };
+  const gVal = document.getElementById('g-value');
+  if (gVal) gVal.onchange = renderGroupAvgs;
   const cCat = document.getElementById('c-cat');
   if (cCat) {
     cCat.onchange = function () {
