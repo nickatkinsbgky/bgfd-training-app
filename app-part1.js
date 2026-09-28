@@ -35,61 +35,67 @@ let db = load();
 window.db = db;
 let charts = {};
 
-function timeToSec(t) {
-  if (!t) return null;
-  const parts = String(t).trim().split(':').map(Number);
-  if (parts.some(isNaN)) return null;
-  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
-  if (parts.length === 2) return parts[0] * 60 + parts[1];
-  if (parts.length === 1) return parts[0];
-  return null;
-}
-function taskMeta(name) { return db.tasks.find(t => t.taskName === name) || {}; }
 function peopleNames() { return db.personnel.map(p => p.fullName).sort((a, b) => a.localeCompare(b)); }
+function taskMeta(name) { return db.tasks.find(t => t.taskName === name) || {}; }
 function catOf(row) { return row.category || taskMeta(row.task).category || 'Other'; }
 function esc(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": '&#39;' }[c]));
+  return String(s ?? '').replace(/[&<>"']/g, function (c) {
+    return ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": '&#39;' })[c];
+  });
 }
 function fillSelect(sel, items, extraFirst) {
   if (!sel) return;
   const cur = sel.value;
   sel.innerHTML = (extraFirst || '') + items.map(c => '<option value="' + esc(c) + '">' + esc(c) + '</option>').join('');
-  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+  if ([].slice.call(sel.options).some(function (o) { return o.value === cur; })) sel.value = cur;
 }
-function fillCats() {
-  const cats = [...db.categories].sort();
+function fillPeople() {
+  const names = peopleNames();
+  const tasks = db.tasks.map(t => t.taskName);
+  const cats = (db.categories || []).slice().sort();
+  fillSelect(document.getElementById('f-person'), names, '<option value="">Select personnel</option>');
+  fillSelect(document.getElementById('list-person'), names, '<option value="">All people</option>');
+  fillSelect(document.getElementById('a-person'), names, '<option value="">Select personnel</option>');
+  fillSelect(document.getElementById('c-person'), names, '<option value="">All / department</option>');
+  fillSelect(document.getElementById('f-task'), tasks);
+  fillSelect(document.getElementById('list-task'), tasks, '<option value="">All tasks</option>');
   fillSelect(document.getElementById('f-cat'), cats);
   fillSelect(document.getElementById('n-cat'), cats);
   fillSelect(document.getElementById('c-cat'), cats, '<option value="">All categories</option>');
-}
-function fillPeople() {
-  const dl = document.getElementById('dl-people');
-  if (dl) dl.innerHTML = peopleNames().map(n => '<option value="' + esc(n) + '"></option>').join('');
-  fillSelect(document.getElementById('f-task'), db.tasks.map(t => t.taskName));
-  fillCats();
+  const hint = document.getElementById('form-hint');
+  if (hint) hint.textContent = db.personnel.length + ' personnel • ' + db.assignments.length + ' assignments loaded.';
 }
 function renderAllTable() {
   const box = document.getElementById('all-table');
   if (!box) return;
-  const rows = [...db.assignments].reverse();
-  box.innerHTML = '<p class="note"><strong>' + db.personnel.length + '</strong> personnel • <strong>' + db.assignments.length + '</strong> assignments</p>' +
+  const pf = ((document.getElementById('list-person') || {}).value || '').toLowerCase();
+  const tf = ((document.getElementById('list-task') || {}).value || '').toLowerCase();
+  const rows = db.assignments.slice().reverse().filter(function (a) {
+    return (!pf || String(a.personnel).toLowerCase().indexOf(pf) >= 0) && (!tf || String(a.task).toLowerCase().indexOf(tf) >= 0);
+  });
+  box.innerHTML = '<p class="note"><strong>' + db.personnel.length + '</strong> personnel • <strong>' + rows.length + '</strong> assignment rows</p>' +
     '<table><thead><tr><th>ID</th><th>Personnel</th><th>Task</th><th>Category</th><th>Status</th><th>Completed</th><th>Time</th></tr></thead><tbody>' +
-    rows.map(r => '<tr><td>' + esc(r.assignmentId) + '</td><td>' + esc(r.personnel) + '</td><td>' + esc(r.task) + '</td><td>' + esc(catOf(r)) + '</td><td>' + esc(r.status) + '</td><td>' + esc(r.dateCompleted || '') + '</td><td>' + esc(r.completionTime || '') + '</td></tr>').join('') +
-    '</tbody></table>';
+    rows.map(function (r) {
+      return '<tr><td>' + esc(r.assignmentId) + '</td><td>' + esc(r.personnel) + '</td><td>' + esc(r.task) + '</td><td>' + esc(catOf(r)) + '</td><td>' + esc(r.status) + '</td><td>' + esc(r.dateCompleted || '') + '</td><td>' + esc(r.completionTime || '') + '</td></tr>';
+    }).join('') + '</tbody></table>';
 }
 function renderRoster() {
   const out = document.getElementById('r-out');
   if (!out) return;
-  const people = [...db.personnel].sort((a, b) => a.fullName.localeCompare(b.fullName));
+  const people = db.personnel.slice().sort(function (a, b) { return a.fullName.localeCompare(b.fullName); });
   out.innerHTML = '<p><strong>' + db.personnel.length + '</strong> personnel • <strong>' + db.tasks.length + '</strong> tasks • <strong>' + db.assignments.length + '</strong> assignments</p>' +
     '<table><thead><tr><th>Name</th><th>Rank</th><th>Station</th><th>Shift</th><th>Battalion</th></tr></thead><tbody>' +
-    people.map(p => '<tr><td>' + esc(p.fullName) + '</td><td>' + esc(p.rank || '') + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td></tr>').join('') +
-    '</tbody></table>';
+    people.map(function (p) {
+      return '<tr><td>' + esc(p.fullName) + '</td><td>' + esc(p.rank || '') + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td></tr>';
+    }).join('') + '</tbody></table>';
 }
 function renderPersonList() {
   const box = document.getElementById('p-list');
   if (!box) return;
-  box.innerHTML = peopleNames().map(n => '<button data-name="' + esc(n) + '">' + esc(n) + '</button>').join('');
+  const q = ((document.getElementById('p-search') || {}).value || '').toLowerCase();
+  box.innerHTML = peopleNames().filter(function (n) { return n.toLowerCase().indexOf(q) >= 0; }).map(function (n) {
+    return '<button type="button" data-name="' + esc(n) + '">' + esc(n) + '</button>';
+  }).join('');
 }
 function renderPersonAvg() {}
 function renderDept() {}
@@ -97,11 +103,22 @@ function renderCharts() {}
 function renderCats() {}
 function chartOpts() { return {}; }
 
-document.querySelectorAll('nav button').forEach(b => {
+if (document.getElementById('list-person')) document.getElementById('list-person').onchange = renderAllTable;
+if (document.getElementById('list-task')) document.getElementById('list-task').onchange = renderAllTable;
+if (document.getElementById('p-search')) document.getElementById('p-search').oninput = renderPersonList;
+if (document.getElementById('btn-export')) document.getElementById('btn-export').onclick = function () {
+  const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bgfd-training-data.json';
+  a.click();
+};
+
+document.querySelectorAll('nav button').forEach(function (b) {
   b.onclick = function () {
-    document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(function (x) { x.classList.remove('active'); });
     b.classList.add('active');
-    ['input', 'person', 'personavg', 'dept', 'groups', 'charts', 'cats', 'roster'].forEach(id => {
+    ['input', 'person', 'personavg', 'dept', 'groups', 'charts', 'cats', 'roster'].forEach(function (id) {
       const el = document.getElementById('tab-' + id);
       if (el) el.hidden = id !== b.dataset.tab;
     });
