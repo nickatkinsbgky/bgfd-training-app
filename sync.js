@@ -26,8 +26,18 @@ function utf8ToB64(str) {
   return btoa(bin);
 }
 
+function refreshViews() {
+  try { if (typeof fillPeople === 'function') fillPeople(); } catch (e) {}
+  try { if (typeof renderAllTable === 'function') renderAllTable(); } catch (e) {}
+  try { if (typeof renderRoster === 'function') renderRoster(); } catch (e) {}
+  const nP = (window.db && window.db.personnel) ? window.db.personnel.length : 0;
+  const nA = (window.db && window.db.assignments) ? window.db.assignments.length : 0;
+  const hint = document.getElementById('form-hint');
+  if (hint) hint.textContent = nP + ' personnel • ' + nA + ' assignments loaded.';
+}
+
 function getDb() {
-  if (typeof window.db !== 'undefined' && window.db) return window.db;
+  if (window.db && window.db.personnel) return window.db;
   try {
     if (typeof db !== 'undefined' && db) {
       window.db = db;
@@ -40,7 +50,7 @@ function getDb() {
     return window.db;
   }
   if (typeof SEED !== 'undefined') {
-    window.db = migrate(structuredClone(SEED));
+    window.db = migrate(JSON.parse(JSON.stringify(SEED)));
     return window.db;
   }
   return null;
@@ -52,12 +62,11 @@ function setDb(next) {
 }
 
 function applyBuiltInData() {
-  const seed = (typeof SEED !== 'undefined') ? SEED : { personnel: [], tasks: [], assignments: [] };
-  setDb(migrate(structuredClone(seed)));
-  localStorage.setItem(KEY, JSON.stringify(window.db));
-  if (typeof fillPeople === 'function') fillPeople();
-  if (typeof renderAllTable === 'function') renderAllTable();
-  setSyncMsg('Loaded department data already in the app (' + (window.db.assignments||[]).length + ' assignments, ' + (window.db.personnel||[]).length + ' personnel).', true);
+  const seed = (typeof SEED !== 'undefined') ? JSON.parse(JSON.stringify(SEED)) : { personnel: [], tasks: [], assignments: [] };
+  setDb(typeof migrate === 'function' ? migrate(seed) : seed);
+  try { localStorage.setItem(typeof KEY !== 'undefined' ? KEY : 'bgfd-training-app-v2', JSON.stringify(window.db)); } catch (e) {}
+  refreshViews();
+  setSyncMsg('Loaded original department data (' + (window.db.assignments||[]).length + ' assignments, ' + (window.db.personnel||[]).length + ' personnel).', true);
 }
 
 async function pullRemote() {
@@ -65,33 +74,37 @@ async function pullRemote() {
   try {
     const url = `https://raw.githubusercontent.com/${REMOTE.owner}/${REMOTE.repo}/${REMOTE.branch}/${REMOTE.path}?t=${Date.now()}`;
     const res = await fetch(url);
+    const local = getDb() || { assignments: [], personnel: [] };
+    const localPeople = (local.personnel || []).length;
+    const localCount = (local.assignments || []).length;
+    const seedPeople = (typeof SEED !== 'undefined' && SEED.personnel) ? SEED.personnel.length : 0;
     if (res.status === 404) {
-      applyBuiltInData();
+      if (localPeople < 50) applyBuiltInData();
+      else { refreshViews(); setSyncMsg('Using this browser\u2019s copy (' + localCount + ' assignments).', true); }
       return null;
     }
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const remote = migrate(await res.json());
     const remoteCount = (remote.assignments || []).length;
     const remotePeople = (remote.personnel || []).length;
-    const local = getDb() || { assignments: [], personnel: [] };
-    const localCount = (local.assignments || []).length;
-    const seedCount = (typeof SEED !== 'undefined' && SEED.assignments) ? SEED.assignments.length : 0;
-    if (!remotePeople && !remoteCount) {
-      if (localCount < seedCount) applyBuiltInData();
-      else setSyncMsg('Using the ' + localCount + ' assignment(s) already on this device.', true);
+    if (remotePeople < 50) {
+      if (localPeople < 50) applyBuiltInData();
+      else { refreshViews(); setSyncMsg('Site copy is empty. Keeping this browser\u2019s ' + localPeople + ' personnel / ' + localCount + ' assignments.', true); }
       return remote;
     }
-    if (localCount > remoteCount) {
-      setSyncMsg('This browser has more assignment rows (' + localCount + ') than the site (' + remoteCount + '). Click Upload to site to keep the fuller copy.');
+    if (localCount > remoteCount && localPeople >= remotePeople) {
+      refreshViews();
+      setSyncMsg('This browser has more rows than the site. Click Upload to site to share them.');
       return remote;
     }
     setDb(remote);
-    localStorage.setItem(KEY, JSON.stringify(window.db));
-    if (typeof fillPeople === 'function') fillPeople();
-    if (typeof renderAllTable === 'function') renderAllTable();
+    localStorage.setItem(typeof KEY !== 'undefined' ? KEY : 'bgfd-training-app-v2', JSON.stringify(window.db));
+    refreshViews();
     setSyncMsg('Using shared data from the site (' + remoteCount + ' assignments, ' + remotePeople + ' personnel).', true);
     return remote;
   } catch (err) {
+    if ((getDb() && (getDb().personnel||[]).length < 50)) applyBuiltInData();
+    else refreshViews();
     setSyncMsg('Could not load the site copy (' + err.message + '). Using this browser\u2019s data.');
     return null;
   }
@@ -152,16 +165,16 @@ function bindSyncUi() {
   const saveBtn = document.getElementById('btn-save-token');
   const pullBtn = document.getElementById('btn-pull');
   const pushBtn = document.getElementById('btn-push');
-  if (input) input.value = getToken() ? '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022' : '';
-  if (saveBtn) saveBtn.onclick = () => {
+  if (input) input.value = getToken() ? '••••••••••••' : '';
+  if (saveBtn) saveBtn.onclick = function () {
     const val = (input.value || '').trim();
-    if (!val || val.indexOf('\u2022') === 0) {
-      setSyncMsg(getToken() ? 'Token already saved in this browser.' : 'Paste a token first.', !getToken() ? false : true);
+    if (!val || val.indexOf('•') === 0) {
+      setSyncMsg(getToken() ? 'Token already saved in this browser.' : 'Paste a token first.', !!getToken());
       return;
     }
     localStorage.setItem(TOKEN_KEY, val);
-    input.value = '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022';
-    setSyncMsg('Token saved in this browser only. Next save will upload.', true);
+    input.value = '••••••••••••';
+    setSyncMsg('Token saved in this browser only.', true);
     pushRemote();
   };
   if (pullBtn) pullBtn.onclick = pullRemote;
@@ -179,4 +192,5 @@ if (typeof save === 'function') {
 
 window.db = getDb();
 bindSyncUi();
+refreshViews();
 pullRemote();
