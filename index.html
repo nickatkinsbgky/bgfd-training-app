@@ -53,7 +53,6 @@
   .NotStarted { background:#2d333b; color:#8b949e; }
   .AtRisk { background:#3d2a00; color:#e3b341; }
   .Overdue { background:#3d1111; color:#ff7b72; }
-  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:16px; }
   .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
   .kpi b { display:block; font-size:22px; color:var(--gold); }
   .kpi span { color:var(--muted); font-size:12px; }
@@ -73,7 +72,6 @@
   @media (max-width:900px){ .chart-grid { grid-template-columns:1fr; } }
   dialog { border:1px solid var(--line); border-radius:10px; background:var(--panel); color:var(--text); padding:18px; width:min(720px,94vw); }
   dialog::backdrop { background:rgba(0,0,0,.6); }
-  .warn { color:#ff7b72; font-size:12px; }
 </style>
 </head>
 <body>
@@ -146,18 +144,13 @@
   <section id="tab-person" class="card" hidden>
     <h2>All data by category • by personnel</h2>
     <div class="split">
-      <div>
-        <input id="p-search" placeholder="Filter roster…" />
-        <div class="plist" id="p-list"></div>
-      </div>
+      <div><input id="p-search" placeholder="Filter roster…" /><div class="plist" id="p-list"></div></div>
       <div id="p-detail"><p class="muted">Select a name.</p></div>
     </div>
   </section>
   <section id="tab-personavg" class="card" hidden>
     <h2>Averages by category • by personnel</h2>
-    <div class="grid" style="max-width:420px">
-      <div><label>Personnel</label><select id="a-person"><option value="">Select personnel</option></select></div>
-    </div>
+    <div class="grid" style="max-width:420px"><div><label>Personnel</label><select id="a-person"><option value="">Select personnel</option></select></div></div>
     <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
     <div id="a-out"></div>
   </section>
@@ -168,10 +161,7 @@
   </section>
   <section id="tab-groups" class="card" hidden>
     <h2>Group averages</h2>
-    <p class="muted">Average completion times for timed evolutions, grouped from each member’s station, shift, and battalion on the roster. Lower minutes = faster.</p>
-    <div class="grid" style="max-width:320px">
-      <div><label>Category filter</label><select id="g-cat"><option value="">All categories</option></select></div>
-    </div>
+    <div class="grid" style="max-width:320px"><div><label>Category filter</label><select id="g-cat"><option value="">All categories</option></select></div></div>
     <div class="chart-grid">
       <div class="chart-wrap"><canvas id="chart-g-shift"></canvas></div>
       <div class="chart-wrap"><canvas id="chart-g-station"></canvas></div>
@@ -198,7 +188,7 @@
   <section id="tab-cats" class="card" hidden>
     <h2>Categories</h2>
     <div class="grid" style="max-width:720px">
-      <div><label>New category name</label><input id="cat-new" placeholder="e.g. Truck Operations" /></div>
+      <div><label>New category name</label><input id="cat-new" /></div>
       <div style="align-self:end"><button class="btn" id="btn-add-cat">Add category</button></div>
     </div>
     <div id="cat-list" style="margin-top:14px"></div>
@@ -225,7 +215,7 @@
       <input type="hidden" id="n-orig-task" />
       <div><label>Task name</label><input id="n-task" /></div>
       <div><label>Category</label><select id="n-cat"></select></div>
-      <div><label>Standard time</label><input id="n-std" list="dl-times" placeholder="00:01:00" /></div>
+      <div><label>Standard time</label><input id="n-std" list="dl-times" /></div>
       <div><label>Task ID</label><input id="n-tid" placeholder="auto" /></div>
       <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn" id="btn-add-task">Save task</button>
@@ -254,7 +244,7 @@
 <script src="group-averages.js?v=20260926-2"></script>
 <script src="input-dropdowns.js?v=20260926-2"></script>
 <script src="lock.js?v=20260928-4"></script>
-<script src="restore-original.js?v=20260928-2"></script>
+<script src="restore-original.js?v=20260928-3"></script>
 <script src="sync.js?v=20260928-2"></script>
 <script>
 (function () {
@@ -263,21 +253,16 @@
   btn.addEventListener('click', function () {
     if (!window.confirm('Replace this browser copy with the original 178 people / 61 assignments?')) return;
     try {
-      if (typeof restoreOriginalData === 'function') {
-        restoreOriginalData();
-        return;
-      }
       if (typeof SEED === 'undefined') {
         alert('Original data files did not load. Hard-refresh and try again.');
         return;
       }
-      var next = (typeof migrate === 'function') ? migrate(JSON.parse(JSON.stringify(SEED))) : JSON.parse(JSON.stringify(SEED));
-      try { db = next; } catch (e) {}
-      window.db = next;
-      localStorage.setItem((typeof KEY !== 'undefined' ? KEY : 'bgfd-training-app-v2'), JSON.stringify(next));
-      if (typeof fillPeople === 'function') fillPeople();
-      if (typeof renderAllTable === 'function') renderAllTable();
-      alert('Restored original data: ' + (next.personnel||[]).length + ' people, ' + (next.assignments||[]).length + ' assignments.');
+      var next = JSON.parse(JSON.stringify(SEED));
+      if (typeof migrate === 'function') next = migrate(next);
+      var key = (typeof KEY !== 'undefined') ? KEY : 'bgfd-training-app-v2';
+      localStorage.setItem(key, JSON.stringify(next));
+      alert('Restored original data: ' + (next.personnel||[]).length + ' people, ' + (next.assignments||[]).length + ' assignments. The page will reload.');
+      location.reload();
     } catch (err) {
       alert('Restore failed: ' + err.message);
     }
