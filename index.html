@@ -7,266 +7,101 @@
 <link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20260926-2" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
-  :root {
-    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d;
-    --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017;
-  }
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
   * { box-sizing:border-box; }
   html,body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 "Segoe UI", system-ui, sans-serif; }
-  header {
-    background: linear-gradient(90deg,#3b0a0a,#1a0a0a 40%,#0d1117);
-    border-bottom:3px solid var(--gold);
-    padding:14px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-  }
-  .logo { height:56px; width:56px; object-fit:contain; background:#0a0a0a; border-radius:50%;
-    border:2px solid var(--gold); padding:2px; flex-shrink:0; }
+  header { background: linear-gradient(90deg,#3b0a0a,#1a0a0a 40%,#0d1117); border-bottom:3px solid var(--gold); padding:14px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .logo { height:56px; width:56px; object-fit:contain; background:#0a0a0a; border-radius:50%; border:2px solid var(--gold); padding:2px; }
   h1 { margin:0; font-size:18px; }
   h1 span { display:block; font-size:12px; color:var(--muted); font-weight:500; }
   nav { display:flex; gap:6px; margin-left:auto; flex-wrap:wrap; }
-  nav button {
-    background:transparent; color:var(--text); border:1px solid var(--line); border-radius:6px;
-    padding:8px 12px; cursor:pointer; font-weight:600;
-  }
+  nav button { background:transparent; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 12px; cursor:pointer; font-weight:600; }
   nav button.active { background:var(--red); border-color:var(--red); }
-  nav button:hover { border-color:var(--gold); }
   main { padding:18px 22px 48px; max-width:1280px; margin:0 auto; }
   .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:16px; }
   h2 { margin:0 0 12px; font-size:16px; color:var(--gold); }
   label { display:block; font-size:12px; color:var(--muted); margin:8px 0 4px; }
-  input, select, textarea {
-    width:100%; background:var(--panel2); color:var(--text); border:1px solid var(--line);
-    border-radius:6px; padding:8px 10px;
-  }
+  input, select { width:100%; background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; }
   .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px 14px; }
   .btn { background:var(--red); color:#fff; border:0; border-radius:6px; padding:9px 16px; font-weight:700; cursor:pointer; }
   .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); }
   .btn.gold { background:var(--gold); color:#1a1200; }
-  .btn.sm { padding:4px 8px; font-size:12px; }
   .row-actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
   table { width:100%; border-collapse:collapse; font-size:13px; }
-  th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; vertical-align:top; }
-  th { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.4px; }
-  tr:hover td { background:#1f2633; }
-  .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
-  .Completed { background:#16351f; color:#3fb950; }
-  .InProgress { background:#132f4c; color:#58a6ff; }
-  .NotStarted { background:#2d333b; color:#8b949e; }
-  .AtRisk { background:#3d2a00; color:#e3b341; }
-  .Overdue { background:#3d1111; color:#ff7b72; }
-  .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
-  .kpi b { display:block; font-size:22px; color:var(--gold); }
-  .kpi span { color:var(--muted); font-size:12px; }
-  .muted { color:var(--muted); }
-  .split { display:grid; grid-template-columns:280px 1fr; gap:16px; }
-  @media (max-width:860px){ .split { grid-template-columns:1fr; } }
-  .plist { max-height:70vh; overflow:auto; }
-  .plist button { width:100%; text-align:left; background:transparent; color:var(--text); border:0;
-    border-bottom:1px solid var(--line); padding:8px 6px; cursor:pointer; }
-  .plist button:hover, .plist button.on { background:#2a1313; }
-  .plist small { color:var(--muted); display:block; }
-  .cat-block { margin-top:18px; }
-  .note { font-size:12px; color:var(--muted); margin-top:8px; }
+  th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; }
+  th { color:var(--muted); font-size:11px; text-transform:uppercase; }
+  .muted, .note { color:var(--muted); font-size:12px; }
   .ok { color:#3fb950; } .no { color:#ff7b72; }
-  .chart-wrap { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px; margin:12px 0 18px; position:relative; height:320px; }
-  .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  @media (max-width:900px){ .chart-grid { grid-template-columns:1fr; } }
-  dialog { border:1px solid var(--line); border-radius:10px; background:var(--panel); color:var(--text); padding:18px; width:min(720px,94vw); }
-  dialog::backdrop { background:rgba(0,0,0,.6); }
+  .split { display:grid; grid-template-columns:280px 1fr; gap:16px; }
+  .plist button { width:100%; text-align:left; background:transparent; color:var(--text); border:0; border-bottom:1px solid var(--line); padding:8px 6px; cursor:pointer; }
 </style>
 </head>
 <body>
 <header>
-  <img class="logo" src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20260926-2" alt="Bowling Green Fire Department logo" />
+  <img class="logo" src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20260926-2" alt="BGFD" />
   <h1>Bowling Green Fire Department<span>Training Division • Personnel Performance App</span></h1>
   <nav>
     <button class="active" data-tab="input">Enter / edit</button>
     <button data-tab="person">By personnel</button>
-    <button data-tab="personavg">Person averages</button>
-    <button data-tab="dept">Department averages</button>
-    <button data-tab="groups">Group averages</button>
-    <button data-tab="charts">Charts</button>
-    <button data-tab="cats">Categories</button>
     <button data-tab="roster">Roster / catalog</button>
   </nav>
 </header>
 <main>
   <section id="tab-input" class="card">
-    <h2 id="form-title">Log an assignment / evolution</h2>
-    <p class="muted" id="form-hint">Pick a member and task, then enter status and times. Saved in this browser.</p>
-    <input type="hidden" id="f-id" />
-    <div class="grid">
-      <div><label>Personnel</label><select id="f-person"><option value="">Select personnel</option></select></div>
-      <div><label>Task</label><select id="f-task"></select></div>
-      <div><label>Category</label><select id="f-cat"></select></div>
-      <div><label>Status</label>
-        <select id="f-status">
-          <option>Completed</option><option>In Progress</option><option>Not Started</option>
-          <option>At Risk</option><option>Overdue</option>
-        </select>
-      </div>
-      <div><label>Priority</label>
-        <select id="f-priority"><option></option><option>High</option><option>Medium</option><option>Low</option></select>
-      </div>
-      <div><label>Date due</label><input type="date" id="f-due" /></div>
-      <div><label>Date completed</label><input type="date" id="f-done" /></div>
-      <div><label>Completion time (mm:ss or hh:mm:ss)</label><input id="f-ctime" list="dl-times" placeholder="Select or type 01:24" /></div>
-      <div><label>Department standard time</label><input id="f-std" list="dl-times" placeholder="Select or type 00:01:00" /></div>
-      <div><label>Notes</label><input id="f-notes" /></div>
-    </div>
+    <h2>Assignments</h2>
+    <p class="muted" id="form-hint">Loading…</p>
     <div class="row-actions">
-      <button class="btn" id="btn-save">Save assignment</button>
-      <button class="btn ghost" id="btn-reset">New record</button>
-      <button class="btn ghost" id="btn-delete" hidden>Delete this record</button>
-      <button class="btn gold" id="btn-export">Export JSON</button>
-      <button class="btn ghost" id="btn-import">Import JSON</button>
       <button class="btn gold" id="btn-restore-original" type="button">Restore original data</button>
-      <input type="file" id="file-import" accept="application/json" hidden />
+      <button class="btn gold" id="btn-export">Export JSON</button>
     </div>
     <p class="note" id="save-msg"></p>
     <p class="note" id="sync-msg"></p>
-    <div class="grid" style="max-width:720px;margin-top:8px">
-      <div><label>GitHub token (to upload shared data)</label><input id="sync-token" type="password" autocomplete="off" placeholder="ghp_…" /></div>
-      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn gold" id="btn-save-token">Save token</button>
-        <button class="btn ghost" id="btn-pull">Load site data</button>
-        <button class="btn ghost" id="btn-push">Upload to site</button>
-      </div>
-    </div>
-    <div class="cat-block">
-      <h2>Recent / all assignments</h2>
-      <div class="grid" style="max-width:560px">
-        <div><label>Filter by person</label><select id="list-person"><option value="">All people</option></select></div>
-        <div><label>Filter by task</label><select id="list-task"><option value="">All tasks</option></select></div>
-      </div>
-      <div style="overflow:auto;max-height:420px;margin-top:10px" id="all-table"></div>
-    </div>
+    <div id="all-table"></div>
   </section>
   <section id="tab-person" class="card" hidden>
-    <h2>All data by category • by personnel</h2>
-    <div class="split">
-      <div><input id="p-search" placeholder="Filter roster…" /><div class="plist" id="p-list"></div></div>
-      <div id="p-detail"><p class="muted">Select a name.</p></div>
-    </div>
-  </section>
-  <section id="tab-personavg" class="card" hidden>
-    <h2>Averages by category • by personnel</h2>
-    <div class="grid" style="max-width:420px"><div><label>Personnel</label><select id="a-person"><option value="">Select personnel</option></select></div></div>
-    <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
-    <div id="a-out"></div>
-  </section>
-  <section id="tab-dept" class="card" hidden>
-    <h2>Department averages by category</h2>
-    <div class="chart-wrap"><canvas id="chart-dept-avg"></canvas></div>
-    <div id="d-out"></div>
-  </section>
-  <section id="tab-groups" class="card" hidden>
-    <h2>Group averages</h2>
-    <div class="grid" style="max-width:320px"><div><label>Category filter</label><select id="g-cat"><option value="">All categories</option></select></div></div>
-    <div class="chart-grid">
-      <div class="chart-wrap"><canvas id="chart-g-shift"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-g-station"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-g-battalion"></canvas></div>
-    </div>
-    <div id="g-out"></div>
-  </section>
-  <section id="tab-charts" class="card" hidden>
-    <h2>Interactive charts</h2>
-    <div class="grid" style="max-width:640px">
-      <div><label>Person (optional — All / department)</label><select id="c-person"><option value="">All / department</option></select></div>
-      <div><label>Category filter</label><select id="c-cat"><option value="">All categories</option></select></div>
-    </div>
-    <div class="chart-grid">
-      <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-compare"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-status"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-met"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-c-shift"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-c-station"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-c-battalion"></canvas></div>
-    </div>
-  </section>
-  <section id="tab-cats" class="card" hidden>
-    <h2>Categories</h2>
-    <div class="grid" style="max-width:720px">
-      <div><label>New category name</label><input id="cat-new" /></div>
-      <div style="align-self:end"><button class="btn" id="btn-add-cat">Add category</button></div>
-    </div>
-    <div id="cat-list" style="margin-top:14px"></div>
+    <h2>By personnel</h2>
+    <div class="split"><div class="plist" id="p-list"></div><div id="p-detail"></div></div>
   </section>
   <section id="tab-roster" class="card" hidden>
-    <h2>Roster and task catalog</h2>
-    <input type="hidden" id="n-orig-person" />
-    <div class="grid">
-      <div><label>Person (Last, First)</label><input id="n-name" placeholder="Last, First" /></div>
-      <div><label>Rank</label><select id="n-rank"><option value="">Select rank</option></select></div>
-      <div><label>Station</label><select id="n-station"><option value="">Select station</option></select></div>
-      <div><label>Shift</label><select id="n-shift"><option value="">Select shift</option></select></div>
-      <div><label>Battalion</label><select id="n-battalion"><option value="">Select battalion</option></select></div>
-      <div><label>Active</label><select id="n-active"><option>Yes</option><option>No</option></select></div>
-      <div><label>Notes</label><input id="n-pnotes" /></div>
-      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" id="btn-add-person">Save person</button>
-        <button class="btn ghost" id="btn-reset-person">New person</button>
-        <button class="btn" id="btn-delete-person" hidden>Delete person</button>
-      </div>
-    </div>
-    <p class="note" id="person-msg"></p>
-    <div class="grid" style="margin-top:10px">
-      <input type="hidden" id="n-orig-task" />
-      <div><label>Task name</label><input id="n-task" /></div>
-      <div><label>Category</label><select id="n-cat"></select></div>
-      <div><label>Standard time</label><input id="n-std" list="dl-times" /></div>
-      <div><label>Task ID</label><input id="n-tid" placeholder="auto" /></div>
-      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" id="btn-add-task">Save task</button>
-        <button class="btn ghost" id="btn-reset-task">New task</button>
-        <button class="btn" id="btn-delete-task" hidden>Delete task</button>
-      </div>
-    </div>
-    <p class="note" id="task-msg"></p>
-    <div id="r-out" style="margin-top:16px"></div>
+    <h2>Roster / catalog</h2>
+    <div id="r-out"></div>
   </section>
 </main>
 <datalist id="dl-people"></datalist>
-<datalist id="dl-times"></datalist>
-<dialog id="dlg-del-task"><h2>Delete task</h2><p id="dlg-del-task-msg"></p><label>Reassign existing assignment rows to</label><select id="dlg-task-move"></select><div class="row-actions"><button class="btn" id="dlg-confirm-del-task">Delete task</button><button class="btn ghost" id="dlg-cancel-del-task">Cancel</button></div></dialog>
-<dialog id="dlg-del-person"><h2>Delete personnel</h2><p id="dlg-del-person-msg"></p><label>Reassign existing assignment rows to</label><select id="dlg-person-move"></select><div class="row-actions"><button class="btn" id="dlg-confirm-del-person">Delete person</button><button class="btn ghost" id="dlg-cancel-del-person">Cancel</button></div></dialog>
-<dialog id="dlg-del-cat"><h2>Delete category</h2><p id="dlg-del-msg"></p><label>Move existing items to</label><select id="dlg-move-to"></select><div class="row-actions"><button class="btn" id="dlg-confirm-del">Delete and move</button><button class="btn ghost" id="dlg-cancel-del">Cancel</button></div></dialog>
+<select id="f-task" hidden></select>
+<select id="f-cat" hidden></select>
+<select id="n-cat" hidden></select>
+<select id="c-cat" hidden></select>
 <script src="seed-personnel-a.js?v=20260926-2"></script>
 <script src="seed-personnel-b.js?v=20260926-2"></script>
 <script src="seed-personnel.js?v=20260926-2"></script>
 <script src="seed-tasks.js?v=20260926-2"></script>
 <script src="seed-assignments.js?v=20260926-2"></script>
 <script src="seed.js?v=20260926-2"></script>
-<script src="app-part1.js?v=20260928-1"></script>
-<script src="app-part2.js?v=20260926-2"></script>
-<script src="roster-patch.js?v=20260926-3"></script>
-<script src="group-averages.js?v=20260926-2"></script>
-<script src="input-dropdowns.js?v=20260926-2"></script>
-<script src="lock.js?v=20260928-4"></script>
-<script src="restore-original.js?v=20260928-3"></script>
-<script src="sync.js?v=20260928-5"></script>
+<script src="app-part1.js?v=20260928-6"></script>
 <script>
 (function () {
   var btn = document.getElementById('btn-restore-original');
-  if (!btn) return;
-  btn.addEventListener('click', function () {
-    if (!window.confirm('Replace this browser copy with the original 178 people / 61 assignments?')) return;
-    try {
-      if (typeof SEED === 'undefined') {
-        alert('Original data files did not load. Hard-refresh and try again.');
-        return;
-      }
-      var next = JSON.parse(JSON.stringify(SEED));
-      if (typeof migrate === 'function') next = migrate(next);
-      var key = (typeof KEY !== 'undefined') ? KEY : 'bgfd-training-app-v2';
-      localStorage.setItem(key, JSON.stringify(next));
-      alert('Restored original data: ' + (next.personnel||[]).length + ' people, ' + (next.assignments||[]).length + ' assignments. The page will reload.');
-      location.reload();
-    } catch (err) {
-      alert('Restore failed: ' + err.message);
-    }
-  });
+  if (btn) btn.onclick = function () {
+    if (!confirm('Load original 178 people / 61 assignments?')) return;
+    var next = JSON.parse(JSON.stringify(SEED));
+    if (typeof migrate === 'function') next = migrate(next);
+    localStorage.setItem('bgfd-training-app-v2', JSON.stringify(next));
+    db = next; window.db = next;
+    if (typeof fillPeople === 'function') fillPeople();
+    if (typeof renderAllTable === 'function') renderAllTable();
+    alert('Loaded ' + next.personnel.length + ' people and ' + next.assignments.length + ' assignments.');
+  };
+  var exp = document.getElementById('btn-export');
+  if (exp) exp.onclick = function () {
+    var blob = new Blob([JSON.stringify(window.db || db, null, 2)], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'bgfd-training-data.json';
+    a.click();
+  };
+  var hint = document.getElementById('form-hint');
+  if (hint && window.db) hint.textContent = window.db.personnel.length + ' personnel • ' + window.db.assignments.length + ' assignments loaded.';
 })();
 </script>
 </body>
