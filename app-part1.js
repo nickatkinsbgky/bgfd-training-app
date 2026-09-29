@@ -17,18 +17,35 @@ function migrate(store) {
 }
 function mergeOCourse(store) {
   const extra = window.SEED_OCOURSE || [];
-  if (!extra.length) return store;
+  const map = window.OC_NAME_MAP || {
+    'Barnhart, Zack':'Barnhart, Zach',
+    'Bates, Chris':'Bates, Christopher',
+    'Dylan, Matt':'Dylan, Matthew',
+    'Gaoa, Solo':'Gaoa, Solomona',
+    'Napolitano, Thomas':'Napolitano, Tom',
+    'Parsley, Dane':'Parsley, William',
+    'Smith, Jonathan':'Smith, Jon',
+    'Vance, Josh':'Vance, Joshua'
+  };
   store.assignments = store.assignments || [];
+  let changed = 0;
+  store.assignments.forEach(a => {
+    if (a && map[a.personnel]) { a.personnel = map[a.personnel]; changed++; }
+  });
   const have = new Set(store.assignments.map(a => a.assignmentId));
-  let added = 0;
   extra.forEach(a => {
-    if (a && a.assignmentId && !have.has(a.assignmentId)) {
+    if (!a || !a.assignmentId) return;
+    if (map[a.personnel]) a.personnel = map[a.personnel];
+    if (!have.has(a.assignmentId)) {
       store.assignments.push(a);
       have.add(a.assignmentId);
-      added++;
+      changed++;
+    } else {
+      const cur = store.assignments.find(x => x.assignmentId === a.assignmentId);
+      if (cur && cur.personnel !== a.personnel) { cur.personnel = a.personnel; changed++; }
     }
   });
-  if (added) {
+  if (changed) {
     try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {}
   }
   return store;
