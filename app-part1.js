@@ -15,6 +15,27 @@ function migrate(store) {
   (store.tasks || []).forEach(t => { if (!t.category) t.category = 'Other'; });
   return store;
 }
+function mergeMissingPersonnel(store) {
+  const extra = [].concat(window.SEED_PERSONNEL || [], window.SEED_PERSONNEL_A || [], window.SEED_PERSONNEL_B || []);
+  store.personnel = store.personnel || [];
+  const have = new Set(store.personnel.map(p => p && p.fullName));
+  let changed = 0;
+  extra.forEach(p => {
+    if (!p || !p.fullName) return;
+    if (!have.has(p.fullName)) {
+      store.personnel.push(p);
+      have.add(p.fullName);
+      changed++;
+    }
+  });
+  store.personnel.forEach(p => {
+    if (p && p.fullName === 'Rich, Brittany') {
+      if (p.station !== 'ADM') { p.station = 'ADM'; p.shift = ''; p.battalion = ''; changed++; }
+      if (!p.rank) p.rank = 'INSPECTOR';
+    }
+  });
+  return changed;
+}
 function mergeOCourse(store) {
   const extra = window.SEED_OCOURSE || [];
   const map = window.OC_NAME_MAP || {
@@ -45,6 +66,7 @@ function mergeOCourse(store) {
       if (cur && cur.personnel !== a.personnel) { cur.personnel = a.personnel; changed++; }
     }
   });
+  changed += mergeMissingPersonnel(store);
   if (changed) {
     try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {}
   }
