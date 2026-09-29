@@ -50,12 +50,21 @@ function mergeOCourse(store) {
   };
   store.assignments = store.assignments || [];
   let changed = 0;
+  const drop = window.OC_DROP_NAMES || [
+    'Carlson, Evron','Chambers, Brian','Cornwell, Michael',
+    'Pardue, Shannon','Thomas, Brandon','Tutor, Nick','PLACEHOLDER'
+  ];
+  const dropSet = new Set(drop);
+  const before = store.assignments.length;
+  store.assignments = store.assignments.filter(a => a && !dropSet.has(a.personnel));
+  changed += before - store.assignments.length;
   store.assignments.forEach(a => {
     if (a && map[a.personnel]) { a.personnel = map[a.personnel]; changed++; }
   });
   const have = new Set(store.assignments.map(a => a.assignmentId));
   extra.forEach(a => {
     if (!a || !a.assignmentId) return;
+    if (dropSet.has(a.personnel) || (map[a.personnel] && dropSet.has(map[a.personnel]))) return;
     if (map[a.personnel]) a.personnel = map[a.personnel];
     if (!have.has(a.assignmentId)) {
       store.assignments.push(a);
