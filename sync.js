@@ -26,11 +26,31 @@ function utf8ToB64(str) {
   return btoa(bin);
 }
 
+function applyNameMaps(store) {
+  if (!store) return store;
+  if (typeof mergeOCourse === 'function') return mergeOCourse(store);
+  const map = window.OC_NAME_MAP || {
+    'Barnhart, Zack':'Barnhart, Zach',
+    'Bates, Chris':'Bates, Christopher',
+    'Dylan, Matt':'Dylan, Matthew',
+    'Gaoa, Solo':'Gaoa, Solomona',
+    'Napolitano, Thomas':'Napolitano, Tom',
+    'Parsley, Dane':'Parsley, William',
+    'Smith, Jonathan':'Smith, Jon',
+    'Vance, Josh':'Vance, Joshua'
+  };
+  (store.assignments || []).forEach(a => {
+    if (a && map[a.personnel]) a.personnel = map[a.personnel];
+  });
+  return store;
+}
+
 function refreshViews() {
   try { if (typeof fillPeople === 'function') fillPeople(); } catch (e) {}
   try { if (typeof fillPeopleAll === 'function') fillPeopleAll(); } catch (e) {}
   try { if (typeof renderAllTable === 'function') renderAllTable(); } catch (e) {}
   try { if (typeof renderRoster === 'function') renderRoster(); } catch (e) {}
+  try { if (typeof renderPersonList === 'function') renderPersonList(); } catch (e) {}
   const nP = (window.db && window.db.personnel) ? window.db.personnel.length : 0;
   const nA = (window.db && window.db.assignments) ? window.db.assignments.length : 0;
   const hint = document.getElementById('form-hint');
@@ -67,19 +87,23 @@ async function pullRemote() {
     const localPeople = (local.personnel || []).length;
     const localCount = (local.assignments || []).length;
     if (!res.ok) {
+      setDb(applyNameMaps(local));
       refreshViews();
       setSyncMsg('Could not reach shared file. Using this device copy.');
       return null;
     }
-    const remote = (typeof migrate === 'function') ? migrate(await res.json()) : await res.json();
+    let remote = (typeof migrate === 'function') ? migrate(await res.json()) : await res.json();
+    remote = applyNameMaps(remote);
     const remoteCount = (remote.assignments || []).length;
     const remotePeople = (remote.personnel || []).length;
     if (remotePeople < 50) {
+      setDb(applyNameMaps(local));
       refreshViews();
       setSyncMsg('Site copy is empty. Keeping this device copy.');
       return remote;
     }
     if (localCount > remoteCount && localPeople >= remotePeople) {
+      setDb(applyNameMaps(local));
       refreshViews();
       setSyncMsg('This device has more rows than the site. Uploading\u2026');
       schedulePush();
