@@ -132,9 +132,18 @@
   </section>
   <section id="tab-charts" class="card" hidden>
     <h2>Charts</h2>
-    <div class="grid" style="max-width:640px">
-      <div><label>Person</label><select id="c-person"><option value="">All / department</option></select></div>
-      <div><label>Category</label><select id="c-cat"><option value="">All categories</option></select></div>
+    <div class="grid" style="max-width:980px">
+      <div><label>Personnel</label><select id="c-person"><option value="">All personnel</option></select></div>
+      <div><label>Task</label><select id="c-cat"><option value="">All tasks</option></select></div>
+      <div><label>Group</label>
+        <select id="c-gtype">
+          <option value="">All groups</option>
+          <option value="shift">By shift</option>
+          <option value="station">By station</option>
+          <option value="battalion">By battalion</option>
+        </select>
+      </div>
+      <div><label>Group value</label><select id="c-gval"><option value="">All</option></select></div>
     </div>
     <div class="chart-grid">
       <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
@@ -200,6 +209,7 @@
 <script src="app-part2.js?v=20260928-10"></script>
 <script src="person-avg.js?v=20260928-15"></script>
 <script src="group-averages.js?v=20260929-1"></script>
+<script src="charts-filters.js?v=20260929-2"></script>
 <script src="crud.js?v=20260928-12"></script>
 <script src="lock.js?v=20260928-4"></script>
 <script src="sync.js?v=20260928-13"></script>
