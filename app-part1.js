@@ -15,15 +15,33 @@ function migrate(store) {
   (store.tasks || []).forEach(t => { if (!t.category) t.category = 'Other'; });
   return store;
 }
+function mergeOCourse(store) {
+  const extra = window.SEED_OCOURSE || [];
+  if (!extra.length) return store;
+  store.assignments = store.assignments || [];
+  const have = new Set(store.assignments.map(a => a.assignmentId));
+  let added = 0;
+  extra.forEach(a => {
+    if (a && a.assignmentId && !have.has(a.assignmentId)) {
+      store.assignments.push(a);
+      have.add(a.assignmentId);
+      added++;
+    }
+  });
+  if (added) {
+    try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {}
+  }
+  return store;
+}
 function load() {
   try {
     const raw = localStorage.getItem(KEY) || localStorage.getItem('bgfd-training-app-v1');
     if (raw) {
       const parsed = migrate(JSON.parse(raw));
-      if ((parsed.personnel || []).length >= 50) return parsed;
+      if ((parsed.personnel || []).length >= 50) return mergeOCourse(parsed);
     }
   } catch (e) {}
-  return migrate(JSON.parse(JSON.stringify(SEED)));
+  return mergeOCourse(migrate(JSON.parse(JSON.stringify(SEED))));
 }
 function save(store) { localStorage.setItem(KEY, JSON.stringify(store)); window.db = store; }
 let db = load();
