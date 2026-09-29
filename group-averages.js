@@ -14,6 +14,11 @@
   (function ensureGroupFilters() {
     const tab = document.getElementById('tab-groups');
     if (!tab) return;
+    const catSel = document.getElementById('g-cat');
+    if (catSel) {
+      const lab = catSel.previousElementSibling;
+      if (lab && lab.tagName === 'LABEL') lab.textContent = 'Task filter';
+    }
     if (!document.getElementById('g-by')) {
       const box = document.createElement('div');
       box.className = 'grid';
@@ -86,10 +91,10 @@
     });
     return sortGroupKeys([...set], field);
   }
-  function timedRows(cat, field, value) {
+  function timedRows(taskFilter, field, value) {
     return db.assignments.filter(a => {
       if (timeToSec(a.completionTime) == null) return false;
-      if (cat && catOf(a) !== cat) return false;
+      if (taskFilter && a.task !== taskFilter) return false;
       if (field && value && groupKey(a, field) !== value) return false;
       return true;
     });
@@ -110,8 +115,8 @@
       pctMet: judged.length ? (100 * met / judged.length) : null
     };
   }
-  function groupStats(field, cat, value) {
-    const rows = timedRows(cat, field, value);
+  function groupStats(field, taskFilter, value) {
+    const rows = timedRows(taskFilter, field, value);
     const buckets = {};
     rows.forEach(r => {
       const k = groupKey(r, field);
@@ -125,8 +130,8 @@
       return Object.assign({ key: k, tasks: Object.keys(byTask).sort().map(task => ({ task: task, n: byTask[task].length, avg: avgMinutes(byTask[task]) })) }, statsOf(list));
     });
   }
-  function tableFor(title, field, cat, value) {
-    const stats = groupStats(field, cat, value);
+  function tableFor(title, field, taskFilter, value) {
+    const stats = groupStats(field, taskFilter, value);
     if (!stats.length) return '<p class="muted">No timed records for ' + esc(title.toLowerCase()) + '.</p>';
     let html = '<div class="cat-block"><h2>' + esc(title) + '</h2>';
     html += '<table><thead><tr><th>' + esc(title.replace(/ averages$/i, '')) + '</th><th>People</th><th>Timed N</th><th>Avg time</th><th>% met</th><th>By task</th></tr></thead><tbody>';
@@ -155,7 +160,7 @@
       return 0;
     });
     const titles = keys.map(f => (SORT_FIELDS.find(p => p[0] === f) || [f, f])[1]);
-    let html = '<div class="cat-block"><h2>Sorted averages</h2><p class="muted">' + titles.join(' → ') + '</p>';
+    let html = '<div class="cat-block"><h2>Sorted averages</h2><p class="muted">' + titles.join(' \u2192 ') + '</p>';
     html += '<table><thead><tr>' + titles.map(t => '<th>' + esc(t) + '</th>').join('') +
       '<th>People</th><th>Timed N</th><th>Avg time</th><th>% met</th></tr></thead><tbody>';
     paths.forEach(path => {
@@ -168,12 +173,12 @@
     html += '</tbody></table></div>';
     return html;
   }
-  function drawGroupBar(canvasId, chartKey, field, title, cat, value) {
+  function drawGroupBar(canvasId, chartKey, field, title, taskFilter, value) {
     const el = document.getElementById(canvasId);
     if (!el) return;
     const wrap = el.closest('.chart-wrap');
     if (wrap) wrap.style.display = '';
-    const stats = groupStats(field, cat, value);
+    const stats = groupStats(field, taskFilter, value);
     destroyChart(chartKey);
     charts[chartKey] = new Chart(el, {
       type: 'bar',
@@ -205,16 +210,25 @@
       vals.map(v => '<option value="' + esc(v) + '">' + esc(labelFor(field, v)) + '</option>').join('');
     if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
   }
+  function fillTaskSelect() {
+    const sel = document.getElementById('g-cat');
+    if (!sel) return '';
+    const keep = sel.value;
+    const names = (db.tasks || []).map(t => t.taskName).filter(Boolean).sort((a, b) => a.localeCompare(b));
+    const extra = [...new Set((db.assignments || []).map(a => a.task).filter(Boolean))];
+    extra.forEach(n => { if (names.indexOf(n) < 0) names.push(n); });
+    names.sort((a, b) => a.localeCompare(b));
+    sel.innerHTML = '<option value="">All tasks</option>' + names.map(n => '<option value="' + esc(n) + '">' + esc(n) + '</option>').join('');
+    if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
+    const lab = sel.previousElementSibling;
+    if (lab && lab.tagName === 'LABEL') lab.textContent = 'Task filter';
+    return sel.value;
+  }
   window.renderGroupAvgs = function () {
-    const catSel = document.getElementById('g-cat');
-    if (catSel && !catSel.dataset.filled) {
-      catSel.innerHTML = '<option value="">All categories</option>' + [...db.categories].sort().map(c => '<option value="' + esc(c) + '">' + esc(c) + '</option>').join('');
-      catSel.dataset.filled = '1';
-    }
+    const taskFilter = fillTaskSelect();
     const bySel = document.getElementById('g-by');
     const field = bySel ? bySel.value : '';
     fillValueSelect(field);
-    const cat = catSel ? catSel.value : '';
     const value = document.getElementById('g-value') ? document.getElementById('g-value').value : '';
     const s1 = (document.getElementById('g-s1') || {}).value || 'task';
     const s2 = (document.getElementById('g-s2') || {}).value || '';
@@ -222,20 +236,19 @@
     const fields = field ? [field] : ['shift', 'station', 'battalion'];
     const ids = { shift: ['chart-g-shift', 'gShift', 'Shift averages'], station: ['chart-g-station', 'gStation', 'Station averages'], battalion: ['chart-g-battalion', 'gBattalion', 'Battalion averages'] };
     Object.keys(ids).forEach(f => {
-      if (fields.indexOf(f) >= 0) drawGroupBar(ids[f][0], ids[f][1], f, 'Average minutes by ' + f, cat, value);
+      if (fields.indexOf(f) >= 0) drawGroupBar(ids[f][0], ids[f][1], f, 'Average minutes by ' + f, taskFilter, value);
       else hideChart(ids[f][0]);
     });
     const out = document.getElementById('g-out');
     if (out) {
-      const rows = timedRows(cat, field, value);
-      out.innerHTML = multiSortTable(rows, s1, s2, s3) + fields.map(f => tableFor(ids[f][2], f, cat, value)).join('');
+      const rows = timedRows(taskFilter, field, value);
+      out.innerHTML = multiSortTable(rows, s1, s2, s3) + fields.map(f => tableFor(ids[f][2], f, taskFilter, value)).join('');
     }
   };
   window.renderGroupChartsOnChartsTab = function () {
-    const cat = document.getElementById('c-cat') ? document.getElementById('c-cat').value : '';
-    drawGroupBar('chart-c-shift', 'cShift', 'shift', 'Charts \u2014 average minutes by shift', cat, '');
-    drawGroupBar('chart-c-station', 'cStation', 'station', 'Charts \u2014 average minutes by station', cat, '');
-    drawGroupBar('chart-c-battalion', 'cBattalion', 'battalion', 'Charts \u2014 average minutes by battalion', cat, '');
+    drawGroupBar('chart-c-shift', 'cShift', 'shift', 'Charts \u2014 average minutes by shift', '', '');
+    drawGroupBar('chart-c-station', 'cStation', 'station', 'Charts \u2014 average minutes by station', '', '');
+    drawGroupBar('chart-c-battalion', 'cBattalion', 'battalion', 'Charts \u2014 average minutes by battalion', '', '');
   };
   document.querySelectorAll('nav button').forEach(b => {
     b.onclick = function () {
