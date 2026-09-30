@@ -27,6 +27,10 @@ function setVal(id, v) {
   const el = document.getElementById(id);
   if (el) el.value = v == null ? '' : v;
 }
+function todayISO() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
 
 function loadAssignment(id) {
   const rec = db.assignments.find(a => a.assignmentId === id);
@@ -36,7 +40,7 @@ function loadAssignment(id) {
   setVal('f-task', rec.task);
   setVal('f-cat', rec.category || '');
   setVal('f-status', rec.status || 'Completed');
-  setVal('f-done', rec.dateCompleted || '');
+  setVal('f-done', rec.dateCompleted || todayISO());
   setVal('f-ctime', rec.completionTime || '');
   setVal('f-std', rec.stdTime || '');
   setVal('f-notes', rec.notes || '');
@@ -49,7 +53,7 @@ function loadAssignment(id) {
 function clearAssignment() {
   setVal('f-id', '');
   setVal('f-person', '');
-  setVal('f-done', '');
+  setVal('f-done', todayISO());
   setVal('f-ctime', '');
   setVal('f-std', '');
   setVal('f-notes', '');
@@ -180,7 +184,7 @@ function renderCats() {
     const id = val('f-id') || nextAssignId();
     const row = {
       assignmentId: id, task: task, personnel: person, rank: recP.rank || '',
-      status: val('f-status') || 'Completed', dateCompleted: val('f-done'),
+      status: val('f-status') || 'Completed', dateCompleted: val('f-done') || todayISO(),
       completionTime: ctime, stdTime: std, metStandard: met, notes: val('f-notes'),
       taskId: meta.taskId || '', category: val('f-cat') || meta.category || 'Other'
     };
@@ -308,4 +312,5 @@ function renderCats() {
   });
 
   renderAllTable();
+  if (!val('f-id')) setVal('f-done', todayISO());
 })();
