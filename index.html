@@ -41,6 +41,19 @@
   .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
   .kpi b { display:block; font-size:22px; color:var(--gold); }
   body.view-only .owner-only { display:none !important; }
+  .ms-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:12px; }
+  .ms-box { background:var(--panel2); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .ms-head { display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-bottom:1px solid var(--line); font-weight:600; color:var(--gold); }
+  .ms-head label { margin:0; color:var(--muted); font-weight:500; display:flex; align-items:center; gap:6px; }
+  .ms-head input { width:auto; }
+  .ms-list { max-height:140px; overflow:auto; padding:6px 10px 10px; }
+  .ms-list.tall { max-height:220px; }
+  .ms-list label { display:flex; align-items:center; gap:8px; margin:0; padding:3px 0; color:var(--text); font-size:13px; }
+  .ms-list input { width:auto; }
+  .ms-group-by { display:flex; flex-wrap:wrap; gap:12px 16px; align-items:center; margin:4px 0 14px; }
+  .ms-group-by span { color:var(--gold); font-weight:600; }
+  .ms-group-by label { margin:0; display:flex; align-items:center; gap:6px; color:var(--text); }
+  .ms-group-by input { width:auto; }
   @media (max-width:900px){ .chart-grid,.split { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -111,22 +124,13 @@
   </section>
   <section id="tab-groups" class="card" hidden>
     <h2>Group averages</h2>
-    <div class="grid" style="max-width:980px">
-      <div><label>Group by</label>
-        <select id="g-by">
-          <option value="">All (shift, station, battalion)</option>
-          <option value="shift">By shift</option>
-          <option value="station">By station</option>
-          <option value="battalion">By battalion</option>
-        </select>
-      </div>
-      <div><label>Group</label><select id="g-value"><option value="">All groups</option></select></div>
-      <div><label>Task filter</label><select id="g-cat"><option value="">All tasks</option></select></div>
-    </div>
+    <div id="g-filters"></div>
     <div class="chart-grid">
-      <div class="chart-wrap"><canvas id="chart-g-shift"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-g-station"></canvas></div>
       <div class="chart-wrap"><canvas id="chart-g-battalion"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-shift"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-task"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-person"></canvas></div>
+      <div class="chart-wrap" style="display:none"><canvas id="chart-g-station"></canvas></div>
     </div>
     <div id="g-out"></div>
   </section>
@@ -209,7 +213,7 @@
 <script src="app-part1.js?v=20260929-8"></script>
 <script src="app-part2.js?v=20260928-10"></script>
 <script src="person-avg.js?v=20260928-15"></script>
-<script src="group-averages.js?v=20260929-1"></script>
+<script src="group-averages.js?v=20260930-1"></script>
 <script src="charts-filters.js?v=20260929-2"></script>
 <script src="crud.js?v=20260928-12"></script>
 <script src="lock.js?v=20260928-4"></script>
