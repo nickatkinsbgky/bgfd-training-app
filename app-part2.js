@@ -6,23 +6,13 @@ if (!document.getElementById('btn-delete')) {
 }
 
 function filteredTimed() {
-  const person = (document.getElementById('c-person').value || '').trim();
-  const cat = document.getElementById('c-cat').value;
-  return db.assignments.filter(a => {
-    if (timeToSec(a.completionTime) == null) return false;
-    if (person && a.personnel !== person) return false;
-    if (cat && catOf(a) !== cat) return false;
-    return true;
-  });
+  return (db.assignments || []).filter(a => timeToSec(a.completionTime) != null);
 }
 
 function renderCharts() {
-  const personEl = document.getElementById('c-person');
-  const catEl = document.getElementById('c-cat');
-  if (!personEl || !document.getElementById('chart-trend')) return;
+  if (!document.getElementById('chart-trend')) return;
   const rows = filteredTimed().slice().sort((a,b) => String(a.dateCompleted||a.dateDue||'').localeCompare(String(b.dateCompleted||b.dateDue||'')));
-  const person = (personEl.value||'').trim();
-  const scope = person || 'Department';
+  const scope = 'Department';
   const byTask = {};
   rows.forEach(r => (byTask[r.task] ||= []).push(r));
   const dates = [...new Set(rows.map(r => r.dateCompleted || r.dateDue || ''))].filter(Boolean).sort();
@@ -47,43 +37,30 @@ function renderCharts() {
     options: chartOpts(scope + ' \u2014 time trend by date')
   });
   destroyChart('compare');
-  if (person) {
-    const labels = Object.keys(byTask);
-    const data = labels.map(t => {
-      const secs = byTask[t].map(r => timeToSec(r.completionTime)).filter(s=>s!=null);
-      return secs.length ? +(secs.reduce((a,b)=>a+b,0)/secs.length/60).toFixed(3) : 0;
-    });
-    charts.compare = new Chart(document.getElementById('chart-compare'), {
-      type: 'bar',
-      data: { labels, datasets: [{ label: 'Avg min', data, backgroundColor: COLORS }] },
-      options: chartOpts(person + ' \u2014 task comparison')
-    });
-  } else {
-    const people = {};
-    rows.forEach(r => (people[r.personnel] ||= []).push(r));
-    const labels = Object.keys(people).sort();
-    const data = labels.map(n => {
-      const secs = people[n].map(r => timeToSec(r.completionTime)).filter(s=>s!=null);
-      return secs.length ? +(secs.reduce((a,b)=>a+b,0)/secs.length/60).toFixed(3) : 0;
-    });
-    charts.compare = new Chart(document.getElementById('chart-compare'), {
-      type: 'bar',
-      data: { labels, datasets: [{ label: 'Avg min (mixed tasks)', data, backgroundColor: COLORS[1] }] },
-      options: chartOpts('People comparison \u2014 average minutes')
-    });
-  }
+  const people = {};
+  rows.forEach(r => (people[r.personnel] ||= []).push(r));
+  const labels = Object.keys(people).sort();
+  const data = labels.map(n => {
+    const secs = people[n].map(r => timeToSec(r.completionTime)).filter(s=>s!=null);
+    return secs.length ? +(secs.reduce((a,b)=>a+b,0)/secs.length/60).toFixed(3) : 0;
+  });
+  charts.compare = new Chart(document.getElementById('chart-compare'), {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Avg min (mixed tasks)', data, backgroundColor: COLORS[1] }] },
+    options: chartOpts('People comparison \u2014 average minutes')
+  });
   destroyChart('status');
   const statuses = ['Completed','In Progress','Not Started','At Risk','Overdue'];
-  const pool = person ? rowsFor(person) : db.assignments;
+  const statusPool = (db.assignments || []).filter(a => typeof passesChartFilters === 'function' ? passesChartFilters(a) : true);
   charts.status = new Chart(document.getElementById('chart-status'), {
     type: 'doughnut',
-    data: { labels: statuses, datasets: [{ data: statuses.map(s => pool.filter(a => a.status === s).length), backgroundColor: ['#3fb950','#58a6ff','#8b949e','#e3b341','#ff7b72'] }] },
+    data: { labels: statuses, datasets: [{ data: statuses.map(s => statusPool.filter(a => a.status === s).length), backgroundColor: ['#3fb950','#58a6ff','#8b949e','#e3b341','#ff7b72'] }] },
     options: { responsive:true, maintainAspectRatio:false, plugins:{ title:{display:true,text:scope+' \u2014 status mix',color:'#e6edf3'}, legend:{labels:{color:'#e6edf3'}} } }
   });
   destroyChart('met');
-  const yes = pool.filter(a => a.metStandard==='Yes').length;
-  const no = pool.filter(a => a.metStandard==='No').length;
-  const unk = pool.filter(a => a.metStandard!=='Yes' && a.metStandard!=='No').length;
+  const yes = statusPool.filter(a => a.metStandard==='Yes').length;
+  const no = statusPool.filter(a => a.metStandard==='No').length;
+  const unk = statusPool.filter(a => a.metStandard!=='Yes' && a.metStandard!=='No').length;
   charts.met = new Chart(document.getElementById('chart-met'), {
     type: 'doughnut',
     data: { labels: ['Met standard','Missed','No standard / not timed'], datasets: [{ data:[yes,no,unk], backgroundColor:['#3fb950','#ff7b72','#8b949e'] }] },
@@ -105,16 +82,20 @@ function fillPeopleAll() {
   const names = peopleNames();
   const tasks = db.tasks.map(t => t.taskName);
   const cats = (db.categories || []).slice().sort();
-  fillSelect(document.getElementById('f-person'), names, '<option value="">Select personnel</option>');
-  fillSelect(document.getElementById('list-person'), names, '<option value="">All people</option>');
-  fillSelect(document.getElementById('a-person'), names, '<option value="">Select personnel</option>');
-  fillSelect(document.getElementById('c-person'), names, '<option value="">All / department</option>');
-  fillSelect(document.getElementById('f-task'), tasks);
-  fillSelect(document.getElementById('list-task'), tasks, '<option value="">All tasks</option>');
-  fillSelect(document.getElementById('f-cat'), cats);
-  fillSelect(document.getElementById('n-cat'), cats);
-  fillSelect(document.getElementById('c-cat'), cats, '<option value="">All categories</option>');
-  fillSelect(document.getElementById('g-cat'), cats, '<option value="">All categories</option>');
+  function fillIf(id, items, extra) {
+    const el = document.getElementById(id);
+    if (el) fillSelect(el, items, extra);
+  }
+  fillIf('f-person', names, '<option value="">Select personnel</option>');
+  fillIf('list-person', names, '<option value="">All people</option>');
+  fillIf('a-person', names, '<option value="">Select personnel</option>');
+  fillIf('c-person', names, '<option value="">All / department</option>');
+  fillIf('f-task', tasks);
+  fillIf('list-task', tasks, '<option value="">All tasks</option>');
+  fillIf('f-cat', cats);
+  fillIf('n-cat', cats);
+  fillIf('c-cat', cats, '<option value="">All categories</option>');
+  fillIf('g-cat', cats, '<option value="">All categories</option>');
   const hint = document.getElementById('form-hint');
   if (hint) hint.textContent = db.personnel.length + ' personnel \u2022 ' + db.assignments.length + ' assignments loaded.';
 }
