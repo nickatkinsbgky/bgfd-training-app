@@ -20,7 +20,7 @@
     if (key === 'Unassigned') return 'Unassigned';
     if (field === 'shift') return 'Shift ' + key;
     if (field === 'battalion') return 'Battalion ' + key;
-    if (field === 'station') return (String(key).match(/^\\d+$/) ? 'Station ' : '') + key;
+    if (field === 'station') return (/^[0-9]+$/.test(String(key)) ? 'Station ' : '') + key;
     return key;
   }
   function sortVals(field, keys) {
