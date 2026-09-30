@@ -1,9 +1,18 @@
 (function () {
+  const FILTERS = [
+    ['battalion', 'Battalion'],
+    ['shift', 'Shift'],
+    ['task', 'Task'],
+    ['personnel', 'Personnel']
+  ];
+
   function personMeta(name) {
     return (db.personnel || []).find(p => p.fullName === name) || {};
   }
-  function groupOf(assignment, field) {
+  function fieldValue(assignment, field) {
     const p = personMeta(assignment.personnel);
+    if (field === 'task') return assignment.task || 'Unassigned';
+    if (field === 'personnel') return assignment.personnel || 'Unassigned';
     const v = String(p[field] || '').trim();
     return v || 'Unassigned';
   }
@@ -14,142 +23,149 @@
     if (field === 'station') return (String(key).match(/^\d+$/) ? 'Station ' : '') + key;
     return key;
   }
-  function ensureChartFilters() {
-    const tab = document.getElementById('tab-charts');
-    if (!tab) return;
-    let grid = tab.querySelector('.grid');
-    if (!grid) return;
-    grid.style.maxWidth = '980px';
-    const cat = document.getElementById('c-cat');
-    if (cat) {
-      const lab = cat.previousElementSibling;
-      if (lab && lab.tagName === 'LABEL') lab.textContent = 'Task';
-    }
-    if (!document.getElementById('c-gtype')) {
-      const wrap = document.createElement('div');
-      wrap.innerHTML = '<label>Group</label><select id="c-gtype">' +
-        '<option value="">All groups</option>' +
-        '<option value="shift">By shift</option>' +
-        '<option value="station">By station</option>' +
-        '<option value="battalion">By battalion</option></select>';
-      grid.appendChild(wrap);
-    }
-    if (!document.getElementById('c-gval')) {
-      const wrap = document.createElement('div');
-      wrap.innerHTML = '<label>Group value</label><select id="c-gval"><option value="">All</option></select>';
-      grid.appendChild(wrap);
-    }
-  }
-  function fillChartTaskSelect() {
-    const sel = document.getElementById('c-cat');
-    if (!sel) return;
-    const keep = sel.value;
-    const names = (db.tasks || []).map(t => t.taskName).filter(Boolean);
-    (db.assignments || []).forEach(a => { if (a.task && names.indexOf(a.task) < 0) names.push(a.task); });
-    names.sort((a, b) => a.localeCompare(b));
-    sel.innerHTML = '<option value="">All tasks</option>' + names.map(n => '<option value="' + esc(n) + '">' + esc(n) + '</option>').join('');
-    if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
-    const lab = sel.previousElementSibling;
-    if (lab && lab.tagName === 'LABEL') lab.textContent = 'Task';
-  }
-  function fillChartGroupValues() {
-    const typeEl = document.getElementById('c-gtype');
-    const valEl = document.getElementById('c-gval');
-    if (!typeEl || !valEl) return;
-    const field = typeEl.value;
-    const keep = valEl.value;
-    if (!field) {
-      valEl.innerHTML = '<option value="">All</option>';
-      valEl.disabled = true;
-      return;
-    }
-    valEl.disabled = false;
-    const set = new Set();
-    (db.personnel || []).forEach(p => set.add(String(p[field] || '').trim() || 'Unassigned'));
-    const vals = [...set].sort((a, b) => {
+  function sortVals(field, keys) {
+    return keys.sort((a, b) => {
       if (a === 'Unassigned') return 1;
       if (b === 'Unassigned') return -1;
       const na = Number(a), nb = Number(b);
-      if (!isNaN(na) && !isNaN(nb)) return na - nb;
-      return a.localeCompare(b, undefined, { numeric: true });
+      if (field !== 'task' && field !== 'personnel' && field !== 'shift' && !isNaN(na) && !isNaN(nb)) return na - nb;
+      return String(a).localeCompare(String(b), undefined, { numeric: true });
     });
-    valEl.innerHTML = '<option value="">All ' + field + 's</option>' +
-      vals.map(v => '<option value="' + esc(v) + '">' + esc(labelGroup(field, v)) + '</option>').join('');
-    if ([...valEl.options].some(o => o.value === keep)) valEl.value = keep;
+  }
+  function allValues(field) {
+    const set = new Set();
+    if (field === 'task') {
+      (db.tasks || []).forEach(t => t.taskName && set.add(t.taskName));
+      (db.assignments || []).forEach(a => a.task && set.add(a.task));
+    } else if (field === 'personnel') {
+      (db.personnel || []).forEach(p => p.fullName && set.add(p.fullName));
+      (db.assignments || []).forEach(a => a.personnel && set.add(a.personnel));
+    } else {
+      (db.personnel || []).forEach(p => set.add(String(p[field] || '').trim() || 'Unassigned'));
+    }
+    return sortVals(field, [...set]);
+  }
+  function selectedValues(field) {
+    const box = document.getElementById('c-ms-' + field);
+    if (!box) return [];
+    return [...box.querySelectorAll('input[type=checkbox]:not([data-all]):checked')].map(i => i.value);
+  }
+  function buildMulti(field, title) {
+    const vals = allValues(field);
+    const prev = new Set(selectedValues(field));
+    const had = document.getElementById('c-ms-' + field);
+    const keepAll = had ? !had.querySelector('input[data-all]') || (had.querySelector('input[data-all]').checked && prev.size === 0) : true;
+    const box = document.createElement('div');
+    box.className = 'ms-box';
+    box.id = 'c-ms-' + field;
+    const tall = field === 'personnel' || field === 'task';
+    let html = '<div class="ms-head"><label><input type="checkbox" data-all' + (keepAll || prev.size === 0 ? ' checked' : '') + '> All</label><span>' + title + '</span></div>';
+    html += '<div class="ms-list' + (tall ? ' tall' : '') + '">';
+    vals.forEach(v => {
+      const on = keepAll || prev.size === 0 ? false : prev.has(v);
+      html += '<label><input type="checkbox" value="' + esc(v) + '"' + (on ? ' checked' : '') + '> ' + esc(labelGroup(field, v)) + '</label>';
+    });
+    html += '</div>';
+    box.innerHTML = html;
+    return box;
+  }
+  function wireMulti(box) {
+    const all = box.querySelector('input[data-all]');
+    const items = () => [...box.querySelectorAll('input[type=checkbox]:not([data-all])')];
+    if (all) all.onchange = function () {
+      if (all.checked) items().forEach(i => { i.checked = false; });
+      refreshCharts();
+    };
+    items().forEach(i => {
+      i.onchange = function () {
+        if (i.checked && all) all.checked = false;
+        if (!items().some(x => x.checked) && all) all.checked = true;
+        refreshCharts();
+      };
+    });
+  }
+  function ensureChartFilters() {
+    const tab = document.getElementById('tab-charts');
+    if (!tab) return;
+    let host = document.getElementById('c-filters');
+    if (!host) {
+      host = document.createElement('div');
+      host.id = 'c-filters';
+      const oldGrid = tab.querySelector('.grid');
+      if (oldGrid) oldGrid.replaceWith(host);
+      else tab.insertBefore(host, tab.children[1] || null);
+    }
+    if (host.dataset.ready === '1' && document.getElementById('c-ms-battalion')) return;
+    host.innerHTML = '';
+    const row = document.createElement('div');
+    row.className = 'ms-grid';
+    FILTERS.forEach(pair => {
+      const wrap = document.createElement('div');
+      wrap.appendChild(buildMulti(pair[0], pair[1]));
+      row.appendChild(wrap);
+    });
+    host.appendChild(row);
+    FILTERS.forEach(pair => wireMulti(document.getElementById('c-ms-' + pair[0])));
+    host.dataset.ready = '1';
+  }
+  function refillIfEmpty() {
+    FILTERS.forEach(pair => {
+      const box = document.getElementById('c-ms-' + pair[0]);
+      if (!box) return;
+      const list = box.querySelector('.ms-list');
+      if (list && list.children.length < 2 && allValues(pair[0]).length) {
+        const fresh = buildMulti(pair[0], pair[1]);
+        box.replaceWith(fresh);
+        wireMulti(fresh);
+      }
+    });
+  }
+  function passesFilters(a) {
+    return FILTERS.every(pair => {
+      const picked = selectedValues(pair[0]);
+      if (!picked.length) return true;
+      return picked.indexOf(fieldValue(a, pair[0])) >= 0;
+    });
   }
   function chartScope() {
-    const person = ((document.getElementById('c-person') || {}).value || '').trim();
-    const task = ((document.getElementById('c-cat') || {}).value || '').trim();
-    const field = ((document.getElementById('c-gtype') || {}).value || '').trim();
-    const gval = ((document.getElementById('c-gval') || {}).value || '').trim();
     const bits = [];
-    if (person) bits.push(person);
-    else bits.push('Department');
-    if (field) bits.push(gval ? labelGroup(field, gval) : ('all ' + field + 's'));
-    if (task) bits.push(task);
-    return bits.join(' • ');
+    FILTERS.forEach(pair => {
+      const picked = selectedValues(pair[0]);
+      if (!picked.length) return;
+      bits.push(picked.length === 1 ? labelGroup(pair[0], picked[0]) : (picked.length + ' ' + pair[1].toLowerCase() + 's'));
+    });
+    return bits.length ? bits.join(' \u2022 ') : 'Department';
   }
   filteredTimed = function () {
-    const person = ((document.getElementById('c-person') || {}).value || '').trim();
-    const task = ((document.getElementById('c-cat') || {}).value || '').trim();
-    const field = ((document.getElementById('c-gtype') || {}).value || '').trim();
-    const gval = ((document.getElementById('c-gval') || {}).value || '').trim();
-    return db.assignments.filter(a => {
-      if (timeToSec(a.completionTime) == null) return false;
-      if (person && a.personnel !== person) return false;
-      if (task && a.task !== task) return false;
-      if (field && gval && groupOf(a, field) !== gval) return false;
-      if (field && !gval) {
-        /* keep all values of that group type */
-      }
-      return true;
-    });
+    return (db.assignments || []).filter(a => timeToSec(a.completionTime) != null && passesFilters(a));
   };
   const _renderCharts = renderCharts;
   renderCharts = function () {
     ensureChartFilters();
-    fillChartTaskSelect();
-    fillChartGroupValues();
+    refillIfEmpty();
     _renderCharts();
-    const titleBits = chartScope();
     try {
       if (charts.trend && charts.trend.options && charts.trend.options.plugins) {
-        charts.trend.options.plugins.title.text = titleBits + ' — time trend by date';
+        charts.trend.options.plugins.title.text = chartScope() + ' \u2014 time trend by date';
         charts.trend.update();
       }
     } catch (e) {}
   };
   window.renderGroupChartsOnChartsTab = function () {
-    const field = ((document.getElementById('c-gtype') || {}).value || '').trim();
-    const task = ((document.getElementById('c-cat') || {}).value || '').trim();
-    const gval = ((document.getElementById('c-gval') || {}).value || '').trim();
-    const person = ((document.getElementById('c-person') || {}).value || '').trim();
-    function rowsForField(f) {
-      return db.assignments.filter(a => {
-        if (timeToSec(a.completionTime) == null) return false;
-        if (person && a.personnel !== person) return false;
-        if (task && a.task !== task) return false;
-        if (gval && f && groupOf(a, f) !== gval) return false;
-        return true;
-      });
-    }
+    ensureChartFilters();
+    refillIfEmpty();
+    const rows = filteredTimed();
     function draw(canvasId, key, f, title) {
       const el = document.getElementById(canvasId);
       if (!el || typeof destroyChart !== 'function') return;
       const wrap = el.closest('.chart-wrap');
-      if (field && field !== f) {
-        if (wrap) wrap.style.display = 'none';
-        destroyChart(key);
-        return;
-      }
       if (wrap) wrap.style.display = '';
-      const rows = rowsForField(f);
       const buckets = {};
       rows.forEach(r => {
-        const k = groupOf(r, f);
+        const k = fieldValue(r, f);
         (buckets[k] ||= []).push(r);
       });
-      const labels = Object.keys(buckets).sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
+      const labels = sortVals(f, Object.keys(buckets));
       const data = labels.map(k => {
         const secs = buckets[k].map(r => timeToSec(r.completionTime)).filter(s => s != null);
         return secs.length ? +(secs.reduce((x, y) => x + y, 0) / secs.length / 60).toFixed(3) : 0;
@@ -162,21 +178,16 @@
       });
     }
     const scope = chartScope();
-    draw('chart-c-shift', 'cShift', 'shift', scope + ' — by shift');
-    draw('chart-c-station', 'cStation', 'station', scope + ' — by station');
-    draw('chart-c-battalion', 'cBattalion', 'battalion', scope + ' — by battalion');
+    draw('chart-c-shift', 'cShift', 'shift', scope + ' \u2014 by shift');
+    draw('chart-c-station', 'cStation', 'station', scope + ' \u2014 by station');
+    draw('chart-c-battalion', 'cBattalion', 'battalion', scope + ' \u2014 by battalion');
+    if (document.getElementById('chart-c-task')) draw('chart-c-task', 'cTask', 'task', scope + ' \u2014 by task');
+    if (document.getElementById('chart-c-person')) draw('chart-c-person', 'cPerson', 'personnel', scope + ' \u2014 by personnel');
   };
   function refreshCharts() {
     if (typeof renderCharts === 'function') renderCharts();
     if (typeof renderGroupChartsOnChartsTab === 'function') renderGroupChartsOnChartsTab();
   }
-  ensureChartFilters();
-  ['c-person', 'c-cat', 'c-gtype', 'c-gval'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.onchange = function () {
-      if (id === 'c-gtype') fillChartGroupValues();
-      refreshCharts();
-    };
-  });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ensureChartFilters);
+  else ensureChartFilters();
 })();
