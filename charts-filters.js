@@ -20,7 +20,7 @@
     if (key === 'Unassigned') return 'Unassigned';
     if (field === 'shift') return 'Shift ' + key;
     if (field === 'battalion') return 'Battalion ' + key;
-    if (field === 'station') return (String(key).match(/^\d+$/) ? 'Station ' : '') + key;
+    if (field === 'station') return (String(key).match(/^\\d+$/) ? 'Station ' : '') + key;
     return key;
   }
   function sortVals(field, keys) {
@@ -127,6 +127,7 @@
       return picked.indexOf(fieldValue(a, pair[0])) >= 0;
     });
   }
+  window.passesChartFilters = passesFilters;
   function chartScope() {
     const bits = [];
     FILTERS.forEach(pair => {
