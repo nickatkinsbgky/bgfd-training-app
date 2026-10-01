@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BGFD Personnel Fitness</title>
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20260926-2" />
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 "Segoe UI", system-ui, sans-serif; }
+  header { background: linear-gradient(90deg,#3b0a0a,#1a0a0a 40%,#0d1117); border-bottom:3px solid var(--gold); padding:14px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .logo { height:56px; width:56px; object-fit:contain; background:#0a0a0a; border-radius:50%; border:2px solid var(--gold); padding:2px; }
+  h1 { margin:0; font-size:18px; } h1 span { display:block; font-size:12px; color:var(--muted); font-weight:500; }
+  nav { display:flex; gap:6px; margin-left:auto; flex-wrap:wrap; }
+  nav button, .home-link { background:transparent; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 12px; cursor:pointer; font-weight:600; text-decoration:none; }
+  nav button.active { background:var(--red); border-color:var(--red); }
+  main { padding:18px 22px 48px; max-width:1280px; margin:0 auto; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:16px; }
+  h2 { margin:0 0 12px; font-size:16px; color:var(--gold); }
+  label { display:block; font-size:12px; color:var(--muted); margin:8px 0 4px; }
+  input, select { width:100%; background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px 14px; }
+  .btn { background:var(--red); color:#fff; border:0; border-radius:6px; padding:9px 16px; font-weight:700; cursor:pointer; }
+  .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); }
+  .row-actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; }
+  th { color:var(--muted); font-size:11px; text-transform:uppercase; }
+  .muted, .note { color:var(--muted); font-size:13px; }
+  @media (max-width:900px){ .split { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <img class="logo" src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20260926-2" alt="BGFD" />
+  <h1>Bowling Green Fire Department<span>Fitness Committee • Personnel Fitness</span></h1>
+  <nav>
+    <a class="home-link" href="index.html">Home</a>
+    <button class="active" data-tab="log" type="button">Log result</button>
+    <button data-tab="catalog" type="button">Roster / tasks</button>
+  </nav>
+</header>
+<main>
+  <section id="tab-log" class="card">
+    <h2 id="form-title">Log a fitness result</h2>
+    <p class="muted" id="form-hint">Roster copied from Personnel Performance. Tasks start empty so fitness standards stay separate.</p>
+    <input type="hidden" id="f-id" />
+    <div class="grid">
+      <div><label>Personnel</label><select id="f-person"><option value="">Select personnel</option></select></div>
+      <div><label>Task</label><select id="f-task"><option value="">Add a task first</option></select></div>
+      <div><label>Date</label><input type="date" id="f-done" /></div>
+      <div><label>Result</label><input id="f-result" placeholder="time, reps, or score" /></div>
+      <div><label>Met standard</label><select id="f-met"><option value="">Not scored</option><option>Yes</option><option>No</option></select></div>
+      <div><label>Notes</label><input id="f-notes" /></div>
+    </div>
+    <div class="row-actions">
+      <button class="btn" id="btn-save" type="button">Save result</button>
+      <button class="btn ghost" id="btn-reset" type="button">New record</button>
+      <button class="btn ghost" id="btn-delete" type="button" hidden>Delete result</button>
+    </div>
+    <p class="note" id="save-msg"></p>
+    <div id="all-table" style="overflow:auto;max-height:480px;margin-top:12px"></div>
+  </section>
+  <section id="tab-catalog" class="card" hidden>
+    <h2>Roster and fitness tasks</h2>
+    <p class="muted">Personnel came from the training roster. Training tasks were not copied. Add fitness tasks here.</p>
+    <input type="hidden" id="n-orig-person" />
+    <div class="grid">
+      <div><label>Person (Last, First)</label><input id="n-name" placeholder="Last, First" /></div>
+      <div><label>Rank</label><input id="n-rank" /></div>
+      <div><label>Station</label><input id="n-station" /></div>
+      <div><label>Shift</label><input id="n-shift" /></div>
+      <div><label>Battalion</label><input id="n-battalion" /></div>
+      <div><label>Active</label><select id="n-active"><option>Yes</option><option>No</option></select></div>
+      <div><label>Notes</label><input id="n-pnotes" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-person" type="button">Save person</button>
+        <button class="btn ghost" id="btn-reset-person" type="button">New person</button>
+        <button class="btn ghost" id="btn-delete-person" type="button" hidden>Delete person</button>
+      </div>
+    </div>
+    <p class="note" id="person-msg"></p>
+    <input type="hidden" id="n-orig-task" />
+    <div class="grid" style="margin-top:12px">
+      <div><label>Fitness task</label><input id="n-task" placeholder="Example: 1.5 mile run" /></div>
+      <div><label>Standard</label><input id="n-std" placeholder="Example: 12:00" /></div>
+      <div><label>Unit</label><input id="n-unit" placeholder="time, reps, score" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-task" type="button">Save task</button>
+        <button class="btn ghost" id="btn-reset-task" type="button">New task</button>
+        <button class="btn ghost" id="btn-delete-task" type="button" hidden>Delete task</button>
+      </div>
+    </div>
+    <p class="note" id="task-msg"></p>
+    <div id="r-out" style="margin-top:16px"></div>
+  </section>
+</main>
+<script src="seed-personnel-a.js?v=20260926-2"></script>
+<script src="seed-personnel-b.js?v=20260929-7"></script>
+<script src="seed-personnel.js?v=20260926-2"></script>
+<script src="fitness.js?v=20261001-1"></script>
+</body>
+</html>
