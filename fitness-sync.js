@@ -41,11 +41,17 @@
       mergeBy(local.personnel, remote.personnel || [], 'fullName');
       mergeBy(local.tasks, remote.tasks || [], 'name');
       var ages = window.SEED_FITNESS_AGES || {};
+      var year = new Date().getFullYear();
       (local.personnel || []).forEach(function (p) {
-        if (p && ages[p.fullName] != null) { p.age = ages[p.fullName]; p.ageAsOf = '2026'; }
+        if (p && ages[p.fullName] != null) {
+          p.ageBase = ages[p.fullName];
+          p.ageBaseYear = 2026;
+          p.age = ages[p.fullName] + (year - 2026);
+          p.ageAsOf = String(year);
+        }
       });
       if (typeof window.saveFitness === 'function') window.saveFitness(local, { silent: true });
-      setSyncMsg('Loaded site copy (' + local.results.length + ' results). Ages are as of 2026.', true);
+      setSyncMsg('Loaded site copy (' + local.results.length + ' results). Ages are as of ' + year + '.', true);
       var active = document.querySelector('nav button.active');
       if (active) active.click();
       document.getElementById('btn-save-all').click && document.getElementById('tab-log') && (location.hash = location.hash);
