@@ -258,11 +258,15 @@
       var years = Object.keys(byYear).sort();
       if (!years.length) return;
       var unit = ((db.tasks.filter(function (t) { return t.name === task; })[0] || {}).unit || '');
-      var data = years.map(function (y) { return +avg(byYear[y]).toFixed(2); });
+      var asMinutes = task === 'Cardio';
+      var data = years.map(function (y) {
+        var n = avg(byYear[y]);
+        return +(asMinutes ? n / 60 : n).toFixed(2);
+      });
       deptCharts.push(new Chart(canvas, {
         type: 'bar',
         data: { labels: years, datasets: [{ label: task + ' average', data: data, backgroundColor: '#c62828', borderColor: '#d4a017', borderWidth: 1 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: task + ' — department average by year', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } }, scales: { x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }, y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' }, title: { display: true, text: unit === 'time' ? 'seconds' : (unit || 'value'), color: '#8b949e' } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: task + ' — department average by year', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } }, scales: { x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }, y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' }, title: { display: true, text: asMinutes ? 'minutes' : (unit === 'time' ? 'seconds' : (unit || 'value')), color: '#8b949e' } } } }
       }));
     });
   }
