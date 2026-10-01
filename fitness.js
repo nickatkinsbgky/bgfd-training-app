@@ -36,6 +36,10 @@
     store.personnel = store.personnel || [];
     store.tasks = store.tasks || [];
     store.results = store.results || [];
+    store.results.forEach(function (r) {
+      if (r && (r.personnel === 'Bohn, Dylan' || r.personnel === 'Dylan Bohn')) r.personnel = 'Dylan, Matthew';
+    });
+    store.personnel = store.personnel.filter(function (p) { return p && p.fullName !== 'Bohn, Dylan' && p.fullName !== 'Dylan Bohn'; });
     var seed = window.SEED_FITNESS || { tasks: [], results: [], personnel: [] };
     (seed.tasks || []).forEach(function (t) {
       if (t && t.name && !store.tasks.some(function (x) { return x.name === t.name; })) store.tasks.push({ name: t.name, standard: t.standard || '', unit: t.unit || '' });
