@@ -48,6 +48,7 @@
     <button class="active" data-tab="log" type="button">Log result</button>
     <button data-tab="person" type="button">By personnel</button>
     <button data-tab="pavg" type="button">Personnel averages</button>
+    <button data-tab="compare" type="button">Comparison</button>
     <button data-tab="dept" type="button">Department averages</button>
     <button data-tab="catalog" type="button">Roster / tasks</button>
   </nav>
@@ -111,6 +112,16 @@
     </div>
     <div id="pa-out" style="margin-top:14px"></div>
   </section>
+
+  <section id="tab-compare" class="card" hidden>
+    <h2>Comparison</h2>
+    <p class="muted">Choose two people to compare each task by year.</p>
+    <div class="grid" style="max-width:720px">
+      <div><label>Person A</label><select id="cmp-a"><option value="">Select personnel</option></select></div>
+      <div><label>Person B</label><select id="cmp-b"><option value="">Select personnel</option></select></div>
+    </div>
+    <div id="cmp-out" style="margin-top:14px"></div>
+  </section>
   <section id="tab-dept" class="card" hidden>
     <h2>Department averages</h2>
     <p class="muted">Averages and yearly charts for every fitness task. Cardio is charted in minutes. Other time tasks stay in seconds.</p>
@@ -156,8 +167,8 @@
 <script src="seed-personnel-b.js?v=20260929-7"></script>
 <script src="seed-personnel.js?v=20260926-2"></script>
 <script src="seed-fitness-ages.js?v=20261001-13"></script>
-<script src="seed-fitness.js?v=20261001-13"></script>
-<script src="fitness.js?v=20261001-13"></script>
+<script src="seed-fitness.js?v=20261001-15"></script>
+<script src="fitness.js?v=20261001-15"></script>
 <script src="fitness-sync.js?v=20261001-13"></script>
 <script src="fitness-export.js?v=20261001-14"></script>
 </body>
