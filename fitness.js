@@ -29,7 +29,7 @@
     });
     return into;
   }
-  function save(store) { localStorage.setItem(KEY, JSON.stringify(store)); db = store; }
+  function save(store, opts) { localStorage.setItem(KEY, JSON.stringify(store)); db = store; window.db = db; if (!(opts && opts.silent) && typeof window.scheduleFitnessPush === "function") window.scheduleFitnessPush(); }
   function load() {
     var store = { personnel: [], tasks: [], results: [] };
     try { var raw = localStorage.getItem(KEY); if (raw) store = JSON.parse(raw); } catch (e) {}
@@ -435,4 +435,6 @@
     document.getElementById('btn-delete-task').hidden = true;
   };
   clearResult(); renderLog();
+  window.db = db;
+  window.saveFitness = save;
 })();
