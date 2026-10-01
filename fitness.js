@@ -53,6 +53,14 @@
     mergePeople(store.personnel, seed.personnel || []);
     mergePeople(store.personnel, seedPeople());
     mergePeople(store.personnel, trainingPeople());
+    var ages = window.SEED_FITNESS_AGES || {};
+    store.personnel.forEach(function (p) {
+      if (!p || !p.fullName || ages[p.fullName] == null) return;
+      p.age = ages[p.fullName];
+      p.ageAsOf = '2026';
+      var note = 'Age as of 2026';
+      if (String(p.notes || '').indexOf(note) < 0) p.notes = ((p.notes || '') + ' · ' + note).replace(/^ · /, '');
+    });
     store.personnel.sort(function (a, b) { return String(a.fullName).localeCompare(String(b.fullName)); });
     if (store.personnel.length !== before || (seed.results || []).length) save(store);
     return store;
@@ -101,8 +109,8 @@
   function renderCatalog() {
     var out = document.getElementById('r-out'); if (!out) return;
     var people = db.personnel.slice().sort(function (a, b) { return a.fullName.localeCompare(b.fullName); });
-    out.innerHTML = '<p><strong>' + people.length + '</strong> personnel \u2022 <strong>' + db.tasks.length + '</strong> fitness tasks</p><h2>Personnel</h2><table><thead><tr><th></th><th>Name</th><th>Rank</th><th>Station</th><th>Shift</th><th>Battalion</th></tr></thead><tbody>' +
-      people.map(function (p) { return '<tr><td><button type="button" class="btn ghost" data-editperson="' + esc(p.fullName) + '">Edit</button></td><td>' + esc(p.fullName) + '</td><td>' + esc(p.rank || '') + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td></tr>'; }).join('') +
+    out.innerHTML = '<p><strong>' + people.length + '</strong> personnel \u2022 <strong>' + db.tasks.length + '</strong> fitness tasks</p><h2>Personnel</h2><table><thead><tr><th></th><th>Name</th><th>Age</th><th>Rank</th><th>Station</th><th>Shift</th><th>Battalion</th></tr></thead><tbody>' +
+      people.map(function (p) { return '<tr><td><button type="button" class="btn ghost" data-editperson="' + esc(p.fullName) + '">Edit</button></td><td>' + esc(p.fullName) + '</td><td>' + esc(p.age || '') + (p.age ? ' <span class="muted">as of 2026</span>' : '') + '</td><td>' + esc(p.rank || '') + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td></tr>'; }).join('') +
       '</tbody></table><h2 style="margin-top:18px">Fitness tasks</h2>' +
       (db.tasks.length ? '<table><thead><tr><th></th><th>Task</th><th>Standard</th><th>Unit</th></tr></thead><tbody>' + db.tasks.map(function (t) { return '<tr><td><button type="button" class="btn ghost" data-edittask="' + esc(t.name) + '">Edit</button></td><td>' + esc(t.name) + '</td><td>' + esc(t.standard || '') + '</td><td>' + esc(t.unit || '') + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="muted">No fitness tasks yet.</p>');
     out.querySelectorAll('[data-editperson]').forEach(function (b) {
@@ -152,7 +160,7 @@
       if (ia < 0) ia = 999; if (ib < 0) ib = 999;
       return ia - ib || a.localeCompare(b);
     });
-    var head = '<p><strong>' + esc(name) + '</strong>' +
+    var head = '<p><strong>' + esc(name) + '</strong>' + (p.age ? ' · Age ' + esc(p.age) + ' <span class="muted">as of 2026</span>' : '') +
       (p.rank ? ' · ' + esc(p.rank) : '') +
       (p.station ? ' · Station ' + esc(p.station) : '') +
       (p.shift ? ' · Shift ' + esc(p.shift) : '') +
