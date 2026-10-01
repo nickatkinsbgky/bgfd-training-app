@@ -28,10 +28,6 @@
   th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; }
   th { color:var(--muted); font-size:11px; text-transform:uppercase; }
   .muted, .note { color:var(--muted); font-size:13px; }
-  .chart-wrap { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:10px; height:280px; margin:8px 0 14px; }
-  .kpis { display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 12px; }
-  .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 12px; min-width:110px; }
-  .kpi b { display:block; font-size:18px; color:var(--gold); }
   @media (max-width:900px){ .split { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -43,7 +39,6 @@
     <a class="home-link" href="index.html">Home</a>
     <button class="active" data-tab="log" type="button">Log result</button>
     <button data-tab="person" type="button">By personnel</button>
-    <button data-tab="dept" type="button">Department averages</button>
     <button data-tab="catalog" type="button">Roster / tasks</button>
   </nav>
 </header>
@@ -76,12 +71,6 @@
       <div><label>Personnel</label><select id="bp-person"><option value="">Select personnel</option></select></div>
     </div>
     <div id="bp-out" style="margin-top:14px;overflow:auto"></div>
-  </section>
-
-  <section id="tab-dept" class="card" hidden>
-    <h2>Department averages</h2>
-    <p class="muted">Averages and yearly charts for every fitness task. Time tasks are averaged in minutes and seconds. Other tasks use their own unit.</p>
-    <div id="dept-out"></div>
   </section>
   <section id="tab-catalog" class="card" hidden>
     <h2>Roster and fitness tasks</h2>
@@ -117,11 +106,10 @@
     <div id="r-out" style="margin-top:16px"></div>
   </section>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="seed-personnel-a.js?v=20260926-2"></script>
 <script src="seed-personnel-b.js?v=20260929-7"></script>
 <script src="seed-personnel.js?v=20260926-2"></script>
-<script src="seed-fitness.js?v=20261001-6"></script>
-<script src="fitness.js?v=20261001-6"></script>
+<script src="seed-fitness.js?v=20261001-5"></script>
+<script src="fitness.js?v=20261001-5"></script>
 </body>
 </html>
