@@ -220,6 +220,16 @@ function bindSyncUi() {
   };
   if (pullBtn) pullBtn.onclick = pullRemote;
   if (pushBtn) pushBtn.onclick = pushRemote;
+  const saveAll = document.getElementById('btn-save-all');
+  if (saveAll) saveAll.onclick = function () {
+    try {
+      const data = (typeof getDb === 'function') ? getDb() : window.db;
+      if (data) localStorage.setItem(typeof KEY !== 'undefined' ? KEY : 'bgfd-training-app-v2', JSON.stringify(data));
+      setSyncMsg('Saved on this device.', true);
+    } catch (e) {
+      setSyncMsg('Save failed.', false);
+    }
+  };
 }
 
 if (typeof save === 'function' && !save._bgfdWrapped) {
