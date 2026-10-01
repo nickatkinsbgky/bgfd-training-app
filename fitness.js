@@ -171,14 +171,111 @@
     });
     box.innerHTML = html;
   }
+
+  var deptCharts = [];
+  function parseResult(task, raw) {
+    var s = String(raw == null ? '' : raw).trim();
+    if (!s) return null;
+    var unit = ((db.tasks.filter(function (t) { return t.name === task; })[0] || {}).unit || '');
+    if (unit === 'time' || s.indexOf(':') >= 0) {
+      var bits = s.split(':').map(function (x) { return parseInt(x, 10); });
+      if (bits.some(function (n) { return isNaN(n); })) return null;
+      if (bits.length === 2) return bits[0] * 60 + bits[1];
+      if (bits.length === 3) return bits[0] * 3600 + bits[1] * 60 + bits[2];
+    }
+    var n = parseFloat(s.replace(/,/g, ''));
+    return isNaN(n) ? null : n;
+  }
+  function fmtResult(task, n) {
+    if (n == null || isNaN(n)) return '—';
+    var unit = ((db.tasks.filter(function (t) { return t.name === task; })[0] || {}).unit || '');
+    if (unit === 'time') {
+      var sec = Math.round(n);
+      var m = Math.floor(sec / 60), s = sec % 60;
+      return m + ':' + String(s).padStart(2, '0');
+    }
+    if (Math.abs(n - Math.round(n)) < 0.05) return String(Math.round(n));
+    return n.toFixed(1);
+  }
+  function avg(list) { return list.length ? list.reduce(function (a, b) { return a + b; }, 0) / list.length : null; }
+  function median(list) {
+    if (!list.length) return null;
+    var s = list.slice().sort(function (a, b) { return a - b; });
+    var mid = Math.floor(s.length / 2);
+    return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+  }
+  function renderDept() {
+    deptCharts.forEach(function (c) { try { c.destroy(); } catch (e) {} });
+    deptCharts = [];
+    var box = document.getElementById('dept-out');
+    if (!box) return;
+    var taskOrder = db.tasks.map(function (t) { return t.name; });
+    var tasks = taskOrder.slice();
+    db.results.forEach(function (r) { if (r.task && tasks.indexOf(r.task) < 0) tasks.push(r.task); });
+    var people = {};
+    db.results.forEach(function (r) { if (r.personnel) people[r.personnel] = true; });
+    var html = '<div class="kpis"><div class="kpi"><b>' + db.results.length + '</b><span>Results</span></div><div class="kpi"><b>' + Object.keys(people).length + '</b><span>People with results</span></div><div class="kpi"><b>' + tasks.length + '</b><span>Tasks</span></div></div>';
+    tasks.forEach(function (task, idx) {
+      var unit = ((db.tasks.filter(function (t) { return t.name === task; })[0] || {}).unit || '');
+      var rows = db.results.filter(function (r) { return r.task === task; });
+      var nums = [];
+      var byYear = {};
+      rows.forEach(function (r) {
+        var n = parseResult(task, r.result);
+        if (n == null) return;
+        nums.push(n);
+        var y = yearOf(r.date) || 'Other';
+        (byYear[y] = byYear[y] || []).push(n);
+      });
+      var years = Object.keys(byYear).sort();
+      var lowerBetter = unit === 'time';
+      html += '<h2 style="margin-top:18px">' + esc(task) + (unit ? ' <span class="muted">(' + esc(unit) + ')</span>' : '') + '</h2>';
+      html += '<div class="kpis"><div class="kpi"><b>' + nums.length + '</b><span>Records</span></div>';
+      html += '<div class="kpi"><b>' + fmtResult(task, avg(nums)) + '</b><span>Average</span></div>';
+      html += '<div class="kpi"><b>' + fmtResult(task, median(nums)) + '</b><span>Median</span></div>';
+      html += '<div class="kpi"><b>' + fmtResult(task, nums.length ? Math.min.apply(null, nums) : null) + '</b><span>' + (lowerBetter ? 'Best' : 'Low') + '</span></div>';
+      html += '<div class="kpi"><b>' + fmtResult(task, nums.length ? Math.max.apply(null, nums) : null) + '</b><span>' + (lowerBetter ? 'Slowest' : 'High') + '</span></div></div>';
+      html += '<div class="chart-wrap"><canvas id="dept-chart-' + idx + '"></canvas></div>';
+      html += '<table><thead><tr><th>Year</th><th>N</th><th>Average</th><th>Median</th><th>Low</th><th>High</th></tr></thead><tbody>';
+      years.forEach(function (y) {
+        var list = byYear[y];
+        html += '<tr><td>' + esc(y) + '</td><td>' + list.length + '</td><td>' + fmtResult(task, avg(list)) + '</td><td>' + fmtResult(task, median(list)) + '</td><td>' + fmtResult(task, Math.min.apply(null, list)) + '</td><td>' + fmtResult(task, Math.max.apply(null, list)) + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    });
+    box.innerHTML = html;
+    tasks.forEach(function (task, idx) {
+      var canvas = document.getElementById('dept-chart-' + idx);
+      if (!canvas || typeof Chart === 'undefined') return;
+      var byYear = {};
+      db.results.forEach(function (r) {
+        if (r.task !== task) return;
+        var n = parseResult(task, r.result);
+        if (n == null) return;
+        var y = yearOf(r.date) || 'Other';
+        (byYear[y] = byYear[y] || []).push(n);
+      });
+      var years = Object.keys(byYear).sort();
+      if (!years.length) return;
+      var unit = ((db.tasks.filter(function (t) { return t.name === task; })[0] || {}).unit || '');
+      var data = years.map(function (y) { return +avg(byYear[y]).toFixed(2); });
+      deptCharts.push(new Chart(canvas, {
+        type: 'bar',
+        data: { labels: years, datasets: [{ label: task + ' average', data: data, backgroundColor: '#c62828', borderColor: '#d4a017', borderWidth: 1 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: task + ' — department average by year', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } }, scales: { x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }, y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' }, title: { display: true, text: unit === 'time' ? 'seconds' : (unit || 'value'), color: '#8b949e' } } } }
+      }));
+    });
+  }
   function show(tab) {
     document.querySelectorAll('nav button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === tab); });
     document.getElementById('tab-log').hidden = tab !== 'log';
     document.getElementById('tab-person').hidden = tab !== 'person';
+    document.getElementById('tab-dept').hidden = tab !== 'dept';
     document.getElementById('tab-catalog').hidden = tab !== 'catalog';
     if (tab === 'catalog') renderCatalog();
     if (tab === 'log') renderLog();
     if (tab === 'person') renderPerson();
+    if (tab === 'dept') renderDept();
   }
   function chosenYear() {
     var other = val('f-year-other');
