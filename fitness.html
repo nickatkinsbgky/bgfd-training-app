@@ -38,6 +38,7 @@
   <nav>
     <a class="home-link" href="index.html">Home</a>
     <button class="active" data-tab="log" type="button">Log result</button>
+    <button data-tab="person" type="button">By personnel</button>
     <button data-tab="catalog" type="button">Roster / tasks</button>
   </nav>
 </header>
@@ -61,6 +62,15 @@
     </div>
     <p class="note" id="save-msg"></p>
     <div id="all-table" style="overflow:auto;max-height:480px;margin-top:12px"></div>
+  </section>
+
+  <section id="tab-person" class="card" hidden>
+    <h2>By personnel</h2>
+    <p class="muted">Choose a name to see every fitness result, grouped by task.</p>
+    <div class="grid" style="max-width:420px">
+      <div><label>Personnel</label><select id="bp-person"><option value="">Select personnel</option></select></div>
+    </div>
+    <div id="bp-out" style="margin-top:14px;overflow:auto"></div>
   </section>
   <section id="tab-catalog" class="card" hidden>
     <h2>Roster and fitness tasks</h2>
@@ -99,7 +109,7 @@
 <script src="seed-personnel-a.js?v=20260926-2"></script>
 <script src="seed-personnel-b.js?v=20260929-7"></script>
 <script src="seed-personnel.js?v=20260926-2"></script>
-<script src="seed-fitness.js?v=20261001-3"></script>
-<script src="fitness.js?v=20261001-3"></script>
+<script src="seed-fitness.js?v=20261001-4"></script>
+<script src="fitness.js?v=20261001-4"></script>
 </body>
 </html>
