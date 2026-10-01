@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BGFD Training Performance App</title>
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20260926-2" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 "Segoe UI", system-ui, sans-serif; }
+  header { background: linear-gradient(90deg,#3b0a0a,#1a0a0a 40%,#0d1117); border-bottom:3px solid var(--gold); padding:14px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .logo { height:56px; width:56px; object-fit:contain; background:#0a0a0a; border-radius:50%; border:2px solid var(--gold); padding:2px; }
+  h1 { margin:0; font-size:18px; } h1 span { display:block; font-size:12px; color:var(--muted); font-weight:500; }
+  nav { display:flex; gap:6px; margin-left:auto; flex-wrap:wrap; }
+  nav button, .home-link { background:transparent; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 12px; cursor:pointer; font-weight:600; text-decoration:none; }
+  nav button.active { background:var(--red); border-color:var(--red); }
+  main { padding:18px 22px 48px; max-width:1280px; margin:0 auto; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:16px; }
+  h2 { margin:0 0 12px; font-size:16px; color:var(--gold); }
+  label { display:block; font-size:12px; color:var(--muted); margin:8px 0 4px; }
+  input, select { width:100%; background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px 14px; }
+  .btn { background:var(--red); color:#fff; border:0; border-radius:6px; padding:9px 16px; font-weight:700; cursor:pointer; }
+  .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); }
+  .btn.gold { background:var(--gold); color:#1a1200; }
+  .row-actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; }
+  th { color:var(--muted); font-size:11px; text-transform:uppercase; }
+  .muted, .note { color:var(--muted); font-size:13px; }
+  .split { display:grid; grid-template-columns:280px 1fr; gap:16px; }
+  .plist { max-height:70vh; overflow:auto; }
+  .plist button { width:100%; text-align:left; background:transparent; color:var(--text); border:0; border-bottom:1px solid var(--line); padding:8px 6px; cursor:pointer; }
+  .plist button.on, .plist button:hover { background:#2a1313; }
+  .plist small { color:var(--muted); display:block; }
+  .chart-wrap { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px; margin:12px 0 18px; height:320px; }
+  .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:16px; }
+  .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  .kpi b { display:block; font-size:22px; color:var(--gold); }
+  body.view-only .owner-only { display:none !important; }
+  .ms-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:12px; }
+  .ms-box { background:var(--panel2); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .ms-head { display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-bottom:1px solid var(--line); font-weight:600; color:var(--gold); }
+  .ms-head label { margin:0; color:var(--muted); font-weight:500; display:flex; align-items:center; gap:6px; }
+  .ms-head input { width:auto; }
+  .ms-list { max-height:140px; overflow:auto; padding:6px 10px 10px; }
+  .ms-list.tall { max-height:220px; }
+  .ms-list label { display:flex; align-items:center; gap:8px; margin:0; padding:3px 0; color:var(--text); font-size:13px; }
+  .ms-list input { width:auto; }
+  .ms-group-by { display:flex; flex-wrap:wrap; gap:12px 16px; align-items:center; margin:4px 0 14px; }
+  .ms-group-by span { color:var(--gold); font-weight:600; }
+  .ms-group-by label { margin:0; display:flex; align-items:center; gap:6px; color:var(--text); }
+  .ms-group-by input { width:auto; }
+  @media (max-width:900px){ .chart-grid,.split { grid-template-columns:1fr; } }
+</style>
+</head>
+<body class="view-only">
+<header>
+  <img class="logo" src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20260926-2" alt="BGFD" />
+  <h1>Bowling Green Fire Department<span>Training Division • Personnel Performance App</span></h1>
+  <nav>
+    <a class="home-link" href="index.html">Home</a>
+    <button class="active" data-tab="input">Enter / edit</button>
+    <button data-tab="person">By personnel</button>
+    <button data-tab="personavg">Person averages</button>
+    <button data-tab="dept">Department averages</button>
+    <button data-tab="groups">Group averages</button>
+    <button data-tab="charts">Charts</button>
+    <button data-tab="cats">Categories</button>
+    <button data-tab="roster">Roster / catalog</button>
+  </nav>
+</header>
+<main>
+  <section id="tab-input" class="card">
+    <h2 id="form-title">Log an assignment / evolution</h2>
+    <p class="muted" id="form-hint">View only until the owner signs in.</p>
+    <input type="hidden" id="f-id" />
+    <div class="grid owner-only">
+      <div><label>Personnel</label><select id="f-person"><option value="">Select personnel</option></select></div>
+      <div><label>Task</label><select id="f-task"></select></div>
+      <div><label>Category</label><select id="f-cat"></select></div>
+      <div><label>Status</label><select id="f-status"><option>Completed</option><option>In Progress</option><option>Not Started</option><option>At Risk</option><option>Overdue</option></select></div>
+      <div><label>Date completed</label><input type="date" id="f-done" /></div>
+      <div><label>Completion time</label><input id="f-ctime" placeholder="mm:ss" /></div>
+      <div><label>Standard time</label><input id="f-std" placeholder="mm:ss" /></div>
+      <div><label>Notes</label><input id="f-notes" /></div>
+    </div>
+    <div class="row-actions owner-only">
+      <button class="btn" id="btn-save">Save assignment</button>
+      <button class="btn ghost" id="btn-reset" type="button">New record</button>
+      <button class="btn ghost" id="btn-delete" type="button" hidden>Delete assignment</button>
+    </div>
+    <p class="note" id="save-msg"></p>
+    <p class="note" id="sync-msg"></p>
+    <h2 style="margin-top:18px">Export to Excel</h2>
+    <p class="muted">Leave both dates blank to export every assignment. Columns include date, personnel, battalion, station, shift, task, time, and whether the standard was met.</p>
+    <div class="grid" style="max-width:720px">
+      <div><label>From date</label><input type="date" id="ex-from" /></div>
+      <div><label>To date</label><input type="date" id="ex-to" /></div>
+      <div style="align-self:end"><button class="btn gold" id="btn-export-xlsx" type="button">Export to Excel</button></div>
+    </div>
+    <p class="note" id="export-msg"></p>
+    <div class="grid owner-only" style="max-width:720px;margin-top:8px">
+      <div><label>GitHub token</label><input id="sync-token" type="password" autocomplete="off" placeholder="ghp_ or github_pat_" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn gold" id="btn-save-token" type="button">Save token</button>
+        <button class="btn ghost" id="btn-pull" type="button">Load site data</button>
+        <button class="btn ghost" id="btn-push" type="button">Upload to site</button>
+      </div>
+    </div>
+    <div id="all-table" style="overflow:auto;max-height:420px;margin-top:12px"></div>
+  </section>
+  <section id="tab-person" class="card" hidden>
+    <h2>By personnel</h2>
+    <div class="split">
+      <div><input id="p-search" placeholder="Filter roster…" /><div class="plist" id="p-list"></div></div>
+      <div id="p-detail"><p class="muted">Select a name.</p></div>
+    </div>
+  </section>
+  <section id="tab-personavg" class="card" hidden>
+    <h2>Person averages</h2>
+    <div class="grid" style="max-width:420px"><div><label>Personnel</label><select id="a-person"><option value="">Select personnel</option></select></div></div>
+    <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
+    <div id="a-out"></div>
+  </section>
+  <section id="tab-dept" class="card" hidden>
+    <h2>Department averages</h2>
+    <div class="chart-wrap"><canvas id="chart-dept-avg"></canvas></div>
+    <div id="d-out"></div>
+  </section>
+  <section id="tab-groups" class="card" hidden>
+    <h2>Group averages</h2>
+    <div id="g-filters"></div>
+    <div class="chart-grid">
+      <div class="chart-wrap"><canvas id="chart-g-battalion"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-shift"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-task"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-person"></canvas></div>
+      <div class="chart-wrap" style="display:none"><canvas id="chart-g-station"></canvas></div>
+    </div>
+    <div id="g-out"></div>
+  </section>
+  <section id="tab-charts" class="card" hidden>
+    <h2>Charts</h2>
+    <p class="muted">Filter with the same multi-selects as Group averages. Leave All checked to include every value in that field.</p>
+    <div id="c-filters"></div>
+    <div class="chart-grid">
+      <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-compare"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-status"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-met"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-battalion"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-shift"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-task"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-person"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-station"></canvas></div>
+    </div>
+  </section>
+  <section id="tab-cats" class="card" hidden>
+    <h2>Categories</h2>
+    <div class="grid owner-only" style="max-width:720px">
+      <div><label>New category</label><input id="cat-new" /></div>
+      <div style="align-self:end"><button class="btn" id="btn-add-cat" type="button">Add category</button></div>
+    </div>
+    <div id="cat-list" style="margin-top:14px"></div>
+  </section>
+  <section id="tab-roster" class="card" hidden>
+    <h2>Roster and task catalog</h2>
+    <input type="hidden" id="n-orig-person" />
+    <div class="grid owner-only">
+      <div><label>Person (Last, First)</label><input id="n-name" placeholder="Last, First" /></div>
+      <div><label>Rank</label><input id="n-rank" /></div>
+      <div><label>Station</label><input id="n-station" /></div>
+      <div><label>Shift</label><input id="n-shift" /></div>
+      <div><label>Battalion</label><input id="n-battalion" /></div>
+      <div><label>Active</label><select id="n-active"><option>Yes</option><option>No</option></select></div>
+      <div><label>Notes</label><input id="n-pnotes" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-person" type="button">Save person</button>
+        <button class="btn ghost" id="btn-reset-person" type="button">New person</button>
+        <button class="btn ghost" id="btn-delete-person" type="button" hidden>Delete person</button>
+      </div>
+    </div>
+    <p class="note" id="person-msg"></p>
+    <input type="hidden" id="n-orig-task" />
+    <div class="grid owner-only" style="margin-top:12px">
+      <div><label>Task name</label><input id="n-task" /></div>
+      <div><label>Category</label><select id="n-cat"></select></div>
+      <div><label>Standard time</label><input id="n-std" /></div>
+      <div><label>Task ID</label><input id="n-tid" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-task" type="button">Save task</button>
+        <button class="btn ghost" id="btn-reset-task" type="button">New task</button>
+        <button class="btn ghost" id="btn-delete-task" type="button" hidden>Delete task</button>
+      </div>
+    </div>
+    <p class="note" id="task-msg"></p>
+    <div id="r-out" style="margin-top:16px"></div>
+  </section>
+</main>
+<select id="list-person" hidden></select>
+<select id="list-task" hidden></select>
+<script src="seed-personnel-a.js?v=20260926-2"></script>
+<script src="seed-personnel-b.js?v=20260929-7"></script>
+<script src="seed-personnel.js?v=20260926-2"></script>
+<script src="seed-tasks.js?v=20260926-2"></script>
+<script src="seed-assignments.js?v=20260926-2"></script>
+<script src="seed-ocourse.js?v=20260929-6"></script>
+<script src="seed.js?v=20260929-1"></script>
+<script src="app-part1.js?v=20260929-8"></script>
+<script src="app-part2.js?v=20260930-2"></script>
+<script src="person-avg.js?v=20260928-15"></script>
+<script src="group-averages.js?v=20260930-1"></script>
+<script src="charts-filters.js?v=20260930-2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="export-excel.js?v=20261001-1"></script>
+<script src="crud.js?v=20260930-3"></script>
+<script src="lock.js?v=20260928-4"></script>
+<script src="sync.js?v=20260929-6"></script>
+</body>
+</html>
