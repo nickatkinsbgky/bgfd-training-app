@@ -21,6 +21,9 @@
   a.choice.alt { background:var(--panel); color:var(--text); border-color:var(--gold); }
   a.choice small { display:block; font-weight:500; font-size:13px; opacity:.85; margin-top:4px; }
   a.choice:hover { filter:brightness(1.08); }
+  button.owner { margin-top:8px; background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:10px; padding:12px 16px; font-size:16px; font-weight:700; cursor:pointer; }
+  button.owner:hover { filter:brightness(1.08); }
+  .owner-note { color:var(--muted); font-size:13px; margin:8px 0 0; }
   @media (max-width:600px){ h1 { font-size:22px; } .logo-ring { width:170px; height:170px; } .logo-ring img { width:142px; height:142px; } }
 </style>
 </head>
@@ -34,7 +37,38 @@
     <div class="actions">
       <a class="choice" href="training.html">Personnel Performance<small>Training Division</small></a>
       <a class="choice alt" href="fitness.html">Personnel Fitness<small>Fitness Committee</small></a>
+      <button class="owner" id="owner-btn" type="button">Owner sign-in</button>
+      <p class="owner-note" id="owner-note">Sign in here before editing Personnel Performance.</p>
     </div>
   </div>
+<script>
+(function () {
+  var SESSION = 'bgfd-owner-unlock';
+  var PASS = 'Bomberonick5606!';
+  var btn = document.getElementById('owner-btn');
+  var note = document.getElementById('owner-note');
+  function paint() {
+    var on = sessionStorage.getItem(SESSION) === '1';
+    btn.textContent = on ? 'Owner signed in' : 'Owner sign-in';
+    note.textContent = on ? 'Signed in for this visit. Open Personnel Performance to edit.' : 'Sign in here before editing Personnel Performance.';
+  }
+  btn.onclick = function () {
+    if (sessionStorage.getItem(SESSION) === '1') {
+      sessionStorage.removeItem(SESSION);
+      paint();
+      return;
+    }
+    var entered = window.prompt('Owner password');
+    if (entered == null) return;
+    if (entered === PASS) {
+      sessionStorage.setItem(SESSION, '1');
+      paint();
+    } else {
+      window.alert('Incorrect password. The site stays view-only.');
+    }
+  };
+  paint();
+})();
+</script>
 </body>
 </html>
