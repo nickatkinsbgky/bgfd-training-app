@@ -443,6 +443,89 @@
       }));
     });
   }
+
+  var compareYearCharts = [];
+  function showCompareMode(mode) {
+    var names = document.getElementById('cmp-names');
+    var years = document.getElementById('cmp-years');
+    if (names) names.hidden = mode !== 'names';
+    if (years) years.hidden = mode !== 'years';
+    var nb = document.getElementById('cmp-tab-names');
+    var yb = document.getElementById('cmp-tab-years');
+    if (nb) nb.className = mode === 'names' ? 'btn' : 'btn ghost';
+    if (yb) yb.className = mode === 'years' ? 'btn' : 'btn ghost';
+    if (mode === 'years') renderCompareYears();
+  }
+  function yearChoices() {
+    var years = {};
+    db.results.forEach(function (r) { var y = yearOf(r.date); if (y) years[y] = true; });
+    var now = new Date().getFullYear();
+    for (var y = now - 5; y <= now + 2; y++) years[y] = true;
+    return Object.keys(years).sort();
+  }
+  function renderCompareYears() {
+    compareYearCharts.forEach(function (c) { try { c.destroy(); } catch (e) {} });
+    compareYearCharts = [];
+    fillSelect('cmp-year-person', names(), '<option value="">All personnel</option>');
+    var ya = document.getElementById('cmp-year-a');
+    var yb = document.getElementById('cmp-year-b');
+    if (ya && !ya.dataset.filled) {
+      var list = yearChoices();
+      ya.innerHTML = list.map(function (y) { return '<option>' + y + '</option>'; }).join('');
+      yb.innerHTML = ya.innerHTML;
+      ya.value = list.indexOf('2025') >= 0 ? '2025' : list[0];
+      yb.value = list.indexOf('2026') >= 0 ? '2026' : list[list.length - 1];
+      ya.dataset.filled = '1';
+      ya.onchange = renderCompareYears;
+      yb.onchange = renderCompareYears;
+      var person = document.getElementById('cmp-year-person');
+      if (person) person.onchange = renderCompareYears;
+    }
+    var box = document.getElementById('cmp-year-out');
+    if (!box) return;
+    var yearA = val('cmp-year-a'), yearB = val('cmp-year-b'), person = val('cmp-year-person');
+    if (!yearA || !yearB) { box.innerHTML = '<p class="muted">Select two years.</p>'; return; }
+    var taskOrder = db.tasks.map(function (t) { return t.name; });
+    var tasks = taskOrder.slice();
+    db.results.forEach(function (r) { if (r.task && tasks.indexOf(r.task) < 0) tasks.push(r.task); });
+    function vals(task, year) {
+      return db.results.filter(function (r) {
+        return r.task === task && yearOf(r.date) === year && (!person || r.personnel === person);
+      }).map(function (r) { return parseResult(task, r.result); }).filter(function (n) { return n != null; });
+    }
+    var who = person || 'Department';
+    var html = '<p><strong>' + esc(who) + '</strong> · ' + esc(yearA) + ' compared with ' + esc(yearB) + '</p>';
+    html += '<table><thead><tr><th>Task</th><th>' + esc(yearA) + '</th><th>N</th><th>' + esc(yearB) + '</th><th>N</th><th>Difference (A − B)</th></tr></thead><tbody>';
+    tasks.forEach(function (task) {
+      var av = vals(task, yearA), bv = vals(task, yearB);
+      if (!av.length && !bv.length) return;
+      var aa = avg(av), bb = avg(bv);
+      var diff = (aa != null && bb != null) ? ((aa === bb ? '0' : ((aa > bb ? '+' : '−') + fmtResult(task, Math.abs(aa - bb))))) : '—';
+      html += '<tr><td>' + esc(task) + '</td><td>' + fmtResult(task, aa) + '</td><td>' + av.length + '</td><td>' + fmtResult(task, bb) + '</td><td>' + bv.length + '</td><td>' + diff + '</td></tr>';
+    });
+    html += '</tbody></table><div class="chart-wrap"><canvas id="cmp-year-chart"></canvas></div>';
+    box.innerHTML = html;
+    var canvas = document.getElementById('cmp-year-chart');
+    if (!canvas || typeof Chart === 'undefined') return;
+    var labels = [], dataA = [], dataB = [];
+    tasks.forEach(function (task) {
+      var av = vals(task, yearA), bv = vals(task, yearB);
+      if (!av.length && !bv.length) return;
+      labels.push(task);
+      var asMinutes = task === 'Cardio';
+      dataA.push(av.length ? +((asMinutes ? avg(av) / 60 : avg(av)).toFixed(2)) : null);
+      dataB.push(bv.length ? +((asMinutes ? avg(bv) / 60 : avg(bv)).toFixed(2)) : null);
+    });
+    if (!labels.length) return;
+    compareYearCharts.push(new Chart(canvas, {
+      type: 'bar',
+      data: { labels: labels, datasets: [
+        { label: yearA, data: dataA, backgroundColor: '#d4a017' },
+        { label: yearB, data: dataB, backgroundColor: '#c62828' }
+      ] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: who + ' — ' + yearA + ' vs ' + yearB, color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } }, scales: { x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }, y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } } } }
+    }));
+  }
   function show(tab) {
     document.querySelectorAll('nav button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === tab); });
     document.getElementById('tab-log').hidden = tab !== 'log';
@@ -455,7 +538,7 @@
     if (tab === 'log') renderLog();
     if (tab === 'person') renderPerson();
     if (tab === 'pavg') renderPersonAvg();
-    if (tab === 'compare') renderCompare();
+    if (tab === 'compare') { renderCompare(); showCompareMode(document.getElementById('cmp-years') && !document.getElementById('cmp-years').hidden ? 'years' : 'names'); }
     if (tab === 'dept') renderDept();
   }
   function chosenYear() {
@@ -491,7 +574,11 @@
     if (i >= 0) db.results[i] = row; else db.results.push(row);
     save(db);
     document.getElementById('save-msg').textContent = (i >= 0 ? 'Updated ' : 'Added ') + task + ' for ' + person + '.';
-    clearResult(); renderLog();
+    var cmpNames = document.getElementById('cmp-tab-names');
+  var cmpYears = document.getElementById('cmp-tab-years');
+  if (cmpNames) cmpNames.onclick = function () { showCompareMode('names'); };
+  if (cmpYears) cmpYears.onclick = function () { showCompareMode('years'); };
+  clearResult(); renderLog();
   };
   document.getElementById('btn-reset').onclick = clearResult;
   document.getElementById('btn-delete').onclick = function () {
@@ -548,6 +635,10 @@
     setVal('n-orig-task', ''); setVal('n-task', ''); setVal('n-std', ''); setVal('n-unit', '');
     document.getElementById('btn-delete-task').hidden = true;
   };
+  var cmpNames = document.getElementById('cmp-tab-names');
+  var cmpYears = document.getElementById('cmp-tab-years');
+  if (cmpNames) cmpNames.onclick = function () { showCompareMode('names'); };
+  if (cmpYears) cmpYears.onclick = function () { showCompareMode('years'); };
   clearResult(); renderLog();
   window.db = db;
   window.saveFitness = save;
