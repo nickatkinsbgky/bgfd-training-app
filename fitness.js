@@ -361,17 +361,101 @@
       }));
     });
   }
+
+  var compareCharts = [];
+  function resultMap(name, task) {
+    var map = {};
+    db.results.forEach(function (r) {
+      if (r.personnel !== name || r.task !== task) return;
+      var y = yearOf(r.date) || 'Other';
+      var n = parseResult(task, r.result);
+      if (!map[y]) map[y] = { text: [], nums: [] };
+      if (r.result) map[y].text.push(r.result);
+      if (n != null) map[y].nums.push(n);
+    });
+    return map;
+  }
+  function renderCompare() {
+    compareCharts.forEach(function (c) { try { c.destroy(); } catch (e) {} });
+    compareCharts = [];
+    fillSelect('cmp-a', names(), '<option value="">Select personnel</option>');
+    fillSelect('cmp-b', names(), '<option value="">Select personnel</option>');
+    ['cmp-a', 'cmp-b'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && !el.dataset.wired) { el.dataset.wired = '1'; el.onchange = renderCompare; }
+    });
+    var box = document.getElementById('cmp-out');
+    if (!box) return;
+    var a = val('cmp-a'), b = val('cmp-b');
+    if (!a || !b) { box.innerHTML = '<p class="muted">Select two people. For example, Atkins, Nick and Dylan, Matthew.</p>'; return; }
+    if (a === b) { box.innerHTML = '<p class="muted">Pick two different people.</p>'; return; }
+    var taskOrder = db.tasks.map(function (t) { return t.name; });
+    var tasks = [];
+    db.results.forEach(function (r) {
+      if ((r.personnel === a || r.personnel === b) && r.task && tasks.indexOf(r.task) < 0) tasks.push(r.task);
+    });
+    tasks.sort(function (x, y) {
+      var ia = taskOrder.indexOf(x), ib = taskOrder.indexOf(y);
+      if (ia < 0) ia = 999; if (ib < 0) ib = 999;
+      return ia - ib;
+    });
+    var html = '<p><strong>' + esc(a) + '</strong>' + (ageOf(a) ? ' · Age ' + ageLabel(a) : '') + ' compared with <strong>' + esc(b) + '</strong>' + (ageOf(b) ? ' · Age ' + ageLabel(b) : '') + '</p>';
+    if (!tasks.length) { box.innerHTML = html + '<p class="muted">Neither person has fitness results.</p>'; return; }
+    tasks.forEach(function (task, idx) {
+      var ma = resultMap(a, task), mb = resultMap(b, task);
+      var years = Object.keys(Object.assign({}, ma, mb)).sort();
+      var unit = ((db.tasks.filter(function (t) { return t.name === task; })[0] || {}).unit || '');
+      html += '<h2 style="margin-top:16px">' + esc(task) + (unit ? ' <span class="muted">(' + esc(unit) + ')</span>' : '') + '</h2>';
+      html += '<div class="chart-wrap"><canvas id="cmp-chart-' + idx + '"></canvas></div>';
+      html += '<table><thead><tr><th>Year</th><th>' + esc(a) + '</th><th>' + esc(b) + '</th><th>Difference (A − B)</th></tr></thead><tbody>';
+      years.forEach(function (y) {
+        var av = ma[y] && ma[y].nums.length ? avg(ma[y].nums) : null;
+        var bv = mb[y] && mb[y].nums.length ? avg(mb[y].nums) : null;
+        var diff = (av != null && bv != null) ? fmtResult(task, Math.abs(av - bv)) : '—';
+        if (av != null && bv != null) diff = (av === bv ? '0' : ((av > bv ? '+' : '−') + fmtResult(task, Math.abs(av - bv))));
+        html += '<tr><td>' + esc(y) + '</td><td>' + esc(ma[y] ? ma[y].text.join(', ') : '') + '</td><td>' + esc(mb[y] ? mb[y].text.join(', ') : '') + '</td><td>' + diff + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    });
+    box.innerHTML = html;
+    tasks.forEach(function (task, idx) {
+      var canvas = document.getElementById('cmp-chart-' + idx);
+      if (!canvas || typeof Chart === 'undefined') return;
+      var ma = resultMap(a, task), mb = resultMap(b, task);
+      var years = Object.keys(Object.assign({}, ma, mb)).sort();
+      if (!years.length) return;
+      var asMinutes = task === 'Cardio';
+      var unit = ((db.tasks.filter(function (t) { return t.name === task; })[0] || {}).unit || '');
+      function series(map) {
+        return years.map(function (y) {
+          if (!map[y] || !map[y].nums.length) return null;
+          var n = avg(map[y].nums);
+          return +(asMinutes ? n / 60 : n).toFixed(2);
+        });
+      }
+      compareCharts.push(new Chart(canvas, {
+        type: 'bar',
+        data: { labels: years, datasets: [
+          { label: a, data: series(ma), backgroundColor: '#d4a017' },
+          { label: b, data: series(mb), backgroundColor: '#c62828' }
+        ] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: task + ' by year', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } }, scales: { x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }, y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' }, title: { display: true, text: asMinutes ? 'minutes' : (unit === 'time' ? 'seconds' : (unit || 'value')), color: '#8b949e' } } } }
+      }));
+    });
+  }
   function show(tab) {
     document.querySelectorAll('nav button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === tab); });
     document.getElementById('tab-log').hidden = tab !== 'log';
     document.getElementById('tab-person').hidden = tab !== 'person';
     document.getElementById('tab-pavg').hidden = tab !== 'pavg';
+    document.getElementById('tab-compare').hidden = tab !== 'compare';
     document.getElementById('tab-dept').hidden = tab !== 'dept';
     document.getElementById('tab-catalog').hidden = tab !== 'catalog';
     if (tab === 'catalog') renderCatalog();
     if (tab === 'log') renderLog();
     if (tab === 'person') renderPerson();
     if (tab === 'pavg') renderPersonAvg();
+    if (tab === 'compare') renderCompare();
     if (tab === 'dept') renderDept();
   }
   function chosenYear() {
