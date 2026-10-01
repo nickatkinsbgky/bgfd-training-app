@@ -91,6 +91,17 @@
     var nums = db.results.map(function (r) { return parseInt(String(r.id || '').replace(/\D/g, ''), 10); }).filter(function (n) { return !isNaN(n); });
     return 'F-' + String((Math.max(0, nums.length ? Math.max.apply(null, nums) : 0) + 1)).padStart(4, '0');
   }
+
+  function ageOf(name) {
+    var p = personOf(name);
+    if (p && p.age) return p.age;
+    var ages = window.SEED_FITNESS_AGES || {};
+    return ages[name] || '';
+  }
+  function ageLabel(name) {
+    var age = ageOf(name);
+    return age ? (age + ' <span class="muted">as of 2026</span>') : '';
+  }
   function personOf(name) { return db.personnel.filter(function (p) { return p.fullName === name; })[0] || {}; }
   function renderLog() {
     fillSelect('f-person', names(), '<option value="">Select personnel</option>');
@@ -99,10 +110,10 @@
     if (hint) hint.textContent = db.personnel.length + ' personnel copied \u2022 ' + db.tasks.length + ' fitness tasks \u2022 ' + db.results.length + ' results. Eval years 2021-2026 are loaded.';
     var box = document.getElementById('all-table');
     if (!box) return;
-    box.innerHTML = '<table><thead><tr><th></th><th>Year</th><th>Personnel</th><th>Station</th><th>Shift</th><th>Battalion</th><th>Task</th><th>Result</th><th>Notes</th></tr></thead><tbody>' +
+    box.innerHTML = '<table><thead><tr><th></th><th>Year</th><th>Personnel</th><th>Age</th><th>Station</th><th>Shift</th><th>Battalion</th><th>Task</th><th>Result</th><th>Notes</th></tr></thead><tbody>' +
       db.results.slice().reverse().map(function (r) {
         var p = personOf(r.personnel);
-        return '<tr><td><button type="button" class="btn ghost" data-edit="' + esc(r.id) + '">Edit</button></td><td>' + esc(yearOf(r.date)) + '</td><td>' + esc(r.personnel) + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td><td>' + esc(r.task) + '</td><td>' + esc(r.result) + '</td><td>' + esc(r.notes || '') + '</td></tr>';
+        return '<tr><td><button type="button" class="btn ghost" data-edit="' + esc(r.id) + '">Edit</button></td><td>' + esc(yearOf(r.date)) + '</td><td>' + esc(r.personnel) + '</td><td>' + ageLabel(r.personnel) + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td><td>' + esc(r.task) + '</td><td>' + esc(r.result) + '</td><td>' + esc(r.notes || '') + '</td></tr>';
       }).join('') + '</tbody></table>';
     box.querySelectorAll('[data-edit]').forEach(function (b) { b.onclick = function () { loadResult(b.getAttribute('data-edit')); }; });
   }
@@ -110,7 +121,7 @@
     var out = document.getElementById('r-out'); if (!out) return;
     var people = db.personnel.slice().sort(function (a, b) { return a.fullName.localeCompare(b.fullName); });
     out.innerHTML = '<p><strong>' + people.length + '</strong> personnel \u2022 <strong>' + db.tasks.length + '</strong> fitness tasks</p><h2>Personnel</h2><table><thead><tr><th></th><th>Name</th><th>Age</th><th>Rank</th><th>Station</th><th>Shift</th><th>Battalion</th></tr></thead><tbody>' +
-      people.map(function (p) { return '<tr><td><button type="button" class="btn ghost" data-editperson="' + esc(p.fullName) + '">Edit</button></td><td>' + esc(p.fullName) + '</td><td>' + esc(p.age || '') + (p.age ? ' <span class="muted">as of 2026</span>' : '') + '</td><td>' + esc(p.rank || '') + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td></tr>'; }).join('') +
+      people.map(function (p) { return '<tr><td><button type="button" class="btn ghost" data-editperson="' + esc(p.fullName) + '">Edit</button></td><td>' + esc(p.fullName) + '</td><td>' + ageLabel(p.fullName) + '</td><td>' + esc(p.rank || '') + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td></tr>'; }).join('') +
       '</tbody></table><h2 style="margin-top:18px">Fitness tasks</h2>' +
       (db.tasks.length ? '<table><thead><tr><th></th><th>Task</th><th>Standard</th><th>Unit</th></tr></thead><tbody>' + db.tasks.map(function (t) { return '<tr><td><button type="button" class="btn ghost" data-edittask="' + esc(t.name) + '">Edit</button></td><td>' + esc(t.name) + '</td><td>' + esc(t.standard || '') + '</td><td>' + esc(t.unit || '') + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="muted">No fitness tasks yet.</p>');
     out.querySelectorAll('[data-editperson]').forEach(function (b) {
@@ -160,7 +171,7 @@
       if (ia < 0) ia = 999; if (ib < 0) ib = 999;
       return ia - ib || a.localeCompare(b);
     });
-    var head = '<p><strong>' + esc(name) + '</strong>' + (p.age ? ' · Age ' + esc(p.age) + ' <span class="muted">as of 2026</span>' : '') +
+    var head = '<p><strong>' + esc(name) + '</strong>' + (ageOf(name) ? ' · Age ' + ageLabel(name) : '') +
       (p.rank ? ' · ' + esc(p.rank) : '') +
       (p.station ? ' · Station ' + esc(p.station) : '') +
       (p.shift ? ' · Shift ' + esc(p.shift) : '') +
