@@ -72,7 +72,7 @@
     fillSelect('f-person', names(), '<option value="">Select personnel</option>');
     fillSelect('f-task', db.tasks.map(function (t) { return t.name; }), '<option value="">Select task</option>');
     var hint = document.getElementById('form-hint');
-    if (hint) hint.textContent = db.personnel.length + ' personnel \u2022 ' + db.tasks.length + ' fitness tasks \u2022 ' + db.results.length + ' results.';
+    if (hint) hint.textContent = db.personnel.length + ' personnel copied \u2022 ' + db.tasks.length + ' fitness tasks \u2022 ' + db.results.length + ' results. Eval years 2021-2026 are loaded.';
     var box = document.getElementById('all-table');
     if (!box) return;
     box.innerHTML = '<table><thead><tr><th></th><th>Date</th><th>Personnel</th><th>Station</th><th>Shift</th><th>Battalion</th><th>Task</th><th>Result</th><th>Met</th></tr></thead><tbody>' +
