@@ -108,12 +108,65 @@
       };
     });
   }
+
+  function renderPerson() {
+    fillSelect('bp-person', names(), '<option value="">Select personnel</option>');
+    var el = document.getElementById('bp-person');
+    if (el && !el.dataset.wired) {
+      el.dataset.wired = '1';
+      el.onchange = renderPerson;
+    }
+    var box = document.getElementById('bp-out');
+    if (!box) return;
+    var name = val('bp-person');
+    if (!name) { box.innerHTML = '<p class="muted">Select a name.</p>'; return; }
+    var p = personOf(name);
+    var rows = db.results.filter(function (r) { return r.personnel === name; });
+    var years = [];
+    rows.forEach(function (r) {
+      var y = String(r.date || '').slice(0, 4);
+      if (y && years.indexOf(y) < 0) years.push(y);
+    });
+    years.sort();
+    var taskOrder = db.tasks.map(function (t) { return t.name; });
+    var tasks = [];
+    rows.forEach(function (r) { if (tasks.indexOf(r.task) < 0) tasks.push(r.task); });
+    tasks.sort(function (a, b) {
+      var ia = taskOrder.indexOf(a), ib = taskOrder.indexOf(b);
+      if (ia < 0) ia = 999; if (ib < 0) ib = 999;
+      return ia - ib || a.localeCompare(b);
+    });
+    var head = '<p><strong>' + esc(name) + '</strong>' +
+      (p.rank ? ' · ' + esc(p.rank) : '') +
+      (p.station ? ' · Station ' + esc(p.station) : '') +
+      (p.shift ? ' · Shift ' + esc(p.shift) : '') +
+      (p.battalion ? ' · Battalion ' + esc(p.battalion) : '') +
+      ' · ' + rows.length + ' results</p>';
+    if (!rows.length) { box.innerHTML = head + '<p class="muted">No fitness results for this person.</p>'; return; }
+    var html = head;
+    tasks.forEach(function (task) {
+      var unit = (db.tasks.filter(function (t) { return t.name === task; })[0] || {}).unit || '';
+      var byYear = {};
+      rows.filter(function (r) { return r.task === task; }).forEach(function (r) {
+        var y = String(r.date || '').slice(0, 4) || 'Other';
+        var cell = esc(r.result || '');
+        if (r.notes) cell += '<div class="muted">' + esc(r.notes) + '</div>';
+        byYear[y] = (byYear[y] ? byYear[y] + '<br>' : '') + cell;
+      });
+      html += '<h2 style="margin-top:16px">' + esc(task) + (unit ? ' <span class="muted">(' + esc(unit) + ')</span>' : '') + '</h2>';
+      html += '<table><thead><tr>' + years.map(function (y) { return '<th>' + esc(y) + '</th>'; }).join('') + '</tr></thead><tbody><tr>' +
+        years.map(function (y) { return '<td>' + (byYear[y] || '') + '</td>'; }).join('') + '</tr></tbody></table>';
+    });
+    box.innerHTML = html;
+  }
   function show(tab) {
     document.querySelectorAll('nav button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === tab); });
     document.getElementById('tab-log').hidden = tab !== 'log';
+    document.getElementById('tab-person').hidden = tab !== 'person';
     document.getElementById('tab-catalog').hidden = tab !== 'catalog';
     if (tab === 'catalog') renderCatalog();
     if (tab === 'log') renderLog();
+    if (tab === 'person') renderPerson();
   }
   function clearResult() {
     setVal('f-id', ''); setVal('f-person', ''); setVal('f-task', ''); setVal('f-done', todayISO()); setVal('f-result', ''); setVal('f-met', ''); setVal('f-notes', '');
