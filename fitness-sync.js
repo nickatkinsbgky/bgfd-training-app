@@ -40,9 +40,14 @@
       local.results = Object.keys(byId).map(function (id) { return byId[id]; });
       mergeBy(local.personnel, remote.personnel || [], 'fullName');
       mergeBy(local.tasks, remote.tasks || [], 'name');
+      var ages = window.SEED_FITNESS_AGES || {};
+      (local.personnel || []).forEach(function (p) {
+        if (p && ages[p.fullName] != null) { p.age = ages[p.fullName]; p.ageAsOf = '2026'; }
+      });
       if (typeof window.saveFitness === 'function') window.saveFitness(local, { silent: true });
-      if (typeof renderLog === 'function') {}
-      setSyncMsg('Loaded site copy (' + local.results.length + ' results).', true);
+      setSyncMsg('Loaded site copy (' + local.results.length + ' results). Ages are as of 2026.', true);
+      var active = document.querySelector('nav button.active');
+      if (active) active.click();
       document.getElementById('btn-save-all').click && document.getElementById('tab-log') && (location.hash = location.hash);
     } catch (e) {
       setSyncMsg('Could not load the site copy. Using this device.');
