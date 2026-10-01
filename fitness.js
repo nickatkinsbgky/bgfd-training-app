@@ -36,11 +36,21 @@
     store.personnel = store.personnel || [];
     store.tasks = store.tasks || [];
     store.results = store.results || [];
+    var seed = window.SEED_FITNESS || { tasks: [], results: [], personnel: [] };
+    (seed.tasks || []).forEach(function (t) {
+      if (t && t.name && !store.tasks.some(function (x) { return x.name === t.name; })) store.tasks.push({ name: t.name, standard: t.standard || '', unit: t.unit || '' });
+    });
+    var haveId = {};
+    store.results.forEach(function (r) { if (r && r.id) haveId[r.id] = true; });
+    (seed.results || []).forEach(function (r) {
+      if (r && r.id && !haveId[r.id]) { store.results.push(r); haveId[r.id] = true; }
+    });
     var before = store.personnel.length;
+    mergePeople(store.personnel, seed.personnel || []);
     mergePeople(store.personnel, seedPeople());
     mergePeople(store.personnel, trainingPeople());
     store.personnel.sort(function (a, b) { return String(a.fullName).localeCompare(String(b.fullName)); });
-    if (store.personnel.length !== before) save(store);
+    if (store.personnel.length !== before || (seed.results || []).length) save(store);
     return store;
   }
   var db = load();
@@ -62,7 +72,7 @@
     fillSelect('f-person', names(), '<option value="">Select personnel</option>');
     fillSelect('f-task', db.tasks.map(function (t) { return t.name; }), '<option value="">Select task</option>');
     var hint = document.getElementById('form-hint');
-    if (hint) hint.textContent = db.personnel.length + ' personnel copied \u2022 ' + db.tasks.length + ' fitness tasks \u2022 ' + db.results.length + ' results. Training tasks were not imported.';
+    if (hint) hint.textContent = db.personnel.length + ' personnel \u2022 ' + db.tasks.length + ' fitness tasks \u2022 ' + db.results.length + ' results.';
     var box = document.getElementById('all-table');
     if (!box) return;
     box.innerHTML = '<table><thead><tr><th></th><th>Date</th><th>Personnel</th><th>Station</th><th>Shift</th><th>Battalion</th><th>Task</th><th>Result</th><th>Met</th></tr></thead><tbody>' +
