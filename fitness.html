@@ -80,6 +80,16 @@
       <button class="btn ghost" id="btn-delete" type="button" hidden>Delete result</button>
     </div>
     <p class="note" id="save-msg"></p>
+    
+    <h2 style="margin-top:18px">Export to Excel</h2>
+    <p class="muted">Leave both years blank to export every result. Columns include year, personnel, age, battalion, station, shift, task, and result.</p>
+    <div class="grid" style="max-width:720px">
+      <div><label>From year</label><input id="ex-from" type="number" min="1900" step="1" placeholder="2021" /></div>
+      <div><label>To year</label><input id="ex-to" type="number" min="1900" step="1" placeholder="2026" /></div>
+      <div style="align-self:end"><button class="btn" id="btn-export-xlsx" type="button">Export to Excel</button></div>
+    </div>
+    <p class="note" id="export-msg"></p>
+
     <div id="all-table" style="overflow:auto;max-height:480px;margin-top:12px"></div>
   </section>
 
@@ -140,6 +150,7 @@
     <div id="r-out" style="margin-top:16px"></div>
   </section>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="seed-personnel-a.js?v=20260926-2"></script>
 <script src="seed-personnel-b.js?v=20260929-7"></script>
@@ -148,5 +159,6 @@
 <script src="seed-fitness.js?v=20261001-13"></script>
 <script src="fitness.js?v=20261001-13"></script>
 <script src="fitness-sync.js?v=20261001-13"></script>
+<script src="fitness-export.js?v=20261001-14"></script>
 </body>
 </html>
