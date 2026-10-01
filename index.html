@@ -94,6 +94,14 @@
     </div>
     <p class="note" id="save-msg"></p>
     <p class="note" id="sync-msg"></p>
+    <h2 style="margin-top:18px">Export to Excel</h2>
+    <p class="muted">Leave both dates blank to export every assignment. Columns include date, personnel, battalion, station, shift, task, time, and whether the standard was met.</p>
+    <div class="grid" style="max-width:720px">
+      <div><label>From date</label><input type="date" id="ex-from" /></div>
+      <div><label>To date</label><input type="date" id="ex-to" /></div>
+      <div style="align-self:end"><button class="btn gold" id="btn-export-xlsx" type="button">Export to Excel</button></div>
+    </div>
+    <p class="note" id="export-msg"></p>
     <div class="grid owner-only" style="max-width:720px;margin-top:8px">
       <div><label>GitHub token</label><input id="sync-token" type="password" autocomplete="off" placeholder="ghp_ or github_pat_" /></div>
       <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
@@ -206,6 +214,8 @@
 <script src="person-avg.js?v=20260928-15"></script>
 <script src="group-averages.js?v=20260930-1"></script>
 <script src="charts-filters.js?v=20260930-2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="export-excel.js?v=20261001-1"></script>
 <script src="crud.js?v=20260930-3"></script>
 <script src="lock.js?v=20260928-4"></script>
 <script src="sync.js?v=20260929-6"></script>
