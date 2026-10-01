@@ -54,12 +54,16 @@
     mergePeople(store.personnel, seedPeople());
     mergePeople(store.personnel, trainingPeople());
     var ages = window.SEED_FITNESS_AGES || {};
+    var year = new Date().getFullYear();
     store.personnel.forEach(function (p) {
       if (!p || !p.fullName || ages[p.fullName] == null) return;
-      p.age = ages[p.fullName];
-      p.ageAsOf = '2026';
-      var note = 'Age as of 2026';
-      if (String(p.notes || '').indexOf(note) < 0) p.notes = ((p.notes || '') + ' · ' + note).replace(/^ · /, '');
+      p.ageBase = ages[p.fullName];
+      p.ageBaseYear = 2026;
+      p.age = ages[p.fullName] + (year - 2026);
+      p.ageAsOf = String(year);
+      var note = 'Age as of ' + year;
+      p.notes = String(p.notes || '').replace(/Age as of \d{4}/g, '').replace(/\s*·\s*·\s*/g, ' · ').replace(/^\s*·\s*|\s*·\s*$/g, '');
+      p.notes = p.notes ? (p.notes + ' · ' + note) : note;
     });
     store.personnel.sort(function (a, b) { return String(a.fullName).localeCompare(String(b.fullName)); });
     if (store.personnel.length !== before || (seed.results || []).length) save(store);
@@ -92,15 +96,22 @@
     return 'F-' + String((Math.max(0, nums.length ? Math.max.apply(null, nums) : 0) + 1)).padStart(4, '0');
   }
 
-  function ageOf(name) {
-    var p = personOf(name);
-    if (p && p.age) return p.age;
+  function ageYear() { return new Date().getFullYear(); }
+  function ageBase(name) {
     var ages = window.SEED_FITNESS_AGES || {};
-    return ages[name] || '';
+    if (ages[name] != null) return ages[name];
+    var p = personOf(name);
+    if (p && p.ageBase != null) return p.ageBase;
+    return null;
+  }
+  function ageOf(name) {
+    var base = ageBase(name);
+    if (base == null) return '';
+    return base + (ageYear() - 2026);
   }
   function ageLabel(name) {
     var age = ageOf(name);
-    return age ? (age + ' <span class="muted">as of 2026</span>') : '';
+    return age === '' ? '' : (age + ' <span class="muted">as of ' + ageYear() + '</span>');
   }
   function personOf(name) { return db.personnel.filter(function (p) { return p.fullName === name; })[0] || {}; }
   function renderLog() {
