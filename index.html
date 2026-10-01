@@ -23,6 +23,8 @@
   a.choice:hover { filter:brightness(1.08); }
   button.owner { margin-top:8px; background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:10px; padding:12px 16px; font-size:16px; font-weight:700; cursor:pointer; }
   button.owner:hover { filter:brightness(1.08); }
+  button.upload { background:var(--panel); color:var(--text); border:1px solid var(--gold); border-radius:10px; padding:14px 16px; font-size:18px; font-weight:700; cursor:pointer; }
+  button.upload:hover { filter:brightness(1.08); }
   .owner-note { color:var(--muted); font-size:13px; margin:8px 0 0; }
   @media (max-width:600px){ h1 { font-size:22px; } .logo-ring { width:170px; height:170px; } .logo-ring img { width:142px; height:142px; } }
 </style>
@@ -37,6 +39,8 @@
     <div class="actions">
       <a class="choice" href="training.html">Personnel Performance<small>Training Division</small></a>
       <a class="choice alt" href="fitness.html">Personnel Fitness<small>Fitness Committee</small></a>
+      <button class="upload" id="btn-upload-all" type="button">Upload to Site</button>
+      <p class="owner-note" id="upload-note"></p>
       <button class="owner" id="owner-btn" type="button">Owner sign-in</button>
       <p class="owner-note" id="owner-note">Sign in here before editing Personnel Performance.</p>
     </div>
@@ -70,5 +74,66 @@
   paint();
 })();
 </script>
+
+<script>
+(function () {
+  var TOKEN_KEY = 'bgfd-gh-token';
+  var note = document.getElementById('upload-note');
+  function setNote(text) { if (note) note.textContent = text || ''; }
+  function b64(str) {
+    var bytes = new TextEncoder().encode(str);
+    var bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  async function putFile(token, path, obj, label) {
+    var api = 'https://api.github.com/repos/nickatkinsbgky/bgfd-training-app/contents/' + path;
+    var headers = { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json' };
+    var content = b64(JSON.stringify(obj));
+    var last = '';
+    for (var attempt = 1; attempt <= 5; attempt++) {
+      var meta = await fetch(api + '?ref=main&t=' + Date.now(), { headers: headers, cache: 'no-store' });
+      var sha = null;
+      if (meta.ok) sha = (await meta.json()).sha;
+      var body = { message: 'Upload ' + label + ' from homepage ' + new Date().toISOString(), content: content, branch: 'main' };
+      if (sha) body.sha = sha;
+      var res = await fetch(api, { method: 'PUT', headers: headers, body: JSON.stringify(body) });
+      var info = await res.json().catch(function () { return {}; });
+      if (res.ok) return;
+      last = info.message || ('HTTP ' + res.status);
+      if (attempt < 5 && /sha|match|409/i.test(last)) continue;
+      throw new Error(label + ': ' + last);
+    }
+    throw new Error(label + ': ' + (last || 'upload failed'));
+  }
+  document.getElementById('btn-upload-all').onclick = async function () {
+    var token = (localStorage.getItem(TOKEN_KEY) || '').trim();
+    if (!token) {
+      token = window.prompt('Paste the GitHub token used by Personnel Performance') || '';
+      token = token.trim();
+      if (!token) { setNote('Upload cancelled. A GitHub token is required.'); return; }
+      localStorage.setItem(TOKEN_KEY, token);
+    }
+    var jobs = [
+      ['bgfd-training-app-v2', 'data.json', 'Personnel Performance'],
+      ['bgfd-fitness-app-v1', 'fitness-data.json', 'Personnel Fitness']
+    ];
+    setNote('Uploading both apps…');
+    var done = [];
+    try {
+      for (var i = 0; i < jobs.length; i++) {
+        var raw = localStorage.getItem(jobs[i][0]);
+        if (!raw) { done.push(jobs[i][2] + ' has no saved data on this device'); continue; }
+        await putFile(token, jobs[i][1], JSON.parse(raw), jobs[i][2]);
+        done.push(jobs[i][2] + ' uploaded');
+      }
+      setNote(done.join('. ') + '.');
+    } catch (err) {
+      setNote('Upload failed. ' + err.message);
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
