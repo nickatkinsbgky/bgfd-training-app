@@ -67,14 +67,8 @@
     if (msg) msg.textContent = 'Restored original data: ' + (next.personnel||[]).length + ' personnel, ' + (next.tasks||[]).length + ' tasks, ' + (next.assignments||[]).length + ' assignments.';
   }
 
-  const nav = document.querySelector('header nav');
-  const btn = document.createElement('button');
-  btn.id = 'owner-btn';
-  btn.type = 'button';
-  btn.textContent = 'Owner sign-in';
-  btn.style.borderColor = 'var(--gold)';
-  btn.onclick = signIn;
-  if (nav) nav.appendChild(btn);
+  const btn = document.getElementById('owner-btn');
+  if (btn) btn.onclick = signIn;
 
   const actions = document.querySelector('#tab-input .row-actions');
   if (actions && !document.getElementById('btn-restore-original')) {
