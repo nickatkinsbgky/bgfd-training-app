@@ -57,6 +57,18 @@
   function val(id) { var el = document.getElementById(id); return el ? String(el.value || '').trim() : ''; }
   function setVal(id, v) { var el = document.getElementById(id); if (el) el.value = v == null ? '' : v; }
   function todayISO() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function yearOf(date) { var y = String(date || '').slice(0, 4); return /^[0-9]{4}$/.test(y) ? y : ''; }
+  function fillYears(selected) {
+    var el = document.getElementById('f-year'); if (!el) return;
+    var now = new Date().getFullYear();
+    var years = {};
+    for (var y = 1990; y <= now + 200; y++) years[y] = true;
+    (db.results || []).forEach(function (r) { var yy = yearOf(r.date); if (yy) years[yy] = true; });
+    if (selected) years[selected] = true;
+    var list = Object.keys(years).map(Number).sort(function (a, b) { return b - a; });
+    el.innerHTML = list.map(function (y) { return '<option value="' + y + '">' + y + '</option>'; }).join('');
+    el.value = String(selected || now);
+  }
   function fillSelect(id, items, extra) {
     var el = document.getElementById(id); if (!el) return; var cur = el.value;
     el.innerHTML = (extra || '') + items.map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + '</option>'; }).join('');
@@ -75,10 +87,10 @@
     if (hint) hint.textContent = db.personnel.length + ' personnel copied \u2022 ' + db.tasks.length + ' fitness tasks \u2022 ' + db.results.length + ' results. Eval years 2021-2026 are loaded.';
     var box = document.getElementById('all-table');
     if (!box) return;
-    box.innerHTML = '<table><thead><tr><th></th><th>Date</th><th>Personnel</th><th>Station</th><th>Shift</th><th>Battalion</th><th>Task</th><th>Result</th><th>Met</th></tr></thead><tbody>' +
+    box.innerHTML = '<table><thead><tr><th></th><th>Year</th><th>Personnel</th><th>Station</th><th>Shift</th><th>Battalion</th><th>Task</th><th>Result</th><th>Notes</th></tr></thead><tbody>' +
       db.results.slice().reverse().map(function (r) {
         var p = personOf(r.personnel);
-        return '<tr><td><button type="button" class="btn ghost" data-edit="' + esc(r.id) + '">Edit</button></td><td>' + esc(r.date) + '</td><td>' + esc(r.personnel) + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td><td>' + esc(r.task) + '</td><td>' + esc(r.result) + '</td><td>' + esc(r.met || '') + '</td></tr>';
+        return '<tr><td><button type="button" class="btn ghost" data-edit="' + esc(r.id) + '">Edit</button></td><td>' + esc(yearOf(r.date)) + '</td><td>' + esc(r.personnel) + '</td><td>' + esc(p.station || '') + '</td><td>' + esc(p.shift || '') + '</td><td>' + esc(p.battalion || '') + '</td><td>' + esc(r.task) + '</td><td>' + esc(r.result) + '</td><td>' + esc(r.notes || '') + '</td></tr>';
       }).join('') + '</tbody></table>';
     box.querySelectorAll('[data-edit]').forEach(function (b) { b.onclick = function () { loadResult(b.getAttribute('data-edit')); }; });
   }
@@ -168,8 +180,14 @@
     if (tab === 'log') renderLog();
     if (tab === 'person') renderPerson();
   }
+  function chosenYear() {
+    var other = val('f-year-other');
+    if (other && /^[0-9]{4}$/.test(other)) return other;
+    return val('f-year') || String(new Date().getFullYear());
+  }
   function clearResult() {
-    setVal('f-id', ''); setVal('f-person', ''); setVal('f-task', ''); setVal('f-done', todayISO()); setVal('f-result', ''); setVal('f-met', ''); setVal('f-notes', '');
+    setVal('f-id', ''); setVal('f-person', ''); setVal('f-task', ''); setVal('f-year-other', ''); setVal('f-result', ''); setVal('f-notes', '');
+    fillYears(new Date().getFullYear());
     document.getElementById('btn-delete').hidden = true;
     document.getElementById('form-title').textContent = 'Log a fitness result';
   }
@@ -177,7 +195,7 @@
     var rec = db.results.filter(function (r) { return r.id === id; })[0];
     if (!rec) return;
     setVal('f-id', rec.id); setVal('f-person', rec.personnel); setVal('f-task', rec.task);
-    setVal('f-done', rec.date || ''); setVal('f-result', rec.result || ''); setVal('f-met', rec.met || ''); setVal('f-notes', rec.notes || '');
+    fillYears(yearOf(rec.date) || new Date().getFullYear()); setVal('f-year-other', ''); setVal('f-result', rec.result || ''); setVal('f-notes', rec.notes || '');
     document.getElementById('btn-delete').hidden = false;
     document.getElementById('form-title').textContent = 'Edit ' + rec.id;
     show('log');
@@ -188,7 +206,9 @@
     var person = val('f-person'), task = val('f-task');
     if (!person || !task) { document.getElementById('save-msg').textContent = 'Personnel and task are required. Add a fitness task on Roster / tasks first.'; return; }
     var id = val('f-id') || nextId();
-    var row = { id: id, personnel: person, task: task, date: val('f-done') || todayISO(), result: val('f-result'), met: val('f-met'), notes: val('f-notes') };
+    var year = chosenYear();
+    if (!/^[0-9]{4}$/.test(year)) { document.getElementById('save-msg').textContent = 'Enter a 4-digit year.'; return; }
+    var row = { id: id, personnel: person, task: task, date: year + '-01-01', result: val('f-result'), met: '', notes: val('f-notes') };
     var i = -1; db.results.forEach(function (r, idx) { if (r.id === id) i = idx; });
     if (i >= 0) db.results[i] = row; else db.results.push(row);
     save(db);
