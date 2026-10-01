@@ -24,6 +24,9 @@
   .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px 14px; }
   .btn { background:var(--red); color:#fff; border:0; border-radius:6px; padding:9px 16px; font-weight:700; cursor:pointer; }
   .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); }
+  .sync-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 22px; background:#10161d; border-bottom:1px solid var(--line); }
+  .sync-bar input { max-width:280px; width:280px; }
+  #sync-msg.ok { color:#3fb950; } #sync-msg.no { color:#ff7b72; }
   .btn.gold { background:var(--gold); color:#1a1200; }
   .row-actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
   table { width:100%; border-collapse:collapse; font-size:13px; }
@@ -73,6 +76,16 @@
     <button data-tab="roster">Roster / catalog</button>
   </nav>
 </header>
+
+<div class="sync-bar">
+  <button class="btn" id="btn-save-all" type="button">Save</button>
+  <button class="btn ghost" id="btn-push" type="button">Upload to site</button>
+  <button class="btn ghost" id="btn-pull" type="button">Load site data</button>
+  <input id="sync-token" type="password" autocomplete="off" placeholder="GitHub token" />
+  <button class="btn ghost" id="btn-save-token" type="button">Save token</button>
+  <span class="note" id="sync-msg"></span>
+</div>
+
 <main>
   <section id="tab-input" class="card">
     <h2 id="form-title">Log an assignment / evolution</h2>
@@ -103,14 +116,6 @@
       <div style="align-self:end"><button class="btn gold" id="btn-export-xlsx" type="button">Export to Excel</button></div>
     </div>
     <p class="note" id="export-msg"></p>
-    <div class="grid owner-only" style="max-width:720px;margin-top:8px">
-      <div><label>GitHub token</label><input id="sync-token" type="password" autocomplete="off" placeholder="ghp_ or github_pat_" /></div>
-      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn gold" id="btn-save-token" type="button">Save token</button>
-        <button class="btn ghost" id="btn-pull" type="button">Load site data</button>
-        <button class="btn ghost" id="btn-push" type="button">Upload to site</button>
-      </div>
-    </div>
     <div id="all-table" style="overflow:auto;max-height:420px;margin-top:12px"></div>
   </section>
   <section id="tab-person" class="card" hidden>
@@ -219,6 +224,6 @@
 <script src="export-excel.js?v=20261001-1"></script>
 <script src="crud.js?v=20260930-3"></script>
 <script src="lock.js?v=20260928-4"></script>
-<script src="sync.js?v=20260929-6"></script>
+<script src="sync.js?v=20261001-1"></script>
 </body>
 </html>
