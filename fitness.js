@@ -270,15 +270,74 @@
       }));
     });
   }
+
+  var personCharts = [];
+  function renderPersonAvg() {
+    personCharts.forEach(function (c) { try { c.destroy(); } catch (e) {} });
+    personCharts = [];
+    fillSelect('pa-person', names(), '<option value="">Select personnel</option>');
+    var el = document.getElementById('pa-person');
+    if (el && !el.dataset.wired) { el.dataset.wired = '1'; el.onchange = renderPersonAvg; }
+    var box = document.getElementById('pa-out');
+    if (!box) return;
+    var name = val('pa-person');
+    if (!name) { box.innerHTML = '<p class="muted">Select a name.</p>'; return; }
+    var rows = db.results.filter(function (r) { return r.personnel === name; });
+    var taskOrder = db.tasks.map(function (t) { return t.name; });
+    var tasks = [];
+    rows.forEach(function (r) { if (r.task && tasks.indexOf(r.task) < 0) tasks.push(r.task); });
+    tasks.sort(function (a, b) {
+      var ia = taskOrder.indexOf(a), ib = taskOrder.indexOf(b);
+      if (ia < 0) ia = 999; if (ib < 0) ib = 999;
+      return ia - ib || a.localeCompare(b);
+    });
+    var html = '<p><strong>' + esc(name) + '</strong> · ' + rows.length + ' results · ' + tasks.length + ' tasks</p>';
+    if (!rows.length) { box.innerHTML = html + '<p class="muted">No fitness results for this person.</p>'; return; }
+    html += '<table><thead><tr><th>Task</th><th>N</th><th>Average</th><th>Median</th><th>Low</th><th>High</th><th>Latest</th></tr></thead><tbody>';
+    tasks.forEach(function (task) {
+      var nums = rows.map(function (r) { return r.task === task ? parseResult(task, r.result) : null; }).filter(function (n) { return n != null; });
+      var latest = rows.filter(function (r) { return r.task === task; }).slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); })[0];
+      html += '<tr><td>' + esc(task) + '</td><td>' + nums.length + '</td><td>' + fmtResult(task, avg(nums)) + '</td><td>' + fmtResult(task, median(nums)) + '</td><td>' + fmtResult(task, nums.length ? Math.min.apply(null, nums) : null) + '</td><td>' + fmtResult(task, nums.length ? Math.max.apply(null, nums) : null) + '</td><td>' + esc(latest ? latest.result : '') + (latest ? ' <span class="muted">' + esc(yearOf(latest.date)) + '</span>' : '') + '</td></tr>';
+    });
+    html += '</tbody></table>';
+    tasks.forEach(function (task, idx) {
+      html += '<h2 style="margin-top:16px">' + esc(task) + '</h2><div class="chart-wrap"><canvas id="pa-chart-' + idx + '"></canvas></div>';
+    });
+    box.innerHTML = html;
+    tasks.forEach(function (task, idx) {
+      var canvas = document.getElementById('pa-chart-' + idx);
+      if (!canvas || typeof Chart === 'undefined') return;
+      var byYear = {};
+      rows.forEach(function (r) {
+        if (r.task !== task) return;
+        var n = parseResult(task, r.result);
+        if (n == null) return;
+        var y = yearOf(r.date) || 'Other';
+        (byYear[y] = byYear[y] || []).push(n);
+      });
+      var years = Object.keys(byYear).sort();
+      if (!years.length) return;
+      var asMinutes = task === 'Cardio';
+      var unit = ((db.tasks.filter(function (t) { return t.name === task; })[0] || {}).unit || '');
+      var data = years.map(function (y) { var n = avg(byYear[y]); return +(asMinutes ? n / 60 : n).toFixed(2); });
+      personCharts.push(new Chart(canvas, {
+        type: 'bar',
+        data: { labels: years, datasets: [{ label: name + ' — ' + task, data: data, backgroundColor: '#d4a017' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: name + ' — ' + task + ' by year', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } }, scales: { x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }, y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' }, title: { display: true, text: asMinutes ? 'minutes' : (unit === 'time' ? 'seconds' : (unit || 'value')), color: '#8b949e' } } } }
+      }));
+    });
+  }
   function show(tab) {
     document.querySelectorAll('nav button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === tab); });
     document.getElementById('tab-log').hidden = tab !== 'log';
     document.getElementById('tab-person').hidden = tab !== 'person';
+    document.getElementById('tab-pavg').hidden = tab !== 'pavg';
     document.getElementById('tab-dept').hidden = tab !== 'dept';
     document.getElementById('tab-catalog').hidden = tab !== 'catalog';
     if (tab === 'catalog') renderCatalog();
     if (tab === 'log') renderLog();
     if (tab === 'person') renderPerson();
+    if (tab === 'pavg') renderPersonAvg();
     if (tab === 'dept') renderDept();
   }
   function chosenYear() {
