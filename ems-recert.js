@@ -151,10 +151,10 @@
   document.getElementById("statusFilter").onchange = render;
   function esc(value) {
     return String(value == null ? "" : value)
-      .replace(/&/g, "&")
-      .replace(/</g, "<")
-      .replace(/>/g, ">")
-      .replace(/"/g, """);
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   }
   function removePerson(name) {
     var person = db.people.filter(function (p) { return p.name === name; })[0];
