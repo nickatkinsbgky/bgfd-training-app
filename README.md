@@ -32,3 +32,5 @@ This site is public. The seed files include department names and sample training
 Open https://nickatkinsbgky.github.io/bgfd-training-app/ems-recert.html
 
 Labeled EMS Recertification Tracker on the homepage. Hours count only in the expiration year and the calendar year before it. Required: Airway 4, Cardiovascular 5, Trauma 3, Medical 6, Operations 2, PAHT 1, SVAT 1, CPR/AED 1. Edits stay in the browser until Export JSON.
+
+Department averages is on the EMS tracker. Pick a recertification cycle year. The average percent of categories met includes only personnel whose expiration year is that cycle. A category is met when hours in the expiration year and the year before it reach the requirement.

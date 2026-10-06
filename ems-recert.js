@@ -249,6 +249,7 @@
     var s = statusOf(selected);
     document.getElementById("landing").hidden = true;
     document.getElementById("app").hidden = true;
+    document.getElementById("deptView").hidden = true;
     document.getElementById("personView").hidden = false;
     document.getElementById("sumName").textContent = selected.name;
     var cycle = s.win ? s.win.start + " through " + s.win.end : "Set an expiration date to start the cycle";
@@ -287,12 +288,14 @@
   document.getElementById("landOpen").onclick = openFromLanding;
   document.getElementById("landRoster").onclick = function () {
     document.getElementById("landing").hidden = true;
+    document.getElementById("deptView").hidden = true;
     document.getElementById("app").hidden = false;
     render();
   };
   document.getElementById("sumEdit").onclick = function () {
     if (!selected) return;
     document.getElementById("personView").hidden = true;
+    document.getElementById("deptView").hidden = true;
     document.getElementById("app").hidden = false;
     render();
     openPerson(selected.name);
@@ -300,13 +303,99 @@
   };
   document.getElementById("sumRoster").onclick = function () {
     document.getElementById("personView").hidden = true;
+    document.getElementById("deptView").hidden = true;
     document.getElementById("app").hidden = false;
     render();
   };
+
+  function expYear(person) {
+    var year = Number(String(person.expDate || "").slice(0, 4));
+    return year >= 2000 && year <= 2100 ? year : 0;
+  }
+  function dueInYear(year) {
+    return db.people.filter(function (p) { return expYear(p) === Number(year); });
+  }
+  function cycleYears() {
+    var set = {};
+    db.people.forEach(function (p) {
+      var year = expYear(p);
+      if (year) set[year] = true;
+    });
+    return Object.keys(set).map(Number).sort();
+  }
+  function pct(part, whole) {
+    if (!whole) return 0;
+    return Math.round((1000 * part) / whole) / 10;
+  }
+  function showDept() {
+    document.getElementById("landing").hidden = true;
+    document.getElementById("app").hidden = true;
+    document.getElementById("personView").hidden = true;
+    document.getElementById("deptView").hidden = false;
+    var select = document.getElementById("deptYear");
+    var years = cycleYears();
+    var current = new Date().getFullYear();
+    var keep = Number(select.value) || (years.indexOf(current) >= 0 ? current : (years[0] || current));
+    select.innerHTML = years.length ? years.map(function (year) {
+      return "<option value=\"" + year + "\">" + year + "</option>";
+    }).join("") : "<option value=\"" + current + "\">" + current + "</option>";
+    if (years.indexOf(keep) >= 0) select.value = String(keep);
+    renderDept();
+  }
+  function renderDept() {
+    var year = Number(document.getElementById("deptYear").value);
+    var people = dueInYear(year);
+    var win = year ? { start: (year - 1) + "-01-01", end: year + "-12-31" } : null;
+    document.getElementById("deptWindow").textContent = win
+      ? "Only personnel expiring in " + year + " are included. Hours count from " + win.start + " through " + win.end + ". A category counts as met when earned hours reach the required hours."
+      : "No expiration years are on the roster.";
+    var rows = people.map(function (p) {
+      var s = statusOf(p);
+      var met = CATS.filter(function (c) { return s.hours[c.key] >= c.need; }).length;
+      return { p: p, s: s, met: met, pct: pct(met, CATS.length) };
+    }).sort(function (a, b) {
+      if (a.pct !== b.pct) return a.pct - b.pct;
+      return a.p.name.localeCompare(b.p.name);
+    });
+    var avg = rows.length ? Math.round(rows.reduce(function (sum, row) { return sum + row.pct; }, 0) / rows.length * 10) / 10 : 0;
+    var fully = rows.filter(function (row) { return row.met === CATS.length; }).length;
+    document.getElementById("deptStats").innerHTML =
+      "<div class=\"stat\"><b>" + people.length + "</b>Due in " + year + "</div>" +
+      "<div class=\"stat " + (avg >= 100 ? "ok" : "warn") + "\"><b>" + avg + "%</b>Avg % of categories met</div>" +
+      "<div class=\"stat ok\"><b>" + fully + "</b>All categories met</div>" +
+      "<div class=\"stat bad\"><b>" + (people.length - fully) + "</b>Still short</div>";
+    document.getElementById("deptCats").innerHTML = CATS.map(function (c) {
+      var metCount = rows.filter(function (row) { return row.s.hours[c.key] >= c.need; }).length;
+      var hourPct = rows.length ? rows.reduce(function (sum, row) {
+        return sum + Math.min(row.s.hours[c.key] / c.need, 1);
+      }, 0) / rows.length * 100 : 0;
+      hourPct = Math.round(hourPct * 10) / 10;
+      var metPct = pct(metCount, rows.length);
+      var tone = metPct >= 100 ? "met" : "short";
+      return "<tr><td class='left'>" + esc(c.key) + "</td><td>" + c.need + "</td><td>" + metCount + " / " + rows.length +
+        "</td><td>" + metPct + "%</td><td>" + hourPct + "%</td><td><span class='meter " + tone + "'><span style='width:" +
+        Math.max(0, Math.min(100, metPct)) + "%'></span></span></td></tr>";
+    }).join("");
+    document.getElementById("deptPeople").innerHTML = rows.length ? rows.map(function (row) {
+      var tone = row.pct >= 100 ? "met" : "short";
+      return "<tr class='clickable " + tone + "' data-name=\"" + esc(row.p.name) + "\"><td class='left name'>" + esc(row.p.name) +
+        "</td><td>" + esc(row.p.kemsisId || "") + "</td><td>" + esc(row.p.expDate || "") + "</td><td>" + row.met + " / " + CATS.length +
+        "</td><td>" + row.pct + "%</td><td class='need'>" + esc(row.s.needs.join("; ")) + "</td></tr>";
+    }).join("") : "<tr><td colspan='6'>No personnel need to recertify in " + year + ".</td></tr>";
+    Array.prototype.forEach.call(document.querySelectorAll("#deptPeople tr[data-name]"), function (tr) {
+      tr.onclick = function () { showSummary(tr.getAttribute("data-name")); };
+    });
+  }
+  document.getElementById("deptYear").onchange = renderDept;
+  document.getElementById("landDept").onclick = showDept;
+  document.getElementById("rosterDept").onclick = showDept;
+  document.getElementById("sumDept").onclick = showDept;
+
   document.getElementById("backLanding").onclick = function (ev) {
     ev.preventDefault();
     document.getElementById("app").hidden = true;
     document.getElementById("personView").hidden = true;
+    document.getElementById("deptView").hidden = true;
     document.getElementById("landing").hidden = false;
     document.getElementById("landSearch").value = "";
     fillLanding();
