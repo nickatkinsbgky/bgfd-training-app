@@ -84,6 +84,7 @@
   <div class="landing-card">
     <h2>EMS Recertification Tracker</h2>
     <p>Search and select personnel</p>
+    <p class="muted" id="landSource">Loading KBEMS_EMT_Recert_Tracker.xlsx…</p>
     <label for="landSearch">Search</label>
     <input id="landSearch" placeholder="Type a name or KEMSIS ID" autocomplete="off" />
     <label for="landSelect">Personnel</label>
@@ -160,7 +161,7 @@
     <div class="wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Hours</th><th>Course</th><th></th></tr></thead><tbody id="classBody"></tbody></table></div>
   </section>
 </main>
-<script src="ems-recert-data.js"></script>
-<script src="ems-recert.js?v=20261005-colors"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="ems-recert.js?v=20261005-excel"></script>
 </body>
 </html>

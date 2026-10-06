@@ -1,5 +1,4 @@
 (function () {
-  var KEY = "bgfd-ems-recert-v1";
   var CATS = [
     { key: "Airway", need: 4 },
     { key: "Cardiovascular", need: 5 },
@@ -10,14 +9,53 @@
     { key: "SVAT", need: 1 },
     { key: "CPR/AED", need: 1 }
   ];
-  function load() {
-    var raw = localStorage.getItem(KEY);
-    if (raw) {
-      try { return JSON.parse(raw); } catch (e) {}
+  var KEY = "bgfd-ems-recert-excel-v1";
+  var db = { people: [], records: [] };
+  function iso(value) {
+    if (!value) return "";
+    if (value instanceof Date && !isNaN(value)) {
+      var m = String(value.getMonth() + 1).padStart(2, "0");
+      var d = String(value.getDate()).padStart(2, "0");
+      return value.getFullYear() + "-" + m + "-" + d;
     }
-    return JSON.parse(JSON.stringify(window.EMS_RECERT_SEED || { people: [], records: [] }));
+    var text = String(value);
+    return text.length >= 10 ? text.slice(0, 10) : text;
   }
-  var db = load();
+  function fromWorkbook(buf) {
+    var book = XLSX.read(buf, { type: "array", cellDates: true });
+    var status = XLSX.utils.sheet_to_json(book.Sheets["Recert Status"], { header: 1, raw: true });
+    var detail = XLSX.utils.sheet_to_json(book.Sheets["Training Detail"], { header: 1, raw: true });
+    var people = [];
+    status.slice(7).forEach(function (row) {
+      if (!row || !row[0]) return;
+      people.push({ name: String(row[0]), kemsisId: row[1] == null ? "" : String(row[1]).replace(/\.0$/, ""), expDate: iso(row[2]) });
+    });
+    var map = {
+      "KBEMS | Airway | Airway/Respiration/Ventilation": "Airway",
+      "KBEMS | Cardiovascular | Cardiovascular": "Cardiovascular",
+      "KBEMS | Trauma | Trauma": "Trauma",
+      "KBEMS | Medical | Medical": "Medical",
+      "KBEMS | Operations | Operations": "Operations",
+      "KBEMS | PAHT | PAHT": "PAHT",
+      "KBEMS | SVAT | SVAT": "SVAT",
+      "KBEMS | CPR/AED | CPR/AED": "CPR/AED"
+    };
+    var records = [];
+    detail.slice(4).forEach(function (row) {
+      if (!row || !row[0] || !map[row[12]]) return;
+      var credit = row[14];
+      if (credit === "" || credit == null) credit = row[11];
+      if (credit === "" || credit == null) credit = row[5];
+      if (credit === "" || credit == null) return;
+      records.push({ name: String(row[0]), date: iso(row[6]), category: map[row[12]], hours: Math.round(Number(credit) * 100) / 100, course: row[3] ? String(row[3]).slice(0, 80) : "" });
+    });
+    return { people: people, records: records };
+  }
+  function loadSaved() {
+    var raw = localStorage.getItem(KEY);
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch (e) { return null; }
+  }
   function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
   function cycle(exp) {
     if (!exp) return null;
@@ -184,11 +222,9 @@
     reader.readAsText(file);
   };
   document.getElementById("resetBtn").onclick = function () {
-    if (!confirm("Replace saved tracker data on this browser with the seed file?")) return;
+    if (!confirm("Reload personnel and classes from KBEMS_EMT_Recert_Tracker.xlsx?")) return;
     localStorage.removeItem(KEY);
-    db = load();
-    save();
-    render();
+    location.reload();
   };
   function fillLanding() {
     var q = (document.getElementById("landSearch").value || "").toLowerCase();
@@ -272,6 +308,17 @@
     fillLanding();
     document.getElementById("landSearch").focus();
   };
-  fillLanding();
-  render();
+  var source = document.getElementById("landSource");
+  fetch("KBEMS_EMT_Recert_Tracker.xlsx?v=20261005")
+    .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.arrayBuffer(); })
+    .then(function (buf) {
+      var saved = loadSaved();
+      db = saved || fromWorkbook(buf);
+      if (source) source.textContent = saved ? "Showing saved edits. Reload seed to use the Excel file again." : "Loaded from KBEMS_EMT_Recert_Tracker.xlsx";
+      fillLanding();
+      render();
+    })
+    .catch(function (err) {
+      if (source) source.textContent = "Could not load the Excel file. " + err.message;
+    });
 })();
