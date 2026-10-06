@@ -135,7 +135,7 @@
     var mine = db.records.filter(function (r) { return r.name === selected.name; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
     document.getElementById("classBody").innerHTML = mine.map(function (r, i) {
       var inCycle = s.win && r.date >= s.win.start && r.date <= s.win.end ? "" : " class='muted'";
-      return "<tr" + inCycle + "><td>" + r.date + "</td><td>" + r.category + "</td><td>" + r.hours + "</td><td>" + (r.course || "") + "</td><td><button data-i='" + i + "' type='button'>Remove</button></td></tr>";
+      return "<tr" + inCycle + "><td>" + esc(r.date) + "</td><td>" + esc(r.category) + "</td><td>" + esc(r.standard || r.category) + "</td><td>" + r.hours + "</td><td>" + esc(r.course || "") + "</td><td><button data-i='" + i + "' type='button'>Remove</button></td></tr>";
     }).join("");
     Array.prototype.forEach.call(document.querySelectorAll("#classBody button"), function (btn) {
       btn.onclick = function (ev) {
@@ -197,7 +197,7 @@
     var date = document.getElementById("newDate").value;
     var hours = Number(document.getElementById("newHours").value);
     if (!date || !hours) { alert("Date and hours are required."); return; }
-    db.records.push({ name: selected.name, date: date, category: document.getElementById("newCat").value, hours: hours, course: document.getElementById("newCourse").value.trim() });
+    var cat = document.getElementById("newCat").value; db.records.push({ name: selected.name, date: date, category: cat, standard: "KBEMS | " + cat + " | " + cat, hours: hours, course: document.getElementById("newCourse").value.trim() });
     save(); render(); openPerson(selected.name);
   };
   document.getElementById("addPerson").onclick = function () {
@@ -274,8 +274,8 @@
       var req = CATS.filter(function (c) { return c.key === r.category; })[0];
       var earned = req && s.hours ? s.hours[req.key] : 0;
       var cls = req ? tone(earned, req.need) : "";
-      return "<tr class='" + cls + "'><td>" + esc(r.date) + "</td><td class='cat'>" + esc(r.category) + "</td><td>" + r.hours + "</td><td>" + esc(r.course || "") + "</td></tr>";
-    }).join("") : "<tr><td colspan='4'>No classes in this cycle.</td></tr>";
+      return "<tr class='" + cls + "'><td>" + esc(r.date) + "</td><td class='cat'>" + esc(r.category) + "</td><td>" + esc(r.standard || r.category) + "</td><td>" + r.hours + "</td><td>" + esc(r.course || "") + "</td></tr>";
+    }).join("") : "<tr><td colspan='5'>No classes in this cycle.</td></tr>";
   }
   function openFromLanding() {
     var name = document.getElementById("landSelect").value;
