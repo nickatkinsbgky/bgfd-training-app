@@ -13,7 +13,9 @@
   header img { width:54px; height:54px; object-fit:contain; }
   h1 { margin:0; font-size:26px; }
   header p { margin:2px 0 0; color:var(--gold); font-weight:700; }
-  a.back { margin-left:auto; color:var(--text); text-decoration:none; border:1px solid var(--gold); border-radius:10px; padding:8px 12px; font-weight:700; }
+  a.back, a.exit { color:var(--text); text-decoration:none; border:1px solid var(--gold); border-radius:10px; padding:8px 12px; font-weight:700; }
+  a.back { margin-left:auto; }
+  a.exit { background:#241c0c; color:var(--gold); }
   main { padding:16px 20px 40px; }
   .stats { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
   .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:120px; }
@@ -72,6 +74,7 @@
 </head>
 <body>
 <header>
+  <a class="exit" href="index.html">Exit</a>
   <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261001-2" alt="BGFD" />
   <div>
     <h1>EMS Recertification Tracker</h1>
