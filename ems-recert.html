@@ -152,6 +152,9 @@
   <p class="muted" id="sumMeta"></p>
   <p id="sumStatus"></p>
   <div class="summary" id="sumCats"></div>
+  <div class="bar">
+    <button class="red" id="sumPdf" type="button">Export printable PDF</button>
+  </div>
   <h3>Classes in this recertification cycle</h3>
   <div class="wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Standard</th><th>Hours</th><th>Course</th></tr></thead><tbody id="sumClasses"></tbody></table></div>
   <div class="bar" style="margin-top:12px">
@@ -288,14 +291,18 @@
     </div>
     <div class="bar">
       <button class="red" id="savePerson" type="button">Save changes</button>
+      <button class="gold" id="drawerPdf" type="button">Export printable PDF</button>
       <button id="deletePerson" type="button">Delete person</button>
       <button class="gold" id="addClass" type="button">Add class</button>
     </div>
     <div class="wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Standard</th><th>Hours</th><th>Course</th><th></th></tr></thead><tbody id="classBody"></tbody></table></div>
   </section>
 </main>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script src="ems-recert-data.js?v=20261005-standard"></script>
-<script src="ems-recert.js?v=20261005-focus"></script>
+<script src="ems-recert.js?v=20261005-pdf"></script>
+<script src="ems-pdf.js?v=20261005-pdf"></script>
 <script src="ems-sync.js?v=20261005-sync"></script>
 </body>
 </html>

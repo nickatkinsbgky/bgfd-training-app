@@ -146,11 +146,12 @@
         var cls = row.s.win ? (val >= c.need ? "hrs met" : "hrs short") : "";
         return "<td class='" + cls + "'>" + val + "</td>";
       }).join("");
-      return "<tr data-name=\"" + esc(row.p.name) + "\"><td class='name'>" + esc(row.p.name) + "</td><td>" + esc(row.p.kemsisId || "") + "</td><td>" + esc(row.p.expDate || "") + "</td><td>" + win + "</td>" + cells + "<td>" + row.s.status + "</td><td class='need'>" + esc(row.s.needs.join("; ")) + "</td><td class='actions'><button class='tiny edit' type='button'>Edit</button><button class='tiny del' type='button'>Delete</button></td></tr>";
+      return "<tr data-name=\"" + esc(row.p.name) + "\"><td class='name'>" + esc(row.p.name) + "</td><td>" + esc(row.p.kemsisId || "") + "</td><td>" + esc(row.p.expDate || "") + "</td><td>" + win + "</td>" + cells + "<td>" + row.s.status + "</td><td class='need'>" + esc(row.s.needs.join("; ")) + "</td><td class='actions'><button class='tiny pdf' type='button'>PDF</button><button class='tiny edit' type='button'>Edit</button><button class='tiny del' type='button'>Delete</button></td></tr>";
     }).join("");
     Array.prototype.forEach.call(document.querySelectorAll("#body tr"), function (tr) {
       var name = tr.getAttribute("data-name");
       tr.onclick = function () { openPerson(name); };
+      tr.querySelector(".pdf").onclick = function (ev) { ev.stopPropagation(); if (window.exportEmsPersonPdf) window.exportEmsPersonPdf(name); };
       tr.querySelector(".edit").onclick = function (ev) { ev.stopPropagation(); openPerson(name); document.getElementById("editName").focus(); };
       tr.querySelector(".del").onclick = function (ev) { ev.stopPropagation(); removePerson(name); };
     });
@@ -331,6 +332,13 @@
     document.getElementById("focusView").hidden = true;
     document.getElementById("app").hidden = false;
     render();
+  };
+  document.getElementById("sumPdf").onclick = function () {
+    if (selected && window.exportEmsPersonPdf) window.exportEmsPersonPdf(selected.name);
+  };
+  var drawerPdf = document.getElementById("drawerPdf");
+  if (drawerPdf) drawerPdf.onclick = function () {
+    if (selected && window.exportEmsPersonPdf) window.exportEmsPersonPdf(selected.name);
   };
   document.getElementById("sumEdit").onclick = function () {
     if (!selected) return;
@@ -584,6 +592,27 @@
     db = seed;
     if (source) source.textContent = "Loaded " + db.people.length + " people and " + db.records.length + " classes from KBEMS_EMT_Recert_Tracker.xlsx";
   }
+
+
+  window.emsPersonReport = function (name) {
+    var person = db.people.filter(function (p) { return p.name === name; })[0];
+    if (!person) return null;
+    var s = statusOf(person);
+    var classes = db.records.filter(function (r) { return r.name === person.name; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    return {
+      person: person,
+      status: s.status,
+      needs: s.needs,
+      win: s.win,
+      hours: s.hours,
+      categories: CATS.map(function (c) {
+        var earned = s.win ? s.hours[c.key] : 0;
+        var tone = !s.win ? "" : (earned > c.need ? "Ahead" : (earned === c.need ? "Met" : "Short"));
+        return { key: c.key, need: c.need, earned: earned, still: Math.round((c.need - earned) * 100) / 100, tone: tone, standard: "KBEMS | " + c.key + " | " + c.key };
+      }),
+      classes: classes
+    };
+  };
 
   window.getEmsDb = function () { return db; };
   window.saveEms = function () { save(); return db; };
