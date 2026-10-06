@@ -1,9 +1,38 @@
 (function () {
   var SRC = "https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/e3e3cb3a6613c2509d99455d451645fe25f2e2cc/ems-recert.js";
+  function ensureTables() {
+    if (!document.getElementById("emrReqStyle")) {
+      var style = document.createElement("style");
+      style.id = "emrReqStyle";
+      style.textContent = ".req-wrap{margin:0 0 14px}.req-wrap table{min-width:0;width:min(640px,100%)}.req-wrap h3{margin:0 0 4px}#personReq[hidden]{display:none}";
+      document.head.appendChild(style);
+    }
+    if (!document.getElementById("emrReqBody")) {
+      var stats = document.getElementById("stats");
+      if (stats && stats.parentNode) {
+        var section = document.createElement("section");
+        section.className = "req-wrap";
+        section.innerHTML = "<h3>Kentucky EMR recertification requirements</h3><p class='muted' id='emrReqNote'></p><div class='wrap'><table><thead><tr><th class='left'>Category</th><th>Required hours</th></tr></thead><tbody id='emrReqBody'></tbody></table></div>";
+        stats.parentNode.insertBefore(section, stats.nextSibling);
+      }
+    }
+    if (!document.getElementById("personReq")) {
+      var sum = document.getElementById("sumStatus");
+      if (sum && sum.parentNode) {
+        var person = document.createElement("section");
+        person.className = "req-wrap";
+        person.id = "personReq";
+        person.hidden = true;
+        person.innerHTML = "<h3>Kentucky EMR recertification requirements</h3><p class='muted'>These hours apply because this person is certified as an EMR.</p><div class='wrap'><table><thead><tr><th class='left'>Category</th><th>Required hours</th></tr></thead><tbody id='emrReqBodyPerson'></tbody></table></div>";
+        sum.parentNode.insertBefore(person, sum.nextSibling);
+      }
+    }
+  }
   fetch(SRC).then(function (res) {
     if (!res.ok) throw new Error("Could not load EMS tracker script");
     return res.text();
   }).then(function (code) {
+    ensureTables();
     var insert = [
       "  var EMR_REQS = [",
       "    { key: \"CPR/AED\", label: \"CPR/AED\", need: 1 },",
