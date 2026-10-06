@@ -309,16 +309,15 @@
     document.getElementById("landSearch").focus();
   };
   var source = document.getElementById("landSource");
-  fetch("KBEMS_EMT_Recert_Tracker.xlsx?v=20261005")
-    .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.arrayBuffer(); })
-    .then(function (buf) {
-      var saved = loadSaved();
-      db = saved || fromWorkbook(buf);
-      if (source) source.textContent = saved ? "Showing saved edits. Reload seed to use the Excel file again." : "Loaded from KBEMS_EMT_Recert_Tracker.xlsx";
-      fillLanding();
-      render();
-    })
-    .catch(function (err) {
-      if (source) source.textContent = "Could not load the Excel file. " + err.message;
-    });
+  var saved = loadSaved();
+  var seed = window.EMS_RECERT_SEED || { people: [], records: [] };
+  if (saved && saved.people && saved.people.length) {
+    db = saved;
+    if (source) source.textContent = "Showing saved edits from this browser. Reload seed uses the uploaded workbook.";
+  } else {
+    db = seed;
+    if (source) source.textContent = "Loaded " + db.people.length + " people and " + db.records.length + " classes from KBEMS_EMT_Recert_Tracker.xlsx";
+  }
+  fillLanding();
+  render();
 })();
