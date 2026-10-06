@@ -64,7 +64,7 @@
       '<div class="stat"><b>' + db.people.length + '</b>People</div>';
     document.getElementById("head").innerHTML = "<tr><th class='name'>Attendee</th><th>KEMSIS ID</th><th>Exp date</th><th>Cycle</th>" +
       CATS.map(function (c) { return "<th>" + c.key + " (" + c.need + ")</th>"; }).join("") +
-      "<th>Status</th><th>Still needed</th></tr>";
+      "<th>Status</th><th>Still needed</th><th class='actions'></th></tr>";
     document.getElementById("body").innerHTML = rows.map(function (row) {
       var win = row.s.win ? row.s.win.start.slice(0, 4) + "–" + row.s.win.end.slice(0, 4) : "";
       var cells = CATS.map(function (c) {
@@ -72,10 +72,13 @@
         var cls = row.s.win ? (val >= c.need ? "hrs met" : "hrs short") : "";
         return "<td class='" + cls + "'>" + val + "</td>";
       }).join("");
-      return "<tr data-name='" + row.p.name.replace(/'/g, "&#39;") + "'><td class='name'>" + row.p.name + "</td><td>" + (row.p.kemsisId || "") + "</td><td>" + (row.p.expDate || "") + "</td><td>" + win + "</td>" + cells + "<td>" + row.s.status + "</td><td class='need'>" + row.s.needs.join("; ") + "</td></tr>";
+      return "<tr data-name=\"" + esc(row.p.name) + "\"><td class='name'>" + esc(row.p.name) + "</td><td>" + esc(row.p.kemsisId || "") + "</td><td>" + esc(row.p.expDate || "") + "</td><td>" + win + "</td>" + cells + "<td>" + row.s.status + "</td><td class='need'>" + esc(row.s.needs.join("; ")) + "</td><td class='actions'><button class='tiny edit' type='button'>Edit</button><button class='tiny del' type='button'>Delete</button></td></tr>";
     }).join("");
     Array.prototype.forEach.call(document.querySelectorAll("#body tr"), function (tr) {
-      tr.onclick = function () { openPerson(tr.getAttribute("data-name")); };
+      var name = tr.getAttribute("data-name");
+      tr.onclick = function () { openPerson(name); };
+      tr.querySelector(".edit").onclick = function (ev) { ev.stopPropagation(); openPerson(name); document.getElementById("editName").focus(); };
+      tr.querySelector(".del").onclick = function (ev) { ev.stopPropagation(); removePerson(name); };
     });
   }
   function openPerson(name) {
@@ -84,6 +87,7 @@
     var s = statusOf(selected);
     document.getElementById("drawer").hidden = false;
     document.getElementById("drawerTitle").textContent = selected.name;
+    document.getElementById("editName").value = selected.name;
     document.getElementById("editId").value = selected.kemsisId || "";
     document.getElementById("editExp").value = selected.expDate || "";
     document.getElementById("editCycle").value = s.win ? s.win.start + " to " + s.win.end : "Set an expiration date";
@@ -107,11 +111,44 @@
   }
   document.getElementById("q").oninput = render;
   document.getElementById("statusFilter").onchange = render;
+  function esc(value) {
+    return String(value == null ? "" : value).replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, """);
+  }
+  function removePerson(name) {
+    var person = db.people.filter(function (p) { return p.name === name; })[0];
+    if (!person) return;
+    var classes = db.records.filter(function (r) { return r.name === name; }).length;
+    var msg = "Delete " + name + "?";
+    if (classes) msg += " This also removes " + classes + " class record" + (classes === 1 ? "" : "s") + ".";
+    if (!confirm(msg)) return;
+    db.people = db.people.filter(function (p) { return p.name !== name; });
+    db.records = db.records.filter(function (r) { return r.name !== name; });
+    if (selected && selected.name === name) {
+      selected = null;
+      document.getElementById("drawer").hidden = true;
+    }
+    save();
+    render();
+  }
   document.getElementById("savePerson").onclick = function () {
     if (!selected) return;
+    var nextName = document.getElementById("editName").value.trim();
+    if (!nextName) { alert("Name is required."); return; }
+    var taken = db.people.some(function (p) { return p !== selected && p.name === nextName; });
+    if (taken) { alert("That name is already on the roster."); return; }
+    var previous = selected.name;
+    selected.name = nextName;
     selected.kemsisId = document.getElementById("editId").value.trim();
     selected.expDate = document.getElementById("editExp").value;
+    if (previous !== nextName) {
+      db.records.forEach(function (r) { if (r.name === previous) r.name = nextName; });
+      db.people.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    }
     save(); render(); openPerson(selected.name);
+  };
+  document.getElementById("deletePerson").onclick = function () {
+    if (!selected) return;
+    removePerson(selected.name);
   };
   document.getElementById("addClass").onclick = function () {
     if (!selected) return;

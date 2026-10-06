@@ -27,6 +27,9 @@
   .wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
   table { width:100%; border-collapse:collapse; min-width:1100px; }
   th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:center; white-space:nowrap; }
+  td.actions, th.actions { text-align:right; }
+  button.tiny { padding:4px 8px; margin-left:4px; font-size:13px; }
+  button.tiny.del { background:#3a1c1c; border-color:#f5b7b1; color:#f5b7b1; }
   th { position:sticky; top:0; background:#211810; color:var(--gold); }
   td.name, th.name { text-align:left; position:sticky; left:0; background:#161b22; }
   tr.short td.hrs { background:#3a1c1c; color:#f5b7b1; }
@@ -73,6 +76,7 @@
   <section class="drawer" id="drawer" hidden>
     <h2 id="drawerTitle" style="margin:0 0 8px"></h2>
     <div class="grid">
+      <div><label>Name</label><input id="editName" /></div>
       <div><label>KEMSIS ID</label><input id="editId" /></div>
       <div><label>Current exp date</label><input id="editExp" type="date" /></div>
       <div><label>Cycle</label><input id="editCycle" disabled /></div>
@@ -86,13 +90,14 @@
       <div><label>Course</label><input id="newCourse" placeholder="Class name" /></div>
     </div>
     <div class="bar">
-      <button class="red" id="savePerson" type="button">Save person</button>
+      <button class="red" id="savePerson" type="button">Save changes</button>
+      <button id="deletePerson" type="button">Delete person</button>
       <button class="gold" id="addClass" type="button">Add class</button>
     </div>
     <div class="wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Hours</th><th>Course</th><th></th></tr></thead><tbody id="classBody"></tbody></table></div>
   </section>
 </main>
 <script src="ems-recert-data.js"></script>
-<script src="ems-recert.js"></script>
+<script src="ems-recert.js?v=20261005-edit"></script>
 </body>
 </html>
