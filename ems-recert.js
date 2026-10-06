@@ -150,7 +150,11 @@
   document.getElementById("q").oninput = render;
   document.getElementById("statusFilter").onchange = render;
   function esc(value) {
-    return String(value == null ? "" : value).replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, """);
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&")
+      .replace(/</g, "<")
+      .replace(/>/g, ">")
+      .replace(/"/g, """);
   }
   function removePerson(name) {
     var person = db.people.filter(function (p) { return p.name === name; })[0];
