@@ -449,6 +449,23 @@
     db = seed;
     if (source) source.textContent = "Loaded " + db.people.length + " people and " + db.records.length + " classes from KBEMS_EMT_Recert_Tracker.xlsx";
   }
+
+  window.getEmsDb = function () { return db; };
+  window.saveEms = function () { save(); return db; };
+  window.setEmsDb = function (next) {
+    db = next && next.people ? next : { people: [], records: [] };
+    if (!db.records) db.records = [];
+    save();
+    rollExpirations();
+    fillLanding();
+    render();
+    if (selected) selected = db.people.filter(function (p) { return p.name === selected.name; })[0] || null;
+    var personView = document.getElementById("personView");
+    var deptView = document.getElementById("deptView");
+    if (personView && !personView.hidden && selected) showSummary(selected.name);
+    if (deptView && !deptView.hidden) renderDept();
+  };
+
   rollExpirations();
   fillLanding();
   render();

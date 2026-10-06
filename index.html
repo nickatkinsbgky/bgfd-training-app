@@ -123,9 +123,10 @@
     }
     var jobs = [
       ['bgfd-training-app-v2', 'data.json', 'Personnel Performance'],
-      ['bgfd-fitness-app-v1', 'fitness-data.json', 'Personnel Fitness']
+      ['bgfd-fitness-app-v1', 'fitness-data.json', 'Personnel Fitness'],
+      ['bgfd-ems-recert-excel-v1', 'ems-recert-data.json', 'EMS Recertification']
     ];
-    setNote('Uploading both apps…');
+    setNote('Uploading site data…');
     var done = [];
     try {
       for (var i = 0; i < jobs.length; i++) {

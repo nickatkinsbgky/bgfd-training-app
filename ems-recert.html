@@ -41,6 +41,11 @@
   .drawer { margin-top:14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; }
   .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
   .muted { color:var(--muted); }
+  .sync-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 20px; background:#10161d; border-bottom:1px solid var(--line); }
+  .sync-bar input { max-width:280px; width:min(280px, 100%); }
+  #sync-msg { color:var(--muted); }
+  #sync-msg.ok { color:#7dcea0; }
+  #sync-msg.no { color:#f5b7b1; }
 
   .landing { min-height:calc(100vh - 92px); display:flex; align-items:center; justify-content:center; padding:28px 16px; background:radial-gradient(circle at top, #3b0a0a 0%, #0d1117 46%); }
   .landing-card { width:min(560px, 100%); text-align:center; background:var(--panel); border:1px solid var(--gold); border-radius:18px; padding:28px 22px; box-shadow:0 16px 30px rgba(0,0,0,.45); }
@@ -91,6 +96,15 @@
   </div>
   <a class="back" href="#" id="backLanding">Find personnel</a>
 </header>
+
+<div class="sync-bar">
+  <button class="red" id="btn-save-all" type="button">Save</button>
+  <button class="gold" id="btn-push" type="button">Upload to site</button>
+  <button class="gold" id="btn-pull" type="button">Load site data</button>
+  <input id="sync-token" type="password" autocomplete="off" placeholder="GitHub token (same as the other apps)" />
+  <button id="btn-save-token" type="button">Save token</button>
+  <span id="sync-msg"></span>
+</div>
 
 <section class="landing" id="landing">
   <div class="landing-card">
@@ -223,6 +237,7 @@
   </section>
 </main>
 <script src="ems-recert-data.js?v=20261005-standard"></script>
-<script src="ems-recert.js?v=20261005-renew-all"></script>
+<script src="ems-recert.js?v=20261005-sync"></script>
+<script src="ems-sync.js?v=20261005-sync"></script>
 </body>
 </html>
