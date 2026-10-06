@@ -57,6 +57,42 @@
     try { return JSON.parse(raw); } catch (e) { return null; }
   }
   function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
+
+  function todayIso() {
+    var now = new Date();
+    return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+  }
+  function addYears(iso, years) {
+    var parts = String(iso).split("-");
+    var year = Number(parts[0]) + years;
+    var month = Number(parts[1]);
+    var day = Number(parts[2]);
+    var dim = new Date(year, month, 0).getDate();
+    if (day > dim) day = dim;
+    return year + "-" + String(month).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+  }
+  function rollExpiration(person) {
+    var exp = person.expDate || "";
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(exp)) return false;
+    var today = todayIso();
+    var changed = false;
+    var guard = 0;
+    while (exp <= today && guard < 20) {
+      exp = addYears(exp, 2);
+      changed = true;
+      guard += 1;
+    }
+    if (changed) person.expDate = exp;
+    return changed;
+  }
+  function rollExpirations() {
+    var changed = false;
+    db.people.forEach(function (person) {
+      if (rollExpiration(person)) changed = true;
+    });
+    if (changed) save();
+    return changed;
+  }
   function cycle(exp) {
     if (!exp) return null;
     var year = Number(String(exp).slice(0, 4));
@@ -182,6 +218,8 @@
     selected.name = nextName;
     selected.kemsisId = document.getElementById("editId").value.trim();
     selected.expDate = document.getElementById("editExp").value;
+    rollExpiration(selected);
+    document.getElementById("editExp").value = selected.expDate || "";
     if (previous !== nextName) {
       db.records.forEach(function (r) { if (r.name === previous) r.name = nextName; });
       db.people.sort(function (a, b) { return a.name.localeCompare(b.name); });
@@ -411,6 +449,7 @@
     db = seed;
     if (source) source.textContent = "Loaded " + db.people.length + " people and " + db.records.length + " classes from KBEMS_EMT_Recert_Tracker.xlsx";
   }
+  rollExpirations();
   fillLanding();
   render();
 })();
