@@ -45,7 +45,8 @@
   .landing-card h2 { margin:0 0 6px; font-size:28px; }
   .landing-card p { margin:0 0 18px; color:var(--gold); font-weight:700; }
   .landing-card input, .landing-card select { width:100%; margin-bottom:10px; font-size:16px; padding:12px; }
-  .landing-card button { width:100%; padding:12px; font-size:18px; }
+  .landing-card button, .landing-card a.ready { width:100%; padding:12px; font-size:18px; }
+  .landing-card a.ready { display:block; margin-top:12px; text-decoration:none; font-weight:800; color:#fff; background:linear-gradient(160deg,#ef5350,#c62828 55%,#7f1212); border:1px solid #ff8a80; border-radius:8px; box-sizing:border-box; }
   #app[hidden], #personView[hidden] { display:none; }
 
   .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:8px; margin:12px 0; }
@@ -78,6 +79,7 @@
     <select id="landSelect" size="8"></select>
     <button class="red" id="landOpen" type="button">Open record</button>
     <button class="gold" id="landRoster" type="button" style="margin-top:8px">View full roster</button>
+    <a class="ready" href="https://kemsis.ky.gov" target="_blank" rel="noopener noreferrer">Ready for Recertification? CLICK HERE</a>
   </div>
 </section>
 
