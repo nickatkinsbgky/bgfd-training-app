@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EMS Recertification Tracker</title>
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261001-2" />
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; --ok:#1f7a4d; --bad:#9b2c2c; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--text); font:15px/1.4 "Segoe UI", system-ui, sans-serif; }
+  header { display:flex; gap:16px; align-items:center; padding:16px 20px; background:linear-gradient(90deg,#3b0a0a,#161b22 55%); border-bottom:3px solid var(--gold); }
+  header img { width:54px; height:54px; object-fit:contain; }
+  h1 { margin:0; font-size:26px; }
+  header p { margin:2px 0 0; color:var(--gold); font-weight:700; }
+  a.back { margin-left:auto; color:var(--text); text-decoration:none; border:1px solid var(--gold); border-radius:10px; padding:8px 12px; font-weight:700; }
+  main { padding:16px 20px 40px; }
+  .stats { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:120px; }
+  .stat b { display:block; font-size:22px; }
+  .stat.ok b { color:#7dcea0; } .stat.bad b { color:#f5b7b1; } .stat.warn b { color:var(--gold); }
+  .bar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; align-items:center; }
+  input, select, button { font:inherit; color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
+  button { cursor:pointer; font-weight:700; }
+  button.gold { background:#241c0c; color:var(--gold); border-color:var(--gold); }
+  button.red { background:var(--red); border-color:#ff8a80; color:#fff; }
+  .wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
+  table { width:100%; border-collapse:collapse; min-width:1100px; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:center; white-space:nowrap; }
+  th { position:sticky; top:0; background:#211810; color:var(--gold); }
+  td.name, th.name { text-align:left; position:sticky; left:0; background:#161b22; }
+  tr.short td.hrs { background:#3a1c1c; color:#f5b7b1; }
+  tr.met td.hrs { background:#163326; color:#b7ebc6; }
+  tr:hover td { filter:brightness(1.08); }
+  .need { text-align:left; white-space:normal; min-width:220px; color:#f5b7b1; }
+  .drawer { margin-top:14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
+  .muted { color:var(--muted); }
+  label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+</style>
+</head>
+<body>
+<header>
+  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261001-2" alt="BGFD" />
+  <div>
+    <h1>EMS Recertification Tracker</h1>
+    <p>Kentucky EMT cycle — expiration year and the year before it</p>
+  </div>
+  <a class="back" href="index.html">Home</a>
+</header>
+<main>
+  <div class="stats" id="stats"></div>
+  <div class="bar">
+    <input id="q" placeholder="Search name or KEMSIS ID" />
+    <select id="statusFilter">
+      <option value="">All statuses</option>
+      <option value="Short">Short</option>
+      <option value="Met">Met</option>
+      <option value="Set exp date">Needs exp date</option>
+    </select>
+    <button class="gold" id="addPerson" type="button">Add person</button>
+    <button id="exportBtn" type="button">Export JSON</button>
+    <button id="importBtn" type="button">Import JSON</button>
+    <input id="importFile" type="file" accept="application/json" hidden />
+    <button id="resetBtn" type="button">Reload seed</button>
+  </div>
+  <div class="wrap">
+    <table>
+      <thead id="head"></thead>
+      <tbody id="body"></tbody>
+    </table>
+  </div>
+  <section class="drawer" id="drawer" hidden>
+    <h2 id="drawerTitle" style="margin:0 0 8px"></h2>
+    <div class="grid">
+      <div><label>KEMSIS ID</label><input id="editId" /></div>
+      <div><label>Current exp date</label><input id="editExp" type="date" /></div>
+      <div><label>Cycle</label><input id="editCycle" disabled /></div>
+    </div>
+    <p class="muted" id="editNeeds"></p>
+    <h3>Add a class in this cycle</h3>
+    <div class="grid">
+      <div><label>Date</label><input id="newDate" type="date" /></div>
+      <div><label>Category</label><select id="newCat"></select></div>
+      <div><label>Hours</label><input id="newHours" type="number" min="0" step="0.25" value="1" /></div>
+      <div><label>Course</label><input id="newCourse" placeholder="Class name" /></div>
+    </div>
+    <div class="bar">
+      <button class="red" id="savePerson" type="button">Save person</button>
+      <button class="gold" id="addClass" type="button">Add class</button>
+    </div>
+    <div class="wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Hours</th><th>Course</th><th></th></tr></thead><tbody id="classBody"></tbody></table></div>
+  </section>
+</main>
+<script src="ems-recert-data.js"></script>
+<script src="ems-recert.js"></script>
+</body>
+</html>

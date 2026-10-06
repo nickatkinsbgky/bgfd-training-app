@@ -1,0 +1,157 @@
+(function () {
+  var KEY = "bgfd-ems-recert-v1";
+  var CATS = [
+    { key: "Airway", need: 4 },
+    { key: "Cardiovascular", need: 5 },
+    { key: "Trauma", need: 3 },
+    { key: "Medical", need: 6 },
+    { key: "Operations", need: 2 },
+    { key: "PAHT", need: 1 },
+    { key: "SVAT", need: 1 },
+    { key: "CPR/AED", need: 1 }
+  ];
+  function load() {
+    var raw = localStorage.getItem(KEY);
+    if (raw) {
+      try { return JSON.parse(raw); } catch (e) {}
+    }
+    return JSON.parse(JSON.stringify(window.EMS_RECERT_SEED || { people: [], records: [] }));
+  }
+  var db = load();
+  function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
+  function cycle(exp) {
+    if (!exp) return null;
+    var year = Number(String(exp).slice(0, 4));
+    if (!year) return null;
+    return { start: (year - 1) + "-01-01", end: year + "-12-31" };
+  }
+  function hoursFor(name, cat, win) {
+    var total = 0;
+    db.records.forEach(function (r) {
+      if (r.name !== name || r.category !== cat) return;
+      if (win && (r.date < win.start || r.date > win.end)) return;
+      total += Number(r.hours) || 0;
+    });
+    return Math.round(total * 100) / 100;
+  }
+  function statusOf(person) {
+    var win = cycle(person.expDate);
+    if (!win) return { status: "Set exp date", hours: {}, needs: [], win: null };
+    var hours = {};
+    var needs = [];
+    CATS.forEach(function (c) {
+      hours[c.key] = hoursFor(person.name, c.key, win);
+      if (hours[c.key] < c.need) needs.push(c.key + " " + (Math.round((c.need - hours[c.key]) * 100) / 100));
+    });
+    return { status: needs.length ? "Short" : "Met", hours: hours, needs: needs, win: win };
+  }
+  var selected = null;
+  function render() {
+    var q = (document.getElementById("q").value || "").toLowerCase();
+    var filter = document.getElementById("statusFilter").value;
+    var rows = db.people.map(function (p) { return { p: p, s: statusOf(p) }; }).filter(function (row) {
+      var blob = (row.p.name + " " + (row.p.kemsisId || "")).toLowerCase();
+      if (q && blob.indexOf(q) === -1) return false;
+      if (filter && row.s.status !== filter) return false;
+      return true;
+    });
+    var counts = { Met: 0, Short: 0, "Set exp date": 0 };
+    db.people.forEach(function (p) { counts[statusOf(p).status] += 1; });
+    document.getElementById("stats").innerHTML =
+      '<div class="stat ok"><b>' + counts.Met + '</b>Met</div>' +
+      '<div class="stat bad"><b>' + counts.Short + '</b>Short</div>' +
+      '<div class="stat warn"><b>' + counts["Set exp date"] + '</b>Needs exp date</div>' +
+      '<div class="stat"><b>' + db.people.length + '</b>People</div>';
+    document.getElementById("head").innerHTML = "<tr><th class='name'>Attendee</th><th>KEMSIS ID</th><th>Exp date</th><th>Cycle</th>" +
+      CATS.map(function (c) { return "<th>" + c.key + " (" + c.need + ")</th>"; }).join("") +
+      "<th>Status</th><th>Still needed</th></tr>";
+    document.getElementById("body").innerHTML = rows.map(function (row) {
+      var win = row.s.win ? row.s.win.start.slice(0, 4) + "–" + row.s.win.end.slice(0, 4) : "";
+      var cells = CATS.map(function (c) {
+        var val = row.s.win ? row.s.hours[c.key] : "";
+        var cls = row.s.win ? (val >= c.need ? "hrs met" : "hrs short") : "";
+        return "<td class='" + cls + "'>" + val + "</td>";
+      }).join("");
+      return "<tr data-name='" + row.p.name.replace(/'/g, "&#39;") + "'><td class='name'>" + row.p.name + "</td><td>" + (row.p.kemsisId || "") + "</td><td>" + (row.p.expDate || "") + "</td><td>" + win + "</td>" + cells + "<td>" + row.s.status + "</td><td class='need'>" + row.s.needs.join("; ") + "</td></tr>";
+    }).join("");
+    Array.prototype.forEach.call(document.querySelectorAll("#body tr"), function (tr) {
+      tr.onclick = function () { openPerson(tr.getAttribute("data-name")); };
+    });
+  }
+  function openPerson(name) {
+    selected = db.people.filter(function (p) { return p.name === name; })[0];
+    if (!selected) return;
+    var s = statusOf(selected);
+    document.getElementById("drawer").hidden = false;
+    document.getElementById("drawerTitle").textContent = selected.name;
+    document.getElementById("editId").value = selected.kemsisId || "";
+    document.getElementById("editExp").value = selected.expDate || "";
+    document.getElementById("editCycle").value = s.win ? s.win.start + " to " + s.win.end : "Set an expiration date";
+    document.getElementById("editNeeds").textContent = s.needs.length ? "Still needed: " + s.needs.join("; ") : (s.win ? "All required categories are met for this cycle." : "");
+    var cat = document.getElementById("newCat");
+    cat.innerHTML = CATS.map(function (c) { return "<option>" + c.key + "</option>"; }).join("");
+    var mine = db.records.filter(function (r) { return r.name === selected.name; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    document.getElementById("classBody").innerHTML = mine.map(function (r, i) {
+      var inCycle = s.win && r.date >= s.win.start && r.date <= s.win.end ? "" : " class='muted'";
+      return "<tr" + inCycle + "><td>" + r.date + "</td><td>" + r.category + "</td><td>" + r.hours + "</td><td>" + (r.course || "") + "</td><td><button data-i='" + i + "' type='button'>Remove</button></td></tr>";
+    }).join("");
+    Array.prototype.forEach.call(document.querySelectorAll("#classBody button"), function (btn) {
+      btn.onclick = function (ev) {
+        ev.stopPropagation();
+        var idx = Number(btn.getAttribute("data-i"));
+        var target = mine[idx];
+        db.records = db.records.filter(function (r) { return r !== target; });
+        save(); render(); openPerson(selected.name);
+      };
+    });
+  }
+  document.getElementById("q").oninput = render;
+  document.getElementById("statusFilter").onchange = render;
+  document.getElementById("savePerson").onclick = function () {
+    if (!selected) return;
+    selected.kemsisId = document.getElementById("editId").value.trim();
+    selected.expDate = document.getElementById("editExp").value;
+    save(); render(); openPerson(selected.name);
+  };
+  document.getElementById("addClass").onclick = function () {
+    if (!selected) return;
+    var date = document.getElementById("newDate").value;
+    var hours = Number(document.getElementById("newHours").value);
+    if (!date || !hours) { alert("Date and hours are required."); return; }
+    db.records.push({ name: selected.name, date: date, category: document.getElementById("newCat").value, hours: hours, course: document.getElementById("newCourse").value.trim() });
+    save(); render(); openPerson(selected.name);
+  };
+  document.getElementById("addPerson").onclick = function () {
+    var name = prompt("Attendee name, Last, First");
+    if (!name) return;
+    db.people.push({ name: name.trim(), kemsisId: "", expDate: "" });
+    db.people.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    save(); render(); openPerson(name.trim());
+  };
+  document.getElementById("exportBtn").onclick = function () {
+    var blob = new Blob([JSON.stringify(db, null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "ems-recertification-tracker.json";
+    a.click();
+  };
+  document.getElementById("importBtn").onclick = function () { document.getElementById("importFile").click(); };
+  document.getElementById("importFile").onchange = function (ev) {
+    var file = ev.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      db = JSON.parse(reader.result);
+      save(); render();
+    };
+    reader.readAsText(file);
+  };
+  document.getElementById("resetBtn").onclick = function () {
+    if (!confirm("Replace saved tracker data on this browser with the seed file?")) return;
+    localStorage.removeItem(KEY);
+    db = load();
+    save();
+    render();
+  };
+  render();
+})();

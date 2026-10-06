@@ -26,3 +26,9 @@ They live next to this project as the split app files. The page will not run unt
 Anyone with the Pages URL can open the app. Data they enter stays in *their* browser unless they use Export / Import JSON.
 
 This site is public. The seed files include department names and sample training times.
+
+## EMS Recertification Tracker
+
+Open https://nickatkinsbgky.github.io/bgfd-training-app/ems-recert.html
+
+Labeled EMS Recertification Tracker on the homepage. Hours count only in the expiration year and the calendar year before it. Required: Airway 4, Cardiovascular 5, Trauma 3, Medical 6, Operations 2, PAHT 1, SVAT 1, CPR/AED 1. Edits stay in the browser until Export JSON.
