@@ -38,7 +38,7 @@
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
     var cycle = report.win ? report.win.start + " through " + report.win.end : "Expiration date not set";
-    doc.text("KEMSIS ID: " + (report.person.kemsisId || "—") + "    Expiration: " + (report.person.expDate || "not set"), 40, 132);
+    doc.text("Certification level: " + (report.person.certificationLevel || "EMT") + "    KEMSIS ID: " + (report.person.kemsisId || "—") + "    Expiration: " + (report.person.expDate || "not set"), 40, 132);
     doc.text("Cycle: " + cycle + "    Status: " + report.status, 40, 148);
     if (report.needs && report.needs.length) {
       doc.setTextColor(155, 44, 44);

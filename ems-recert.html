@@ -102,6 +102,8 @@
   .meter.short > span { background:#e74c3c; }
   td.left, th.left { text-align:left; }
   tr.clickable { cursor:pointer; }
+  select.cert { min-width:118px; padding:4px 8px; }
+  table { min-width:1240px; }
 </style>
 </head>
 <body>
@@ -150,6 +152,17 @@
   </aside>
   <h2 id="sumName" style="margin:0 0 4px"></h2>
   <p class="muted" id="sumMeta"></p>
+  <div class="bar">
+    <div>
+      <label for="sumCert">Certification Level</label>
+      <select id="sumCert">
+        <option>EMR</option>
+        <option selected>EMT</option>
+        <option>AEMT</option>
+        <option>Paramedic</option>
+      </select>
+    </div>
+  </div>
   <p id="sumStatus"></p>
   <div class="summary" id="sumCats"></div>
   <div class="bar">
@@ -237,6 +250,7 @@
         <tr>
           <th class="left">Attendee</th>
           <th>KEMSIS ID</th>
+          <th>Certification Level</th>
           <th>Exp date</th>
           <th>Categories met</th>
           <th>% of categories met</th>
@@ -278,6 +292,7 @@
     <div class="grid">
       <div><label>Name</label><input id="editName" /></div>
       <div><label>KEMSIS ID</label><input id="editId" /></div>
+      <div><label>Certification Level</label><select id="editCert"><option>EMR</option><option selected>EMT</option><option>AEMT</option><option>Paramedic</option></select></div>
       <div><label>Current exp date</label><input id="editExp" type="date" /></div>
       <div><label>Cycle</label><input id="editCycle" disabled /></div>
     </div>
@@ -301,8 +316,8 @@
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script src="ems-recert-data.js?v=20261005-standard"></script>
-<script src="ems-recert.js?v=20261005-pdf"></script>
-<script src="ems-pdf.js?v=20261005-pdf"></script>
+<script src="ems-recert.js?v=20261006-cert"></script>
+<script src="ems-pdf.js?v=20261006-cert"></script>
 <script src="ems-sync.js?v=20261005-sync"></script>
 </body>
 </html>

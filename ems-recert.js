@@ -1,4 +1,5 @@
 (function () {
+  var CERT_LEVELS = ["EMR", "EMT", "AEMT", "Paramedic"];
   var CATS = [
     { key: "Airway", need: 4 },
     { key: "Cardiovascular", need: 5 },
@@ -57,6 +58,45 @@
     try { return JSON.parse(raw); } catch (e) { return null; }
   }
   function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
+  function certLevel(person) {
+    return person && CERT_LEVELS.indexOf(person.certificationLevel) >= 0 ? person.certificationLevel : "EMT";
+  }
+  function certSelect(name, level) {
+    return "<select class='cert' data-name=\"" + esc(name) + "\">" + CERT_LEVELS.map(function (opt) {
+      return "<option" + (opt === level ? " selected" : "") + ">" + opt + "</option>";
+    }).join("") + "</select>";
+  }
+  function setCertLevel(name, level) {
+    var person = db.people.filter(function (p) { return p.name === name; })[0];
+    if (!person || CERT_LEVELS.indexOf(level) === -1) return;
+    person.certificationLevel = level;
+    save();
+    var editCert = document.getElementById("editCert");
+    var sumCert = document.getElementById("sumCert");
+    if (selected && selected.name === name) {
+      if (editCert) editCert.value = level;
+      if (sumCert) sumCert.value = level;
+    }
+  }
+  function bindCertSelects(root) {
+    Array.prototype.forEach.call((root || document).querySelectorAll("select.cert"), function (sel) {
+      sel.onclick = function (ev) { ev.stopPropagation(); };
+      sel.onchange = function (ev) {
+        ev.stopPropagation();
+        setCertLevel(sel.getAttribute("data-name"), sel.value);
+      };
+    });
+  }
+  function ensureCertLevels() {
+    var changed = false;
+    (db.people || []).forEach(function (person) {
+      if (CERT_LEVELS.indexOf(person.certificationLevel) === -1) {
+        person.certificationLevel = "EMT";
+        changed = true;
+      }
+    });
+    if (changed) save();
+  }
 
   function todayIso() {
     var now = new Date();
@@ -136,7 +176,7 @@
       '<div class="stat bad"><b>' + counts.Short + '</b>Short</div>' +
       '<div class="stat warn"><b>' + counts["Set exp date"] + '</b>Needs exp date</div>' +
       '<div class="stat"><b>' + db.people.length + '</b>People</div>';
-    document.getElementById("head").innerHTML = "<tr><th class='name'>Attendee</th><th>KEMSIS ID</th><th>Exp date</th><th>Cycle</th>" +
+    document.getElementById("head").innerHTML = "<tr><th class='name'>Attendee</th><th>KEMSIS ID</th><th>Certification Level</th><th>Exp date</th><th>Cycle</th>" +
       CATS.map(function (c) { return "<th>" + c.key + " (" + c.need + ")</th>"; }).join("") +
       "<th>Status</th><th>Still needed</th><th class='actions'></th></tr>";
     document.getElementById("body").innerHTML = rows.map(function (row) {
@@ -146,7 +186,7 @@
         var cls = row.s.win ? (val >= c.need ? "hrs met" : "hrs short") : "";
         return "<td class='" + cls + "'>" + val + "</td>";
       }).join("");
-      return "<tr data-name=\"" + esc(row.p.name) + "\"><td class='name'>" + esc(row.p.name) + "</td><td>" + esc(row.p.kemsisId || "") + "</td><td>" + esc(row.p.expDate || "") + "</td><td>" + win + "</td>" + cells + "<td>" + row.s.status + "</td><td class='need'>" + esc(row.s.needs.join("; ")) + "</td><td class='actions'><button class='tiny pdf' type='button'>PDF</button><button class='tiny edit' type='button'>Edit</button><button class='tiny del' type='button'>Delete</button></td></tr>";
+      return "<tr data-name=\"" + esc(row.p.name) + "\"><td class='name'>" + esc(row.p.name) + "</td><td>" + esc(row.p.kemsisId || "") + "</td><td>" + certSelect(row.p.name, certLevel(row.p)) + "</td><td>" + esc(row.p.expDate || "") + "</td><td>" + win + "</td>" + cells + "<td>" + row.s.status + "</td><td class='need'>" + esc(row.s.needs.join("; ")) + "</td><td class='actions'><button class='tiny pdf' type='button'>PDF</button><button class='tiny edit' type='button'>Edit</button><button class='tiny del' type='button'>Delete</button></td></tr>";
     }).join("");
     Array.prototype.forEach.call(document.querySelectorAll("#body tr"), function (tr) {
       var name = tr.getAttribute("data-name");
@@ -155,6 +195,7 @@
       tr.querySelector(".edit").onclick = function (ev) { ev.stopPropagation(); openPerson(name); document.getElementById("editName").focus(); };
       tr.querySelector(".del").onclick = function (ev) { ev.stopPropagation(); removePerson(name); };
     });
+    bindCertSelects(document.getElementById("body"));
   }
   function openPerson(name) {
     selected = db.people.filter(function (p) { return p.name === name; })[0];
@@ -164,6 +205,7 @@
     document.getElementById("drawerTitle").textContent = selected.name;
     document.getElementById("editName").value = selected.name;
     document.getElementById("editId").value = selected.kemsisId || "";
+    document.getElementById("editCert").value = certLevel(selected);
     document.getElementById("editExp").value = selected.expDate || "";
     document.getElementById("editCycle").value = s.win ? s.win.start + " to " + s.win.end : "Set an expiration date";
     document.getElementById("editNeeds").textContent = s.needs.length ? "Still needed: " + s.needs.join("; ") : (s.win ? "All required categories are met for this cycle." : "");
@@ -218,6 +260,7 @@
     var previous = selected.name;
     selected.name = nextName;
     selected.kemsisId = document.getElementById("editId").value.trim();
+    selected.certificationLevel = document.getElementById("editCert").value || "EMT";
     selected.expDate = document.getElementById("editExp").value;
     rollExpiration(selected);
     document.getElementById("editExp").value = selected.expDate || "";
@@ -242,7 +285,7 @@
   document.getElementById("addPerson").onclick = function () {
     var name = prompt("Attendee name, Last, First");
     if (!name) return;
-    db.people.push({ name: name.trim(), kemsisId: "", expDate: "" });
+    db.people.push({ name: name.trim(), kemsisId: "", expDate: "", certificationLevel: "EMT" });
     db.people.sort(function (a, b) { return a.name.localeCompare(b.name); });
     save(); render(); openPerson(name.trim());
   };
@@ -276,7 +319,7 @@
       return (p.name + " " + (p.kemsisId || "")).toLowerCase().indexOf(q) !== -1;
     });
     select.innerHTML = people.map(function (p) {
-      var label = p.name + (p.kemsisId ? " — " + p.kemsisId : "");
+      var label = p.name + " — " + certLevel(p) + (p.kemsisId ? " — " + p.kemsisId : "");
       return "<option value=\"" + esc(p.name) + "\">" + esc(label) + "</option>";
     }).join("");
     if (people.length) select.selectedIndex = 0;
@@ -293,7 +336,9 @@
     document.getElementById("personView").hidden = false;
     document.getElementById("sumName").textContent = selected.name;
     var cycle = s.win ? s.win.start + " through " + s.win.end : "Set an expiration date to start the cycle";
-    document.getElementById("sumMeta").textContent = "KEMSIS " + (selected.kemsisId || "—") + " · Exp " + (selected.expDate || "not set") + " · " + cycle;
+    document.getElementById("sumMeta").textContent = "KEMSIS " + (selected.kemsisId || "—") + " · " + certLevel(selected) + " · Exp " + (selected.expDate || "not set") + " · " + cycle;
+    var sumCert = document.getElementById("sumCert");
+    if (sumCert) sumCert.value = certLevel(selected);
     document.getElementById("sumStatus").textContent = s.status === "Met" ? "Met for this cycle." : (s.needs.length ? "Still needed: " + s.needs.join("; ") : s.status);
     function tone(earned, need) {
       if (earned > need) return "over";
@@ -332,6 +377,12 @@
     document.getElementById("focusView").hidden = true;
     document.getElementById("app").hidden = false;
     render();
+  };
+  var sumCert = document.getElementById("sumCert");
+  if (sumCert) sumCert.onchange = function () {
+    if (!selected) return;
+    setCertLevel(selected.name, sumCert.value);
+    document.getElementById("sumMeta").textContent = document.getElementById("sumMeta").textContent.replace(/ · (EMR|EMT|AEMT|Paramedic) · /, " · " + sumCert.value + " · ");
   };
   document.getElementById("sumPdf").onclick = function () {
     if (selected && window.exportEmsPersonPdf) window.exportEmsPersonPdf(selected.name);
@@ -430,12 +481,13 @@
     document.getElementById("deptPeople").innerHTML = rows.length ? rows.map(function (row) {
       var tone = row.pct >= 100 ? "met" : "short";
       return "<tr class='clickable " + tone + "' data-name=\"" + esc(row.p.name) + "\"><td class='left name'>" + esc(row.p.name) +
-        "</td><td>" + esc(row.p.kemsisId || "") + "</td><td>" + esc(row.p.expDate || "") + "</td><td>" + row.met + " / " + CATS.length +
+        "</td><td>" + esc(row.p.kemsisId || "") + "</td><td>" + certSelect(row.p.name, certLevel(row.p)) + "</td><td>" + esc(row.p.expDate || "") + "</td><td>" + row.met + " / " + CATS.length +
         "</td><td>" + row.pct + "%</td><td class='need'>" + esc(row.s.needs.join("; ")) + "</td></tr>";
-    }).join("") : "<tr><td colspan='6'>No personnel need to recertify in " + year + ".</td></tr>";
+    }).join("") : "<tr><td colspan='7'>No personnel need to recertify in " + year + ".</td></tr>";
     Array.prototype.forEach.call(document.querySelectorAll("#deptPeople tr[data-name]"), function (tr) {
       tr.onclick = function () { showSummary(tr.getAttribute("data-name")); };
     });
+    bindCertSelects(document.getElementById("deptPeople"));
   }
 
   var STANDARDS = {
@@ -592,6 +644,7 @@
     db = seed;
     if (source) source.textContent = "Loaded " + db.people.length + " people and " + db.records.length + " classes from KBEMS_EMT_Recert_Tracker.xlsx";
   }
+  ensureCertLevels();
 
 
   window.emsPersonReport = function (name) {
@@ -619,6 +672,7 @@
   window.setEmsDb = function (next) {
     db = next && next.people ? next : { people: [], records: [] };
     if (!db.records) db.records = [];
+    ensureCertLevels();
     save();
     rollExpirations();
     fillLanding();
