@@ -35,3 +35,5 @@ Labeled EMS Recertification Tracker on the homepage. Hours count only in the exp
 
 Department averages is on the EMS tracker. Pick a recertification cycle year. The average percent of categories met includes only personnel whose expiration year is that cycle. A category is met when hours in the expiration year and the year before it reach the requirement.
 Every person's expiration date renews by two years on that date, not just one record. A 2027-12-31 expiration becomes 2029-12-31 on that date, then 2031-12-31 on the next expiration, and so on.
+
+Training focus compares the current recertification year against time left in the cycle. Falling short means earned hours are below the prorated target. Ahead includes anyone who has already met that category.

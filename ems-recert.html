@@ -76,6 +76,24 @@
 
   label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
 
+
+  #focusView[hidden] { display:none; }
+  #focusView { padding:16px 20px 40px; }
+  .focus-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; margin:12px 0 18px; }
+  .focus-card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .focus-card.short { border-color:#e74c3c; }
+  .focus-card.ontrack { border-color:var(--gold); }
+  .focus-card.ahead { border-color:#2ecc71; }
+  .focus-card h3 { margin:0 0 4px; font-size:18px; }
+  .focus-card .std { color:var(--muted); font-size:12px; min-height:32px; }
+  .pace { display:flex; gap:8px; margin-top:8px; }
+  .pace b { display:block; font-size:18px; }
+  .pace span { flex:1; background:var(--panel2); border-radius:8px; padding:6px; font-size:12px; }
+  .pace .short b { color:#f5b7b1; }
+  .pace .ontrack b { color:var(--gold); }
+  .pace .ahead b { color:#7dcea0; }
+  #focusCallout { background:#211810; border:1px solid var(--gold); border-radius:12px; padding:12px 14px; }
+
   #deptView[hidden] { display:none; }
   #deptView { padding:16px 20px 40px; }
   .meter { height:10px; background:#30363d; border-radius:99px; overflow:hidden; min-width:110px; display:inline-block; vertical-align:middle; width:120px; }
@@ -118,6 +136,7 @@
     <button class="red" id="landOpen" type="button">Open record</button>
     <button class="gold" id="landRoster" type="button" style="margin-top:8px">View full roster</button>
     <button class="gold" id="landDept" type="button" style="margin-top:8px">Department averages</button>
+    <button class="red" id="landFocus" type="button" style="margin-top:8px">Training focus</button>
     <a class="ready" href="https://kemsis.ky.gov" target="_blank" rel="noopener noreferrer">Ready for Recertification? CLICK HERE</a>
   </div>
 </section>
@@ -139,9 +158,47 @@
     <button class="gold" id="sumEdit" type="button">Edit person</button>
     <button id="sumRoster" type="button">Full roster</button>
     <button class="gold" id="sumDept" type="button">Department averages</button>
+    <button class="red" id="sumFocus" type="button">Training focus</button>
   </div>
 </section>
 
+
+
+<section id="focusView" hidden>
+  <h2 style="margin:0 0 4px">Training focus</h2>
+  <p class="muted" id="focusNote">Snapshot of the current recertification year. A category is behind when earned hours are below the prorated target for the time already used in that cycle.</p>
+  <div class="bar">
+    <div>
+      <label for="focusYear">Recertification cycle year</label>
+      <select id="focusYear"></select>
+    </div>
+    <div>
+      <label for="focusCat">Catch-up list</label>
+      <select id="focusCat"></select>
+    </div>
+  </div>
+  <p class="muted" id="focusWindow"></p>
+  <div class="stats" id="focusStats"></div>
+  <p id="focusCallout"></p>
+  <div class="focus-grid" id="focusCards"></div>
+  <h3>Personnel falling short in the selected standard</h3>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="left">Attendee</th>
+          <th>Exp date</th>
+          <th>Earned</th>
+          <th>Pace target</th>
+          <th>Required</th>
+          <th>Still needed</th>
+          <th>Days left</th>
+        </tr>
+      </thead>
+      <tbody id="focusPeople"></tbody>
+    </table>
+  </div>
+</section>
 
 <section id="deptView" hidden>
   <h2 style="margin:0 0 4px">Department averages</h2>
@@ -205,6 +262,7 @@
     <input id="importFile" type="file" accept="application/json" hidden />
     <button id="resetBtn" type="button">Reload seed</button>
     <button class="gold" id="rosterDept" type="button">Department averages</button>
+    <button class="red" id="rosterFocus" type="button">Training focus</button>
   </div>
   <div class="wrap">
     <table>
@@ -237,7 +295,7 @@
   </section>
 </main>
 <script src="ems-recert-data.js?v=20261005-standard"></script>
-<script src="ems-recert.js?v=20261005-sync"></script>
+<script src="ems-recert.js?v=20261005-focus"></script>
 <script src="ems-sync.js?v=20261005-sync"></script>
 </body>
 </html>

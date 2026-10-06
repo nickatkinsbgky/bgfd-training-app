@@ -288,6 +288,7 @@
     document.getElementById("landing").hidden = true;
     document.getElementById("app").hidden = true;
     document.getElementById("deptView").hidden = true;
+    document.getElementById("focusView").hidden = true;
     document.getElementById("personView").hidden = false;
     document.getElementById("sumName").textContent = selected.name;
     var cycle = s.win ? s.win.start + " through " + s.win.end : "Set an expiration date to start the cycle";
@@ -327,6 +328,7 @@
   document.getElementById("landRoster").onclick = function () {
     document.getElementById("landing").hidden = true;
     document.getElementById("deptView").hidden = true;
+    document.getElementById("focusView").hidden = true;
     document.getElementById("app").hidden = false;
     render();
   };
@@ -334,6 +336,7 @@
     if (!selected) return;
     document.getElementById("personView").hidden = true;
     document.getElementById("deptView").hidden = true;
+    document.getElementById("focusView").hidden = true;
     document.getElementById("app").hidden = false;
     render();
     openPerson(selected.name);
@@ -342,6 +345,7 @@
   document.getElementById("sumRoster").onclick = function () {
     document.getElementById("personView").hidden = true;
     document.getElementById("deptView").hidden = true;
+    document.getElementById("focusView").hidden = true;
     document.getElementById("app").hidden = false;
     render();
   };
@@ -369,6 +373,7 @@
     document.getElementById("landing").hidden = true;
     document.getElementById("app").hidden = true;
     document.getElementById("personView").hidden = true;
+    document.getElementById("focusView").hidden = true;
     document.getElementById("deptView").hidden = false;
     var select = document.getElementById("deptYear");
     var years = cycleYears();
@@ -424,6 +429,135 @@
       tr.onclick = function () { showSummary(tr.getAttribute("data-name")); };
     });
   }
+
+  var STANDARDS = {
+    Airway: "KBEMS | Airway | Airway/Respiration/Ventilation",
+    Cardiovascular: "KBEMS | Cardiovascular | Cardiovascular",
+    Trauma: "KBEMS | Trauma | Trauma",
+    Medical: "KBEMS | Medical | Medical",
+    Operations: "KBEMS | Operations | Operations",
+    PAHT: "KBEMS | PAHT | PAHT",
+    SVAT: "KBEMS | SVAT | SVAT",
+    "CPR/AED": "KBEMS | CPR/AED | CPR/AED"
+  };
+  function parseIso(value) {
+    var parts = String(value || "").split("-");
+    if (parts.length < 3 || !parts[0]) return null;
+    return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+  }
+  function todayDate() {
+    var now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
+  function paceOf(earned, need, exp) {
+    var year = Number(String(exp).slice(0, 4));
+    var start = parseIso((year - 1) + "-01-01");
+    var end = parseIso(exp);
+    var today = todayDate();
+    var total = Math.max(1, Math.round((end - start) / 86400000));
+    var elapsed = Math.max(0, Math.min(total, Math.round((today - start) / 86400000)));
+    var fraction = elapsed / total;
+    var expected = Math.round(need * fraction * 100) / 100;
+    var tolerance = Math.max(0.25, need * 0.1);
+    var bucket = "short";
+    if (earned + 0.001 >= need) bucket = "ahead";
+    else if (earned + tolerance >= expected) bucket = "ontrack";
+    var daysLeft = Math.max(0, Math.round((end - today) / 86400000));
+    return { bucket: bucket, fraction: fraction, expected: expected, daysLeft: daysLeft, elapsed: elapsed, total: total };
+  }
+  function showFocus() {
+    document.getElementById("landing").hidden = true;
+    document.getElementById("app").hidden = true;
+    document.getElementById("personView").hidden = true;
+    document.getElementById("deptView").hidden = true;
+    document.getElementById("focusView").hidden = false;
+    var select = document.getElementById("focusYear");
+    var years = cycleYears();
+    var current = new Date().getFullYear();
+    var keep = Number(select.value) || (years.indexOf(current) >= 0 ? current : (years[0] || current));
+    select.innerHTML = years.length ? years.map(function (year) {
+      return "<option value=\"" + year + "\">" + year + "</option>";
+    }).join("") : "<option value=\"" + current + "\">" + current + "</option>";
+    if (years.indexOf(keep) >= 0) select.value = String(keep);
+    renderFocus();
+  }
+  function renderFocus() {
+    var year = Number(document.getElementById("focusYear").value) || new Date().getFullYear();
+    var people = dueInYear(year);
+    var today = todayDate();
+    var elapsedPct = 0;
+    var daysLeft = 0;
+    if (people.length) {
+      var sample = paceOf(0, 1, people[0].expDate);
+      elapsedPct = Math.round(sample.fraction * 1000) / 10;
+      daysLeft = sample.daysLeft;
+    }
+    document.getElementById("focusWindow").textContent = people.length
+      ? "Cycle " + (year - 1) + "-01-01 through each " + year + " expiration. As of " + todayIso() + ", " + elapsedPct + "% of the cycle is elapsed and " + daysLeft + " days remain for a " + year + "-12-31 expiration."
+      : "No personnel have a " + year + " expiration.";
+    var rows = CATS.map(function (c) {
+      var counts = { short: 0, ontrack: 0, ahead: 0 };
+      var gap = 0;
+      var behind = [];
+      people.forEach(function (p) {
+        var earned = hoursFor(p.name, c.key, cycle(p.expDate));
+        var pace = paceOf(earned, c.need, p.expDate);
+        counts[pace.bucket] += 1;
+        if (pace.bucket === "short") {
+          gap += Math.max(0, c.need - earned);
+          behind.push({ p: p, earned: earned, pace: pace, need: c.need });
+        }
+      });
+      behind.sort(function (a, b) { return (a.earned - b.earned) || a.p.name.localeCompare(b.p.name); });
+      return { c: c, counts: counts, gap: Math.round(gap * 10) / 10, behind: behind };
+    }).sort(function (a, b) { return b.counts.short - a.counts.short || b.gap - a.gap; });
+    var shortPeople = people.filter(function (p) {
+      return CATS.some(function (c) {
+        var earned = hoursFor(p.name, c.key, cycle(p.expDate));
+        return paceOf(earned, c.need, p.expDate).bucket === "short";
+      });
+    }).length;
+    var metPeople = people.filter(function (p) {
+      return CATS.every(function (c) {
+        return hoursFor(p.name, c.key, cycle(p.expDate)) + 0.001 >= c.need;
+      });
+    }).length;
+    document.getElementById("focusStats").innerHTML =
+      '<div class="stat"><b>' + people.length + '</b>In this cycle</div>' +
+      '<div class="stat bad"><b>' + shortPeople + '</b>Short in a category</div>' +
+      '<div class="stat ok"><b>' + metPeople + '</b>All categories met</div>' +
+      '<div class="stat warn"><b>' + daysLeft + '</b>Days left</div>';
+    var top = rows.filter(function (row) { return row.counts.short; }).slice(0, 3);
+    document.getElementById("focusCallout").innerHTML = top.length
+      ? "<strong>Focus these standards first.</strong> " + top.map(function (row) {
+          return row.c.key + " (" + row.counts.short + " of " + people.length + " behind, " + row.gap + " hours still needed)";
+        }).join("; ") + ". Trauma and other categories with few people behind can stay on the regular schedule."
+      : "Nobody in this cycle is behind the prorated pace.";
+    document.getElementById("focusCards").innerHTML = rows.map(function (row) {
+      var tone = row.counts.short >= people.length / 2 ? "short" : (row.counts.ahead >= row.counts.short ? "ahead" : "ontrack");
+      return '<article class="focus-card ' + tone + '"><h3>' + esc(row.c.key) + '</h3><div class="std">' + esc(STANDARDS[row.c.key] || row.c.key) + '</div><div class="pace"><span class="short"><b>' + row.counts.short + '</b>Falling short</span><span class="ontrack"><b>' + row.counts.ontrack + '</b>On track</span><span class="ahead"><b>' + row.counts.ahead + '</b>Ahead / met</span></div><p class="muted" style="margin:8px 0 0">Required ' + row.c.need + ' · ' + row.gap + ' hours still short of the requirement</p></article>';
+    }).join("");
+    var catSelect = document.getElementById("focusCat");
+    var keepCat = catSelect.value || (rows[0] ? rows[0].c.key : "");
+    catSelect.innerHTML = rows.map(function (row) {
+      return '<option value="' + esc(row.c.key) + '">' + esc(row.c.key) + ' — ' + row.counts.short + ' behind</option>';
+    }).join("");
+    if (keepCat) catSelect.value = keepCat;
+    var chosen = rows.filter(function (row) { return row.c.key === catSelect.value; })[0] || rows[0];
+    document.getElementById("focusPeople").innerHTML = chosen && chosen.behind.length ? chosen.behind.map(function (row) {
+      var still = Math.round((row.need - row.earned) * 100) / 100;
+      return '<tr class="clickable short" data-name="' + esc(row.p.name) + '"><td class="left name">' + esc(row.p.name) + '</td><td>' + esc(row.p.expDate || "") + '</td><td>' + row.earned + '</td><td>' + row.pace.expected + '</td><td>' + row.need + '</td><td>' + still + '</td><td>' + row.pace.daysLeft + '</td></tr>';
+    }).join("") : '<tr><td colspan="7">No one is behind pace in this category.</td></tr>';
+    Array.prototype.forEach.call(document.querySelectorAll("#focusPeople tr[data-name]"), function (tr) {
+      tr.onclick = function () { showSummary(tr.getAttribute("data-name")); };
+    });
+  }
+  document.getElementById("focusYear").onchange = renderFocus;
+  document.getElementById("focusCat").onchange = renderFocus;
+  document.getElementById("landFocus").onclick = showFocus;
+  document.getElementById("sumFocus").onclick = showFocus;
+  document.getElementById("rosterFocus").onclick = showFocus;
+
   document.getElementById("deptYear").onchange = renderDept;
   document.getElementById("landDept").onclick = showDept;
   document.getElementById("rosterDept").onclick = showDept;
@@ -434,6 +568,7 @@
     document.getElementById("app").hidden = true;
     document.getElementById("personView").hidden = true;
     document.getElementById("deptView").hidden = true;
+    document.getElementById("focusView").hidden = true;
     document.getElementById("landing").hidden = false;
     document.getElementById("landSearch").value = "";
     fillLanding();
@@ -464,6 +599,8 @@
     var deptView = document.getElementById("deptView");
     if (personView && !personView.hidden && selected) showSummary(selected.name);
     if (deptView && !deptView.hidden) renderDept();
+    var focusView = document.getElementById("focusView");
+    if (focusView && !focusView.hidden) renderFocus();
   };
 
   rollExpirations();
