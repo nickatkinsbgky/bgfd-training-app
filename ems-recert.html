@@ -46,7 +46,14 @@
   .landing-card p { margin:0 0 18px; color:var(--gold); font-weight:700; }
   .landing-card input, .landing-card select { width:100%; margin-bottom:10px; font-size:16px; padding:12px; }
   .landing-card button { width:100%; padding:12px; font-size:18px; }
-  #app[hidden] { display:none; }
+  #app[hidden], #personView[hidden] { display:none; }
+
+  .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:8px; margin:12px 0; }
+  .summary div { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:10px; }
+  .summary b { display:block; font-size:20px; }
+  .summary .ok { border-color:#1f7a4d; } .summary .bad { border-color:#9b2c2c; }
+  #personView { padding:16px 20px 40px; }
+
 
   label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
 </style>
@@ -73,6 +80,20 @@
     <button class="gold" id="landRoster" type="button" style="margin-top:8px">View full roster</button>
   </div>
 </section>
+
+<section id="personView" hidden>
+  <h2 id="sumName" style="margin:0 0 4px"></h2>
+  <p class="muted" id="sumMeta"></p>
+  <p id="sumStatus"></p>
+  <div class="summary" id="sumCats"></div>
+  <h3>Classes in this recertification cycle</h3>
+  <div class="wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Hours</th><th>Course</th></tr></thead><tbody id="sumClasses"></tbody></table></div>
+  <div class="bar" style="margin-top:12px">
+    <button class="gold" id="sumEdit" type="button">Edit person</button>
+    <button id="sumRoster" type="button">Full roster</button>
+  </div>
+</section>
+
 <main id="app" hidden>
 
   <div class="stats" id="stats"></div>
@@ -121,6 +142,6 @@
   </section>
 </main>
 <script src="ems-recert-data.js"></script>
-<script src="ems-recert.js?v=20261005-landing"></script>
+<script src="ems-recert.js?v=20261005-summary"></script>
 </body>
 </html>

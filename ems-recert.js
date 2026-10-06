@@ -202,16 +202,37 @@
     }).join("");
     if (people.length) select.selectedIndex = 0;
   }
+
+  function showSummary(name) {
+    selected = db.people.filter(function (p) { return p.name === name; })[0];
+    if (!selected) return;
+    var s = statusOf(selected);
+    document.getElementById("landing").hidden = true;
+    document.getElementById("app").hidden = true;
+    document.getElementById("personView").hidden = false;
+    document.getElementById("sumName").textContent = selected.name;
+    var cycle = s.win ? s.win.start + " through " + s.win.end : "Set an expiration date to start the cycle";
+    document.getElementById("sumMeta").textContent = "KEMSIS " + (selected.kemsisId || "—") + " · Exp " + (selected.expDate || "not set") + " · " + cycle;
+    document.getElementById("sumStatus").textContent = s.status === "Met" ? "Met for this cycle." : (s.needs.length ? "Still needed: " + s.needs.join("; ") : s.status);
+    document.getElementById("sumCats").innerHTML = CATS.map(function (c) {
+      var earned = s.win ? s.hours[c.key] : 0;
+      var cls = s.win ? (earned >= c.need ? "ok" : "bad") : "";
+      return "<div class='" + cls + "'><span>" + c.key + "</span><b>" + earned + "</b><span class='muted'>of " + c.need + "</span></div>";
+    }).join("");
+    var classes = [];
+    if (s.win) {
+      classes = db.records.filter(function (r) {
+        return r.name === selected.name && r.date >= s.win.start && r.date <= s.win.end;
+      }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    }
+    document.getElementById("sumClasses").innerHTML = classes.length ? classes.map(function (r) {
+      return "<tr><td>" + esc(r.date) + "</td><td>" + esc(r.category) + "</td><td>" + r.hours + "</td><td>" + esc(r.course || "") + "</td></tr>";
+    }).join("") : "<tr><td colspan='4'>No classes in this cycle.</td></tr>";
+  }
   function openFromLanding() {
     var name = document.getElementById("landSelect").value;
     if (!name) { alert("Select a person."); return; }
-    document.getElementById("landing").hidden = true;
-    document.getElementById("app").hidden = false;
-    document.getElementById("q").value = "";
-    document.getElementById("statusFilter").value = "";
-    render();
-    openPerson(name);
-    document.getElementById("drawer").scrollIntoView({ behavior: "smooth", block: "start" });
+    showSummary(name);
   }
   document.getElementById("landSearch").oninput = fillLanding;
   document.getElementById("landSelect").ondblclick = openFromLanding;
@@ -221,9 +242,23 @@
     document.getElementById("app").hidden = false;
     render();
   };
+  document.getElementById("sumEdit").onclick = function () {
+    if (!selected) return;
+    document.getElementById("personView").hidden = true;
+    document.getElementById("app").hidden = false;
+    render();
+    openPerson(selected.name);
+    document.getElementById("drawer").scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  document.getElementById("sumRoster").onclick = function () {
+    document.getElementById("personView").hidden = true;
+    document.getElementById("app").hidden = false;
+    render();
+  };
   document.getElementById("backLanding").onclick = function (ev) {
     ev.preventDefault();
     document.getElementById("app").hidden = true;
+    document.getElementById("personView").hidden = true;
     document.getElementById("landing").hidden = false;
     document.getElementById("landSearch").value = "";
     fillLanding();
