@@ -39,6 +39,15 @@
   .drawer { margin-top:14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; }
   .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
   .muted { color:var(--muted); }
+
+  .landing { min-height:calc(100vh - 92px); display:flex; align-items:center; justify-content:center; padding:28px 16px; background:radial-gradient(circle at top, #3b0a0a 0%, #0d1117 46%); }
+  .landing-card { width:min(560px, 100%); text-align:center; background:var(--panel); border:1px solid var(--gold); border-radius:18px; padding:28px 22px; box-shadow:0 16px 30px rgba(0,0,0,.45); }
+  .landing-card h2 { margin:0 0 6px; font-size:28px; }
+  .landing-card p { margin:0 0 18px; color:var(--gold); font-weight:700; }
+  .landing-card input, .landing-card select { width:100%; margin-bottom:10px; font-size:16px; padding:12px; }
+  .landing-card button { width:100%; padding:12px; font-size:18px; }
+  #app[hidden] { display:none; }
+
   label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
 </style>
 </head>
@@ -49,9 +58,23 @@
     <h1>EMS Recertification Tracker</h1>
     <p>Kentucky EMT cycle — expiration year and the year before it</p>
   </div>
-  <a class="back" href="index.html">Home</a>
+  <a class="back" href="#" id="backLanding">Find personnel</a>
 </header>
-<main>
+
+<section class="landing" id="landing">
+  <div class="landing-card">
+    <h2>EMS Recertification Tracker</h2>
+    <p>Search and select personnel</p>
+    <label for="landSearch">Search</label>
+    <input id="landSearch" placeholder="Type a name or KEMSIS ID" autocomplete="off" />
+    <label for="landSelect">Personnel</label>
+    <select id="landSelect" size="8"></select>
+    <button class="red" id="landOpen" type="button">Open record</button>
+    <button class="gold" id="landRoster" type="button" style="margin-top:8px">View full roster</button>
+  </div>
+</section>
+<main id="app" hidden>
+
   <div class="stats" id="stats"></div>
   <div class="bar">
     <input id="q" placeholder="Search name or KEMSIS ID" />
@@ -98,6 +121,6 @@
   </section>
 </main>
 <script src="ems-recert-data.js"></script>
-<script src="ems-recert.js?v=20261005-edit"></script>
+<script src="ems-recert.js?v=20261005-landing"></script>
 </body>
 </html>

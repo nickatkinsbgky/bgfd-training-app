@@ -190,5 +190,45 @@
     save();
     render();
   };
+  function fillLanding() {
+    var q = (document.getElementById("landSearch").value || "").toLowerCase();
+    var select = document.getElementById("landSelect");
+    var people = db.people.filter(function (p) {
+      return (p.name + " " + (p.kemsisId || "")).toLowerCase().indexOf(q) !== -1;
+    });
+    select.innerHTML = people.map(function (p) {
+      var label = p.name + (p.kemsisId ? " — " + p.kemsisId : "");
+      return "<option value=\"" + esc(p.name) + "\">" + esc(label) + "</option>";
+    }).join("");
+    if (people.length) select.selectedIndex = 0;
+  }
+  function openFromLanding() {
+    var name = document.getElementById("landSelect").value;
+    if (!name) { alert("Select a person."); return; }
+    document.getElementById("landing").hidden = true;
+    document.getElementById("app").hidden = false;
+    document.getElementById("q").value = "";
+    document.getElementById("statusFilter").value = "";
+    render();
+    openPerson(name);
+    document.getElementById("drawer").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  document.getElementById("landSearch").oninput = fillLanding;
+  document.getElementById("landSelect").ondblclick = openFromLanding;
+  document.getElementById("landOpen").onclick = openFromLanding;
+  document.getElementById("landRoster").onclick = function () {
+    document.getElementById("landing").hidden = true;
+    document.getElementById("app").hidden = false;
+    render();
+  };
+  document.getElementById("backLanding").onclick = function (ev) {
+    ev.preventDefault();
+    document.getElementById("app").hidden = true;
+    document.getElementById("landing").hidden = false;
+    document.getElementById("landSearch").value = "";
+    fillLanding();
+    document.getElementById("landSearch").focus();
+  };
+  fillLanding();
   render();
 })();
