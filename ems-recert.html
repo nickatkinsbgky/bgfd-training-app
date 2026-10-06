@@ -52,8 +52,19 @@
   .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:8px; margin:12px 0; }
   .summary div { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:10px; }
   .summary b { display:block; font-size:20px; }
-  .summary .ok { border-color:#1f7a4d; } .summary .bad { border-color:#9b2c2c; }
-  #personView { padding:16px 20px 40px; }
+  .summary .short { border-color:#e74c3c; background:#3a1c1c; color:#ffb4ab; }
+  .summary .met { border-color:#2ecc71; background:#163326; color:#b7ebc6; }
+  .summary .over { border-color:#5dade2; background:#163044; color:#d6eaf8; }
+  #personView { position:relative; padding:16px 20px 40px; }
+  .color-key { position:absolute; top:12px; right:20px; background:#211810; border:1px solid var(--gold); border-radius:12px; padding:10px 12px; min-width:210px; }
+  .color-key strong { display:block; color:var(--gold); margin-bottom:6px; }
+  .color-key span { display:flex; align-items:center; gap:8px; margin:4px 0; }
+  .swatch { width:14px; height:14px; border-radius:3px; display:inline-block; }
+  .swatch.short { background:#e74c3c; } .swatch.met { background:#2ecc71; } .swatch.over { background:#5dade2; }
+  tr.short td.cat { color:#ffb4ab; font-weight:700; }
+  tr.met td.cat { color:#b7ebc6; font-weight:700; }
+  tr.over td.cat { color:#d6eaf8; font-weight:700; }
+  @media (max-width:760px){ .color-key { position:static; margin-bottom:12px; } }
 
 
   label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
@@ -84,6 +95,12 @@
 </section>
 
 <section id="personView" hidden>
+  <aside class="color-key">
+    <strong>Color key</strong>
+    <span><i class="swatch short"></i>Red — short of required hours</span>
+    <span><i class="swatch met"></i>Green — required hours met</span>
+    <span><i class="swatch over"></i>Blue — over the required hours</span>
+  </aside>
   <h2 id="sumName" style="margin:0 0 4px"></h2>
   <p class="muted" id="sumMeta"></p>
   <p id="sumStatus"></p>
@@ -144,6 +161,6 @@
   </section>
 </main>
 <script src="ems-recert-data.js"></script>
-<script src="ems-recert.js?v=20261005-summary"></script>
+<script src="ems-recert.js?v=20261005-colors"></script>
 </body>
 </html>

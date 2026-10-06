@@ -214,10 +214,15 @@
     var cycle = s.win ? s.win.start + " through " + s.win.end : "Set an expiration date to start the cycle";
     document.getElementById("sumMeta").textContent = "KEMSIS " + (selected.kemsisId || "—") + " · Exp " + (selected.expDate || "not set") + " · " + cycle;
     document.getElementById("sumStatus").textContent = s.status === "Met" ? "Met for this cycle." : (s.needs.length ? "Still needed: " + s.needs.join("; ") : s.status);
+    function tone(earned, need) {
+      if (earned > need) return "over";
+      if (earned === need) return "met";
+      return "short";
+    }
     document.getElementById("sumCats").innerHTML = CATS.map(function (c) {
       var earned = s.win ? s.hours[c.key] : 0;
-      var cls = s.win ? (earned >= c.need ? "ok" : "bad") : "";
-      return "<div class='" + cls + "'><span>" + c.key + "</span><b>" + earned + "</b><span class='muted'>of " + c.need + "</span></div>";
+      var cls = s.win ? tone(earned, c.need) : "";
+      return "<div class='" + cls + "'><span>" + c.key + "</span><b>" + earned + "</b><span>of " + c.need + "</span></div>";
     }).join("");
     var classes = [];
     if (s.win) {
@@ -226,7 +231,10 @@
       }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
     }
     document.getElementById("sumClasses").innerHTML = classes.length ? classes.map(function (r) {
-      return "<tr><td>" + esc(r.date) + "</td><td>" + esc(r.category) + "</td><td>" + r.hours + "</td><td>" + esc(r.course || "") + "</td></tr>";
+      var req = CATS.filter(function (c) { return c.key === r.category; })[0];
+      var earned = req && s.hours ? s.hours[req.key] : 0;
+      var cls = req ? tone(earned, req.need) : "";
+      return "<tr class='" + cls + "'><td>" + esc(r.date) + "</td><td class='cat'>" + esc(r.category) + "</td><td>" + r.hours + "</td><td>" + esc(r.course || "") + "</td></tr>";
     }).join("") : "<tr><td colspan='4'>No classes in this cycle.</td></tr>";
   }
   function openFromLanding() {
