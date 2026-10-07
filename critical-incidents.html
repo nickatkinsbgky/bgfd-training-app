@@ -4,28 +4,100 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Critical Incidents — Bowling Green Fire Department</title>
-<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-1" />
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-6" />
 <style>
   :root { --bg:#0d1117; --panel:#161b22; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
   * { box-sizing:border-box; }
   html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font:16px/1.45 "Segoe UI", system-ui, sans-serif; }
-  body { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px 16px; background: radial-gradient(circle at top, #3b0a0a 0%, #0d1117 42%); }
-  .wrap { width:min(640px, 100%); text-align:center; }
-  h1 { margin:0 0 8px; font-size:32px; }
-  .sub { color:var(--gold); font-weight:700; margin:0 0 18px; letter-spacing:.06em; text-transform:uppercase; }
-  .card { padding:28px 22px; border:1px solid var(--gold); border-radius:16px; background:linear-gradient(180deg, rgba(212,160,23,.16), rgba(22,27,34,.9)); box-shadow:0 12px 0 #5a4308, 0 18px 24px rgba(0,0,0,.4); }
-  p { margin:0 0 18px; color:var(--muted); }
-  a.back { display:inline-block; text-decoration:none; color:#fff; font-weight:800; border-radius:12px; padding:12px 18px; background:linear-gradient(160deg, #ef5350 0%, var(--red) 45%, #7f1212 100%); box-shadow:0 8px 0 #6d1010; }
+  body { padding:22px 16px 40px; background: radial-gradient(circle at top, #3b0a0a 0%, #0d1117 42%); }
+  .wrap { width:min(980px, 100%); margin:0 auto; }
+  .top { display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
+  a.back { text-decoration:none; color:#fff; font-weight:800; border-radius:12px; padding:10px 14px; background:linear-gradient(160deg, #ef5350 0%, var(--red) 45%, #7f1212 100%); box-shadow:0 6px 0 #6d1010; }
+  h1 { margin:0; font-size:30px; }
+  .sub { color:var(--gold); font-weight:700; margin:4px 0 0; letter-spacing:.05em; text-transform:uppercase; font-size:13px; }
+  .stats { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0; }
+  .stat { background:var(--panel); border:1px solid #30363d; border-radius:12px; padding:10px 14px; min-width:110px; }
+  .stat b { display:block; font-size:22px; color:var(--gold); }
+  .stat span { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .filters { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  input, select { background:#0d1117; color:var(--text); border:1px solid #30363d; border-radius:10px; padding:10px 12px; font:inherit; }
+  input { flex:1; min-width:220px; }
+  .card { background:var(--panel); border:1px solid #30363d; border-radius:14px; padding:14px 16px; margin:0 0 12px; }
+  .card h2 { margin:0 0 4px; font-size:18px; }
+  .meta { color:var(--muted); font-size:14px; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .pill { border:1px solid var(--gold); color:var(--gold); border-radius:999px; padding:2px 8px; font-size:12px; font-weight:700; }
+  details { margin-top:10px; }
+  summary { cursor:pointer; color:var(--gold); font-weight:700; }
+  .narrative { white-space:pre-wrap; color:var(--text); margin:8px 0 0; font-size:14px; }
+  .empty, .note { color:var(--muted); }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <p class="sub">Bowling Green Fire Department</p>
-    <div class="card">
-      <h1>Critical Incidents</h1>
-      <p>This app is not built yet. The home page button is reserved for the future Critical Incidents app.</p>
+    <div class="top">
+      <div>
+        <h1>Critical Incidents</h1>
+        <p class="sub">Bowling Green Fire Department · imported 2026-10-07</p>
+      </div>
       <a class="back" href="index.html">Back to home</a>
     </div>
+    <p class="note" id="status">Loading stored incidents…</p>
+    <div class="stats" id="stats"></div>
+    <div class="filters">
+      <input id="q" type="search" placeholder="Search address, officer, unit, or incident number" />
+      <select id="shift"><option value="">All shifts</option><option>A</option><option>B</option><option>C</option></select>
+    </div>
+    <div id="list"></div>
   </div>
+<script>
+(function () {
+  var KEY = 'bgfd-critical-incidents-v1';
+  var list = document.getElementById('list');
+  var q = document.getElementById('q');
+  var shift = document.getElementById('shift');
+  var status = document.getElementById('status');
+  var rows = [];
+  function esc(s) { return String(s || '').replace(/[&<>"]/g, function (c) { return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]; }); }
+  function paintStats(shown) {
+    var people = shown.reduce(function (n, r) { return n + (r.personnel || 0); }, 0);
+    document.getElementById('stats').innerHTML =
+      "<div class='stat'><b>" + shown.length + "</b><span>Showing</span></div>" +
+      "<div class='stat'><b>" + rows.length + "</b><span>Stored</span></div>" +
+      "<div class='stat'><b>" + people + "</b><span>Personnel on shown</span></div>";
+  }
+  function render() {
+    var term = q.value.trim().toLowerCase();
+    var sh = shift.value;
+    var shown = rows.filter(function (r) {
+      if (sh && r.shift !== sh) return false;
+      if (!term) return true;
+      return [r.address, r.officer, r.unit, r.incidentNumber, r.cadNumber, r.nfirs, r.narrative].join(' ').toLowerCase().indexOf(term) !== -1;
+    });
+    paintStats(shown);
+    if (!shown.length) { list.innerHTML = "<p class='empty'>No incidents match.</p>"; return; }
+    list.innerHTML = shown.map(function (r) {
+      var narrative = r.narrative ? "<details><summary>Narrative</summary><p class='narrative'>" + esc(r.narrative) + "</p></details>" : "";
+      return "<article class='card'><h2>" + esc(r.incidentNumber) + " · " + esc(r.address) + "</h2><div class='meta'>" + esc(r.created) + "</div><div class='pills'><span class='pill'>Shift " + esc(r.shift) + "</span><span class='pill'>" + esc(r.unit || 'No unit') + "</span><span class='pill'>" + esc(r.officer) + "</span><span class='pill'>" + esc(r.personnel) + " personnel</span>" + (r.nfirs ? "<span class='pill'>" + esc(r.nfirs) + "</span>" : "") + "</div>" + narrative + "</article>";
+    }).join('');
+  }
+  q.oninput = render;
+  shift.onchange = render;
+  var files = [0,1,2,3,4,5,6,7,8,9,10];
+  Promise.all(files.map(function (n) {
+    return fetch('critical-incidents/' + n + '.json?v=20261007-6').then(function (r) {
+      if (!r.ok) throw new Error('Missing group ' + n);
+      return r.json();
+    });
+  })).then(function (groups) {
+    rows = groups.reduce(function (all, group) { return all.concat(group); }, []);
+    localStorage.setItem(KEY, JSON.stringify({ imported: '2026-10-07', count: rows.length, incidents: rows }));
+    status.textContent = rows.length + ' incidents stored from CriticalIncidents-Nick_20261007144204.xlsx.';
+    render();
+  }).catch(function (err) {
+    status.textContent = 'Could not load stored incidents. ' + err.message;
+  });
+})();
+</script>
 </body>
 </html>
