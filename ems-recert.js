@@ -13,7 +13,7 @@
         var section = document.createElement("section");
         section.className = "req-wrap";
         section.id = "levelReqWrap";
-        section.innerHTML = "<h3>Kentucky recertification requirements by level</h3><p class='muted' id='emrReqNote'></p><div class='req-grid'><div><h3>EMR</h3><div class='wrap'><table><thead><tr><th class='left'>Category</th><th>Required hours</th></tr></thead><tbody id='emrReqBody'></tbody></table></div></div><div><h3>AEMT</h3><div class='wrap'><table><thead><tr><th class='left'>Category</th><th>Required hours</th></tr></thead><tbody id='aemtReqBody'></tbody></table></div></div></div>";
+        section.innerHTML = "<h3>Kentucky recertification requirements by level</h3><p class='muted' id='emrReqNote'></p><div class='req-grid'><div><h3>EMR</h3><div class='wrap'><table><thead><tr><th class='left'>Category</th><th>Required hours</th></tr></thead><tbody id='emrReqBody'></tbody></table></div></div><div><h3>AEMT</h3><div class='wrap'><table><thead><tr><th class='left'>Category</th><th>Required hours</th></tr></thead><tbody id='aemtReqBody'></tbody></table></div></div><div><h3>Paramedic</h3><div class='wrap'><table><thead><tr><th class='left'>Category</th><th>Required hours</th></tr></thead><tbody id='paramedicReqBody'></tbody></table></div></div></div>";
         stats.parentNode.insertBefore(section, stats.nextSibling);
       }
     }
@@ -63,9 +63,19 @@
       "      { key: \"Trauma\", label: \"Trauma\", need: 4 },",
       "      { key: \"Medical\", label: \"Medical\", need: 7 },",
       "      { key: \"Operations\", label: \"Operations\", need: 3 }",
+      "    ],",
+      "    Paramedic: [",
+      "      { key: \"CPR/AED\", label: \"CPR/AED\", need: 1 },",
+      "      { key: \"PAHT\", label: \"Pediatric abusive head trauma\", need: 1 },",
+      "      { key: \"SVAT\", label: \"Sexual violence awareness training\", need: 1 },",
+      "      { key: \"Airway\", label: \"Airway\", need: 6 },",
+      "      { key: \"Cardiovascular\", label: \"Cardiology\", need: 7 },",
+      "      { key: \"Trauma\", label: \"Trauma\", need: 5 },",
+      "      { key: \"Medical\", label: \"Medical\", need: 8 },",
+      "      { key: \"Operations\", label: \"Operations\", need: 4 }",
       "    ]",
       "  };",
-      "  var PEDS_NEED = { AEMT: 2.5 };",
+      "  var PEDS_NEED = { AEMT: 2.5, Paramedic: 3 };",
       "  function reqList(level) { return LEVEL_REQS[level] || null; }",
       "  function catsFor(person) {",
       "    var reqs = reqList(certLevel(person));",
@@ -106,16 +116,18 @@
       "  function fillReqTable() {",
       "    var emr = document.getElementById(\"emrReqBody\");",
       "    var aemt = document.getElementById(\"aemtReqBody\");",
+      "    var medic = document.getElementById(\"paramedicReqBody\");",
       "    var personBody = document.getElementById(\"emrReqBodyPerson\");",
       "    if (emr) emr.innerHTML = reqRows(\"EMR\");",
       "    if (aemt) aemt.innerHTML = reqRows(\"AEMT\");",
+      "    if (medic) medic.innerHTML = reqRows(\"Paramedic\");",
       "    if (personBody && selected) personBody.innerHTML = reqRows(certLevel(selected));",
       "    var note = document.getElementById(\"emrReqNote\");",
-      "    if (note) note.textContent = \"EMR and AEMT hours apply when that certification level is selected. EMT and Paramedic keep the existing category hours. Roster cells show earned / required. AEMT also needs 2.5 pediatric hours inside the total. PAHT and classes marked pediatric, or with pediatric in the course name, count.\";",
+      "    if (note) note.textContent = \"EMR, AEMT, and Paramedic hours apply when that certification level is selected. EMT keeps the existing category hours. Roster cells show earned / required. AEMT needs 2.5 pediatric hours and Paramedic needs 3 pediatric hours inside the total. PAHT and classes marked pediatric, or with pediatric in the course name, count.\";",
       "    var title = document.getElementById(\"personReqTitle\");",
       "    var personNote = document.getElementById(\"personReqNote\");",
       "    if (title && selected) title.textContent = \"Kentucky \" + certLevel(selected) + \" recertification requirements\";",
-      "    if (personNote && selected) personNote.textContent = certLevel(selected) === \"AEMT\" ? \"Category hours plus 2.5 hours of pediatric content within the total. Mark new classes as pediatric content when they qualify.\" : \"These hours apply because this person is certified as an \" + certLevel(selected) + \".\";",
+      "    if (personNote && selected) { var peds = PEDS_NEED[certLevel(selected)]; personNote.textContent = peds ? (\"Category hours plus \" + peds + \" hours of pediatric content within the total. Mark new classes as pediatric content when they qualify.\") : (\"These hours apply because this person is certified as an \" + certLevel(selected) + \".\"); }",
       "  }",
       ""
     ].join("\n");
@@ -136,7 +148,7 @@
     code = code.replace("        var earned = hoursFor(p.name, c.key, cycle(p.expDate));\n        var pace = paceOf(earned, c.need, p.expDate);\n        counts[pace.bucket] += 1;\n        if (pace.bucket === \"short\") {\n          gap += Math.max(0, c.need - earned);\n          behind.push({ p: p, earned: earned, pace: pace, need: c.need });\n        }", "        var need = needFor(p, c.key);\n        var earned = hoursFor(p.name, c.key, cycle(p.expDate));\n        var pace = paceOf(earned, need, p.expDate);\n        counts[pace.bucket] += 1;\n        if (pace.bucket === \"short\") {\n          gap += Math.max(0, need - earned);\n          behind.push({ p: p, earned: earned, pace: pace, need: need });\n        }");
     code = code.replace("return paceOf(earned, c.need, p.expDate).bucket === \"short\";", "return paceOf(earned, needFor(p, c.key), p.expDate).bucket === \"short\";");
     code = code.replace("return hoursFor(p.name, c.key, cycle(p.expDate)) + 0.001 >= c.need;", "return hoursFor(p.name, c.key, cycle(p.expDate)) + 0.001 >= needFor(p, c.key);");
-    code = code.replace("Required ' + row.c.need + '", "Required ' + needFor({ certificationLevel: \"AEMT\" }, row.c.key) + \" AEMT / \" + row.c.need + \" EMT+ '");
+    code = code.replace("Required ' + row.c.need + '", "Required ' + needFor({ certificationLevel: \"Paramedic\" }, row.c.key) + \" Paramedic / \" + needFor({ certificationLevel: \"AEMT\" }, row.c.key) + \" AEMT / \" + row.c.need + \" EMT+ '");
     code = code.replace("categories: CATS.map(function (c) {", "categories: catsFor(person).map(function (c) {");
     code = code.replace("var cat = document.getElementById(\"newCat\").value; db.records.push({ name: selected.name, date: date, category: cat, standard: \"KBEMS | \" + cat + \" | \" + cat, hours: hours, course: document.getElementById(\"newCourse\").value.trim() });", "var cat = document.getElementById(\"newCat\").value; var pedsBox = document.getElementById(\"newPeds\"); db.records.push({ name: selected.name, date: date, category: cat, standard: \"KBEMS | \" + cat + \" | \" + cat, hours: hours, course: document.getElementById(\"newCourse\").value.trim(), pediatric: !!(pedsBox && pedsBox.checked) }); if (pedsBox) pedsBox.checked = false;");
     code = code.replace("ensureCertLevels();\n\n\n  window.emsPersonReport", "ensureCertLevels();\n  fillReqTable();\n\n  window.emsPersonReport");
