@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>Critical Incidents — Bowling Green Fire Department</title>
-<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-10" />
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-11" />
 <style>
   :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
   * { box-sizing:border-box; }
@@ -61,12 +61,20 @@
   .hbar-row b { display:block; height:100%; border-radius:99px; }
   .hbar-row em { font-style:normal; color:var(--gold); font-weight:800; text-align:right; }
   .linechart { width:100%; height:auto; background:#10161d; border-radius:12px; }
+  .pie-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px; }
+  .pie-wrap { display:flex; gap:12px; align-items:center; }
+  .pie { width:140px; height:140px; flex:0 0 140px; transform:rotate(-90deg); }
+  .legend { list-style:none; margin:0; padding:0; font-size:13px; }
+  .legend li { display:flex; gap:6px; align-items:center; margin:3px 0; }
+  .legend i { width:10px; height:10px; border-radius:2px; display:inline-block; }
+  .legend b { color:var(--gold); }
+  .legend span { color:var(--muted); }
 </style>
 </head>
 <body class="view-only">
 <header>
   <a class="exit" href="index.html">Home</a>
-  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-10" alt="BGFD" />
+  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-11" alt="BGFD" />
   <div>
     <h1>Critical Incidents</h1>
     <p>Flagged incidents</p>
@@ -118,9 +126,9 @@
   <section id="averages" hidden></section>
   <section id="charts" hidden></section>
 </main>
-<script src="critical-incidents-sync.js?v=20261007-10"></script>
-<script src="critical-incidents-averages.js?v=20261007-10"></script>
-<script src="critical-incidents-charts.js?v=20261007-10"></script>
-<script src="critical-incidents-app.js?v=20261007-10"></script>
+<script src="critical-incidents-sync.js?v=20261007-11"></script>
+<script src="critical-incidents-averages.js?v=20261007-11"></script>
+<script src="critical-incidents-charts.js?v=20261007-11"></script>
+<script src="critical-incidents-app.js?v=20261007-11"></script>
 </body>
 </html>
