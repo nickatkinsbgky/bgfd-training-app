@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>Critical Incidents — Bowling Green Fire Department</title>
-<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-9" />
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-10" />
 <style>
   :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
   * { box-sizing:border-box; }
@@ -28,15 +28,15 @@
   #sync-msg.ok { color:#7dcea0; }
   #sync-msg.no { color:#f5b7b1; }
   main { width:min(980px, 100%); margin:0 auto; padding:18px 16px 40px; }
-  .tabs { display:flex; gap:8px; margin:0 0 14px; }
+  .tabs { display:flex; gap:8px; margin:0 0 14px; flex-wrap:wrap; }
   .stats { display:flex; gap:10px; flex-wrap:wrap; margin:0 0 14px; }
   .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:110px; }
   .stat b { display:block; font-size:22px; color:var(--gold); }
   .stat span { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
   .filters, .edit-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
   .filters input { flex:1; min-width:220px; }
-  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin:0 0 12px; }
-  .card h2 { margin:0 0 4px; font-size:18px; }
+  .card, .chart-card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin:0 0 12px; }
+  .card h2, .chart-card h2 { margin:0 0 10px; font-size:18px; }
   .meta { color:var(--muted); font-size:14px; }
   .pills { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
   .pill { border:1px solid var(--gold); color:var(--gold); border-radius:999px; padding:2px 8px; font-size:12px; font-weight:700; }
@@ -54,13 +54,19 @@
   th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:center; }
   th { background:#211810; color:var(--gold); }
   td.left, th.left { text-align:left; }
-  #averages h2 { margin:8px 0; font-size:20px; }
+  #averages h2, #charts h2 { margin:8px 0; font-size:20px; }
+  .hbar-row { display:grid; grid-template-columns:128px 1fr 36px; gap:8px; align-items:center; margin:7px 0; }
+  .hbar-row span { font-size:14px; }
+  .hbar-row i { display:block; height:16px; background:#1c2330; border-radius:99px; overflow:hidden; }
+  .hbar-row b { display:block; height:100%; border-radius:99px; }
+  .hbar-row em { font-style:normal; color:var(--gold); font-weight:800; text-align:right; }
+  .linechart { width:100%; height:auto; background:#10161d; border-radius:12px; }
 </style>
 </head>
 <body class="view-only">
 <header>
   <a class="exit" href="index.html">Home</a>
-  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-9" alt="BGFD" />
+  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-10" alt="BGFD" />
   <div>
     <h1>Critical Incidents</h1>
     <p>Flagged incidents</p>
@@ -79,6 +85,7 @@
   <div class="tabs">
     <button class="red" id="tab-list" type="button">Incidents</button>
     <button class="gold" id="tab-avg" type="button">Averages</button>
+    <button class="gold" id="tab-charts" type="button">Charts</button>
   </div>
   <section id="incidents-panel">
   <div class="stats" id="stats"></div>
@@ -109,9 +116,11 @@
   <div id="list"></div>
   </section>
   <section id="averages" hidden></section>
+  <section id="charts" hidden></section>
 </main>
-<script src="critical-incidents-sync.js?v=20261007-9"></script>
-<script src="critical-incidents-averages.js?v=20261007-9"></script>
-<script src="critical-incidents-app.js?v=20261007-9"></script>
+<script src="critical-incidents-sync.js?v=20261007-10"></script>
+<script src="critical-incidents-averages.js?v=20261007-10"></script>
+<script src="critical-incidents-charts.js?v=20261007-10"></script>
+<script src="critical-incidents-app.js?v=20261007-10"></script>
 </body>
 </html>
