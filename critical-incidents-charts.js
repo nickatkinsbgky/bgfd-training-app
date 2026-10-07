@@ -1,5 +1,6 @@
 (function () {
   var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var COLORS = ["#c62828", "#d4a017", "#5dade2", "#2ecc71", "#e67e22", "#af7ac5", "#f5b7b1", "#7dcea0", "#f4d03f", "#85929e"];
   function stationOf(unit) {
     var u = String(unit || "").toUpperCase().trim();
     if (!u) return "No unit";
@@ -51,6 +52,22 @@
       return "<div class='hbar-row'><span>" + p[0] + "</span><i><b style='width:" + w + "%;background:" + color + "'></b></i><em>" + p[1] + "</em></div>";
     }).join("") + "</div>";
   }
+  function pie(pairs) {
+    var total = pairs.reduce(function (n, p) { return n + p[1]; }, 0) || 1;
+    var circ = 2 * Math.PI * 42;
+    var offset = 0;
+    var slices = pairs.map(function (p, i) {
+      var len = (p[1] / total) * circ;
+      var slice = "<circle r='42' cx='60' cy='60' fill='none' stroke='" + COLORS[i % COLORS.length] + "' stroke-width='24' stroke-dasharray='" + len + " " + (circ - len) + "' stroke-dashoffset='" + (-offset) + "'></circle>";
+      offset += len;
+      return slice;
+    }).join("");
+    var legend = pairs.map(function (p, i) {
+      var pct = Math.round(p[1] / total * 100);
+      return "<li><i style='background:" + COLORS[i % COLORS.length] + "'></i>" + p[0] + " <b>" + p[1] + "</b> <span>" + pct + "%</span></li>";
+    }).join("");
+    return "<div class='pie-wrap'><svg viewBox='0 0 120 120' class='pie' role='img'><circle r='42' cx='60' cy='60' fill='none' stroke='#1c2330' stroke-width='24'></circle>" + slices + "</svg><ul class='legend'>" + legend + "</ul></div>";
+  }
   function line(pairs, average) {
     if (!pairs.length) return "<p class='empty'>No monthly data.</p>";
     var max = pairs.reduce(function (n, p) { return Math.max(n, p[1], average); }, 1);
@@ -74,6 +91,11 @@
     var s = summary();
     box.innerHTML =
       "<div class='stats'><div class='stat'><b>" + s.total + "</b><span>Incidents</span></div><div class='stat'><b>" + fmt(s.overall) + "</b><span>Avg / month</span></div></div>" +
+      "<div class='pie-grid'>" +
+      "<section class='chart-card'><h2>Shift pie</h2>" + pie(s.shifts) + "</section>" +
+      "<section class='chart-card'><h2>Station pie</h2>" + pie(s.stations) + "</section>" +
+      "<section class='chart-card'><h2>Officer pie</h2>" + pie(s.officers) + "<p class='meta'>Top 10 officers in charge.</p></section>" +
+      "</div>" +
       "<section class='chart-card'><h2>Incidents by shift</h2>" + bars(s.shifts, "#c62828") + "</section>" +
       "<section class='chart-card'><h2>Incidents by station</h2>" + bars(s.stations, "#d4a017") + "</section>" +
       "<section class='chart-card'><h2>Incidents by month</h2>" + line(s.monthPairs, s.overall) + "</section>" +
