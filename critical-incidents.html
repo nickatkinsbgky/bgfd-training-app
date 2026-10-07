@@ -4,25 +4,36 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Critical Incidents — Bowling Green Fire Department</title>
-<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-6" />
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-7" />
 <style>
-  :root { --bg:#0d1117; --panel:#161b22; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
   * { box-sizing:border-box; }
   html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font:16px/1.45 "Segoe UI", system-ui, sans-serif; }
-  body { padding:22px 16px 40px; background: radial-gradient(circle at top, #3b0a0a 0%, #0d1117 42%); }
-  .wrap { width:min(980px, 100%); margin:0 auto; }
-  .top { display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
-  a.back { text-decoration:none; color:#fff; font-weight:800; border-radius:12px; padding:10px 14px; background:linear-gradient(160deg, #ef5350 0%, var(--red) 45%, #7f1212 100%); box-shadow:0 6px 0 #6d1010; }
-  h1 { margin:0; font-size:30px; }
-  .sub { color:var(--gold); font-weight:700; margin:4px 0 0; letter-spacing:.05em; text-transform:uppercase; font-size:13px; }
-  .stats { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0; }
-  .stat { background:var(--panel); border:1px solid #30363d; border-radius:12px; padding:10px 14px; min-width:110px; }
+  body { background: radial-gradient(circle at top, #3b0a0a 0%, #0d1117 42%); }
+  header { display:flex; gap:14px; align-items:center; padding:16px 20px; background:linear-gradient(90deg,#3b0a0a,#161b22 55%); border-bottom:3px solid var(--gold); }
+  header img { width:54px; height:54px; object-fit:contain; }
+  h1 { margin:0; font-size:26px; }
+  header p { margin:2px 0 0; color:var(--gold); font-weight:700; }
+  a.exit, button.owner { margin-left:auto; color:var(--gold); text-decoration:none; border:1px solid var(--gold); border-radius:10px; padding:8px 12px; font-weight:800; background:#241c0c; cursor:pointer; }
+  button.owner { margin-left:8px; }
+  .sync-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 20px; background:#10161d; border-bottom:1px solid var(--line); }
+  .sync-bar input { max-width:280px; width:min(280px, 100%); }
+  input, select, textarea, button { font:inherit; color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
+  button { cursor:pointer; font-weight:700; }
+  button.gold { background:#241c0c; color:var(--gold); border-color:var(--gold); }
+  button.red { background:var(--red); border-color:#ff8a80; color:#fff; }
+  button.tiny { padding:4px 8px; font-size:13px; }
+  #sync-msg { color:var(--muted); }
+  #sync-msg.ok { color:#7dcea0; }
+  #sync-msg.no { color:#f5b7b1; }
+  main { width:min(980px, 100%); margin:0 auto; padding:18px 16px 40px; }
+  .stats { display:flex; gap:10px; flex-wrap:wrap; margin:0 0 14px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:110px; }
   .stat b { display:block; font-size:22px; color:var(--gold); }
   .stat span { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
-  .filters { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
-  input, select { background:#0d1117; color:var(--text); border:1px solid #30363d; border-radius:10px; padding:10px 12px; font:inherit; }
-  input { flex:1; min-width:220px; }
-  .card { background:var(--panel); border:1px solid #30363d; border-radius:14px; padding:14px 16px; margin:0 0 12px; }
+  .filters, .edit-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .filters input { flex:1; min-width:220px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin:0 0 12px; }
   .card h2 { margin:0 0 4px; font-size:18px; }
   .meta { color:var(--muted); font-size:14px; }
   .pills { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
@@ -30,73 +41,213 @@
   details { margin-top:10px; }
   summary { cursor:pointer; color:var(--gold); font-weight:700; }
   .narrative { white-space:pre-wrap; color:var(--text); margin:8px 0 0; font-size:14px; }
-  .empty, .note { color:var(--muted); }
+  .drawer { background:var(--panel); border:1px solid var(--gold); border-radius:14px; padding:14px; margin-bottom:14px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
+  label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+  textarea { width:100%; min-height:90px; }
+  body.view-only .owner-only { display:none; }
+  .empty { color:var(--muted); }
 </style>
 </head>
-<body>
-  <div class="wrap">
-    <div class="top">
-      <div>
-        <h1>Critical Incidents</h1>
-        <p class="sub">Bowling Green Fire Department · imported 2026-10-07</p>
-      </div>
-      <a class="back" href="index.html">Back to home</a>
-    </div>
-    <p class="note" id="status">Loading stored incidents…</p>
-    <div class="stats" id="stats"></div>
-    <div class="filters">
-      <input id="q" type="search" placeholder="Search address, officer, unit, or incident number" />
-      <select id="shift"><option value="">All shifts</option><option>A</option><option>B</option><option>C</option></select>
-    </div>
-    <div id="list"></div>
+<body class="view-only">
+<header>
+  <a class="exit" href="index.html">Home</a>
+  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-7" alt="BGFD" />
+  <div>
+    <h1>Critical Incidents</h1>
+    <p>Flagged incidents</p>
   </div>
+  <button class="owner" id="owner-btn" type="button">Owner sign-in</button>
+</header>
+<div class="sync-bar">
+  <button class="red" id="btn-save-all" type="button">Save</button>
+  <button class="gold" id="btn-push" type="button">Upload to site</button>
+  <button class="gold" id="btn-pull" type="button">Load site data</button>
+  <input id="sync-token" type="password" autocomplete="off" placeholder="GitHub token (same as the other apps)" />
+  <button id="btn-save-token" type="button">Save token</button>
+  <span id="sync-msg"></span>
+</div>
+<main>
+  <div class="stats" id="stats"></div>
+  <div class="filters">
+    <input id="q" type="search" placeholder="Search address, officer, unit, or incident number" />
+    <select id="shift"><option value="">All shifts</option><option>A</option><option>B</option><option>C</option></select>
+    <button class="red owner-only" id="btn-add" type="button">Add incident</button>
+  </div>
+  <section class="drawer owner-only" id="drawer" hidden>
+    <h2 id="drawerTitle" style="margin:0 0 8px">Add incident</h2>
+    <div class="grid">
+      <div><label>Date</label><input id="f-created" type="datetime-local" /></div>
+      <div><label>Incident number</label><input id="f-number" /></div>
+      <div><label>Address</label><input id="f-address" /></div>
+      <div><label>Shift</label><select id="f-shift"><option>A</option><option>B</option><option>C</option></select></div>
+      <div><label>First unit</label><input id="f-unit" /></div>
+      <div><label>Officer</label><input id="f-officer" /></div>
+      <div><label>Personnel</label><input id="f-personnel" type="number" min="0" value="0" /></div>
+      <div><label>NFIRS</label><input id="f-nfirs" /></div>
+    </div>
+    <label>Narrative</label>
+    <textarea id="f-narrative"></textarea>
+    <div class="edit-bar">
+      <button class="red" id="btn-save-incident" type="button">Save incident</button>
+      <button id="btn-cancel" type="button">Cancel</button>
+    </div>
+  </section>
+  <div id="list"></div>
+</main>
+<script src="critical-incidents-sync.js?v=20261007-7"></script>
 <script>
 (function () {
-  var KEY = 'bgfd-critical-incidents-v1';
-  var list = document.getElementById('list');
-  var q = document.getElementById('q');
-  var shift = document.getElementById('shift');
-  var status = document.getElementById('status');
-  var rows = [];
-  function esc(s) { return String(s || '').replace(/[&<>"]/g, function (c) { return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]; }); }
+  var KEY = "bgfd-critical-incidents-v1";
+  var SESSION = "bgfd-owner-unlock";
+  var PASS = "Bomberonick5606!";
+  var db = { imported: "2026-10-07", source: "CriticalIncidents-Nick_20261007144204.xlsx", incidents: [] };
+  var editing = null;
+  var list = document.getElementById("list");
+  var q = document.getElementById("q");
+  var shift = document.getElementById("shift");
+  var drawer = document.getElementById("drawer");
+  function esc(s) { return String(s || "").replace(/[&<>"]/g, function (c) { return ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" })[c]; }); }
+  function unlocked() { return sessionStorage.getItem(SESSION) === "1"; }
+  function applyLock() {
+    document.body.classList.toggle("view-only", !unlocked());
+    document.getElementById("owner-btn").textContent = unlocked() ? "Owner signed in" : "Owner sign-in";
+    if (!unlocked()) drawer.hidden = true;
+  }
+  function saveCritical() {
+    localStorage.setItem(KEY, JSON.stringify(db));
+    return db;
+  }
+  window.saveCritical = saveCritical;
+  window.getCriticalDb = function () { return db; };
+  window.setCriticalDb = function (next) {
+    db = next && next.incidents ? next : db;
+    saveCritical();
+    render();
+  };
   function paintStats(shown) {
-    var people = shown.reduce(function (n, r) { return n + (r.personnel || 0); }, 0);
-    document.getElementById('stats').innerHTML =
+    var people = shown.reduce(function (n, r) { return n + (Number(r.personnel) || 0); }, 0);
+    document.getElementById("stats").innerHTML =
       "<div class='stat'><b>" + shown.length + "</b><span>Showing</span></div>" +
-      "<div class='stat'><b>" + rows.length + "</b><span>Stored</span></div>" +
+      "<div class='stat'><b>" + db.incidents.length + "</b><span>Stored</span></div>" +
       "<div class='stat'><b>" + people + "</b><span>Personnel on shown</span></div>";
   }
   function render() {
     var term = q.value.trim().toLowerCase();
     var sh = shift.value;
-    var shown = rows.filter(function (r) {
+    var shown = db.incidents.filter(function (r) {
       if (sh && r.shift !== sh) return false;
       if (!term) return true;
-      return [r.address, r.officer, r.unit, r.incidentNumber, r.cadNumber, r.nfirs, r.narrative].join(' ').toLowerCase().indexOf(term) !== -1;
+      return [r.address, r.officer, r.unit, r.incidentNumber, r.cadNumber, r.nfirs, r.narrative].join(" ").toLowerCase().indexOf(term) !== -1;
     });
     paintStats(shown);
     if (!shown.length) { list.innerHTML = "<p class='empty'>No incidents match.</p>"; return; }
-    list.innerHTML = shown.map(function (r) {
+    list.innerHTML = shown.map(function (r, i) {
+      var idx = db.incidents.indexOf(r);
       var narrative = r.narrative ? "<details><summary>Narrative</summary><p class='narrative'>" + esc(r.narrative) + "</p></details>" : "";
-      return "<article class='card'><h2>" + esc(r.incidentNumber) + " · " + esc(r.address) + "</h2><div class='meta'>" + esc(r.created) + "</div><div class='pills'><span class='pill'>Shift " + esc(r.shift) + "</span><span class='pill'>" + esc(r.unit || 'No unit') + "</span><span class='pill'>" + esc(r.officer) + "</span><span class='pill'>" + esc(r.personnel) + " personnel</span>" + (r.nfirs ? "<span class='pill'>" + esc(r.nfirs) + "</span>" : "") + "</div>" + narrative + "</article>";
-    }).join('');
+      var actions = unlocked() ? "<div class='edit-bar owner-only'><button class='tiny gold' data-edit='" + idx + "' type='button'>Edit</button><button class='tiny' data-del='" + idx + "' type='button'>Delete</button></div>" : "";
+      return "<article class='card'><h2>" + esc(r.incidentNumber) + " · " + esc(r.address) + "</h2><div class='meta'>" + esc(r.created) + "</div><div class='pills'><span class='pill'>Shift " + esc(r.shift) + "</span><span class='pill'>" + esc(r.unit || "No unit") + "</span><span class='pill'>" + esc(r.officer) + "</span><span class='pill'>" + esc(r.personnel) + " personnel</span>" + (r.nfirs ? "<span class='pill'>" + esc(r.nfirs) + "</span>" : "") + "</div>" + narrative + actions + "</article>";
+    }).join("");
   }
+  function blankForm() {
+    editing = null;
+    document.getElementById("drawerTitle").textContent = "Add incident";
+    document.getElementById("f-created").value = "";
+    document.getElementById("f-number").value = "";
+    document.getElementById("f-address").value = "";
+    document.getElementById("f-shift").value = "A";
+    document.getElementById("f-unit").value = "";
+    document.getElementById("f-officer").value = "";
+    document.getElementById("f-personnel").value = "0";
+    document.getElementById("f-nfirs").value = "";
+    document.getElementById("f-narrative").value = "";
+  }
+  function openEdit(idx) {
+    if (!unlocked()) return;
+    var r = db.incidents[idx];
+    if (!r) return;
+    editing = idx;
+    drawer.hidden = false;
+    document.getElementById("drawerTitle").textContent = "Edit incident";
+    document.getElementById("f-created").value = String(r.created || "").replace(" ", "T").slice(0, 16);
+    document.getElementById("f-number").value = r.incidentNumber || "";
+    document.getElementById("f-address").value = r.address || "";
+    document.getElementById("f-shift").value = r.shift || "A";
+    document.getElementById("f-unit").value = r.unit || "";
+    document.getElementById("f-officer").value = r.officer || "";
+    document.getElementById("f-personnel").value = r.personnel || 0;
+    document.getElementById("f-nfirs").value = r.nfirs || "";
+    document.getElementById("f-narrative").value = r.narrative || "";
+  }
+  document.getElementById("owner-btn").onclick = function () {
+    if (unlocked()) { sessionStorage.removeItem(SESSION); applyLock(); render(); return; }
+    var entered = window.prompt("Owner password");
+    if (entered == null) return;
+    if (entered === PASS) { sessionStorage.setItem(SESSION, "1"); applyLock(); render(); }
+    else window.alert("Incorrect password. The site stays view-only.");
+  };
+  document.getElementById("btn-add").onclick = function () { blankForm(); drawer.hidden = false; };
+  document.getElementById("btn-cancel").onclick = function () { drawer.hidden = true; editing = null; };
+  document.getElementById("btn-save-incident").onclick = function () {
+    var created = document.getElementById("f-created").value.replace("T", " ");
+    var row = {
+      created: created,
+      incidentId: editing != null && db.incidents[editing] ? db.incidents[editing].incidentId : Date.now(),
+      incidentNumber: document.getElementById("f-number").value.trim(),
+      criteria: "Meets Critical Incident Criteria",
+      answer: true,
+      address: document.getElementById("f-address").value.trim(),
+      nfirs: document.getElementById("f-nfirs").value.trim(),
+      unit: document.getElementById("f-unit").value.trim(),
+      shift: document.getElementById("f-shift").value,
+      officer: document.getElementById("f-officer").value.trim(),
+      cadNumber: document.getElementById("f-number").value.trim(),
+      narrative: document.getElementById("f-narrative").value.trim(),
+      personnel: Number(document.getElementById("f-personnel").value) || 0
+    };
+    if (editing == null) db.incidents.unshift(row);
+    else db.incidents[editing] = row;
+    saveCritical();
+    drawer.hidden = true;
+    render();
+    var msg = document.getElementById("sync-msg");
+    if (msg) { msg.textContent = "Saved on this device. Upload to site to share it."; msg.className = "ok"; }
+  };
+  list.onclick = function (e) {
+    var edit = e.target.getAttribute("data-edit");
+    var del = e.target.getAttribute("data-del");
+    if (edit != null) openEdit(Number(edit));
+    if (del != null && confirm("Delete this incident from this device?")) {
+      db.incidents.splice(Number(del), 1);
+      saveCritical();
+      render();
+    }
+  };
   q.oninput = render;
   shift.onchange = render;
-  var files = [0,1,2,3,4,5,6,7,8,9,10];
-  Promise.all(files.map(function (n) {
-    return fetch('critical-incidents/' + n + '.json?v=20261007-6').then(function (r) {
-      if (!r.ok) throw new Error('Missing group ' + n);
-      return r.json();
-    });
-  })).then(function (groups) {
-    rows = groups.reduce(function (all, group) { return all.concat(group); }, []);
-    localStorage.setItem(KEY, JSON.stringify({ imported: '2026-10-07', count: rows.length, incidents: rows }));
-    status.textContent = rows.length + ' incidents stored from CriticalIncidents-Nick_20261007144204.xlsx.';
+  async function seedFromGroups() {
+    var files = [0,1,2,3,4,5,6,7,8,9,10];
+    var groups = await Promise.all(files.map(function (n) {
+      return fetch("critical-incidents/" + n + ".json?v=20261007-7").then(function (r) { return r.ok ? r.json() : []; });
+    }));
+    return groups.reduce(function (all, group) { return all.concat(group); }, []);
+  }
+  async function boot() {
+    applyLock();
+    try { db = JSON.parse(localStorage.getItem(KEY) || "null") || db; } catch (e) {}
+    if (!db.incidents || !db.incidents.length) {
+      try {
+        var res = await fetch("critical-incidents-data.json?t=" + Date.now(), { cache: "no-store" });
+        if (res.ok) db = await res.json();
+      } catch (e) {}
+    }
+    if (!db.incidents || !db.incidents.length) {
+      db.incidents = await seedFromGroups();
+      saveCritical();
+    }
     render();
-  }).catch(function (err) {
-    status.textContent = 'Could not load stored incidents. ' + err.message;
-  });
+  }
+  boot();
 })();
 </script>
 </body>
