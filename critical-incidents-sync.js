@@ -32,16 +32,25 @@
     var info = await meta.json();
     return info.sha || null;
   }
+  async function loadGroups() {
+    var files = [0,1,2,3,4,5,6,7,8,9,10];
+    var groups = await Promise.all(files.map(function (n) {
+      return fetch("critical-incidents/" + n + ".json?t=" + Date.now(), { cache: "no-store" }).then(function (r) {
+        if (!r.ok) throw new Error("Missing group " + n);
+        return r.json();
+      });
+    }));
+    var incidents = groups.reduce(function (all, group) { return all.concat(group); }, []);
+    return { source: "CriticalIncidents-Nick_20261007144204.xlsx", imported: "2026-10-07", count: incidents.length, incidents: incidents };
+  }
   async function pullRemote() {
     setSyncMsg("Loading site data…");
     try {
+      var remote = null;
       var res = await fetch("https://raw.githubusercontent.com/" + REMOTE.owner + "/" + REMOTE.repo + "/" + REMOTE.branch + "/" + REMOTE.path + "?t=" + Date.now(), { cache: "no-store" });
-      if (!res.ok) { setSyncMsg("No site copy yet. Save, then upload."); return; }
-      var remote = await res.json();
-      if (!remote || !remote.incidents || !remote.incidents.length) {
-        setSyncMsg("Site copy is empty. Kept this device.");
-        return;
-      }
+      if (res.ok) remote = await res.json();
+      if (!remote || !remote.incidents || !remote.incidents.length) remote = await loadGroups();
+      if (!remote.incidents.length) { setSyncMsg("Site copy is empty. Kept this device.", false); return; }
       var local = currentDb();
       var localCount = local && local.incidents ? local.incidents.length : 0;
       if (localCount && localCount !== remote.incidents.length) {
