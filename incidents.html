@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<title>Critical Incidents — Bowling Green Fire Department</title>
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-9" />
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font:16px/1.45 "Segoe UI", system-ui, sans-serif; }
+  body { background: radial-gradient(circle at top, #3b0a0a 0%, #0d1117 42%); }
+  header { display:flex; gap:14px; align-items:center; padding:16px 20px; background:linear-gradient(90deg,#3b0a0a,#161b22 55%); border-bottom:3px solid var(--gold); }
+  header img { width:54px; height:54px; object-fit:contain; }
+  h1 { margin:0; font-size:26px; }
+  header p { margin:2px 0 0; color:var(--gold); font-weight:700; }
+  a.exit, button.owner { margin-left:auto; color:var(--gold); text-decoration:none; border:1px solid var(--gold); border-radius:10px; padding:8px 12px; font-weight:800; background:#241c0c; cursor:pointer; }
+  button.owner { margin-left:8px; }
+  .sync-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 20px; background:#10161d; border-bottom:1px solid var(--line); }
+  .sync-bar input { max-width:280px; width:min(280px, 100%); }
+  input, select, textarea, button { font:inherit; color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
+  button { cursor:pointer; font-weight:700; }
+  button.gold { background:#241c0c; color:var(--gold); border-color:var(--gold); }
+  button.red { background:var(--red); border-color:#ff8a80; color:#fff; }
+  button.tiny { padding:4px 8px; font-size:13px; }
+  #sync-msg { color:var(--muted); }
+  #sync-msg.ok { color:#7dcea0; }
+  #sync-msg.no { color:#f5b7b1; }
+  main { width:min(980px, 100%); margin:0 auto; padding:18px 16px 40px; }
+  .tabs { display:flex; gap:8px; margin:0 0 14px; }
+  .stats { display:flex; gap:10px; flex-wrap:wrap; margin:0 0 14px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:110px; }
+  .stat b { display:block; font-size:22px; color:var(--gold); }
+  .stat span { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .filters, .edit-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .filters input { flex:1; min-width:220px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin:0 0 12px; }
+  .card h2 { margin:0 0 4px; font-size:18px; }
+  .meta { color:var(--muted); font-size:14px; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .pill { border:1px solid var(--gold); color:var(--gold); border-radius:999px; padding:2px 8px; font-size:12px; font-weight:700; }
+  details { margin-top:10px; }
+  summary { cursor:pointer; color:var(--gold); font-weight:700; }
+  .narrative { white-space:pre-wrap; color:var(--text); margin:8px 0 0; font-size:14px; }
+  .drawer { background:var(--panel); border:1px solid var(--gold); border-radius:14px; padding:14px; margin-bottom:14px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
+  label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+  textarea { width:100%; min-height:90px; }
+  body.view-only .owner-only { display:none; }
+  .empty { color:var(--muted); }
+  .wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:var(--panel); margin:0 0 18px; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:center; }
+  th { background:#211810; color:var(--gold); }
+  td.left, th.left { text-align:left; }
+  #averages h2 { margin:8px 0; font-size:20px; }
+</style>
+</head>
+<body class="view-only">
+<header>
+  <a class="exit" href="index.html">Home</a>
+  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-9" alt="BGFD" />
+  <div>
+    <h1>Critical Incidents</h1>
+    <p>Flagged incidents</p>
+  </div>
+  <button class="owner" id="owner-btn" type="button">Owner sign-in</button>
+</header>
+<div class="sync-bar">
+  <button class="red" id="btn-save-all" type="button">Save</button>
+  <button class="gold" id="btn-push" type="button">Upload to site</button>
+  <button class="gold" id="btn-pull" type="button">Load site data</button>
+  <input id="sync-token" type="password" autocomplete="off" placeholder="GitHub token (same as the other apps)" />
+  <button id="btn-save-token" type="button">Save token</button>
+  <span id="sync-msg"></span>
+</div>
+<main>
+  <div class="tabs">
+    <button class="red" id="tab-list" type="button">Incidents</button>
+    <button class="gold" id="tab-avg" type="button">Averages</button>
+  </div>
+  <section id="incidents-panel">
+  <div class="stats" id="stats"></div>
+  <div class="filters">
+    <input id="q" type="search" placeholder="Search address, officer, unit, or incident number" />
+    <select id="shift"><option value="">All shifts</option><option>A</option><option>B</option><option>C</option></select>
+    <button class="red owner-only" id="btn-add" type="button">Add incident</button>
+  </div>
+  <section class="drawer owner-only" id="drawer" hidden>
+    <h2 id="drawerTitle" style="margin:0 0 8px">Add incident</h2>
+    <div class="grid">
+      <div><label>Date</label><input id="f-created" type="datetime-local" /></div>
+      <div><label>Incident number</label><input id="f-number" /></div>
+      <div><label>Address</label><input id="f-address" /></div>
+      <div><label>Shift</label><select id="f-shift"><option>A</option><option>B</option><option>C</option></select></div>
+      <div><label>First unit</label><input id="f-unit" /></div>
+      <div><label>Officer</label><input id="f-officer" /></div>
+      <div><label>Personnel</label><input id="f-personnel" type="number" min="0" value="0" /></div>
+      <div><label>NFIRS</label><input id="f-nfirs" /></div>
+    </div>
+    <label>Narrative</label>
+    <textarea id="f-narrative"></textarea>
+    <div class="edit-bar">
+      <button class="red" id="btn-save-incident" type="button">Save incident</button>
+      <button id="btn-cancel" type="button">Cancel</button>
+    </div>
+  </section>
+  <div id="list"></div>
+  </section>
+  <section id="averages" hidden></section>
+</main>
+<script src="critical-incidents-sync.js?v=20261007-9"></script>
+<script src="critical-incidents-averages.js?v=20261007-9"></script>
+<script src="critical-incidents-app.js?v=20261007-9"></script>
+</body>
+</html>
