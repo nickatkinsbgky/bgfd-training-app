@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>Bowling Green Fire Department</title>
-<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-3" />
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-4" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet" />
@@ -13,12 +13,11 @@
   :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
   * { box-sizing:border-box; }
   html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font:16px/1.45 "Segoe UI", system-ui, sans-serif; }
-  body { min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:18px 16px 28px; background: radial-gradient(circle at top, #3b0a0a 0%, #0d1117 42%); }
+  body { min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:86px 16px 28px; background: radial-gradient(circle at top, #3b0a0a 0%, #0d1117 42%); }
+  .motto { position:fixed; top:0; left:0; right:0; z-index:5; margin:0; padding:16px 18px; text-align:center; font-family:Cinzel, "Times New Roman", serif; font-size:28px; font-weight:700; letter-spacing:.08em; color:#1c1406; background:linear-gradient(180deg, #fff1c2 0%, #e2b63a 46%, #8d6410 100%); border-bottom:3px solid #4a1010; box-shadow:0 8px 18px rgba(0,0,0,.45); }
   .wrap { width:min(720px, 100%); text-align:center; }
-  .crest { position:relative; width:min(360px, 100%); height:248px; margin:0 auto 8px; }
-  .logo-ring { position:absolute; left:50%; top:26px; transform:translateX(-50%); width:220px; height:220px; border-radius:50%; border:4px solid var(--gold); background:radial-gradient(circle at 35% 30%, #2a2a2a, #050505 70%); display:flex; align-items:center; justify-content:center; box-shadow:0 18px 30px rgba(0,0,0,.55), inset 0 -10px 18px rgba(0,0,0,.65), inset 0 8px 12px rgba(255,255,255,.08), 0 0 0 8px rgba(212,160,23,.12); }
+  .logo-ring { width:220px; height:220px; margin:0 auto 18px; border-radius:50%; border:4px solid var(--gold); background:radial-gradient(circle at 35% 30%, #2a2a2a, #050505 70%); display:flex; align-items:center; justify-content:center; box-shadow:0 18px 30px rgba(0,0,0,.55), inset 0 -10px 18px rgba(0,0,0,.65), inset 0 8px 12px rgba(255,255,255,.08), 0 0 0 8px rgba(212,160,23,.12); }
   .logo-ring img { width:186px; height:186px; object-fit:contain; filter:drop-shadow(0 8px 8px rgba(0,0,0,.55)); }
-  .moon-banner { position:absolute; left:50%; top:0; transform:translateX(-50%); width:min(320px, 94%); height:64px; pointer-events:none; filter:drop-shadow(0 6px 8px rgba(0,0,0,.45)); }
   h1 { margin:0 0 6px; font-size:32px; letter-spacing:.02em; text-shadow:0 3px 0 #3b0a0a, 0 8px 16px rgba(0,0,0,.45); }
   .sub { color:var(--gold); font-weight:700; margin:0 0 10px; text-shadow:0 2px 0 #5a4308; }
   .banner { margin:0 auto 28px; max-width:640px; padding:12px 16px; border:1px solid var(--gold); border-radius:12px; color:var(--text); background:linear-gradient(180deg, rgba(212,160,23,.22), rgba(212,160,23,.06)); font-weight:700; letter-spacing:.01em; box-shadow:0 10px 0 #6b5410, 0 16px 24px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.25); }
@@ -34,31 +33,14 @@
   button.owner:hover { transform:translateY(-2px); filter:brightness(1.06); }
   button.owner:active { transform:translateY(5px); box-shadow:0 3px 0 #5a4308; }
   .owner-note { width:100%; color:var(--muted); font-size:13px; margin:0; text-align:center; }
-  @media (max-width:680px){ h1 { font-size:22px; } .crest { height:228px; } .logo-ring { width:196px; height:196px; top:24px; } .logo-ring img { width:164px; height:164px; } .moon-banner { height:56px; } a.choice, button.owner { width:100%; } a.choice { height:180px; } }
+  @media (max-width:680px){ body { padding-top:72px; } .motto { font-size:18px; letter-spacing:.04em; padding:14px 10px; } h1 { font-size:22px; } .logo-ring { width:170px; height:170px; } .logo-ring img { width:142px; height:142px; } a.choice, button.owner { width:100%; } a.choice { height:180px; } }
 </style>
 </head>
 <body>
+  <p class="motto">Teach, Track, Train</p>
   <div class="wrap">
-    <div class="crest">
-      <div class="logo-ring">
-        <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-3" alt="Bowling Green Fire Department" />
-      </div>
-      <svg class="moon-banner" viewBox="0 0 340 72" role="img" aria-label="Teach, Track, Train">
-        <defs>
-          <linearGradient id="ribbonGold" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#fff1c2" />
-            <stop offset="0.42" stop-color="#e2b63a" />
-            <stop offset="1" stop-color="#8d6410" />
-          </linearGradient>
-          <path id="mottoArc" d="M 28 46 A 520 520 0 0 1 312 46" fill="none" />
-        </defs>
-        <path d="M 22 50 A 540 540 0 0 1 318 50" fill="none" stroke="#4a1010" stroke-width="30" stroke-linecap="round" />
-        <path d="M 22 50 A 540 540 0 0 1 318 50" fill="none" stroke="url(#ribbonGold)" stroke-width="24" stroke-linecap="round" />
-        <path d="M 22 50 A 540 540 0 0 1 318 50" fill="none" stroke="#fff6d6" stroke-width="1.4" stroke-linecap="round" opacity="0.7" />
-        <text fill="#1c1406" font-family="Cinzel, 'Times New Roman', serif" font-size="15" font-weight="700" letter-spacing="0.6">
-          <textPath href="#mottoArc" startOffset="50%" text-anchor="middle">Teach, Track, Train</textPath>
-        </text>
-      </svg>
+    <div class="logo-ring">
+      <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261007-4" alt="Bowling Green Fire Department" />
     </div>
     <h1>Bowling Green Fire Department</h1>
     <p class="sub">Personnel Systems</p>
