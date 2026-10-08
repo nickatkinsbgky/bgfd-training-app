@@ -37,3 +37,10 @@ Department averages is on the EMS tracker. Pick a recertification cycle year. Th
 Every person's expiration date renews by two years on that date, not just one record. A 2027-12-31 expiration becomes 2029-12-31 on that date, then 2031-12-31 on the next expiration, and so on.
 
 Training focus compares the current recertification year against time left in the cycle. Falling short means earned hours are below the prorated target. Ahead includes anyone who has already met that category.
+
+
+## National Data
+
+Open https://nickatkinsbgky.github.io/bgfd-training-app/national-data.html
+
+Labeled National Data on the homepage. Loads the firefighter rescue survey file updated_data - 2026-01-01.xlsx (5,074 victim records). The page filters by outcome, occupancy, age, who found the victim, and state. Download spreadsheet saves the original workbook.

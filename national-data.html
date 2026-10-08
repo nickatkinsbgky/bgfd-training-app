@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<title>National Data — Bowling Green Fire Department</title>
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-1" />
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font:16px/1.45 "Segoe UI", system-ui, sans-serif; }
+  body { background: radial-gradient(circle at top, #3b0a0a 0%, #0d1117 42%); }
+  header { display:flex; gap:14px; align-items:center; padding:16px 20px; background:linear-gradient(90deg,#3b0a0a,#161b22 55%); border-bottom:3px solid var(--gold); }
+  header img { width:54px; height:54px; object-fit:contain; }
+  h1 { margin:0; font-size:26px; }
+  header p { margin:2px 0 0; color:var(--gold); font-weight:700; }
+  a.exit { margin-left:auto; color:var(--gold); text-decoration:none; border:1px solid var(--gold); border-radius:10px; padding:8px 12px; font-weight:800; background:#241c0c; }
+  main { width:min(1180px, 100%); margin:0 auto; padding:18px 16px 48px; }
+  .toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:0 0 14px; }
+  a.file, button { font:inherit; color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 12px; font-weight:700; text-decoration:none; cursor:pointer; }
+  a.file, button.gold { background:#241c0c; color:var(--gold); border-color:var(--gold); }
+  .note { color:var(--muted); font-size:14px; margin:0 0 14px; }
+  .stats { display:flex; gap:10px; flex-wrap:wrap; margin:0 0 14px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:120px; }
+  .stat b { display:block; font-size:22px; color:var(--gold); }
+  .stat span { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .filters { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .filters input, .filters select { font:inherit; color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
+  .filters input { flex:1; min-width:220px; }
+  .charts { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:12px; margin:0 0 14px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+  .card h2 { margin:0 0 10px; font-size:18px; }
+  .hbar-row { display:grid; grid-template-columns:minmax(110px,42%) 1fr 42px; gap:8px; align-items:center; margin:6px 0; }
+  .hbar-row span { font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hbar-row i { display:block; height:14px; background:#1c2330; border-radius:99px; overflow:hidden; }
+  .hbar-row b { display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,#ef5350,#d4a017); }
+  .hbar-row em { font-style:normal; color:var(--gold); font-weight:800; text-align:right; font-size:13px; }
+  .wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
+  table { width:100%; border-collapse:collapse; min-width:980px; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; font-size:14px; white-space:nowrap; }
+  th { background:#211810; color:var(--gold); position:sticky; top:0; }
+  tr:hover td { background:#1c2330; }
+  .alive { color:#7dcea0; font-weight:700; }
+  .deceased { color:#f5b7b1; font-weight:700; }
+  .pager { display:flex; gap:8px; align-items:center; justify-content:space-between; margin:12px 0 0; color:var(--muted); flex-wrap:wrap; }
+  #status { color:var(--gold); font-weight:700; }
+  @media (max-width:680px){ h1 { font-size:20px; } header { flex-wrap:wrap; } a.exit { margin-left:0; } }
+</style>
+</head>
+<body>
+<header>
+  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-1" alt="BGFD" />
+  <div>
+    <h1>National Data</h1>
+    <p>Firefighter rescue survey</p>
+  </div>
+  <a class="exit" href="index.html">Home</a>
+</header>
+<main>
+  <div class="toolbar">
+    <a class="file" href="national-data/updated_data_2026-01-01.xlsx" download>Download spreadsheet</a>
+    <span id="status">Loading national data…</span>
+  </div>
+  <p class="note">Source file updated_data - 2026-01-01.xlsx. Each row is a reported victim removal. The table shows city and state; street addresses stay in the downloaded spreadsheet.</p>
+  <div class="stats" id="stats"></div>
+  <div class="filters">
+    <input id="q" type="search" placeholder="Search city, state, occupancy, room, or method" />
+    <select id="out"><option value="">All outcomes</option></select>
+    <select id="occ"><option value="">All occupancies</option></select>
+    <select id="age"><option value="">All ages</option></select>
+    <select id="found"><option value="">All found by</option></select>
+    <select id="st"><option value="">All states</option></select>
+  </div>
+  <div class="charts" id="charts"></div>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Incident date</th><th>City</th><th>State</th><th>Occupancy</th><th>Age</th><th>Outcome</th><th>Found by</th><th>Search</th><th>Room</th><th>Conditions</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="pager">
+    <span id="page-label"></span>
+    <span>
+      <button id="prev" type="button">Previous</button>
+      <button id="next" type="button">Next</button>
+    </span>
+  </div>
+</main>
+<script>
+(function () {
+  var PAGE = 40;
+  var data = [];
+  var filtered = [];
+  var page = 0;
+  var q = document.getElementById('q');
+  var out = document.getElementById('out');
+  var occ = document.getElementById('occ');
+  var age = document.getElementById('age');
+  var found = document.getElementById('found');
+  var st = document.getElementById('st');
+
+  function clean(v) { return v || 'Unknown'; }
+  function countBy(list, key) {
+    var m = {};
+    list.forEach(function (r) {
+      var k = clean(r[key]);
+      m[k] = (m[k] || 0) + 1;
+    });
+    return Object.keys(m).map(function (k) { return [k, m[k]]; }).sort(function (a, b) { return b[1] - a[1]; });
+  }
+  function fillSelect(sel, pairs) {
+    var current = sel.value;
+    sel.innerHTML = sel.options[0].outerHTML;
+    pairs.forEach(function (p) {
+      var o = document.createElement('option');
+      o.value = p[0] === 'Unknown' ? '__blank' : p[0];
+      o.textContent = p[0] + ' (' + p[1] + ')';
+      sel.appendChild(o);
+    });
+    sel.value = current;
+  }
+  function bars(title, pairs) {
+    var top = pairs.slice(0, 8);
+    var max = top.length ? top[0][1] : 1;
+    var rows = top.map(function (p) {
+      var w = Math.max(2, Math.round(p[1] / max * 100));
+      return '<div class="hbar-row"><span title="' + p[0] + '">' + p[0] + '</span><i><b style="width:' + w + '%"></b></i><em>' + p[1] + '</em></div>';
+    }).join('');
+    return '<section class="card"><h2>' + title + '</h2>' + rows + '</section>';
+  }
+  function match(r) {
+    var query = q.value.trim().toLowerCase();
+    if (query) {
+      var blob = [r.city, r.st, r.occ, r.room, r.method, r.found, r.ext, r.fire].join(' ').toLowerCase();
+      if (blob.indexOf(query) < 0) return false;
+    }
+    function eq(sel, val) {
+      if (!sel.value) return true;
+      if (sel.value === '__blank') return !val;
+      return val === sel.value;
+    }
+    return eq(out, r.out) && eq(occ, r.occ) && eq(age, r.age) && eq(found, r.found) && eq(st, r.st);
+  }
+  function render() {
+    filtered = data.filter(match);
+    var pages = Math.max(1, Math.ceil(filtered.length / PAGE));
+    if (page >= pages) page = pages - 1;
+    var start = page * PAGE;
+    var slice = filtered.slice(start, start + PAGE);
+    document.getElementById('rows').innerHTML = slice.map(function (r) {
+      var outcome = r.out === 'Alive' ? 'alive' : (r.out === 'Deceased' ? 'deceased' : '');
+      return '<tr><td>' + (r.date || '') + '</td><td>' + (r.city || '') + '</td><td>' + (r.st || '') + '</td><td>' + (r.occ || '') + '</td><td>' + (r.age || '') + '</td><td class="' + outcome + '">' + (r.out || '') + '</td><td>' + (r.found || '') + '</td><td>' + (r.method || '') + '</td><td>' + (r.room || '') + '</td><td>' + (r.ext || '') + '</td></tr>';
+    }).join('') || '<tr><td colspan="10">No matching records.</td></tr>';
+    document.getElementById('page-label').textContent = filtered.length + ' matching · page ' + (page + 1) + ' of ' + pages;
+    var alive = filtered.filter(function (r) { return r.out === 'Alive'; }).length;
+    var dead = filtered.filter(function (r) { return r.out === 'Deceased'; }).length;
+    var known = alive + dead;
+    var rate = known ? Math.round(alive / known * 100) : 0;
+    document.getElementById('stats').innerHTML =
+      '<div class="stat"><b>' + filtered.length + '</b><span>Records</span></div>' +
+      '<div class="stat"><b>' + alive + '</b><span>Alive</span></div>' +
+      '<div class="stat"><b>' + dead + '</b><span>Deceased</span></div>' +
+      '<div class="stat"><b>' + rate + '%</b><span>Alive when known</span></div>';
+    document.getElementById('charts').innerHTML =
+      bars('Outcome', countBy(filtered, 'out')) +
+      bars('Age group', countBy(filtered, 'age')) +
+      bars('Occupancy', countBy(filtered, 'occ')) +
+      bars('Found by', countBy(filtered, 'found')) +
+      bars('Exterior conditions', countBy(filtered, 'ext')) +
+      bars('Search timing', countBy(filtered, 'when'));
+  }
+  function resetPage() { page = 0; render(); }
+  [q, out, occ, age, found, st].forEach(function (el) { el.addEventListener('input', resetPage); el.addEventListener('change', resetPage); });
+  document.getElementById('prev').onclick = function () { if (page > 0) { page--; render(); } };
+  document.getElementById('next').onclick = function () { if ((page + 1) * PAGE < filtered.length) { page++; render(); } };
+
+  fetch('national-data/records.json?v=20261008-1')
+    .then(function (res) { if (!res.ok) throw new Error('Could not load records'); return res.json(); })
+    .then(function (payload) {
+      data = payload.records || [];
+      document.getElementById('status').textContent = payload.count + ' victim records · file dated ' + payload.asOf;
+      fillSelect(out, countBy(data, 'out'));
+      fillSelect(occ, countBy(data, 'occ'));
+      fillSelect(age, countBy(data, 'age'));
+      fillSelect(found, countBy(data, 'found'));
+      fillSelect(st, countBy(data, 'st'));
+      render();
+    })
+    .catch(function (err) {
+      document.getElementById('status').textContent = err.message || 'Load failed';
+    });
+})();
+</script>
+</body>
+</html>
