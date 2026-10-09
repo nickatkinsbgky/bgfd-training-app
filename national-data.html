@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>National Data — Bowling Green Fire Department</title>
-<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-2" />
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-3" />
 <style>
   :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
   * { box-sizing:border-box; }
@@ -61,10 +61,10 @@
 </head>
 <body>
 <header>
-  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-2" alt="BGFD" />
+  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-3" alt="BGFD" />
   <div>
     <h1>National Data</h1>
-    <p>Firefighter rescue survey</p>
+    <p>Data Provided by the Firefighter Rescue Survey</p>
   </div>
   <a class="exit" href="index.html">Home</a>
 </header>
@@ -322,7 +322,7 @@
     document.getElementById('tab-charts').className = 'red';
   };
 
-  fetch('national-data/records.json?v=20261008-2')
+  fetch('national-data/records.json?v=20261008-3')
     .then(function (res) { if (!res.ok) throw new Error('Could not load records'); return res.json(); })
     .then(function (payload) {
       data = payload.records || [];
