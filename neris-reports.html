@@ -41,13 +41,17 @@
   <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-1" alt="BGFD" />
   <div>
     <h1>NERIS Reports</h1>
-    <p>Incident Casualty-Rescue Civilian (Non-Firefighter)</p>
+    <p id="subtitle">Incident Casualty-Rescue</p>
   </div>
   <a class="exit" href="index.html">Home</a>
 </header>
 <main>
-  <p class="note">Searchable data dictionary for the NERIS Incident Casualty-Rescue Civilian (Non-Firefighter) module. Source: NERIS Data Dictionary / USFA NERIS Release 1.0.1.</p>
+  <p class="note">Searchable data dictionary for NERIS casualty and rescue modules. Civilian and firefighter data are kept separate. Source: NERIS Data Dictionary / USFA NERIS Release 1.0.1.</p>
   <div class="toolbar">
+    <select id="module">
+      <option value="civilian">Civilian (Non-Firefighter)</option>
+      <option value="firefighter">Firefighter</option>
+    </select>
     <input id="q" type="search" placeholder="Search field name, definition, or group…" />
     <select id="group">
       <option value="">All groups</option>
@@ -58,7 +62,7 @@
 </main>
 <script>
 (function () {
-  var fields = [
+  var civilian = [
     { key: "nonff_rescue_birth_month_year", type: "Text", group: "general", definition: "The MM/YYYY of birth of the person(s) injured or rescued.", mandatory: false, cardinality: "Single" },
     { key: "nonff_rescue_gender", type: "Text", group: "general", definition: "The gender of the person(s) injured or rescued.", mandatory: false, cardinality: "Single" },
     { key: "nonff_rescue_race", type: "Text", group: "general", definition: "The race of the person(s) injured or rescued.", mandatory: false, cardinality: "Single" },
@@ -76,19 +80,66 @@
     { key: "nonff_casualty_casualty_cause", type: "Text", group: "casualty.injured", definition: "The apparent cause of the injury or fatality.", mandatory: false, cardinality: "Single" }
   ];
 
-  var groups = [];
-  fields.forEach(function (f) {
-    if (groups.indexOf(f.group) < 0) groups.push(f.group);
-  });
+  var firefighter = [
+    { key: "ff_rescue_birth_month_year", type: "Text", group: "general", definition: "Date of birth of the person(s) injured or rescued. MM/YYYY format required.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_gender", type: "Text", group: "general", definition: "Gender of the person(s) injured or rescued.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_race", type: "Text", group: "general", definition: "Race of the person(s) injured or rescued.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_rank", type: "Text", group: "casualty.demographic", definition: "Rank of firefighter.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_service", type: "Float", group: "casualty.demographic", definition: "Years of service.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_classification", type: "Text", group: "casualty.demographic", definition: "Job classification of firefighter.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_type", type: "Text", group: "rescue", definition: "Whether there was a rescue, non-rescue, assist, or self evacuation.", mandatory: true, cardinality: "Single" },
+    { key: "ff_rescue_primary_mode", type: "Text", group: "rescue", definition: "Primary mode for rescue.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_actions", type: "Array[Text]", group: "rescue", definition: "Actions taken to support the rescue.", mandatory: false, cardinality: "Multi" },
+    { key: "ff_rescue_impediment_type", type: "Array[Text]", group: "rescue", definition: "Whether conditions impacted the ability of rescue.", mandatory: false, cardinality: "Multi" },
+    { key: "ff_rescue_mayday", type: "Boolean", group: "rescue.ff", definition: "Whether there was a mayday called to indicate a firefighter needed assistance during the incident.", mandatory: true, cardinality: "Single" },
+    { key: "ff_rescue_mayday_relative_time", type: "Text", group: "rescue.ff", definition: "Relative to suppression, when the mayday was called.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_rit_activated", type: "Boolean", group: "rescue.ff", definition: "Whether a RIT team was activated following a mayday declaration.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_room_type", type: "Text", group: "rescue.structure", definition: "Type of room/space from which the occupant was rescued.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_elevation_type", type: "Text", group: "rescue.structure", definition: "Elevation at which the occupant was found.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_gas_isolation", type: "Boolean", group: "rescue.structure", definition: "Whether the space was isolated from the flow of heat and/or toxic gases.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_removal_path_type", type: "Text", group: "rescue.structure", definition: "How the firefighter was removed from the structure.", mandatory: false, cardinality: "Single" },
+    { key: "ff_rescue_fire_relative_time", type: "Text", group: "rescue.structure", definition: "Relative to suppression, when the firefighter was removed from the structure.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_type", type: "Text", group: "casualty", definition: "Whether the person was uninjured, injured nonfatally, injured fatally.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_linked_unit_id", type: "Text", group: "casualty.injured.deployment", definition: "Name of the unit responding to the incident in FD Spec. Unit maps to Core Department Spec.", mandatory: true, cardinality: "Single" },
+    { key: "ff_casualty_reported_unit_id", type: "Text", group: "casualty.injured.deployment", definition: "Name of the unit responding to the incident if neris id not yet in FD Spec.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_duty_type", type: "Text", group: "casualty.injured.deployment", definition: "Duty state of the firefighter at the time of the incident.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_cause", type: "Text", group: "casualty.injured.deployment", definition: "Apparent cause of the injury or fatality.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_action", type: "Text", group: "casualty.injured.deployment", definition: "Action that occurred during the time of the incident.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_ppe", type: "Array[Text]", group: "casualty.injured.deployment", definition: "PPE worn during time of incident.", mandatory: false, cardinality: "Multi" },
+    { key: "ff_casualty_incident_command", type: "Boolean", group: "casualty.injured.deployment", definition: "Whether an incident command structure was in place during incident.", mandatory: false, cardinality: "Single" },
+    { key: "ff_casualty_incident_timeline", type: "Text", group: "casualty.injured.deployment", definition: "Stage of the incident when the injury occurred.", mandatory: false, cardinality: "Single" }
+  ];
+
+  var datasets = { civilian: civilian, firefighter: firefighter };
+  var moduleSel = document.getElementById("module");
   var groupSel = document.getElementById("group");
-  groups.forEach(function (g) {
-    var o = document.createElement("option");
-    o.value = g;
-    o.textContent = g;
-    groupSel.appendChild(o);
-  });
+  var subtitle = document.getElementById("subtitle");
+
+  function currentFields() {
+    return datasets[moduleSel.value] || civilian;
+  }
+
+  function updateGroups() {
+    var fields = currentFields();
+    var groups = [];
+    fields.forEach(function (f) {
+      if (groups.indexOf(f.group) < 0) groups.push(f.group);
+    });
+    var current = groupSel.value;
+    groupSel.innerHTML = '<option value="">All groups</option>';
+    groups.forEach(function (g) {
+      var o = document.createElement("option");
+      o.value = g;
+      o.textContent = g;
+      groupSel.appendChild(o);
+    });
+    if ([].some.call(groupSel.options, function (o) { return o.value === current; })) {
+      groupSel.value = current;
+    }
+  }
 
   function render() {
+    var fields = currentFields();
     var query = document.getElementById("q").value.trim().toLowerCase();
     var gFilter = groupSel.value;
     var list = fields.filter(function (f) {
@@ -98,10 +149,19 @@
       return blob.indexOf(query) >= 0;
     });
 
+    var groups = [];
+    fields.forEach(function (f) {
+      if (groups.indexOf(f.group) < 0) groups.push(f.group);
+    });
+
     document.getElementById("stats").innerHTML =
       '<div class="stat"><b>' + list.length + '</b><span>Matching fields</span></div>' +
       '<div class="stat"><b>' + fields.length + '</b><span>Total fields</span></div>' +
       '<div class="stat"><b>' + groups.length + '</b><span>Groups</span></div>';
+
+    subtitle.textContent = moduleSel.value === "firefighter"
+      ? "Incident Casualty-Rescue Firefighter"
+      : "Incident Casualty-Rescue Civilian (Non-Firefighter)";
 
     if (!list.length) {
       document.getElementById("cards").innerHTML = '<div class="no-results">No fields match your search.</div>';
@@ -122,8 +182,14 @@
     }).join("");
   }
 
+  moduleSel.addEventListener("change", function () {
+    updateGroups();
+    render();
+  });
   document.getElementById("q").addEventListener("input", render);
   groupSel.addEventListener("change", render);
+
+  updateGroups();
   render();
 })();
 </script>
