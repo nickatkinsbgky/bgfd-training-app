@@ -118,11 +118,15 @@
   button.gold, .btn.gold, a.exit, button.owner { background: #241c0c !important; color: #d4a017 !important; border-color: #d4a017 !important; }
   button.ghost, .btn.ghost { background: transparent !important; border: 1px solid #30363d !important; color: #e6edf3 !important; }
   button:hover, .btn:hover, a.choice:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+  a.home-link { background:transparent; color:var(--text, #e6edf3); border:1px solid var(--gold, #d4a017); border-radius:8px; padding:8px 14px; font-weight:600; text-decoration:none; min-height:36px; display:inline-flex; align-items:center; margin-right:8px; }
+  a.home-link:hover { filter:brightness(1.1); }
 </style>
 </head>
 <body>
 <header>
-  <a class="exit" href="index.html">Home</a>
+  <a class="home-link" href="index.html">Home</a>
+
   <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261001-2" alt="BGFD" />
   <div>
     <h1>EMS Recertification Tracker</h1>

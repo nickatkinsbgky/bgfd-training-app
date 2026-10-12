@@ -39,16 +39,20 @@
   button.red, .btn { background: #c62828 !important; color: #fff !important; }
   button.gold, a.exit { background: #241c0c !important; color: #d4a017 !important; border-color: #d4a017 !important; }
   button:hover { filter: brightness(1.08); }
+
+  a.home-link { background:transparent; color:var(--text, #e6edf3); border:1px solid var(--gold, #d4a017); border-radius:8px; padding:8px 14px; font-weight:600; text-decoration:none; min-height:36px; display:inline-flex; align-items:center; margin-right:8px; }
+  a.home-link:hover { filter:brightness(1.1); }
 </style>
 </head>
 <body>
 <header>
+  <a class="home-link" href="index.html">Home</a>
+
   <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-1" alt="BGFD" />
   <div>
     <h1>NERIS Reports</h1>
     <p id="subtitle">Incident Casualty-Rescue</p>
   </div>
-  <a class="exit" href="index.html">Home</a>
 </header>
 <main>
   <p class="note">Searchable data dictionary for NERIS casualty and rescue modules. Civilian and firefighter data are kept separate. Source: NERIS Data Dictionary / USFA NERIS Release 1.0.1.</p>

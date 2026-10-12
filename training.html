@@ -59,14 +59,18 @@
   .ms-group-by label { margin:0; display:flex; align-items:center; gap:6px; color:var(--text); }
   .ms-group-by input { width:auto; }
   @media (max-width:900px){ .chart-grid,.split { grid-template-columns:1fr; } }
+
+  a.home-link { background:transparent; color:var(--text, #e6edf3); border:1px solid var(--gold, #d4a017); border-radius:8px; padding:8px 14px; font-weight:600; text-decoration:none; min-height:36px; display:inline-flex; align-items:center; margin-right:8px; }
+  a.home-link:hover { filter:brightness(1.1); }
 </style>
 </head>
 <body class="view-only">
 <header>
+  <a class="home-link" href="index.html">Home</a>
+
   <img class="logo" src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20260926-2" alt="BGFD" />
   <h1>Bowling Green Fire Department<span>Training Division • Personnel Performance App</span></h1>
   <nav>
-    <a class="home-link" href="index.html">Home</a>
     <a class="home-link sources" href="training-sources.html?v=20261009-1">Supporting Information and Sources</a>
     <button class="active" data-tab="input">Enter / edit</button>
     <button data-tab="person">By personnel</button>
