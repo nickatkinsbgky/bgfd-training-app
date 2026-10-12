@@ -120,8 +120,112 @@
     <p class="note" id="export-msg"></p>
     <div id="all-table" style="overflow:auto;max-height:420px;margin-top:12px"></div>
   </section>
-  <!-- rest of original content preserved with only style changes -->
+  <section id="tab-person" class="card" hidden>
+    <h2>By personnel</h2>
+    <div class="split">
+      <div><input id="p-search" placeholder="Filter roster…" /><div class="plist" id="p-list"></div></div>
+      <div id="p-detail"><p class="muted">Select a name.</p></div>
+    </div>
+  </section>
+  <section id="tab-personavg" class="card" hidden>
+    <h2>Person averages</h2>
+    <div class="grid" style="max-width:420px"><div><label>Personnel</label><select id="a-person"><option value="">Select personnel</option></select></div></div>
+    <div class="chart-wrap" style="height:280px"><canvas id="chart-person-avg"></canvas></div>
+    <div id="a-out"></div>
+  </section>
+  <section id="tab-dept" class="card" hidden>
+    <h2>Department averages</h2>
+    <div class="chart-wrap"><canvas id="chart-dept-avg"></canvas></div>
+    <div id="d-out"></div>
+  </section>
+  <section id="tab-groups" class="card" hidden>
+    <h2>Group averages</h2>
+    <div id="g-filters"></div>
+    <div class="chart-grid">
+      <div class="chart-wrap"><canvas id="chart-g-battalion"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-shift"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-task"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-g-person"></canvas></div>
+      <div class="chart-wrap" style="display:none"><canvas id="chart-g-station"></canvas></div>
+    </div>
+    <div id="g-out"></div>
+  </section>
+  <section id="tab-charts" class="card" hidden>
+    <h2>Charts</h2>
+    <p class="muted">Filter with the same multi-selects as Group averages. Leave All checked to include every value in that field.</p>
+    <div id="c-filters"></div>
+    <div class="chart-grid">
+      <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-compare"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-status"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-met"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-battalion"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-shift"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-task"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-person"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-c-station"></canvas></div>
+    </div>
+  </section>
+  <section id="tab-cats" class="card" hidden>
+    <h2>Categories</h2>
+    <div class="grid owner-only" style="max-width:720px">
+      <div><label>New category</label><input id="cat-new" /></div>
+      <div style="align-self:end"><button class="btn" id="btn-add-cat" type="button">Add category</button></div>
+    </div>
+    <div id="cat-list" style="margin-top:14px"></div>
+  </section>
+  <section id="tab-roster" class="card" hidden>
+    <h2>Roster and task catalog</h2>
+    <input type="hidden" id="n-orig-person" />
+    <div class="grid owner-only">
+      <div><label>Person (Last, First)</label><input id="n-name" placeholder="Last, First" /></div>
+      <div><label>Rank</label><input id="n-rank" /></div>
+      <div><label>Station</label><input id="n-station" /></div>
+      <div><label>Shift</label><input id="n-shift" /></div>
+      <div><label>Battalion</label><input id="n-battalion" /></div>
+      <div><label>Active</label><select id="n-active"><option>Yes</option><option>No</option></select></div>
+      <div><label>Notes</label><input id="n-pnotes" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-person" type="button">Save person</button>
+        <button class="btn ghost" id="btn-reset-person" type="button">New person</button>
+        <button class="btn ghost" id="btn-delete-person" type="button" hidden>Delete person</button>
+      </div>
+    </div>
+    <p class="note" id="person-msg"></p>
+    <input type="hidden" id="n-orig-task" />
+    <div class="grid owner-only" style="margin-top:12px">
+      <div><label>Task name</label><input id="n-task" /></div>
+      <div><label>Category</label><select id="n-cat"></select></div>
+      <div><label>Standard time</label><input id="n-std" /></div>
+      <div><label>Task ID</label><input id="n-tid" /></div>
+      <div style="align-self:end;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btn-add-task" type="button">Save task</button>
+        <button class="btn ghost" id="btn-reset-task" type="button">New task</button>
+        <button class="btn ghost" id="btn-delete-task" type="button" hidden>Delete task</button>
+      </div>
+    </div>
+    <p class="note" id="task-msg"></p>
+    <div id="r-out" style="margin-top:16px"></div>
+  </section>
 </main>
-<!-- scripts unchanged -->
+<select id="list-person" hidden></select>
+<select id="list-task" hidden></select>
+<script src="seed-personnel-a.js?v=20260926-2"></script>
+<script src="seed-personnel-b.js?v=20260929-7"></script>
+<script src="seed-personnel.js?v=20260926-2"></script>
+<script src="seed-tasks.js?v=20260926-2"></script>
+<script src="seed-assignments.js?v=20260926-2"></script>
+<script src="seed-ocourse.js?v=20260929-6"></script>
+<script src="seed.js?v=20260929-1"></script>
+<script src="app-part1.js?v=20260929-8"></script>
+<script src="app-part2.js?v=20260930-2"></script>
+<script src="person-avg.js?v=20260928-15"></script>
+<script src="group-averages.js?v=20260930-1"></script>
+<script src="charts-filters.js?v=20260930-2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="export-excel.js?v=20261001-1"></script>
+<script src="crud.js?v=20260930-3"></script>
+<script src="lock.js?v=20261001-2"></script>
+<script src="sync.js?v=20261001-1"></script>
 </body>
 </html>
