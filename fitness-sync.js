@@ -108,5 +108,10 @@
   };
   var pushBtn = document.getElementById('btn-push');
   if (pushBtn) pushBtn.onclick = pushRemote;
+  var loadBtn = document.getElementById('btn-load');
+  if (loadBtn) loadBtn.onclick = function () {
+    setSyncMsg('Loading site data…');
+    pullRemote();
+  };
   pullRemote();
 })();
