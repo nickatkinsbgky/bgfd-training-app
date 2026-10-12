@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<title>NERIS Reports — Bowling Green Fire Department</title>
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-1" />
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font:16px/1.45 "Segoe UI", system-ui, sans-serif; }
+  body { background: radial-gradient(circle at top, #3b0a0a 0%, #0d1117 42%); }
+  header { display:flex; gap:14px; align-items:center; padding:16px 20px; background:linear-gradient(90deg,#3b0a0a,#161b22 55%); border-bottom:3px solid var(--gold); }
+  header img { width:54px; height:54px; object-fit:contain; }
+  h1 { margin:0; font-size:26px; }
+  header p { margin:2px 0 0; color:var(--gold); font-weight:700; }
+  a.exit { margin-left:auto; color:var(--gold); text-decoration:none; border:1px solid var(--gold); border-radius:10px; padding:8px 12px; font-weight:800; background:#241c0c; }
+  main { width:min(1100px, 100%); margin:0 auto; padding:18px 16px 48px; }
+  .toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:0 0 16px; }
+  .toolbar input { flex:1; min-width:220px; font:inherit; color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+  .toolbar select { font:inherit; color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+  .note { color:var(--muted); font-size:14px; margin:0 0 16px; }
+  .stats { display:flex; gap:10px; flex-wrap:wrap; margin:0 0 16px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:140px; }
+  .stat b { display:block; font-size:20px; color:var(--gold); }
+  .stat span { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .cards { display:grid; gap:12px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px 18px; }
+  .card h3 { margin:0 0 6px; font-size:18px; color:#fff; }
+  .meta { display:flex; gap:12px; flex-wrap:wrap; margin:0 0 8px; font-size:13px; color:var(--muted); }
+  .meta span { background:#1c2330; border-radius:6px; padding:2px 8px; }
+  .group { color:var(--gold); font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+  .def { margin:0; color:var(--text); }
+  .no-results { text-align:center; color:var(--muted); padding:40px 20px; }
+  @media (max-width:680px){ h1 { font-size:20px; } header { flex-wrap:wrap; } a.exit { margin-left:0; } }
+</style>
+</head>
+<body>
+<header>
+  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-1" alt="BGFD" />
+  <div>
+    <h1>NERIS Reports</h1>
+    <p>Incident Casualty-Rescue Civilian (Non-Firefighter)</p>
+  </div>
+  <a class="exit" href="index.html">Home</a>
+</header>
+<main>
+  <p class="note">Searchable data dictionary for the NERIS Incident Casualty-Rescue Civilian (Non-Firefighter) module. Source: NERIS Data Dictionary / USFA NERIS Release 1.0.1.</p>
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="Search field name, definition, or group…" />
+    <select id="group">
+      <option value="">All groups</option>
+    </select>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="cards" id="cards"></div>
+</main>
+<script>
+(function () {
+  var fields = [
+    { key: "nonff_rescue_birth_month_year", type: "Text", group: "general", definition: "The MM/YYYY of birth of the person(s) injured or rescued.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_gender", type: "Text", group: "general", definition: "The gender of the person(s) injured or rescued.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_race", type: "Text", group: "general", definition: "The race of the person(s) injured or rescued.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_type", type: "Text", group: "rescue", definition: "Whether there was a rescue, non-rescue, assist, or self evacuation.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_presence_known", type: "Text", group: "rescue", definition: "Whether the presence of an occupant in need of rescue was known.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_primary_mode", type: "Text", group: "rescue", definition: "The primary mode for rescue.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_actions", type: "Array[Text]", group: "rescue", definition: "Actions taken to support the rescue.", mandatory: false, cardinality: "Multi" },
+    { key: "nonff_rescue_impediment_type", type: "Array[Text]", group: "rescue", definition: "Whether conditions impacted the ability of rescue.", mandatory: false, cardinality: "Multi" },
+    { key: "nonff_rescue_room_type", type: "Text", group: "rescue.structure", definition: "The type of room/space from which the occupant was rescued.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_elevation_type", type: "Text", group: "rescue.structure", definition: "The elevation at which the occupant was found.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_gas_isolation", type: "Boolean", group: "rescue.structure", definition: "Whether the space was isolated from the flow of heat and/or toxic gases.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_removal_path_type", type: "Text", group: "rescue.structure", definition: "Route along which removal from the structure occurred.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_rescue_fire_relative_time", type: "Text", group: "rescue.structure", definition: "Relative to suppression, when the occupant was removed from the structure.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_casualty_casualty_type", type: "Text", group: "casualty", definition: "Whether the person was uninjured, injured nonfatally, injured fatally.", mandatory: false, cardinality: "Single" },
+    { key: "nonff_casualty_casualty_cause", type: "Text", group: "casualty.injured", definition: "The apparent cause of the injury or fatality.", mandatory: false, cardinality: "Single" }
+  ];
+
+  var groups = [];
+  fields.forEach(function (f) {
+    if (groups.indexOf(f.group) < 0) groups.push(f.group);
+  });
+  var groupSel = document.getElementById("group");
+  groups.forEach(function (g) {
+    var o = document.createElement("option");
+    o.value = g;
+    o.textContent = g;
+    groupSel.appendChild(o);
+  });
+
+  function render() {
+    var query = document.getElementById("q").value.trim().toLowerCase();
+    var gFilter = groupSel.value;
+    var list = fields.filter(function (f) {
+      if (gFilter && f.group !== gFilter) return false;
+      if (!query) return true;
+      var blob = (f.key + " " + f.definition + " " + f.group + " " + f.type).toLowerCase();
+      return blob.indexOf(query) >= 0;
+    });
+
+    document.getElementById("stats").innerHTML =
+      '<div class="stat"><b>' + list.length + '</b><span>Matching fields</span></div>' +
+      '<div class="stat"><b>' + fields.length + '</b><span>Total fields</span></div>' +
+      '<div class="stat"><b>' + groups.length + '</b><span>Groups</span></div>';
+
+    if (!list.length) {
+      document.getElementById("cards").innerHTML = '<div class="no-results">No fields match your search.</div>';
+      return;
+    }
+
+    document.getElementById("cards").innerHTML = list.map(function (f) {
+      return '<article class="card">' +
+        '<div class="group">' + f.group + '</div>' +
+        '<h3>' + f.key + '</h3>' +
+        '<div class="meta">' +
+          '<span>' + f.type + '</span>' +
+          '<span>' + (f.mandatory ? "Mandatory" : "Optional") + '</span>' +
+          '<span>' + f.cardinality + '</span>' +
+        '</div>' +
+        '<p class="def">' + f.definition + '</p>' +
+      '</article>';
+    }).join("");
+  }
+
+  document.getElementById("q").addEventListener("input", render);
+  groupSel.addEventListener("change", render);
+  render();
+})();
+</script>
+</body>
+</html>
