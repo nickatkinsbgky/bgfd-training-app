@@ -28,10 +28,14 @@
   .row-actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
   table { width:100%; border-collapse:collapse; font-size:12.5px; }
   th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:right; white-space:nowrap; }
-  th { color:var(--muted); font-size:11px; text-transform:uppercase; background:#1c2330; position:sticky; top:0; }
+  th { color:var(--muted); font-size:11px; text-transform:uppercase; background:#1c2330; position:sticky; top:0; z-index:2; }
   th:first-child, th:nth-child(2), th:nth-child(3),
-  td:first-child, td:nth-child(2), td:nth-child(3) { text-align:left; }
+  td:first-child, td:nth-child(2), td:nth-child(3) { text-align:left; position:sticky; background:#161b22; z-index:1; }
+  th:first-child, td:first-child { left:0; min-width:100px; }
+  th:nth-child(2), td:nth-child(2) { left:100px; min-width:100px; }
+  th:nth-child(3), td:nth-child(3) { left:200px; min-width:120px; border-right:2px solid var(--gold); }
   tr:hover td { background:rgba(255,255,255,.03); }
+  tr:hover td:first-child, tr:hover td:nth-child(2), tr:hover td:nth-child(3) { background:#1c2330; }
   .short { color:#f85149; font-weight:600; }
   .ok { color:var(--green); }
   .muted, .note { color:var(--muted); font-size:13px; }
@@ -40,12 +44,20 @@
   .kpi b { display:block; font-size:18px; color:var(--gold); }
   .chart-wrap { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; height:320px; margin:12px 0; }
   .table-wrap { overflow-x:auto; max-height:600px; }
+  .top-lists { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:16px; }
+  .top-list { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  .top-list h3 { margin:0 0 8px; font-size:14px; color:var(--gold); }
+  .top-list ol { margin:0; padding-left:20px; }
+  .top-list li { margin:4px 0; }
   @media (max-width:900px) {
     header { padding:12px 14px; }
     main { padding:12px 14px 32px; }
     nav { margin-left:0; width:100%; }
     .chart-wrap { height:260px; }
     table { font-size:11px; }
+    th:first-child, td:first-child { min-width:80px; }
+    th:nth-child(2), td:nth-child(2) { left:80px; min-width:80px; }
+    th:nth-child(3), td:nth-child(3) { left:160px; min-width:100px; }
   }
 </style>
 </head>
@@ -67,7 +79,7 @@
     <h2>Department Overview</h2>
     <div class="kpis" id="kpis"></div>
     <div class="grid" style="max-width:900px; margin-bottom:12px">
-      <div><label>Search name or rank</label><input id="search" placeholder="Type to filter..." /></div>
+      <div><label>Personnel</label><select id="personFilter"><option value="">All Personnel</option></select></div>
       <div><label>Rank</label><select id="rankFilter"><option value="">All Ranks</option></select></div>
       <div><label>Shortfall filter</label>
         <select id="shortFilter">
@@ -86,7 +98,7 @@
         <tbody id="tbody"></tbody>
       </table>
     </div>
-    <p class="note">Training Instructor treated same as Engineer for Driver Operator. Fitness max 48 → Company. Facility over 18 → Company. Driver Op / Officer rank-dependent. HazMat overage stays.</p>
+    <p class="note">Training Instructor treated same as Engineer for Driver Operator. Fitness max 48 → Company. Facility over 18 → Company. Driver Op / Officer rank-dependent. HazMat overage stays. Name and Rank columns stay visible when scrolling horizontally.</p>
   </section>
 
   <section id="tab-personnel" class="card" hidden>
@@ -104,6 +116,7 @@
       <div><label>Personnel for category chart</label><select id="chart-person"><option value="">Select personnel</option></select></div>
     </div>
     <div class="chart-wrap" id="person-chart-wrap" style="display:none"><canvas id="person-chart"></canvas></div>
+    <div id="top-lists" class="top-lists"></div>
   </section>
 
   <section id="tab-export" class="card" hidden>
@@ -133,6 +146,16 @@ const cols = [
   ['Facility_Short','Facility Short'], ['Driver_Op_Short','Driver Operator Short'], ['Officer_Short','Officer Short'], ['HazMat_Short','HazMat Short']
 ];
 
+const categoryKeys = [
+  { key: 'Company_Raw', label: 'Company Training' },
+  { key: 'Fitness_Raw', label: 'Physical Fitness' },
+  { key: 'Driver_Op_Raw', label: 'Driver Operator' },
+  { key: 'Facility_Raw', label: 'Facility Training' },
+  { key: 'HazMat_Raw', label: 'HazMat' },
+  { key: 'Officer_Raw', label: 'Officer Training' },
+  { key: 'Effective_Company_Hours', label: 'Effective Company Hours' }
+];
+
 function fmt(v, key) {
   if (v == null || v === '') return '';
   const n = Number(v);
@@ -160,11 +183,11 @@ function renderTable(rows) {
 }
 
 function getFiltered() {
-  const q = document.getElementById('search').value.toLowerCase();
+  const person = document.getElementById('personFilter').value;
   const rank = document.getElementById('rankFilter').value;
   const shortF = document.getElementById('shortFilter').value;
   return data.filter(r => {
-    if (q && !(`${r.Last_Name} ${r.First_Name} ${r.Rank}`).toLowerCase().includes(q)) return false;
+    if (person && `${r.Last_Name}, ${r.First_Name}` !== person) return false;
     if (rank && r.Rank !== rank) return false;
     if (shortF === 'company' && Number(r.Company_Short_to_192) <= 0) return false;
     if (shortF === 'facility' && Number(r.Facility_Short) <= 0) return false;
@@ -230,6 +253,22 @@ function drawPersonChart(name) {
   });
 }
 
+function renderTopLists() {
+  const container = document.getElementById('top-lists');
+  let html = '';
+  categoryKeys.forEach(cat => {
+    const sorted = [...data].sort((a, b) => Number(b[cat.key] || 0) - Number(a[cat.key] || 0));
+    const top = sorted.slice(0, 10);
+    const bottom = sorted.slice(-10).reverse();
+    html += `<div class="top-list"><h3>Most ${cat.label}</h3><ol>`;
+    top.forEach(p => { html += `<li>${p.Last_Name}, ${p.First_Name} — ${Number(p[cat.key]||0).toFixed(1)}</li>`; });
+    html += `</ol></div><div class="top-list"><h3>Least ${cat.label}</h3><ol>`;
+    bottom.forEach(p => { html += `<li>${p.Last_Name}, ${p.First_Name} — ${Number(p[cat.key]||0).toFixed(1)}</li>`; });
+    html += `</ol></div>`;
+  });
+  container.innerHTML = html;
+}
+
 function exportPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'landscape' });
@@ -260,7 +299,10 @@ document.querySelectorAll('nav button').forEach(btn => {
     btn.classList.add('active');
     document.querySelectorAll('main section').forEach(s => s.hidden = true);
     document.getElementById('tab-' + btn.dataset.tab).hidden = false;
-    if (btn.dataset.tab === 'charts') drawDeptChart();
+    if (btn.dataset.tab === 'charts') {
+      drawDeptChart();
+      renderTopLists();
+    }
   };
 });
 
@@ -276,13 +318,15 @@ fetch('iso_class1_data.json')
     const rankSel = document.getElementById('rankFilter');
     ranks.forEach(rk => { const o = document.createElement('option'); o.value = rk; o.textContent = rk; rankSel.appendChild(o); });
     const names = d.map(r => `${r.Last_Name}, ${r.First_Name}`).sort();
+    const personFilter = document.getElementById('personFilter');
+    names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; personFilter.appendChild(o); });
     ['person-select','chart-person'].forEach(id => {
       const sel = document.getElementById(id);
       names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; sel.appendChild(o); });
     });
     document.getElementById('person-select').onchange = e => showPerson(e.target.value);
     document.getElementById('chart-person').onchange = e => drawPersonChart(e.target.value);
-    document.getElementById('search').oninput = applyFilters;
+    document.getElementById('personFilter').onchange = applyFilters;
     document.getElementById('rankFilter').onchange = applyFilters;
     document.getElementById('shortFilter').onchange = applyFilters;
     applyFilters();
