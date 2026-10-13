@@ -589,23 +589,16 @@ document.getElementById('chart-person').onchange = e => drawPersonChart(e.target
   document.getElementById(id).onchange = applyFilters;
 });
 
-const cached = localStorage.getItem(LS_KEY);
-if (cached) {
-  try { data = JSON.parse(cached); } catch (e) { data = []; }
-}
-if (!data.length) {
-  fetch('iso_class1_data.json')
-    .then(r => r.json())
-    .then(d => {
-      data = d.map(recalc);
-      localStorage.setItem(LS_KEY, JSON.stringify(data));
-      applyFilters();
-    })
-    .catch(() => { document.getElementById('tbody').innerHTML = '<tr><td colspan="18">Failed to load data</td></tr>'; });
-} else {
-  data = data.map(recalc);
-  applyFilters();
-}
+// Clear any previous cache so the latest data (with Shift/Station/Battalion) is always loaded
+localStorage.removeItem(LS_KEY);
+fetch('iso_class1_data.json?t=' + Date.now())
+  .then(r => r.json())
+  .then(d => {
+    data = d.map(recalc);
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+    applyFilters();
+  })
+  .catch(() => { document.getElementById('tbody').innerHTML = '<tr><td colspan="18">Failed to load data</td></tr>'; });
 
 const tokenInput = document.getElementById('sync-token');
 if (localStorage.getItem(TOKEN_KEY)) tokenInput.value = '••••••••••••';
