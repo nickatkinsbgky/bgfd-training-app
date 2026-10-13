@@ -21,7 +21,7 @@
   h2 { margin:0 0 12px; font-size:16px; color:var(--gold); }
   label { display:block; font-size:12px; color:var(--muted); margin:8px 0 4px; }
   input, select { width:100%; background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px 14px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px 14px; }
   .btn { background:var(--red); color:#fff; border:0; border-radius:8px; padding:9px 16px; font-weight:700; cursor:pointer; min-height:36px; }
   .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); }
   .btn.gold { background:#241c0c; color:var(--gold); border:1px solid var(--gold); }
@@ -49,6 +49,12 @@
   .top-list h3 { margin:0 0 8px; font-size:14px; color:var(--gold); }
   .top-list ol { margin:0; padding-left:20px; }
   .top-list li { margin:4px 0; }
+  .modal { position:fixed; inset:0; background:rgba(0,0,0,.7); display:none; align-items:center; justify-content:center; z-index:100; }
+  .modal.show { display:flex; }
+  .modal-card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px; width:min(720px,95vw); max-height:90vh; overflow:auto; }
+  .sync-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 22px; background:#10161d; border-bottom:1px solid var(--line); }
+  .sync-bar input { max-width:220px; }
+  #sync-msg.ok { color:#3fb950; } #sync-msg.no { color:#ff7b72; }
   @media (max-width:900px) {
     header { padding:12px 14px; }
     main { padding:12px 14px 32px; }
@@ -74,6 +80,17 @@
   </nav>
 </header>
 
+<div class="sync-bar">
+  <button class="btn" id="btn-add" type="button">Add Personnel</button>
+  <button class="btn ghost" id="btn-edit" type="button">Edit Selected</button>
+  <button class="btn ghost" id="btn-delete" type="button">Delete Selected</button>
+  <button class="btn ghost" id="btn-save-local" type="button">Save Local</button>
+  <button class="btn ghost" id="btn-push" type="button">Upload to Site</button>
+  <input id="sync-token" type="password" autocomplete="off" placeholder="GitHub token" />
+  <button class="btn ghost" id="btn-save-token" type="button">Save Token</button>
+  <span class="note" id="sync-msg"></span>
+</div>
+
 <main>
   <section id="tab-overview" class="card">
     <h2>Department Overview</h2>
@@ -98,7 +115,7 @@
         <tbody id="tbody"></tbody>
       </table>
     </div>
-    <p class="note">Training Instructor treated same as Engineer for Driver Operator. Fitness max 48 → Company. Facility over 18 → Company. Driver Op / Officer rank-dependent. HazMat overage stays. Name and Rank columns stay visible when scrolling horizontally.</p>
+    <p class="note">Training Instructor treated same as Engineer for Driver Operator. Fitness max 48 → Company. Facility over 18 → Company. Driver Op / Officer rank-dependent. HazMat overage stays. Name and Rank columns stay visible when scrolling horizontally. Changes are saved locally; use Upload to Site to commit them.</p>
   </section>
 
   <section id="tab-personnel" class="card" hidden>
@@ -131,12 +148,37 @@
   </section>
 </main>
 
+<div class="modal" id="edit-modal">
+  <div class="modal-card">
+    <h2 id="modal-title">Edit Personnel</h2>
+    <div class="grid">
+      <div><label>Last Name</label><input id="e-last" /></div>
+      <div><label>First Name</label><input id="e-first" /></div>
+      <div><label>Rank</label><input id="e-rank" /></div>
+      <div><label>Company Training</label><input id="e-company" type="number" step="0.01" /></div>
+      <div><label>Physical Fitness</label><input id="e-fitness" type="number" step="0.01" /></div>
+      <div><label>Driver Operator</label><input id="e-driver" type="number" step="0.01" /></div>
+      <div><label>Facility Training</label><input id="e-facility" type="number" step="0.01" /></div>
+      <div><label>HazMat</label><input id="e-hazmat" type="number" step="0.01" /></div>
+      <div><label>Officer Training</label><input id="e-officer" type="number" step="0.01" /></div>
+    </div>
+    <div class="row-actions">
+      <button class="btn" id="btn-save-person" type="button">Save</button>
+      <button class="btn ghost" id="btn-cancel" type="button">Cancel</button>
+    </div>
+    <p class="note" id="modal-msg"></p>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script>
 let data = [];
 let deptChart, personChart;
+let editingIndex = -1;
+const LS_KEY = 'iso-class1-data';
+const TOKEN_KEY = 'bgfd-gh-token';
 
 const cols = [
   ['Last_Name','Last Name'], ['First_Name','First Name'], ['Rank','Rank'],
@@ -156,6 +198,62 @@ const categoryKeys = [
   { key: 'Effective_Company_Hours', label: 'Effective Company Hours' }
 ];
 
+function isEngineerRank(rank) {
+  const r = (rank || '').toUpperCase();
+  return r.includes('ENGINEER') || r.includes('TRAINING INSTRUCTOR');
+}
+function isOfficerRank(rank) {
+  const r = (rank || '').toUpperCase();
+  return r.includes('CAPTAIN') || r.includes('CHIEF') || r.includes('BATTALION') || r.includes('ASSISTANT') || r.includes('DEPUTY');
+}
+
+function recalc(p) {
+  const company = Number(p.Company_Raw) || 0;
+  const fitness = Number(p.Fitness_Raw) || 0;
+  const driver = Number(p.Driver_Op_Raw) || 0;
+  const facility = Number(p.Facility_Raw) || 0;
+  const hazmat = Number(p.HazMat_Raw) || 0;
+  const officer = Number(p.Officer_Raw) || 0;
+  const eng = isEngineerRank(p.Rank);
+  const off = isOfficerRank(p.Rank);
+
+  const fitnessTo = Math.min(fitness, 48);
+  const fitnessOver = Math.max(0, fitness - 48);
+
+  const facilityTo = Math.max(0, facility - 18);
+  const facilityShort = Math.max(0, 18 - facility);
+
+  let driverTo = eng ? Math.max(0, driver - 12) : driver;
+  const driverShort = eng ? Math.max(0, 12 - driver) : 0;
+
+  let officerTo = off ? Math.max(0, officer - 12) : officer;
+  const officerShort = off ? Math.max(0, 12 - officer) : 0;
+
+  const hazmatOver = Math.max(0, hazmat - 6);
+  const hazmatShort = Math.max(0, 6 - hazmat);
+
+  const totalAdded = fitnessTo + facilityTo + driverTo + officerTo;
+  const effective = company + totalAdded;
+  const companyShort = Math.max(0, 192 - effective);
+
+  return {
+    ...p,
+    Fitness_to_Company: fitnessTo,
+    Fitness_Overage_stays: fitnessOver,
+    Facility_to_Company: facilityTo,
+    Facility_Short: facilityShort,
+    Driver_Op_to_Company: driverTo,
+    Driver_Op_Short: driverShort,
+    Officer_to_Company: officerTo,
+    Officer_Short: officerShort,
+    HazMat_Overage_stays: hazmatOver,
+    HazMat_Short: hazmatShort,
+    Total_Overage_Added_to_Company: totalAdded,
+    Effective_Company_Hours: effective,
+    Company_Short_to_192: companyShort
+  };
+}
+
 function fmt(v, key) {
   if (v == null || v === '') return '';
   const n = Number(v);
@@ -169,8 +267,8 @@ function renderTable(rows) {
   const thead = document.getElementById('thead');
   const tbody = document.getElementById('tbody');
   thead.innerHTML = '<tr>' + cols.map(c => `<th>${c[1]}</th>`).join('') + '</tr>';
-  tbody.innerHTML = rows.map(r =>
-    '<tr>' + cols.map(c => `<td>${fmt(r[c[0]], c[0])}</td>`).join('') + '</tr>'
+  tbody.innerHTML = rows.map((r, i) =>
+    `<tr data-idx="${data.indexOf(r)}">` + cols.map(c => `<td>${fmt(r[c[0]], c[0])}</td>`).join('') + '</tr>'
   ).join('');
   const meeting = rows.filter(r => Number(r.Effective_Company_Hours) >= 192).length;
   const avg = rows.reduce((s,r) => s + Number(r.Effective_Company_Hours||0), 0) / (rows.length||1);
@@ -180,6 +278,13 @@ function renderTable(rows) {
     <div class="kpi"><b>${meeting}</b>At/Above 192</div>
     <div class="kpi"><b>${rows.filter(r=>Number(r.Company_Short_to_192)>0).length}</b>Short on Company</div>
   `;
+  tbody.querySelectorAll('tr').forEach(tr => {
+    tr.onclick = () => {
+      tbody.querySelectorAll('tr').forEach(x => x.style.outline = '');
+      tr.style.outline = '2px solid #d4a017';
+      editingIndex = Number(tr.dataset.idx);
+    };
+  });
 }
 
 function getFiltered() {
@@ -198,7 +303,26 @@ function getFiltered() {
   });
 }
 
-function applyFilters() { renderTable(getFiltered()); }
+function applyFilters() { renderTable(getFiltered()); populateSelects(); }
+
+function populateSelects() {
+  const names = data.map(r => `${r.Last_Name}, ${r.First_Name}`).sort();
+  const ranks = [...new Set(data.map(r => r.Rank))].sort();
+  const rankSel = document.getElementById('rankFilter');
+  const prevRank = rankSel.value;
+  rankSel.innerHTML = '<option value="">All Ranks</option>';
+  ranks.forEach(rk => { const o = document.createElement('option'); o.value = rk; o.textContent = rk; if (rk === prevRank) o.selected = true; rankSel.appendChild(o); });
+  const personFilter = document.getElementById('personFilter');
+  const prevP = personFilter.value;
+  personFilter.innerHTML = '<option value="">All Personnel</option>';
+  names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; if (n === prevP) o.selected = true; personFilter.appendChild(o); });
+  ['person-select','chart-person'].forEach(id => {
+    const sel = document.getElementById(id);
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">Select personnel</option>';
+    names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; if (n === prev) o.selected = true; sel.appendChild(o); });
+  });
+}
 
 function showPerson(name) {
   const r = data.find(p => `${p.Last_Name}, ${p.First_Name}` === name);
@@ -292,7 +416,105 @@ function exportPDF() {
   document.getElementById('export-msg').textContent = 'PDF downloaded.';
 }
 
-// Tabs
+function openModal(isNew) {
+  document.getElementById('modal-title').textContent = isNew ? 'Add Personnel' : 'Edit Personnel';
+  document.getElementById('modal-msg').textContent = '';
+  if (isNew) {
+    editingIndex = -1;
+    ['e-last','e-first','e-rank','e-company','e-fitness','e-driver','e-facility','e-hazmat','e-officer'].forEach(id => document.getElementById(id).value = '');
+  } else {
+    if (editingIndex < 0) { alert('Select a row first'); return; }
+    const p = data[editingIndex];
+    document.getElementById('e-last').value = p.Last_Name || '';
+    document.getElementById('e-first').value = p.First_Name || '';
+    document.getElementById('e-rank').value = p.Rank || '';
+    document.getElementById('e-company').value = p.Company_Raw || 0;
+    document.getElementById('e-fitness').value = p.Fitness_Raw || 0;
+    document.getElementById('e-driver').value = p.Driver_Op_Raw || 0;
+    document.getElementById('e-facility').value = p.Facility_Raw || 0;
+    document.getElementById('e-hazmat').value = p.HazMat_Raw || 0;
+    document.getElementById('e-officer').value = p.Officer_Raw || 0;
+  }
+  document.getElementById('edit-modal').classList.add('show');
+}
+
+function savePerson() {
+  const p = {
+    Last_Name: document.getElementById('e-last').value.trim(),
+    First_Name: document.getElementById('e-first').value.trim(),
+    Rank: document.getElementById('e-rank').value.trim().toUpperCase(),
+    Company_Raw: Number(document.getElementById('e-company').value) || 0,
+    Fitness_Raw: Number(document.getElementById('e-fitness').value) || 0,
+    Driver_Op_Raw: Number(document.getElementById('e-driver').value) || 0,
+    Facility_Raw: Number(document.getElementById('e-facility').value) || 0,
+    HazMat_Raw: Number(document.getElementById('e-hazmat').value) || 0,
+    Officer_Raw: Number(document.getElementById('e-officer').value) || 0
+  };
+  if (!p.Last_Name || !p.First_Name) { document.getElementById('modal-msg').textContent = 'Last and First name required'; return; }
+  const calculated = recalc(p);
+  if (editingIndex >= 0) {
+    data[editingIndex] = calculated;
+  } else {
+    data.push(calculated);
+  }
+  data.sort((a,b) => (a.Last_Name + a.First_Name).localeCompare(b.Last_Name + b.First_Name));
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+  document.getElementById('edit-modal').classList.remove('show');
+  applyFilters();
+  document.getElementById('sync-msg').textContent = 'Saved locally.';
+  document.getElementById('sync-msg').className = 'note ok';
+}
+
+function deleteSelected() {
+  if (editingIndex < 0) { alert('Select a row first'); return; }
+  if (!confirm('Delete this person?')) return;
+  data.splice(editingIndex, 1);
+  editingIndex = -1;
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+  applyFilters();
+  document.getElementById('sync-msg').textContent = 'Deleted locally.';
+  document.getElementById('sync-msg').className = 'note ok';
+}
+
+function setSyncMsg(text, ok) {
+  const el = document.getElementById('sync-msg');
+  el.textContent = text || '';
+  el.classList.remove('ok','no');
+  if (ok === true) el.classList.add('ok');
+  if (ok === false) el.classList.add('no');
+}
+function utf8ToB64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
+async function pushToGitHub() {
+  const tok = (localStorage.getItem(TOKEN_KEY) || '').trim();
+  if (!tok) { setSyncMsg('Paste and save a GitHub token first.', false); return; }
+  setSyncMsg('Uploading…');
+  const api = 'https://api.github.com/repos/nickatkinsbgky/bgfd-training-app/contents/iso_class1_data.json';
+  const headers = { Authorization: 'Bearer ' + tok, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+  try {
+    const meta = await fetch(api + '?ref=main&t=' + Date.now(), { headers, cache: 'no-store' });
+    const info = meta.ok ? await meta.json() : {};
+    const body = {
+      message: 'Update ISO Class 1 data ' + new Date().toISOString(),
+      content: utf8ToB64(JSON.stringify(data, null, 2)),
+      branch: 'main'
+    };
+    if (info.sha) body.sha = info.sha;
+    const res = await fetch(api, { method: 'PUT', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    if (res.ok) setSyncMsg('Uploaded to the site.', true);
+    else {
+      const err = await res.json().catch(() => ({}));
+      setSyncMsg('Upload failed: ' + (err.message || res.status), false);
+    }
+  } catch (e) {
+    setSyncMsg('Upload failed: ' + e.message, false);
+  }
+}
+
 document.querySelectorAll('nav button').forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -309,29 +531,50 @@ document.querySelectorAll('nav button').forEach(btn => {
 document.getElementById('btn-pdf').onclick = exportPDF;
 document.getElementById('btn-csv').onclick = () => { window.location = 'iso_class1_data.csv'; };
 document.getElementById('btn-json').onclick = () => { window.location = 'iso_class1_data.json'; };
+document.getElementById('btn-add').onclick = () => openModal(true);
+document.getElementById('btn-edit').onclick = () => openModal(false);
+document.getElementById('btn-delete').onclick = deleteSelected;
+document.getElementById('btn-save-person').onclick = savePerson;
+document.getElementById('btn-cancel').onclick = () => document.getElementById('edit-modal').classList.remove('show');
+document.getElementById('btn-save-local').onclick = () => {
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+  setSyncMsg('Saved on this device.', true);
+};
+document.getElementById('btn-push').onclick = pushToGitHub;
+document.getElementById('btn-save-token').onclick = () => {
+  const val = document.getElementById('sync-token').value.trim();
+  if (val && !val.startsWith('•')) {
+    localStorage.setItem(TOKEN_KEY, val);
+    document.getElementById('sync-token').value = '••••••••••••';
+    setSyncMsg('Token saved.', true);
+  }
+};
+document.getElementById('person-select').onchange = e => showPerson(e.target.value);
+document.getElementById('chart-person').onchange = e => drawPersonChart(e.target.value);
+document.getElementById('personFilter').onchange = applyFilters;
+document.getElementById('rankFilter').onchange = applyFilters;
+document.getElementById('shortFilter').onchange = applyFilters;
 
-fetch('iso_class1_data.json')
-  .then(r => r.json())
-  .then(d => {
-    data = d;
-    const ranks = [...new Set(d.map(r => r.Rank))].sort();
-    const rankSel = document.getElementById('rankFilter');
-    ranks.forEach(rk => { const o = document.createElement('option'); o.value = rk; o.textContent = rk; rankSel.appendChild(o); });
-    const names = d.map(r => `${r.Last_Name}, ${r.First_Name}`).sort();
-    const personFilter = document.getElementById('personFilter');
-    names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; personFilter.appendChild(o); });
-    ['person-select','chart-person'].forEach(id => {
-      const sel = document.getElementById(id);
-      names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; sel.appendChild(o); });
-    });
-    document.getElementById('person-select').onchange = e => showPerson(e.target.value);
-    document.getElementById('chart-person').onchange = e => drawPersonChart(e.target.value);
-    document.getElementById('personFilter').onchange = applyFilters;
-    document.getElementById('rankFilter').onchange = applyFilters;
-    document.getElementById('shortFilter').onchange = applyFilters;
-    applyFilters();
-  })
-  .catch(() => { document.getElementById('tbody').innerHTML = '<tr><td colspan="15">Failed to load data</td></tr>'; });
+const cached = localStorage.getItem(LS_KEY);
+if (cached) {
+  try { data = JSON.parse(cached); } catch (e) { data = []; }
+}
+if (!data.length) {
+  fetch('iso_class1_data.json')
+    .then(r => r.json())
+    .then(d => {
+      data = d.map(recalc);
+      localStorage.setItem(LS_KEY, JSON.stringify(data));
+      applyFilters();
+    })
+    .catch(() => { document.getElementById('tbody').innerHTML = '<tr><td colspan="15">Failed to load data</td></tr>'; });
+} else {
+  data = data.map(recalc);
+  applyFilters();
+}
+
+const tokenInput = document.getElementById('sync-token');
+if (localStorage.getItem(TOKEN_KEY)) tokenInput.value = '••••••••••••';
 </script>
 </body>
 </html>
