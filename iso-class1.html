@@ -2,83 +2,135 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ISO Class 1 Hours — BGFD</title>
 <link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-1" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    --bg: #0d1117; --panel: #161b22; --line: #30363d; --text: #e6edf3; --muted: #8b949e;
-    --red: #c62828; --gold: #d4a017; --green: #238636; --orange: #d29922;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 Inter, system-ui, sans-serif; }
-  header { padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--panel); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  header h1 { margin: 0; font-size: 20px; font-weight: 700; }
-  header a { color: var(--gold); text-decoration: none; font-weight: 600; }
-  .controls { padding: 12px 20px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid var(--line); }
-  input, select { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; }
-  .summary { padding: 12px 20px; display: flex; gap: 24px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
-  .summary strong { color: var(--text); }
-  .table-wrap { overflow-x: auto; padding: 0 20px 20px; }
-  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-  th, td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
-  th { position: sticky; top: 0; background: #1c2330; color: var(--muted); font-weight: 600; text-align: right; cursor: pointer; }
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; --green:#3fb950; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 "Segoe UI", system-ui, sans-serif; }
+  header { background: linear-gradient(90deg,#3b0a0a,#1a0a0a 40%,#0d1117); border-bottom:3px solid var(--gold); padding:14px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .logo { height:56px; width:56px; object-fit:contain; background:#0a0a0a; border-radius:50%; border:2px solid var(--gold); padding:2px; }
+  h1 { margin:0; font-size:18px; } h1 span { display:block; font-size:12px; color:var(--muted); font-weight:500; }
+  nav { display:flex; gap:6px; margin-left:auto; flex-wrap:wrap; }
+  nav button, .home-link { background:transparent; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:8px 14px; cursor:pointer; font-weight:600; text-decoration:none; min-height:36px; display:inline-flex; align-items:center; }
+  nav button.active { background:var(--red); border-color:var(--red); }
+  main { padding:18px 22px 48px; max-width:1400px; margin:0 auto; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:16px; }
+  h2 { margin:0 0 12px; font-size:16px; color:var(--gold); }
+  label { display:block; font-size:12px; color:var(--muted); margin:8px 0 4px; }
+  input, select { width:100%; background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px 14px; }
+  .btn { background:var(--red); color:#fff; border:0; border-radius:8px; padding:9px 16px; font-weight:700; cursor:pointer; min-height:36px; }
+  .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); }
+  .btn.gold { background:#241c0c; color:var(--gold); border:1px solid var(--gold); }
+  .row-actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:right; white-space:nowrap; }
+  th { color:var(--muted); font-size:11px; text-transform:uppercase; background:#1c2330; position:sticky; top:0; }
   th:first-child, th:nth-child(2), th:nth-child(3),
-  td:first-child, td:nth-child(2), td:nth-child(3) { text-align: left; }
-  tr:hover td { background: rgba(255,255,255,.03); }
-  .short { color: #f85149; font-weight: 600; }
-  .ok { color: #3fb950; }
-  .over { color: var(--gold); }
-  .note { padding: 8px 20px 16px; color: var(--muted); font-size: 12px; }
+  td:first-child, td:nth-child(2), td:nth-child(3) { text-align:left; }
+  tr:hover td { background:rgba(255,255,255,.03); }
+  .short { color:#f85149; font-weight:600; }
+  .ok { color:var(--green); }
+  .muted, .note { color:var(--muted); font-size:13px; }
+  .kpis { display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 12px; }
+  .kpi { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 12px; min-width:120px; }
+  .kpi b { display:block; font-size:18px; color:var(--gold); }
+  .chart-wrap { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:12px; height:320px; margin:12px 0; }
+  .table-wrap { overflow-x:auto; max-height:600px; }
+  @media (max-width:900px) {
+    header { padding:12px 14px; }
+    main { padding:12px 14px 32px; }
+    nav { margin-left:0; width:100%; }
+    .chart-wrap { height:260px; }
+    table { font-size:11px; }
+  }
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html">← Home</a>
-  <h1>ISO Class 1 Hours Analysis</h1>
-  <a href="iso_class1_data.csv" download>Download CSV</a>
-  <a href="iso_class1_data.json" download>Download JSON</a>
+  <a class="home-link" href="index.html">Home</a>
+  <img class="logo" src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-1" alt="BGFD" />
+  <h1>Bowling Green Fire Department<span>ISO Class 1 • Company Training Analysis</span></h1>
+  <nav>
+    <button class="active" data-tab="overview" type="button">Overview</button>
+    <button data-tab="personnel" type="button">By Personnel</button>
+    <button data-tab="charts" type="button">Charts</button>
+    <button data-tab="export" type="button">Export</button>
+  </nav>
 </header>
-<div class="controls">
-  <input type="text" id="search" placeholder="Search name or rank..." />
-  <select id="rankFilter"><option value="">All Ranks</option></select>
-  <select id="shortFilter">
-    <option value="">All</option>
-    <option value="company">Short on Company (192)</option>
-    <option value="facility">Short on Facility (18)</option>
-    <option value="driver">Short on Driver Op (Engineers/TI)</option>
-    <option value="officer">Short on Officer (Captains/Chiefs)</option>
-    <option value="hazmat">Short on HazMat (6)</option>
-  </select>
-</div>
-<div class="summary" id="summary"></div>
-<div class="table-wrap">
-  <table id="tbl">
-    <thead id="thead"></thead>
-    <tbody id="tbody"></tbody>
-  </table>
-</div>
-<div class="note">
-  Training Instructor treated same as Engineer for Driver Operator (12 hrs required; only overage transfers).<br>
-  Fitness: max 48 → Company. Facility: over 18 → Company. Driver Op / Officer: rank-dependent. HazMat overage stays.<br>
-  Effective Company = Company Raw + eligible overages. Target 192.
-</div>
+
+<main>
+  <section id="tab-overview" class="card">
+    <h2>Department Overview</h2>
+    <div class="kpis" id="kpis"></div>
+    <div class="grid" style="max-width:900px; margin-bottom:12px">
+      <div><label>Search name or rank</label><input id="search" placeholder="Type to filter..." /></div>
+      <div><label>Rank</label><select id="rankFilter"><option value="">All Ranks</option></select></div>
+      <div><label>Shortfall filter</label>
+        <select id="shortFilter">
+          <option value="">All</option>
+          <option value="company">Short on Company (192)</option>
+          <option value="facility">Short on Facility (18)</option>
+          <option value="driver">Short on Driver Op</option>
+          <option value="officer">Short on Officer</option>
+          <option value="hazmat">Short on HazMat (6)</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table id="main-table">
+        <thead id="thead"></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="note">Training Instructor treated same as Engineer for Driver Operator. Fitness max 48 → Company. Facility over 18 → Company. Driver Op / Officer rank-dependent. HazMat overage stays.</p>
+  </section>
+
+  <section id="tab-personnel" class="card" hidden>
+    <h2>By Personnel</h2>
+    <div class="grid" style="max-width:480px">
+      <div><label>Select personnel</label><select id="person-select"><option value="">Choose a person</option></select></div>
+    </div>
+    <div id="person-detail" style="margin-top:16px"></div>
+  </section>
+
+  <section id="tab-charts" class="card" hidden>
+    <h2>Progress Charts</h2>
+    <div class="chart-wrap"><canvas id="dept-chart"></canvas></div>
+    <div class="grid" style="max-width:480px; margin-top:8px">
+      <div><label>Personnel for category chart</label><select id="chart-person"><option value="">Select personnel</option></select></div>
+    </div>
+    <div class="chart-wrap" id="person-chart-wrap" style="display:none"><canvas id="person-chart"></canvas></div>
+  </section>
+
+  <section id="tab-export" class="card" hidden>
+    <h2>Export Data</h2>
+    <p class="muted">Export the current filtered view or the full dataset.</p>
+    <div class="row-actions">
+      <button class="btn" id="btn-pdf" type="button">Export to PDF</button>
+      <button class="btn ghost" id="btn-csv" type="button">Download CSV</button>
+      <button class="btn ghost" id="btn-json" type="button">Download JSON</button>
+    </div>
+    <p class="note" id="export-msg"></p>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script>
 let data = [];
+let deptChart, personChart;
+
 const cols = [
   ['Last_Name','Last'], ['First_Name','First'], ['Rank','Rank'],
-  ['Company_Raw','Company Raw'], ['Fitness_Raw','Fitness'], ['Driver_Op_Raw','Driver Op'],
+  ['Company_Raw','Company'], ['Fitness_Raw','Fitness'], ['Driver_Op_Raw','Driver Op'],
   ['Facility_Raw','Facility'], ['HazMat_Raw','HazMat'], ['Officer_Raw','Officer'],
-  ['Fitness_to_Company','Fit→Co'], ['Fitness_Overage_stays','Fit Over'],
-  ['Facility_to_Company','Fac→Co'], ['Facility_Short','Fac Short'],
-  ['Driver_Op_to_Company','DO→Co'], ['Driver_Op_Short','DO Short'],
-  ['Officer_to_Company','Off→Co'], ['Officer_Short','Off Short'],
-  ['HazMat_Overage_stays','HZ Over'], ['HazMat_Short','HZ Short'],
-  ['Total_Overage_Added_to_Company','Total Added'],
-  ['Effective_Company_Hours','Eff Company'], ['Company_Short_to_192','Co Short']
+  ['Effective_Company_Hours','Eff Company'], ['Company_Short_to_192','Co Short'],
+  ['Facility_Short','Fac Short'], ['Driver_Op_Short','DO Short'], ['Officer_Short','Off Short'], ['HazMat_Short','HZ Short']
 ];
 
 function fmt(v, key) {
@@ -90,24 +142,28 @@ function fmt(v, key) {
   return n.toFixed(1);
 }
 
-function render(rows) {
+function renderTable(rows) {
   const thead = document.getElementById('thead');
   const tbody = document.getElementById('tbody');
-  thead.innerHTML = '<tr>' + cols.map((c,i) => `<th data-i="${i}">${c[1]}</th>`).join('') + '</tr>';
+  thead.innerHTML = '<tr>' + cols.map(c => `<th>${c[1]}</th>`).join('') + '</tr>';
   tbody.innerHTML = rows.map(r =>
     '<tr>' + cols.map(c => `<td>${fmt(r[c[0]], c[0])}</td>`).join('') + '</tr>'
   ).join('');
-  document.getElementById('summary').innerHTML =
-    `<span><strong>${rows.length}</strong> shown</span>` +
-    `<span>Avg Effective Company: <strong>${(rows.reduce((s,r)=>s+Number(r.Effective_Company_Hours||0),0)/ (rows.length||1)).toFixed(1)}</strong></span>` +
-    `<span>Meeting 192: <strong>${rows.filter(r=>Number(r.Effective_Company_Hours)>=192).length}</strong></span>`;
+  const meeting = rows.filter(r => Number(r.Effective_Company_Hours) >= 192).length;
+  const avg = rows.reduce((s,r) => s + Number(r.Effective_Company_Hours||0), 0) / (rows.length||1);
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi"><b>${rows.length}</b>Shown</div>
+    <div class="kpi"><b>${avg.toFixed(1)}</b>Avg Effective</div>
+    <div class="kpi"><b>${meeting}</b>At/Above 192</div>
+    <div class="kpi"><b>${rows.filter(r=>Number(r.Company_Short_to_192)>0).length}</b>Short on Company</div>
+  `;
 }
 
-function applyFilters() {
+function getFiltered() {
   const q = document.getElementById('search').value.toLowerCase();
   const rank = document.getElementById('rankFilter').value;
   const shortF = document.getElementById('shortFilter').value;
-  let rows = data.filter(r => {
+  return data.filter(r => {
     if (q && !(`${r.Last_Name} ${r.First_Name} ${r.Rank}`).toLowerCase().includes(q)) return false;
     if (rank && r.Rank !== rank) return false;
     if (shortF === 'company' && Number(r.Company_Short_to_192) <= 0) return false;
@@ -117,22 +173,121 @@ function applyFilters() {
     if (shortF === 'hazmat' && Number(r.HazMat_Short) <= 0) return false;
     return true;
   });
-  render(rows);
 }
+
+function applyFilters() { renderTable(getFiltered()); }
+
+function showPerson(name) {
+  const r = data.find(p => `${p.Last_Name}, ${p.First_Name}` === name);
+  if (!r) { document.getElementById('person-detail').innerHTML = ''; return; }
+  const html = `
+    <div class="kpis">
+      <div class="kpi"><b>${Number(r.Effective_Company_Hours).toFixed(1)}</b>Effective Company</div>
+      <div class="kpi"><b>${Number(r.Company_Short_to_192).toFixed(1)}</b>Short to 192</div>
+    </div>
+    <table>
+      <tr><th>Category</th><th>Raw Hours</th><th>Applied / Overage</th><th>Short</th></tr>
+      <tr><td>Company Training</td><td>${Number(r.Company_Raw).toFixed(1)}</td><td>—</td><td>${fmt(r.Company_Short_to_192,'Company_Short_to_192')}</td></tr>
+      <tr><td>Physical Fitness</td><td>${Number(r.Fitness_Raw).toFixed(1)}</td><td>→ Company: ${Number(r.Fitness_to_Company).toFixed(1)} (over stays: ${Number(r.Fitness_Overage_stays).toFixed(1)})</td><td>—</td></tr>
+      <tr><td>Facility Training</td><td>${Number(r.Facility_Raw).toFixed(1)}</td><td>→ Company: ${Number(r.Facility_to_Company).toFixed(1)}</td><td>${fmt(r.Facility_Short,'Facility_Short')}</td></tr>
+      <tr><td>Driver Operator</td><td>${Number(r.Driver_Op_Raw).toFixed(1)}</td><td>→ Company: ${Number(r.Driver_Op_to_Company).toFixed(1)}</td><td>${fmt(r.Driver_Op_Short,'Driver_Op_Short')}</td></tr>
+      <tr><td>Officer Training</td><td>${Number(r.Officer_Raw).toFixed(1)}</td><td>→ Company: ${Number(r.Officer_to_Company).toFixed(1)}</td><td>${fmt(r.Officer_Short,'Officer_Short')}</td></tr>
+      <tr><td>HazMat</td><td>${Number(r.HazMat_Raw).toFixed(1)}</td><td>Overage stays: ${Number(r.HazMat_Overage_stays).toFixed(1)}</td><td>${fmt(r.HazMat_Short,'HazMat_Short')}</td></tr>
+    </table>
+    <p class="note">Total overage added to Company: ${Number(r.Total_Overage_Added_to_Company).toFixed(1)}</p>
+  `;
+  document.getElementById('person-detail').innerHTML = html;
+}
+
+function drawDeptChart() {
+  const meeting = data.filter(r => Number(r.Effective_Company_Hours) >= 192).length;
+  const short = data.length - meeting;
+  if (deptChart) deptChart.destroy();
+  deptChart = new Chart(document.getElementById('dept-chart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['At/Above 192', 'Short of 192'],
+      datasets: [{ data: [meeting, short], backgroundColor: ['#3fb950','#f85149'] }]
+    },
+    options: { plugins: { title: { display: true, text: 'Department: Effective Company Hours vs 192 Target', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } } }
+  });
+}
+
+function drawPersonChart(name) {
+  const r = data.find(p => `${p.Last_Name}, ${p.First_Name}` === name);
+  if (!r) { document.getElementById('person-chart-wrap').style.display = 'none'; return; }
+  document.getElementById('person-chart-wrap').style.display = 'block';
+  const labels = ['Company', 'Fitness→Co', 'Facility→Co', 'DriverOp→Co', 'Officer→Co'];
+  const values = [
+    Number(r.Company_Raw), Number(r.Fitness_to_Company), Number(r.Facility_to_Company),
+    Number(r.Driver_Op_to_Company), Number(r.Officer_to_Company)
+  ];
+  if (personChart) personChart.destroy();
+  personChart = new Chart(document.getElementById('person-chart'), {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Hours applied to Company', data: values, backgroundColor: '#d4a017' }] },
+    options: { plugins: { title: { display: true, text: `${name} — Contributions to Effective Company Hours`, color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } }, scales: { y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }, x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } } } }
+  });
+}
+
+function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape' });
+  doc.setFontSize(16);
+  doc.text('BGFD ISO Class 1 Hours Analysis', 14, 16);
+  doc.setFontSize(10);
+  doc.text('Generated ' + new Date().toLocaleDateString(), 14, 22);
+  const rows = getFiltered().map(r => cols.map(c => {
+    const v = r[c[0]];
+    return (v == null) ? '' : (typeof v === 'number' ? Number(v).toFixed(1) : String(v));
+  }));
+  doc.autoTable({
+    head: [cols.map(c => c[1])],
+    body: rows,
+    startY: 28,
+    styles: { fontSize: 7, cellPadding: 1.5 },
+    headStyles: { fillColor: [198, 40, 40] },
+    theme: 'grid'
+  });
+  doc.save('BGFD_ISO_Class1_Hours.pdf');
+  document.getElementById('export-msg').textContent = 'PDF downloaded.';
+}
+
+// Tabs
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('main section').forEach(s => s.hidden = true);
+    document.getElementById('tab-' + btn.dataset.tab).hidden = false;
+    if (btn.dataset.tab === 'charts') drawDeptChart();
+  };
+});
+
+document.getElementById('btn-pdf').onclick = exportPDF;
+document.getElementById('btn-csv').onclick = () => { window.location = 'iso_class1_data.csv'; };
+document.getElementById('btn-json').onclick = () => { window.location = 'iso_class1_data.json'; };
 
 fetch('iso_class1_data.json')
   .then(r => r.json())
   .then(d => {
     data = d;
     const ranks = [...new Set(d.map(r => r.Rank))].sort();
-    const sel = document.getElementById('rankFilter');
-    ranks.forEach(rk => { const o = document.createElement('option'); o.value = rk; o.textContent = rk; sel.appendChild(o); });
-    applyFilters();
+    const rankSel = document.getElementById('rankFilter');
+    ranks.forEach(rk => { const o = document.createElement('option'); o.value = rk; o.textContent = rk; rankSel.appendChild(o); });
+    const names = d.map(r => `${r.Last_Name}, ${r.First_Name}`).sort();
+    ['person-select','chart-person'].forEach(id => {
+      const sel = document.getElementById(id);
+      names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; sel.appendChild(o); });
+    });
+    document.getElementById('person-select').onchange = e => showPerson(e.target.value);
+    document.getElementById('chart-person').onchange = e => drawPersonChart(e.target.value);
     document.getElementById('search').oninput = applyFilters;
     document.getElementById('rankFilter').onchange = applyFilters;
     document.getElementById('shortFilter').onchange = applyFilters;
+    applyFilters();
   })
-  .catch(e => { document.getElementById('tbody').innerHTML = '<tr><td colspan="22">Failed to load data</td></tr>'; });
+  .catch(() => { document.getElementById('tbody').innerHTML = '<tr><td colspan="15">Failed to load data</td></tr>'; });
 </script>
 </body>
 </html>
