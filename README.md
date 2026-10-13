@@ -38,9 +38,14 @@ Every person's expiration date renews by two years on that date, not just one re
 
 Training focus compares the current recertification year against time left in the cycle. Falling short means earned hours are below the prorated target. Ahead includes anyone who has already met that category.
 
-
 ## National Data
 
 Open https://nickatkinsbgky.github.io/bgfd-training-app/national-data.html
 
 Labeled National Data on the homepage. Loads the firefighter rescue survey file updated_data - 2026-01-01.xlsx (5,074 victim records). The page filters by outcome, occupancy, age, who found the victim, and state. Download spreadsheet saves the original workbook.
+
+## ISO Class 1 Hours Analysis
+
+Open https://nickatkinsbgky.github.io/bgfd-training-app/iso-class1.html
+
+Labeled ISO Class 1 Hours on the homepage. Calculates effective Company Training hours (target 192) by applying overage rules from Fitness (max 48), Facility (over 18), Driver Operator (rank-dependent; Engineers and Training Instructors keep 12), and Officer Training (rank-dependent; Captains and Chief titles keep 12). HazMat overage stays in place. Shows shortfalls by category and allows filtering by rank or shortfall type. Data files: iso_class1_data.json and iso_class1_data.csv.
