@@ -263,6 +263,8 @@ function recalc(p) {
 
 function fmt(v, key) {
   if (v == null || v === '') return '';
+  // Keep text fields as-is (Shift, Station, Battalion, Rank, Names)
+  if (['Shift','Station','Battalion','Rank','Last_Name','First_Name'].includes(key)) return String(v);
   const n = Number(v);
   if (isNaN(n)) return v;
   if (key.includes('Short') && n > 0) return `<span class="short">${n.toFixed(1)}</span>`;
@@ -588,19 +590,11 @@ document.getElementById('chart-person').onchange = e => drawPersonChart(e.target
 });
 
 const cached = localStorage.getItem(LS_KEY);
-let useCache = false;
 if (cached) {
-  try {
-    const parsed = JSON.parse(cached);
-    // Only use cache if it has the new Shift field (avoids stale data)
-    if (parsed.length && parsed[0].Shift !== undefined) {
-      data = parsed;
-      useCache = true;
-    }
-  } catch (e) { data = []; }
+  try { data = JSON.parse(cached); } catch (e) { data = []; }
 }
-if (!useCache) {
-  fetch('iso_class1_data.json?t=' + Date.now())
+if (!data.length) {
+  fetch('iso_class1_data.json')
     .then(r => r.json())
     .then(d => {
       data = d.map(recalc);
