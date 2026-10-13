@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ISO Class 1 Hours — BGFD</title>
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261008-1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --line: #30363d; --text: #e6edf3; --muted: #8b949e;
+    --red: #c62828; --gold: #d4a017; --green: #238636; --orange: #d29922;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 Inter, system-ui, sans-serif; }
+  header { padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--panel); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  header h1 { margin: 0; font-size: 20px; font-weight: 700; }
+  header a { color: var(--gold); text-decoration: none; font-weight: 600; }
+  .controls { padding: 12px 20px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid var(--line); }
+  input, select { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; }
+  .summary { padding: 12px 20px; display: flex; gap: 24px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+  .summary strong { color: var(--text); }
+  .table-wrap { overflow-x: auto; padding: 0 20px 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { position: sticky; top: 0; background: #1c2330; color: var(--muted); font-weight: 600; text-align: right; cursor: pointer; }
+  th:first-child, th:nth-child(2), th:nth-child(3),
+  td:first-child, td:nth-child(2), td:nth-child(3) { text-align: left; }
+  tr:hover td { background: rgba(255,255,255,.03); }
+  .short { color: #f85149; font-weight: 600; }
+  .ok { color: #3fb950; }
+  .over { color: var(--gold); }
+  .note { padding: 8px 20px 16px; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html">← Home</a>
+  <h1>ISO Class 1 Hours Analysis</h1>
+  <a href="iso_class1_data.csv" download>Download CSV</a>
+  <a href="iso_class1_data.json" download>Download JSON</a>
+</header>
+<div class="controls">
+  <input type="text" id="search" placeholder="Search name or rank..." />
+  <select id="rankFilter"><option value="">All Ranks</option></select>
+  <select id="shortFilter">
+    <option value="">All</option>
+    <option value="company">Short on Company (192)</option>
+    <option value="facility">Short on Facility (18)</option>
+    <option value="driver">Short on Driver Op (Engineers/TI)</option>
+    <option value="officer">Short on Officer (Captains/Chiefs)</option>
+    <option value="hazmat">Short on HazMat (6)</option>
+  </select>
+</div>
+<div class="summary" id="summary"></div>
+<div class="table-wrap">
+  <table id="tbl">
+    <thead id="thead"></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+<div class="note">
+  Training Instructor treated same as Engineer for Driver Operator (12 hrs required; only overage transfers).<br>
+  Fitness: max 48 → Company. Facility: over 18 → Company. Driver Op / Officer: rank-dependent. HazMat overage stays.<br>
+  Effective Company = Company Raw + eligible overages. Target 192.
+</div>
+<script>
+let data = [];
+const cols = [
+  ['Last_Name','Last'], ['First_Name','First'], ['Rank','Rank'],
+  ['Company_Raw','Company Raw'], ['Fitness_Raw','Fitness'], ['Driver_Op_Raw','Driver Op'],
+  ['Facility_Raw','Facility'], ['HazMat_Raw','HazMat'], ['Officer_Raw','Officer'],
+  ['Fitness_to_Company','Fit→Co'], ['Fitness_Overage_stays','Fit Over'],
+  ['Facility_to_Company','Fac→Co'], ['Facility_Short','Fac Short'],
+  ['Driver_Op_to_Company','DO→Co'], ['Driver_Op_Short','DO Short'],
+  ['Officer_to_Company','Off→Co'], ['Officer_Short','Off Short'],
+  ['HazMat_Overage_stays','HZ Over'], ['HazMat_Short','HZ Short'],
+  ['Total_Overage_Added_to_Company','Total Added'],
+  ['Effective_Company_Hours','Eff Company'], ['Company_Short_to_192','Co Short']
+];
+
+function fmt(v, key) {
+  if (v == null || v === '') return '';
+  const n = Number(v);
+  if (isNaN(n)) return v;
+  if (key.includes('Short') && n > 0) return `<span class="short">${n.toFixed(1)}</span>`;
+  if (key === 'Effective_Company_Hours') return n >= 192 ? `<span class="ok">${n.toFixed(1)}</span>` : n.toFixed(1);
+  return n.toFixed(1);
+}
+
+function render(rows) {
+  const thead = document.getElementById('thead');
+  const tbody = document.getElementById('tbody');
+  thead.innerHTML = '<tr>' + cols.map((c,i) => `<th data-i="${i}">${c[1]}</th>`).join('') + '</tr>';
+  tbody.innerHTML = rows.map(r =>
+    '<tr>' + cols.map(c => `<td>${fmt(r[c[0]], c[0])}</td>`).join('') + '</tr>'
+  ).join('');
+  document.getElementById('summary').innerHTML =
+    `<span><strong>${rows.length}</strong> shown</span>` +
+    `<span>Avg Effective Company: <strong>${(rows.reduce((s,r)=>s+Number(r.Effective_Company_Hours||0),0)/ (rows.length||1)).toFixed(1)}</strong></span>` +
+    `<span>Meeting 192: <strong>${rows.filter(r=>Number(r.Effective_Company_Hours)>=192).length}</strong></span>`;
+}
+
+function applyFilters() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const rank = document.getElementById('rankFilter').value;
+  const shortF = document.getElementById('shortFilter').value;
+  let rows = data.filter(r => {
+    if (q && !(`${r.Last_Name} ${r.First_Name} ${r.Rank}`).toLowerCase().includes(q)) return false;
+    if (rank && r.Rank !== rank) return false;
+    if (shortF === 'company' && Number(r.Company_Short_to_192) <= 0) return false;
+    if (shortF === 'facility' && Number(r.Facility_Short) <= 0) return false;
+    if (shortF === 'driver' && Number(r.Driver_Op_Short) <= 0) return false;
+    if (shortF === 'officer' && Number(r.Officer_Short) <= 0) return false;
+    if (shortF === 'hazmat' && Number(r.HazMat_Short) <= 0) return false;
+    return true;
+  });
+  render(rows);
+}
+
+fetch('iso_class1_data.json')
+  .then(r => r.json())
+  .then(d => {
+    data = d;
+    const ranks = [...new Set(d.map(r => r.Rank))].sort();
+    const sel = document.getElementById('rankFilter');
+    ranks.forEach(rk => { const o = document.createElement('option'); o.value = rk; o.textContent = rk; sel.appendChild(o); });
+    applyFilters();
+    document.getElementById('search').oninput = applyFilters;
+    document.getElementById('rankFilter').onchange = applyFilters;
+    document.getElementById('shortFilter').onchange = applyFilters;
+  })
+  .catch(e => { document.getElementById('tbody').innerHTML = '<tr><td colspan="22">Failed to load data</td></tr>'; });
+</script>
+</body>
+</html>
