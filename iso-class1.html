@@ -21,7 +21,7 @@
   h2 { margin:0 0 12px; font-size:16px; color:var(--gold); }
   label { display:block; font-size:12px; color:var(--muted); margin:8px 0 4px; }
   input, select { width:100%; background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px 14px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px 14px; }
   .btn { background:var(--red); color:#fff; border:0; border-radius:8px; padding:9px 16px; font-weight:700; cursor:pointer; min-height:36px; }
   .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); }
   .btn.gold { background:#241c0c; color:var(--gold); border:1px solid var(--gold); }
@@ -29,13 +29,15 @@
   table { width:100%; border-collapse:collapse; font-size:12.5px; }
   th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:right; white-space:nowrap; }
   th { color:var(--muted); font-size:11px; text-transform:uppercase; background:#1c2330; position:sticky; top:0; z-index:2; }
-  th:first-child, th:nth-child(2), th:nth-child(3),
-  td:first-child, td:nth-child(2), td:nth-child(3) { text-align:left; position:sticky; background:#161b22; z-index:1; }
-  th:first-child, td:first-child { left:0; min-width:100px; }
-  th:nth-child(2), td:nth-child(2) { left:100px; min-width:100px; }
-  th:nth-child(3), td:nth-child(3) { left:200px; min-width:120px; border-right:2px solid var(--gold); }
+  th:nth-child(-n+6), td:nth-child(-n+6) { text-align:left; position:sticky; background:#161b22; z-index:1; }
+  th:nth-child(1), td:nth-child(1) { left:0; min-width:90px; }
+  th:nth-child(2), td:nth-child(2) { left:90px; min-width:90px; }
+  th:nth-child(3), td:nth-child(3) { left:180px; min-width:110px; }
+  th:nth-child(4), td:nth-child(4) { left:290px; min-width:50px; }
+  th:nth-child(5), td:nth-child(5) { left:340px; min-width:60px; }
+  th:nth-child(6), td:nth-child(6) { left:400px; min-width:70px; border-right:2px solid var(--gold); }
   tr:hover td { background:rgba(255,255,255,.03); }
-  tr:hover td:first-child, tr:hover td:nth-child(2), tr:hover td:nth-child(3) { background:#1c2330; }
+  tr:hover td:nth-child(-n+6) { background:#1c2330; }
   .short { color:#f85149; font-weight:600; }
   .ok { color:var(--green); }
   .muted, .note { color:var(--muted); font-size:13px; }
@@ -61,9 +63,12 @@
     nav { margin-left:0; width:100%; }
     .chart-wrap { height:260px; }
     table { font-size:11px; }
-    th:first-child, td:first-child { min-width:80px; }
-    th:nth-child(2), td:nth-child(2) { left:80px; min-width:80px; }
-    th:nth-child(3), td:nth-child(3) { left:160px; min-width:100px; }
+    th:nth-child(1), td:nth-child(1) { min-width:70px; }
+    th:nth-child(2), td:nth-child(2) { left:70px; min-width:70px; }
+    th:nth-child(3), td:nth-child(3) { left:140px; min-width:90px; }
+    th:nth-child(4), td:nth-child(4) { left:230px; min-width:40px; }
+    th:nth-child(5), td:nth-child(5) { left:270px; min-width:50px; }
+    th:nth-child(6), td:nth-child(6) { left:320px; min-width:55px; }
   }
 </style>
 </head>
@@ -95,9 +100,12 @@
   <section id="tab-overview" class="card">
     <h2>Department Overview</h2>
     <div class="kpis" id="kpis"></div>
-    <div class="grid" style="max-width:900px; margin-bottom:12px">
+    <div class="grid" style="max-width:1100px; margin-bottom:12px">
       <div><label>Personnel</label><select id="personFilter"><option value="">All Personnel</option></select></div>
       <div><label>Rank</label><select id="rankFilter"><option value="">All Ranks</option></select></div>
+      <div><label>Shift</label><select id="shiftFilter"><option value="">All Shifts</option></select></div>
+      <div><label>Station</label><select id="stationFilter"><option value="">All Stations</option></select></div>
+      <div><label>Battalion</label><select id="battalionFilter"><option value="">All Battalions</option></select></div>
       <div><label>Shortfall filter</label>
         <select id="shortFilter">
           <option value="">All</option>
@@ -115,7 +123,7 @@
         <tbody id="tbody"></tbody>
       </table>
     </div>
-    <p class="note">Training Instructor treated same as Engineer for Driver Operator. Fitness max 48 → Company. Facility over 18 → Company. Driver Op / Officer rank-dependent. HazMat overage stays. Name and Rank columns stay visible when scrolling horizontally. Changes are saved locally; use Upload to Site to commit them.</p>
+    <p class="note">Training Instructor treated same as Engineer for Driver Operator. Fitness max 48 → Company. Facility over 18 → Company. Driver Op / Officer rank-dependent. HazMat overage stays. Name, Rank, Shift, Station, and Battalion stay visible when scrolling horizontally.</p>
   </section>
 
   <section id="tab-personnel" class="card" hidden>
@@ -155,6 +163,9 @@
       <div><label>Last Name</label><input id="e-last" /></div>
       <div><label>First Name</label><input id="e-first" /></div>
       <div><label>Rank</label><input id="e-rank" /></div>
+      <div><label>Shift</label><input id="e-shift" /></div>
+      <div><label>Station</label><input id="e-station" /></div>
+      <div><label>Battalion</label><input id="e-battalion" /></div>
       <div><label>Company Training</label><input id="e-company" type="number" step="0.01" /></div>
       <div><label>Physical Fitness</label><input id="e-fitness" type="number" step="0.01" /></div>
       <div><label>Driver Operator</label><input id="e-driver" type="number" step="0.01" /></div>
@@ -182,6 +193,7 @@ const TOKEN_KEY = 'bgfd-gh-token';
 
 const cols = [
   ['Last_Name','Last Name'], ['First_Name','First Name'], ['Rank','Rank'],
+  ['Shift','Shift'], ['Station','Station'], ['Battalion','Battalion'],
   ['Company_Raw','Company Training'], ['Fitness_Raw','Physical Fitness'], ['Driver_Op_Raw','Driver Operator'],
   ['Facility_Raw','Facility Training'], ['HazMat_Raw','HazMat'], ['Officer_Raw','Officer Training'],
   ['Effective_Company_Hours','Effective Company Hours'], ['Company_Short_to_192','Company Short to 192'],
@@ -219,19 +231,14 @@ function recalc(p) {
 
   const fitnessTo = Math.min(fitness, 48);
   const fitnessOver = Math.max(0, fitness - 48);
-
   const facilityTo = Math.max(0, facility - 18);
   const facilityShort = Math.max(0, 18 - facility);
-
   let driverTo = eng ? Math.max(0, driver - 12) : driver;
   const driverShort = eng ? Math.max(0, 12 - driver) : 0;
-
   let officerTo = off ? Math.max(0, officer - 12) : officer;
   const officerShort = off ? Math.max(0, 12 - officer) : 0;
-
   const hazmatOver = Math.max(0, hazmat - 6);
   const hazmatShort = Math.max(0, 6 - hazmat);
-
   const totalAdded = fitnessTo + facilityTo + driverTo + officerTo;
   const effective = company + totalAdded;
   const companyShort = Math.max(0, 192 - effective);
@@ -267,7 +274,7 @@ function renderTable(rows) {
   const thead = document.getElementById('thead');
   const tbody = document.getElementById('tbody');
   thead.innerHTML = '<tr>' + cols.map(c => `<th>${c[1]}</th>`).join('') + '</tr>';
-  tbody.innerHTML = rows.map((r, i) =>
+  tbody.innerHTML = rows.map((r) =>
     `<tr data-idx="${data.indexOf(r)}">` + cols.map(c => `<td>${fmt(r[c[0]], c[0])}</td>`).join('') + '</tr>'
   ).join('');
   const meeting = rows.filter(r => Number(r.Effective_Company_Hours) >= 192).length;
@@ -290,10 +297,16 @@ function renderTable(rows) {
 function getFiltered() {
   const person = document.getElementById('personFilter').value;
   const rank = document.getElementById('rankFilter').value;
+  const shift = document.getElementById('shiftFilter').value;
+  const station = document.getElementById('stationFilter').value;
+  const battalion = document.getElementById('battalionFilter').value;
   const shortF = document.getElementById('shortFilter').value;
   return data.filter(r => {
     if (person && `${r.Last_Name}, ${r.First_Name}` !== person) return false;
     if (rank && r.Rank !== rank) return false;
+    if (shift && r.Shift !== shift) return false;
+    if (station && r.Station !== station) return false;
+    if (battalion && r.Battalion !== battalion) return false;
     if (shortF === 'company' && Number(r.Company_Short_to_192) <= 0) return false;
     if (shortF === 'facility' && Number(r.Facility_Short) <= 0) return false;
     if (shortF === 'driver' && Number(r.Driver_Op_Short) <= 0) return false;
@@ -307,11 +320,22 @@ function applyFilters() { renderTable(getFiltered()); populateSelects(); }
 
 function populateSelects() {
   const names = data.map(r => `${r.Last_Name}, ${r.First_Name}`).sort();
-  const ranks = [...new Set(data.map(r => r.Rank))].sort();
-  const rankSel = document.getElementById('rankFilter');
-  const prevRank = rankSel.value;
-  rankSel.innerHTML = '<option value="">All Ranks</option>';
-  ranks.forEach(rk => { const o = document.createElement('option'); o.value = rk; o.textContent = rk; if (rk === prevRank) o.selected = true; rankSel.appendChild(o); });
+  const ranks = [...new Set(data.map(r => r.Rank))].filter(Boolean).sort();
+  const shifts = [...new Set(data.map(r => r.Shift))].filter(Boolean).sort();
+  const stations = [...new Set(data.map(r => r.Station))].filter(Boolean).sort();
+  const battalions = [...new Set(data.map(r => r.Battalion))].filter(Boolean).sort();
+
+  function fill(id, values, allLabel) {
+    const sel = document.getElementById(id);
+    const prev = sel.value;
+    sel.innerHTML = `<option value="">${allLabel}</option>`;
+    values.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; if (v === prev) o.selected = true; sel.appendChild(o); });
+  }
+  fill('rankFilter', ranks, 'All Ranks');
+  fill('shiftFilter', shifts, 'All Shifts');
+  fill('stationFilter', stations, 'All Stations');
+  fill('battalionFilter', battalions, 'All Battalions');
+
   const personFilter = document.getElementById('personFilter');
   const prevP = personFilter.value;
   personFilter.innerHTML = '<option value="">All Personnel</option>';
@@ -332,6 +356,7 @@ function showPerson(name) {
       <div class="kpi"><b>${Number(r.Effective_Company_Hours).toFixed(1)}</b>Effective Company</div>
       <div class="kpi"><b>${Number(r.Company_Short_to_192).toFixed(1)}</b>Short to 192</div>
     </div>
+    <p class="note">Shift ${r.Shift||'—'} · Station ${r.Station||'—'} · Battalion ${r.Battalion||'—'}</p>
     <table>
       <tr><th>Category</th><th>Raw Hours</th><th>Applied / Overage</th><th>Short</th></tr>
       <tr><td>Company Training</td><td>${Number(r.Company_Raw).toFixed(1)}</td><td>—</td><td>${fmt(r.Company_Short_to_192,'Company_Short_to_192')}</td></tr>
@@ -408,7 +433,7 @@ function exportPDF() {
     head: [cols.map(c => c[1])],
     body: rows,
     startY: 28,
-    styles: { fontSize: 7, cellPadding: 1.5 },
+    styles: { fontSize: 6, cellPadding: 1 },
     headStyles: { fillColor: [198, 40, 40] },
     theme: 'grid'
   });
@@ -419,15 +444,19 @@ function exportPDF() {
 function openModal(isNew) {
   document.getElementById('modal-title').textContent = isNew ? 'Add Personnel' : 'Edit Personnel';
   document.getElementById('modal-msg').textContent = '';
+  const fields = ['e-last','e-first','e-rank','e-shift','e-station','e-battalion','e-company','e-fitness','e-driver','e-facility','e-hazmat','e-officer'];
   if (isNew) {
     editingIndex = -1;
-    ['e-last','e-first','e-rank','e-company','e-fitness','e-driver','e-facility','e-hazmat','e-officer'].forEach(id => document.getElementById(id).value = '');
+    fields.forEach(id => document.getElementById(id).value = '');
   } else {
     if (editingIndex < 0) { alert('Select a row first'); return; }
     const p = data[editingIndex];
     document.getElementById('e-last').value = p.Last_Name || '';
     document.getElementById('e-first').value = p.First_Name || '';
     document.getElementById('e-rank').value = p.Rank || '';
+    document.getElementById('e-shift').value = p.Shift || '';
+    document.getElementById('e-station').value = p.Station || '';
+    document.getElementById('e-battalion').value = p.Battalion || '';
     document.getElementById('e-company').value = p.Company_Raw || 0;
     document.getElementById('e-fitness').value = p.Fitness_Raw || 0;
     document.getElementById('e-driver').value = p.Driver_Op_Raw || 0;
@@ -443,6 +472,9 @@ function savePerson() {
     Last_Name: document.getElementById('e-last').value.trim(),
     First_Name: document.getElementById('e-first').value.trim(),
     Rank: document.getElementById('e-rank').value.trim().toUpperCase(),
+    Shift: document.getElementById('e-shift').value.trim(),
+    Station: document.getElementById('e-station').value.trim(),
+    Battalion: document.getElementById('e-battalion').value.trim(),
     Company_Raw: Number(document.getElementById('e-company').value) || 0,
     Fitness_Raw: Number(document.getElementById('e-fitness').value) || 0,
     Driver_Op_Raw: Number(document.getElementById('e-driver').value) || 0,
@@ -551,9 +583,9 @@ document.getElementById('btn-save-token').onclick = () => {
 };
 document.getElementById('person-select').onchange = e => showPerson(e.target.value);
 document.getElementById('chart-person').onchange = e => drawPersonChart(e.target.value);
-document.getElementById('personFilter').onchange = applyFilters;
-document.getElementById('rankFilter').onchange = applyFilters;
-document.getElementById('shortFilter').onchange = applyFilters;
+['personFilter','rankFilter','shiftFilter','stationFilter','battalionFilter','shortFilter'].forEach(id => {
+  document.getElementById(id).onchange = applyFilters;
+});
 
 const cached = localStorage.getItem(LS_KEY);
 if (cached) {
@@ -567,7 +599,7 @@ if (!data.length) {
       localStorage.setItem(LS_KEY, JSON.stringify(data));
       applyFilters();
     })
-    .catch(() => { document.getElementById('tbody').innerHTML = '<tr><td colspan="15">Failed to load data</td></tr>'; });
+    .catch(() => { document.getElementById('tbody').innerHTML = '<tr><td colspan="18">Failed to load data</td></tr>'; });
 } else {
   data = data.map(recalc);
   applyFilters();
