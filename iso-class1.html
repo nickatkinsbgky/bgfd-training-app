@@ -126,11 +126,11 @@ let data = [];
 let deptChart, personChart;
 
 const cols = [
-  ['Last_Name','Last'], ['First_Name','First'], ['Rank','Rank'],
-  ['Company_Raw','Company'], ['Fitness_Raw','Fitness'], ['Driver_Op_Raw','Driver Op'],
-  ['Facility_Raw','Facility'], ['HazMat_Raw','HazMat'], ['Officer_Raw','Officer'],
-  ['Effective_Company_Hours','Eff Company'], ['Company_Short_to_192','Co Short'],
-  ['Facility_Short','Fac Short'], ['Driver_Op_Short','DO Short'], ['Officer_Short','Off Short'], ['HazMat_Short','HZ Short']
+  ['Last_Name','Last Name'], ['First_Name','First Name'], ['Rank','Rank'],
+  ['Company_Raw','Company Training'], ['Fitness_Raw','Physical Fitness'], ['Driver_Op_Raw','Driver Operator'],
+  ['Facility_Raw','Facility Training'], ['HazMat_Raw','HazMat'], ['Officer_Raw','Officer Training'],
+  ['Effective_Company_Hours','Effective Company Hours'], ['Company_Short_to_192','Company Short to 192'],
+  ['Facility_Short','Facility Short'], ['Driver_Op_Short','Driver Operator Short'], ['Officer_Short','Officer Short'], ['HazMat_Short','HazMat Short']
 ];
 
 function fmt(v, key) {
@@ -217,7 +217,7 @@ function drawPersonChart(name) {
   const r = data.find(p => `${p.Last_Name}, ${p.First_Name}` === name);
   if (!r) { document.getElementById('person-chart-wrap').style.display = 'none'; return; }
   document.getElementById('person-chart-wrap').style.display = 'block';
-  const labels = ['Company', 'Fitness→Co', 'Facility→Co', 'DriverOp→Co', 'Officer→Co'];
+  const labels = ['Company Training', 'Fitness to Company', 'Facility to Company', 'Driver Operator to Company', 'Officer to Company'];
   const values = [
     Number(r.Company_Raw), Number(r.Fitness_to_Company), Number(r.Facility_to_Company),
     Number(r.Driver_Op_to_Company), Number(r.Officer_to_Company)
