@@ -588,11 +588,19 @@ document.getElementById('chart-person').onchange = e => drawPersonChart(e.target
 });
 
 const cached = localStorage.getItem(LS_KEY);
+let useCache = false;
 if (cached) {
-  try { data = JSON.parse(cached); } catch (e) { data = []; }
+  try {
+    const parsed = JSON.parse(cached);
+    // Only use cache if it has the new Shift field (avoids stale data)
+    if (parsed.length && parsed[0].Shift !== undefined) {
+      data = parsed;
+      useCache = true;
+    }
+  } catch (e) { data = []; }
 }
-if (!data.length) {
-  fetch('iso_class1_data.json')
+if (!useCache) {
+  fetch('iso_class1_data.json?t=' + Date.now())
     .then(r => r.json())
     .then(d => {
       data = d.map(recalc);
