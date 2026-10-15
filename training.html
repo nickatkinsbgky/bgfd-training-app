@@ -157,7 +157,17 @@
   </section>
   <section id="tab-tasksort" class="card" hidden>
     <h2>By Task</h2>
-    <p class="muted">All assignments sorted by Task, then Personnel, then Date Completed.</p>
+    <p class="muted">Choose a task, then a person, to see that person's records for the task.</p>
+    <div class="grid" style="max-width:640px;margin-bottom:12px">
+      <div>
+        <label for="tasksort-task">Task</label>
+        <select id="tasksort-task"><option value="">Select a task</option></select>
+      </div>
+      <div>
+        <label for="tasksort-person">Personnel</label>
+        <select id="tasksort-person"><option value="">Select personnel</option></select>
+      </div>
+    </div>
     <div id="tasksort-out"></div>
   </section>
   <section id="tab-charts" class="card" hidden>
@@ -231,7 +241,7 @@
 <script src="app-part2.js?v=20260930-2"></script>
 <script src="person-avg.js?v=20260928-15"></script>
 <script src="group-averages.js?v=20260930-1"></script>
-<script src="task-sort.js?v=20261015-1"></script>
+<script src="task-sort.js?v=20261015-2"></script>
 <script src="charts-filters.js?v=20260930-2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="export-excel.js?v=20261001-1"></script>

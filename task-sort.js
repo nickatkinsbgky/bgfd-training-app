@@ -11,50 +11,107 @@
     var m = String(d).match(/^(\d{4})-(\d{2})-(\d{2})/);
     return m ? m[2] + '/' + m[3] + '/' + m[1] : String(d);
   }
-  window.renderTaskSort = function () {
+  function uniqueTasks() {
+    var set = {};
+    (db.assignments || []).forEach(function (a) {
+      var t = a.task || 'Unassigned';
+      set[t] = true;
+    });
+    (db.tasks || []).forEach(function (t) {
+      if (t.taskName) set[t.taskName] = true;
+    });
+    return Object.keys(set).sort(function (a, b) {
+      return a.localeCompare(b, undefined, { numeric: true });
+    });
+  }
+  function peopleForTask(task) {
+    var set = {};
+    (db.assignments || []).forEach(function (a) {
+      if ((a.task || 'Unassigned') === task && a.personnel) set[a.personnel] = true;
+    });
+    return Object.keys(set).sort(function (a, b) {
+      return a.localeCompare(b, undefined, { numeric: true });
+    });
+  }
+  function fillTaskSelect() {
+    var sel = document.getElementById('tasksort-task');
+    if (!sel) return;
+    var cur = sel.value;
+    var tasks = uniqueTasks();
+    sel.innerHTML = '<option value="">Select a task</option>' +
+      tasks.map(function (t) { return '<option value="' + esc(t) + '">' + esc(t) + '</option>'; }).join('');
+    if (cur && tasks.indexOf(cur) >= 0) sel.value = cur;
+  }
+  function fillPersonSelect(task) {
+    var sel = document.getElementById('tasksort-person');
+    if (!sel) return;
+    var cur = sel.value;
+    var people = task ? peopleForTask(task) : [];
+    sel.innerHTML = '<option value="">Select personnel</option>' +
+      people.map(function (p) { return '<option value="' + esc(p) + '">' + esc(p) + '</option>'; }).join('');
+    if (cur && people.indexOf(cur) >= 0) sel.value = cur;
+    else sel.value = '';
+  }
+  function renderDetail(task, person) {
     var out = document.getElementById('tasksort-out');
     if (!out) return;
-    var rows = (db.assignments || []).slice().sort(function (a, b) {
-      var ta = String(a.task || 'Unassigned');
-      var tb = String(b.task || 'Unassigned');
-      if (ta !== tb) return ta.localeCompare(tb, undefined, { numeric: true });
-      var pa = String(a.personnel || '');
-      var pb = String(b.personnel || '');
-      if (pa !== pb) return pa.localeCompare(pb, undefined, { numeric: true });
-      var da = String(a.dateCompleted || '');
-      var dbd = String(b.dateCompleted || '');
-      return da.localeCompare(dbd);
-    });
-    if (!rows.length) {
-      out.innerHTML = '<p class="muted">No assignments recorded yet.</p>';
+    if (!task) {
+      out.innerHTML = '<p class="muted">Choose a task to begin.</p>';
       return;
     }
-    var html = '<table class="data"><thead><tr>'
-      + '<th>Task</th><th>Personnel</th><th>Rank</th><th>Date Completed</th>'
-      + '<th>Status</th><th>Completion Time</th><th>Met Standard</th><th>Category</th><th>Notes</th>'
+    if (!person) {
+      var n = peopleForTask(task).length;
+      out.innerHTML = '<p class="muted">' + n + ' person' + (n === 1 ? '' : 's') + ' have records for ' + esc(task) + '. Choose a person to see details.</p>';
+      return;
+    }
+    var rows = (db.assignments || []).filter(function (a) {
+      return (a.task || 'Unassigned') === task && a.personnel === person;
+    }).sort(function (a, b) {
+      return String(a.dateCompleted || '').localeCompare(String(b.dateCompleted || ''));
+    });
+    if (!rows.length) {
+      out.innerHTML = '<p class="muted">No records for ' + esc(person) + ' on ' + esc(task) + '.</p>';
+      return;
+    }
+    var pMeta = (db.personnel || []).find(function (p) { return p.fullName === person; }) || {};
+    var rank = rows[0].rank || pMeta.rank || '';
+    var html = '<h2 style="color:var(--text);margin:8px 0 4px">' + esc(person) + '</h2>';
+    html += '<p class="muted">' + esc(task) + (rank ? ' · ' + esc(rank) : '') + ' · ' + rows.length + ' record' + (rows.length === 1 ? '' : 's') + '</p>';
+    html += '<table class="data"><thead><tr>'
+      + '<th>Date Completed</th><th>Status</th><th>Completion Time</th><th>Standard Time</th>'
+      + '<th>Met Standard</th><th>Category</th><th>Notes</th>'
       + '</tr></thead><tbody>';
-    var lastTask = null;
     rows.forEach(function (a) {
-      var task = a.task || 'Unassigned';
-      var isNew = task !== lastTask;
-      lastTask = task;
-      html += '<tr' + (isNew ? ' style="border-top:2px solid var(--gold,#d4a017)"' : '') + '>'
-        + '<td>' + (isNew ? '<strong>' + esc(task) + '</strong>' : '') + '</td>'
-        + '<td>' + esc(a.personnel || '') + '</td>'
-        + '<td>' + esc(a.rank || '') + '</td>'
+      html += '<tr>'
         + '<td>' + esc(fmtDate(a.dateCompleted)) + '</td>'
         + '<td>' + esc(a.status || '') + '</td>'
         + '<td>' + esc(a.completionTime || '') + '</td>'
+        + '<td>' + esc(a.stdTime || '') + '</td>'
         + '<td>' + esc(a.metStandard || '') + '</td>'
         + '<td>' + esc(a.category || '') + '</td>'
         + '<td>' + esc(a.notes || '') + '</td>'
         + '</tr>';
     });
     html += '</tbody></table>';
-    html += '<p class="note">' + rows.length + ' assignment' + (rows.length === 1 ? '' : 's') + ' sorted by Task, then Personnel, then Date Completed.</p>';
     out.innerHTML = html;
+  }
+  window.renderTaskSort = function () {
+    fillTaskSelect();
+    var taskSel = document.getElementById('tasksort-task');
+    var personSel = document.getElementById('tasksort-person');
+    if (!taskSel || !personSel) return;
+    if (!taskSel.onchange) {
+      taskSel.onchange = function () {
+        fillPersonSelect(taskSel.value);
+        renderDetail(taskSel.value, '');
+      };
+      personSel.onchange = function () {
+        renderDetail(taskSel.value, personSel.value);
+      };
+    }
+    fillPersonSelect(taskSel.value);
+    renderDetail(taskSel.value, personSel.value);
   };
-
   function wireNav() {
     document.querySelectorAll('nav button').forEach(function (b) {
       if (b.dataset.tab !== 'tasksort') return;
@@ -62,10 +119,7 @@
       b.onclick = function (ev) {
         if (typeof prev === 'function') prev.call(b, ev);
         var mine = document.getElementById('tab-tasksort');
-        var box = document.getElementById('tasksort-out');
-        if (mine && !mine.hidden && box && !box.innerHTML) {
-          renderTaskSort();
-        }
+        if (mine && !mine.hidden) renderTaskSort();
       };
     });
   }
