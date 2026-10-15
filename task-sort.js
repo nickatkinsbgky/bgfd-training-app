@@ -1,68 +1,74 @@
 (function () {
-  function renderTaskSort() {
-    const out = document.getElementById('task-sort-out');
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  function fmtDate(d) {
+    if (!d) return '';
+    var m = String(d).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return m ? m[2] + '/' + m[3] + '/' + m[1] : String(d);
+  }
+  window.renderTaskSort = function () {
+    var out = document.getElementById('tasksort-out');
     if (!out) return;
-    const rows = (db.assignments || []).slice().sort((a, b) => {
-      const t = String(a.task || '').localeCompare(String(b.task || ''), undefined, { numeric: true });
-      if (t) return t;
-      const p = String(a.personnel || '').localeCompare(String(b.personnel || ''));
-      if (p) return p;
-      return String(a.dateCompleted || '').localeCompare(String(b.dateCompleted || ''));
+    var rows = (db.assignments || []).slice().sort(function (a, b) {
+      var ta = String(a.task || 'Unassigned');
+      var tb = String(b.task || 'Unassigned');
+      if (ta !== tb) return ta.localeCompare(tb, undefined, { numeric: true });
+      var pa = String(a.personnel || '');
+      var pb = String(b.personnel || '');
+      if (pa !== pb) return pa.localeCompare(pb, undefined, { numeric: true });
+      var da = String(a.dateCompleted || '');
+      var dbd = String(b.dateCompleted || '');
+      return da.localeCompare(dbd);
     });
     if (!rows.length) {
-      out.innerHTML = '<p class="muted">No assignments found.</p>';
+      out.innerHTML = '<p class="muted">No assignments recorded yet.</p>';
       return;
     }
-    let html = '<div class="cat-block"><h2>Sorted by Task</h2><p class="muted">' + rows.length + ' records</p>';
-    html += '<table><thead><tr><th>Task</th><th>Personnel</th><th>Date Completed</th><th>Status</th><th>Category</th></tr></thead><tbody>';
-    let lastTask = null;
-    rows.forEach(r => {
-      const task = r.task || 'Unassigned';
-      const showTask = task !== lastTask;
+    var html = '<table class="data"><thead><tr>'
+      + '<th>Task</th><th>Personnel</th><th>Rank</th><th>Date Completed</th>'
+      + '<th>Status</th><th>Completion Time</th><th>Met Standard</th><th>Category</th><th>Notes</th>'
+      + '</tr></thead><tbody>';
+    var lastTask = null;
+    rows.forEach(function (a) {
+      var task = a.task || 'Unassigned';
+      var isNew = task !== lastTask;
       lastTask = task;
-      html += '<tr>' +
-        '<td>' + (showTask ? esc(task) : '') + '</td>' +
-        '<td>' + esc(r.personnel || '') + '</td>' +
-        '<td>' + esc(r.dateCompleted || '') + '</td>' +
-        '<td>' + esc(r.status || '') + '</td>' +
-        '<td>' + esc((typeof catOf === 'function' ? catOf(r) : r.category) || '') + '</td>' +
-        '</tr>';
+      html += '<tr' + (isNew ? ' style="border-top:2px solid var(--gold,#d4a017)"' : '') + '>'
+        + '<td>' + (isNew ? '<strong>' + esc(task) + '</strong>' : '') + '</td>'
+        + '<td>' + esc(a.personnel || '') + '</td>'
+        + '<td>' + esc(a.rank || '') + '</td>'
+        + '<td>' + esc(fmtDate(a.dateCompleted)) + '</td>'
+        + '<td>' + esc(a.status || '') + '</td>'
+        + '<td>' + esc(a.completionTime || '') + '</td>'
+        + '<td>' + esc(a.metStandard || '') + '</td>'
+        + '<td>' + esc(a.category || '') + '</td>'
+        + '<td>' + esc(a.notes || '') + '</td>'
+        + '</tr>';
     });
-    html += '</tbody></table></div>';
+    html += '</tbody></table>';
+    html += '<p class="note">' + rows.length + ' assignment' + (rows.length === 1 ? '' : 's') + ' sorted by Task, then Personnel, then Date Completed.</p>';
     out.innerHTML = html;
-  }
+  };
 
-  // Hook into tab switching
-  function attach() {
-    const buttons = document.querySelectorAll('nav button');
-    buttons.forEach(b => {
-      const orig = b.onclick;
-      b.onclick = function () {
-        if (typeof orig === 'function') orig.call(this);
-        document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-        const tab = b.dataset.tab;
-        ['input', 'person', 'personavg', 'dept', 'groups', 'charts', 'cats', 'roster', 'tasksort'].forEach(id => {
-          const el = document.getElementById('tab-' + id);
-          if (el) el.hidden = id !== tab;
-        });
-        if (tab === 'tasksort') renderTaskSort();
-        if (tab === 'person' && typeof renderPersonList === 'function') renderPersonList();
-        if (tab === 'personavg' && typeof renderPersonAvg === 'function') renderPersonAvg();
-        if (tab === 'dept' && typeof renderDept === 'function') renderDept();
-        if (tab === 'groups' && typeof renderGroupAvgs === 'function') renderGroupAvgs();
-        if (tab === 'charts') {
-          if (typeof renderCharts === 'function') renderCharts();
-          if (typeof renderGroupChartsOnChartsTab === 'function') renderGroupChartsOnChartsTab();
+  function wireNav() {
+    document.querySelectorAll('nav button').forEach(function (b) {
+      if (b.dataset.tab !== 'tasksort') return;
+      var prev = b.onclick;
+      b.onclick = function (ev) {
+        if (typeof prev === 'function') prev.call(b, ev);
+        var mine = document.getElementById('tab-tasksort');
+        var box = document.getElementById('tasksort-out');
+        if (mine && !mine.hidden && box && !box.innerHTML) {
+          renderTaskSort();
         }
-        if (tab === 'cats' && typeof renderCats === 'function') renderCats();
-        if (tab === 'roster' && typeof renderRoster === 'function') renderRoster();
-        if (tab === 'input' && typeof renderAllTable === 'function') renderAllTable();
       };
     });
   }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attach);
-  else attach();
-  window.renderTaskSort = renderTaskSort;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wireNav);
+  else wireNav();
 })();
