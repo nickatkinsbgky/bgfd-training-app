@@ -31,7 +31,9 @@ This site is public. The seed files include department names and sample training
 
 Each app has its own page. To share just one app (so the recipient only sees that app and does not see a Home button back to the full suite), append `?standalone=1` to the URL.
 
-Examples you can email or text:
+**Share button:** Every app now has a **Share** button in the header. Click it to automatically copy a clean standalone link (`?standalone=1`) to your clipboard. The button briefly shows “Copied!” as confirmation. If the clipboard API is unavailable, a prompt appears with the link so you can copy it manually.
+
+Examples you can email or text (or generate with the Share button):
 
 - **EMS Recertification Tracker:** https://nickatkinsbgky.github.io/bgfd-training-app/ems-recert.html?standalone=1
 - **Personnel Performance:** https://nickatkinsbgky.github.io/bgfd-training-app/training.html?standalone=1
