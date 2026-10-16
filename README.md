@@ -27,6 +27,18 @@ Anyone with the Pages URL can open the app. Data they enter stays in *their* bro
 
 This site is public. The seed files include department names and sample training times.
 
+## Sharing individual apps
+
+Each app has its own page. To share just one app (so the recipient only sees that app and does not see a Home button back to the full suite), append `?standalone=1` to the URL.
+
+Examples you can email or text:
+
+- **EMS Recertification Tracker:** https://nickatkinsbgky.github.io/bgfd-training-app/ems-recert.html?standalone=1
+- **Personnel Performance:** https://nickatkinsbgky.github.io/bgfd-training-app/training.html?standalone=1
+- **Personnel Fitness:** https://nickatkinsbgky.github.io/bgfd-training-app/fitness.html?standalone=1
+
+Without the query parameter the page still works and shows the Home link. The standalone mode simply hides the Home button so the view stays focused on that one app.
+
 ## EMS Recertification Tracker
 
 Open https://nickatkinsbgky.github.io/bgfd-training-app/ems-recert.html
