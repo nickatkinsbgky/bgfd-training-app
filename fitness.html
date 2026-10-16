@@ -205,15 +205,6 @@
 <script src="fitness.js?v=20261001-16"></script>
 <script src="fitness-sync.js?v=20261001-13"></script>
 <script src="fitness-export.js?v=20261001-14"></script>
-<script>
-(function () {
-  var params = new URLSearchParams(location.search);
-  if (params.has('standalone') || params.has('share')) {
-    document.querySelectorAll('a.home-link[href="index.html"], a[href="index.html"]').forEach(function (el) {
-      el.style.display = 'none';
-    });
-  }
-})();
-</script>
+<script src="share.js"></script>
 </body>
 </html>
