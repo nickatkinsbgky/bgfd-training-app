@@ -521,7 +521,7 @@ function drawCategoryCountChart() {
     data: {
       labels,
       datasets: [{
-        label: 'People completed',
+        label: 'Personnel completed',
         data: categories.map(c => c.count),
         backgroundColor: '#3fb950',
         borderColor: '#3fb950',
@@ -532,7 +532,7 @@ function drawCategoryCountChart() {
     options: {
       indexAxis: 'y',
       plugins: {
-        title: { display: true, text: 'People Completing Each ISO Category', color: '#e6edf3', font: { size: 14 } },
+        title: { display: true, text: 'Personnel Completing Each Category', color: '#e6edf3', font: { size: 14 } },
         legend: { display: false },
         tooltip: {
           callbacks: {
