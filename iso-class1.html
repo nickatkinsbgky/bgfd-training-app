@@ -138,6 +138,7 @@
     <h2>Progress Charts</h2>
     <div class="chart-wrap"><canvas id="dept-chart"></canvas></div>
     <div class="chart-wrap"><canvas id="category-completion-chart"></canvas></div>
+    <div class="chart-wrap" style="height:380px"><canvas id="category-count-chart"></canvas></div>
     <div class="grid" style="max-width:480px; margin-top:8px">
       <div><label>Personnel for category chart</label><select id="chart-person"><option value="">Select personnel</option></select></div>
     </div>
@@ -187,7 +188,7 @@
 <script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script>
 let data = [];
-let deptChart, personChart, categoryCompletionChart;
+let deptChart, personChart, categoryCompletionChart, categoryCountChart;
 let editingIndex = -1;
 const LS_KEY = 'iso-class1-data';
 const TOKEN_KEY = 'bgfd-gh-token';
@@ -456,6 +457,103 @@ function drawCategoryCompletionChart() {
         y: {
           ticks: { color: '#e6edf3' },
           grid: { color: '#30363d' }
+        }
+      }
+    }
+  });
+}
+
+function drawCategoryCountChart() {
+  const total = data.length || 1;
+  const categories = [
+    {
+      label: 'Company (192h eff.)',
+      count: data.filter(r => Number(r.Effective_Company_Hours) >= 192).length,
+      base: total,
+      note: 'of department'
+    },
+    {
+      label: 'Facility (18h)',
+      count: data.filter(r => Number(r.Facility_Raw) >= 18).length,
+      base: total,
+      note: 'of department'
+    },
+    {
+      label: 'HazMat (6h)',
+      count: data.filter(r => Number(r.HazMat_Raw) >= 6).length,
+      base: total,
+      note: 'of department'
+    },
+    {
+      label: 'Fitness (48h)',
+      count: data.filter(r => Number(r.Fitness_Raw) >= 48).length,
+      base: total,
+      note: 'of department'
+    },
+    {
+      label: 'Driver Op (12h)',
+      count: (() => {
+        const applicable = data.filter(r => isEngineerRank(r.Rank));
+        return applicable.filter(r => Number(r.Driver_Op_Raw) >= 12).length;
+      })(),
+      base: data.filter(r => isEngineerRank(r.Rank)).length || 1,
+      note: 'of engineers'
+    },
+    {
+      label: 'Officer (12h)',
+      count: (() => {
+        const applicable = data.filter(r => isOfficerRank(r.Rank));
+        return applicable.filter(r => Number(r.Officer_Raw) >= 12).length;
+      })(),
+      base: data.filter(r => isOfficerRank(r.Rank)).length || 1,
+      note: 'of officers'
+    }
+  ];
+
+  const labels = categories.map(c => {
+    const pct = ((c.count / c.base) * 100).toFixed(0);
+    return `${c.label} — ${c.count} (${pct}%)`;
+  });
+
+  if (categoryCountChart) categoryCountChart.destroy();
+  categoryCountChart = new Chart(document.getElementById('category-count-chart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'People completed',
+        data: categories.map(c => c.count),
+        backgroundColor: '#3fb950',
+        borderColor: '#3fb950',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: {
+        title: { display: true, text: 'People Completing Each ISO Category', color: '#e6edf3', font: { size: 14 } },
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const cat = categories[ctx.dataIndex];
+              const pct = ((cat.count / cat.base) * 100).toFixed(1);
+              return `${cat.count} of ${cat.base} ${cat.note} (${pct}%)`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: { color: '#8b949e', stepSize: 5 },
+          grid: { color: '#30363d' },
+          title: { display: true, text: 'Number of personnel', color: '#8b949e' }
+        },
+        y: {
+          ticks: { color: '#e6edf3', font: { size: 11 } },
+          grid: { display: false }
         }
       }
     }
@@ -732,6 +830,7 @@ document.querySelectorAll('nav button').forEach(btn => {
     if (btn.dataset.tab === 'charts') {
       drawDeptChart();
       drawCategoryCompletionChart();
+      drawCategoryCountChart();
       renderTopLists();
     }
   };
