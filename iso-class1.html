@@ -147,9 +147,9 @@
 
   <section id="tab-export" class="card" hidden>
     <h2>Export Data</h2>
-    <p class="muted">Export the current filtered view or the full dataset.</p>
+    <p class="muted">Export the current filtered view. The PDF report includes a department summary, color-coded shortfalls, and professional formatting.</p>
     <div class="row-actions">
-      <button class="btn" id="btn-pdf" type="button">Export to PDF</button>
+      <button class="btn" id="btn-pdf" type="button">Export Professional PDF Report</button>
       <button class="btn ghost" id="btn-csv" type="button">Download CSV</button>
       <button class="btn ghost" id="btn-json" type="button">Download JSON</button>
     </div>
@@ -497,25 +497,124 @@ function renderTopLists() {
 
 function exportPDF() {
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'landscape' });
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'letter' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const filtered = getFiltered();
+  const total = filtered.length || 1;
+  const meeting = filtered.filter(r => Number(r.Effective_Company_Hours) >= 192).length;
+  const avgEff = filtered.reduce((s, r) => s + Number(r.Effective_Company_Hours || 0), 0) / total;
+  const shortCompany = filtered.filter(r => Number(r.Company_Short_to_192) > 0).length;
+  const shortFacility = filtered.filter(r => Number(r.Facility_Short) > 0).length;
+  const shortHazMat = filtered.filter(r => Number(r.HazMat_Short) > 0).length;
+
+  const gold = [212, 160, 23];
+  const red = [198, 40, 40];
+  const dark = [13, 17, 23];
+
+  // Header band
+  doc.setFillColor(...red);
+  doc.rect(0, 0, pageW, 52, 'F');
+  doc.setFillColor(...gold);
+  doc.rect(0, 52, pageW, 4, 'F');
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
-  doc.text('BGFD ISO Class 1 Hours Analysis', 14, 16);
-  doc.setFontSize(10);
-  doc.text('Generated ' + new Date().toLocaleDateString(), 14, 22);
-  const rows = getFiltered().map(r => cols.map(c => {
+  doc.text('Bowling Green Fire Department', 28, 24);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('ISO Class 1 • Company Training Analysis', 28, 40);
+
+  doc.setFontSize(9);
+  doc.text(new Date().toLocaleString(), pageW - 28, 24, { align: 'right' });
+  doc.text(`Filtered view: ${filtered.length} personnel`, pageW - 28, 38, { align: 'right' });
+
+  // KPI summary
+  let y = 72;
+  doc.setTextColor(...dark);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.text('Department Summary', 28, y);
+
+  const kpis = [
+    { label: 'Personnel', value: filtered.length },
+    { label: 'Avg Effective', value: avgEff.toFixed(1) },
+    { label: 'At/Above 192', value: `${meeting} (${((meeting/total)*100).toFixed(0)}%)` },
+    { label: 'Short on Company', value: shortCompany },
+    { label: 'Short on Facility', value: shortFacility },
+    { label: 'Short on HazMat', value: shortHazMat }
+  ];
+
+  y += 8;
+  const boxW = (pageW - 56) / kpis.length - 8;
+  kpis.forEach((k, i) => {
+    const x = 28 + i * (boxW + 8);
+    doc.setFillColor(248, 246, 242);
+    doc.setDrawColor(...gold);
+    doc.roundedRect(x, y, boxW, 36, 3, 3, 'FD');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(...red);
+    doc.text(String(k.value), x + boxW / 2, y + 16, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(100, 100, 100);
+    doc.text(k.label, x + boxW / 2, y + 28, { align: 'center' });
+  });
+
+  // Data table
+  const rows = filtered.map(r => cols.map(c => {
     const v = r[c[0]];
-    return (v == null) ? '' : (typeof v === 'number' ? Number(v).toFixed(1) : String(v));
+    if (v == null || v === '') return '';
+    if (typeof v === 'number') return Number(v).toFixed(1);
+    return String(v);
   }));
+
   doc.autoTable({
     head: [cols.map(c => c[1])],
     body: rows,
-    startY: 28,
-    styles: { fontSize: 6, cellPadding: 1 },
-    headStyles: { fillColor: [198, 40, 40] },
-    theme: 'grid'
+    startY: y + 50,
+    styles: { fontSize: 6.5, cellPadding: 2, textColor: [30, 30, 30], lineColor: [220, 220, 220], lineWidth: 0.25 },
+    headStyles: { fillColor: red, textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 6.5, halign: 'center' },
+    alternateRowStyles: { fillColor: [250, 248, 245] },
+    columnStyles: {
+      0: { fontStyle: 'bold' }, // Last Name
+      12: { fontStyle: 'bold' } // Effective
+    },
+    didParseCell: function(data) {
+      if (data.section === 'body') {
+        const key = cols[data.column.index][0];
+        const raw = filtered[data.row.index];
+        if (!raw) return;
+        // Color shortfalls red
+        if (key.includes('Short') && Number(raw[key]) > 0) {
+          data.cell.styles.textColor = [198, 40, 40];
+          data.cell.styles.fontStyle = 'bold';
+        }
+        // Color effective green if meeting
+        if (key === 'Effective_Company_Hours' && Number(raw[key]) >= 192) {
+          data.cell.styles.textColor = [46, 160, 67];
+          data.cell.styles.fontStyle = 'bold';
+        }
+      }
+    },
+    didDrawPage: function(data) {
+      // Footer
+      const page = doc.internal.getCurrentPageInfo().pageNumber;
+      doc.setFillColor(...gold);
+      doc.rect(0, pageH - 22, pageW, 22, 'F');
+      doc.setTextColor(40, 30, 10);
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.text('BGFD Training Division • ISO Class 1 Report', 28, pageH - 8);
+      doc.text(`Page ${page}`, pageW - 28, pageH - 8, { align: 'right' });
+    },
+    margin: { top: 28, bottom: 28, left: 20, right: 20 }
   });
+
   doc.save('BGFD_ISO_Class1_Hours.pdf');
-  document.getElementById('export-msg').textContent = 'PDF downloaded.';
+  document.getElementById('export-msg').textContent = 'Professional PDF report downloaded.';
 }
 
 function openModal(isNew) {
