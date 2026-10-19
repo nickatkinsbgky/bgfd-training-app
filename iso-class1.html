@@ -137,6 +137,7 @@
   <section id="tab-charts" class="card" hidden>
     <h2>Progress Charts</h2>
     <div class="chart-wrap"><canvas id="dept-chart"></canvas></div>
+    <div class="chart-wrap"><canvas id="category-completion-chart"></canvas></div>
     <div class="grid" style="max-width:480px; margin-top:8px">
       <div><label>Personnel for category chart</label><select id="chart-person"><option value="">Select personnel</option></select></div>
     </div>
@@ -186,7 +187,7 @@
 <script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script>
 let data = [];
-let deptChart, personChart;
+let deptChart, personChart, categoryCompletionChart;
 let editingIndex = -1;
 const LS_KEY = 'iso-class1-data';
 const TOKEN_KEY = 'bgfd-gh-token';
@@ -387,6 +388,80 @@ function drawDeptChart() {
   });
 }
 
+function drawCategoryCompletionChart() {
+  const total = data.length || 1;
+  const categories = [
+    {
+      label: 'Company (192h eff.)',
+      pct: (data.filter(r => Number(r.Effective_Company_Hours) >= 192).length / total) * 100
+    },
+    {
+      label: 'Facility (18h)',
+      pct: (data.filter(r => Number(r.Facility_Raw) >= 18).length / total) * 100
+    },
+    {
+      label: 'HazMat (6h)',
+      pct: (data.filter(r => Number(r.HazMat_Raw) >= 6).length / total) * 100
+    },
+    {
+      label: 'Fitness (48h)',
+      pct: (data.filter(r => Number(r.Fitness_Raw) >= 48).length / total) * 100
+    },
+    {
+      label: 'Driver Op (12h, applicable)',
+      pct: (() => {
+        const applicable = data.filter(r => isEngineerRank(r.Rank));
+        if (!applicable.length) return 0;
+        return (applicable.filter(r => Number(r.Driver_Op_Raw) >= 12).length / applicable.length) * 100;
+      })()
+    },
+    {
+      label: 'Officer (12h, applicable)',
+      pct: (() => {
+        const applicable = data.filter(r => isOfficerRank(r.Rank));
+        if (!applicable.length) return 0;
+        return (applicable.filter(r => Number(r.Officer_Raw) >= 12).length / applicable.length) * 100;
+      })()
+    }
+  ];
+
+  if (categoryCompletionChart) categoryCompletionChart.destroy();
+  categoryCompletionChart = new Chart(document.getElementById('category-completion-chart'), {
+    type: 'bar',
+    data: {
+      labels: categories.map(c => c.label),
+      datasets: [{
+        label: '% of Personnel Meeting Requirement',
+        data: categories.map(c => Number(c.pct.toFixed(1))),
+        backgroundColor: '#d4a017',
+        borderColor: '#d4a017',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: {
+        title: { display: true, text: 'Department-Wide ISO Category Completion %', color: '#e6edf3' },
+        legend: { labels: { color: '#e6edf3' } },
+        tooltip: { callbacks: { label: ctx => ctx.parsed.x.toFixed(1) + '%' } }
+      },
+      scales: {
+        x: {
+          min: 0,
+          max: 100,
+          ticks: { color: '#8b949e', callback: v => v + '%' },
+          grid: { color: '#30363d' },
+          title: { display: true, text: 'Completion %', color: '#8b949e' }
+        },
+        y: {
+          ticks: { color: '#e6edf3' },
+          grid: { color: '#30363d' }
+        }
+      }
+    }
+  });
+}
+
 function drawPersonChart(name) {
   const r = data.find(p => `${p.Last_Name}, ${p.First_Name}` === name);
   if (!r) { document.getElementById('person-chart-wrap').style.display = 'none'; return; }
@@ -557,6 +632,7 @@ document.querySelectorAll('nav button').forEach(btn => {
     document.getElementById('tab-' + btn.dataset.tab).hidden = false;
     if (btn.dataset.tab === 'charts') {
       drawDeptChart();
+      drawCategoryCompletionChart();
       renderTopLists();
     }
   };
