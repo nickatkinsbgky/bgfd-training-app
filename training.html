@@ -79,6 +79,7 @@
     <button data-tab="dept">Department averages</button>
     <button data-tab="groups">Group averages</button>
     <button data-tab="tasksort">By Task</button>
+    <button data-tab="persontask">Person × Task</button>
     <button data-tab="charts">Charts</button>
     <button data-tab="cats">Categories</button>
     <button data-tab="roster">Roster / catalog</button>
@@ -172,6 +173,21 @@
     </div>
     <div id="tasksort-out"></div>
   </section>
+  <section id="tab-persontask" class="card" hidden>
+    <h2>Person × Task</h2>
+    <p class="muted">Choose a person, then a task, to see every completion of that task by that person (oldest first).</p>
+    <div class="grid" style="max-width:640px;margin-bottom:12px">
+      <div>
+        <label for="pth-person">Personnel</label>
+        <select id="pth-person"><option value="">Select personnel</option></select>
+      </div>
+      <div>
+        <label for="pth-task">Task</label>
+        <select id="pth-task"><option value="">Select a task</option></select>
+      </div>
+    </div>
+    <div id="pth-out"></div>
+  </section>
   <section id="tab-charts" class="card" hidden>
     <h2>Charts</h2>
     <p class="muted">Filter with the same multi-selects as Group averages. Leave All checked to include every value in that field.</p>
@@ -244,6 +260,7 @@
 <script src="person-avg.js?v=20260928-15"></script>
 <script src="group-averages.js?v=20260930-1"></script>
 <script src="task-sort.js?v=20261015-2"></script>
+<script src="person-task-history.js?v=20261020-1"></script>
 <script src="charts-filters.js?v=20260930-2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="export-excel.js?v=20261001-1"></script>
