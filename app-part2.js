@@ -104,7 +104,7 @@ document.querySelectorAll('nav button').forEach(b => {
   b.onclick = () => {
     document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
     b.classList.add('active');
-    ['input','person','personavg','dept','groups','tasksort','charts','cats','roster'].forEach(id => {
+    ['input','person','personavg','dept','groups','tasksort','persontask','charts','cats','roster'].forEach(id => {
       const el = document.getElementById('tab-'+id);
       if (el) el.hidden = id !== b.dataset.tab;
     });
@@ -113,6 +113,7 @@ document.querySelectorAll('nav button').forEach(b => {
     if (b.dataset.tab === 'dept') renderDept();
     if (b.dataset.tab === 'groups' && typeof renderGroupAvgs === 'function') renderGroupAvgs();
     if (b.dataset.tab === 'tasksort' && typeof renderTaskSort === 'function') renderTaskSort();
+    if (b.dataset.tab === 'persontask' && typeof renderPersonTaskHistory === 'function') renderPersonTaskHistory();
     if (b.dataset.tab === 'charts') {
       renderCharts();
       if (typeof renderGroupChartsOnChartsTab === 'function') renderGroupChartsOnChartsTab();
