@@ -73,9 +73,7 @@
   tr.over td.cat { color:#d6eaf8; font-weight:700; }
   @media (max-width:760px){ .color-key { position:static; margin-bottom:12px; } }
 
-
   label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
-
 
   #focusView[hidden] { display:none; }
   #focusView { padding:16px 20px 40px; }
@@ -105,7 +103,15 @@
   select.cert { min-width:118px; padding:4px 8px; }
   table { min-width:1240px; }
 
-  /* Uniform professional buttons */
+  #bracketView[hidden] { display:none; }
+  #bracketView { padding:16px 20px 40px; }
+  .bracket-wrap { display:flex; gap:16px; overflow:auto; padding:8px 0; }
+  .bracket-col { min-width:200px; display:flex; flex-direction:column; gap:6px; }
+  .bracket-col.champ { border-left:2px solid #2ecc71; padding-left:12px; }
+  .bracket-slot { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:13px; }
+  .bracket-slot.ready { border-color:#2ecc71; background:#163326; }
+  .bracket-slot small { display:block; color:var(--muted); font-size:11px; }
+
   button, .btn, a.choice, a.back, a.exit, nav button, .home-link {
     border-radius: 8px !important;
     padding: 8px 14px !important;
@@ -157,8 +163,18 @@
     <button class="gold" id="landRoster" type="button" style="margin-top:8px">View full roster</button>
     <button class="gold" id="landDept" type="button" style="margin-top:8px">Department averages</button>
     <button class="red" id="landFocus" type="button" style="margin-top:8px">Training focus</button>
+    <button class="gold" id="landBracket" type="button" style="margin-top:8px">Race to Recertify bracket</button>
     <a class="ready" href="https://kemsis.ky.gov" target="_blank" rel="noopener noreferrer">Ready for Recertification? CLICK HERE</a>
   </div>
+</section>
+
+<section id="bracketView" hidden>
+  <div class="bar">
+    <a class="back" href="#" id="bracketBack">Back to landing</a>
+  </div>
+  <h2 style="margin:0 0 4px">Race to Recertify</h2>
+  <p class="muted">NCAA-style bracket ranked by percent of required categories met. The finish line is fully ready to recertify.</p>
+  <div id="bracket-out"></div>
 </section>
 
 <section id="personView" hidden>
@@ -334,6 +350,7 @@
 <script src="ems-recert.js?v=20261006-paramedic2"></script>
 <script src="ems-pdf.js?v=20261006-aemt"></script>
 <script src="ems-sync.js?v=20261005-sync"></script>
+<script src="ems-bracket.js?v=20261020-1"></script>
 <script src="share.js"></script>
 </body>
 </html>
