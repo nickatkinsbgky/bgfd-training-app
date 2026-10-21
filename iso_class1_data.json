@@ -461,7 +461,10 @@
   {
     "Last_Name": "Bush",
     "First_Name": "Alan",
-    "Rank": "ENGINEER",
+    "Rank": "CAPTAIN",
+    "Shift": "B",
+    "Station": "1",
+    "Battalion": "1",
     "Company_Raw": 140.28,
     "Fitness_Raw": 66,
     "Driver_Op_Raw": 19,
@@ -472,18 +475,15 @@
     "Fitness_Overage_stays": 18,
     "Facility_to_Company": 29.5,
     "Facility_Short": 0,
-    "Driver_Op_to_Company": 7,
+    "Driver_Op_to_Company": 19,
     "Driver_Op_Short": 0,
-    "Officer_to_Company": 31,
+    "Officer_to_Company": 19,
     "Officer_Short": 0,
     "HazMat_Overage_stays": 0,
     "HazMat_Short": 3.5,
     "Total_Overage_Added_to_Company": 115.5,
     "Effective_Company_Hours": 255.78,
-    "Company_Short_to_192": 0,
-    "Shift": "B",
-    "Station": "1",
-    "Battalion": "1"
+    "Company_Short_to_192": 0
   },
   {
     "Last_Name": "Caffey",
