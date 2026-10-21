@@ -97,6 +97,7 @@
   <button class="btn ghost" id="btn-edit" type="button">Edit Selected</button>
   <button class="btn ghost" id="btn-delete" type="button">Delete Selected</button>
   <button class="btn ghost" id="btn-save-local" type="button">Save Local</button>
+  <button class="btn ghost" id="btn-load" type="button">Load Site Data</button>
   <button class="btn ghost" id="btn-push" type="button">Upload to Site</button>
   <input id="sync-token" type="password" autocomplete="off" placeholder="GitHub token" />
   <button class="btn ghost" id="btn-save-token" type="button">Save Token</button>
@@ -597,6 +598,27 @@ function savePerson() {}
 function pushToGitHub() {}
 function setSyncMsg(msg, ok) { const el = document.getElementById('sync-msg'); if (el) { el.textContent = msg; el.className = ok ? 'ok' : 'no'; } }
 
+function loadSiteData() {
+  setSyncMsg('Loading latest site data…', true);
+  fetch('iso_class1_data.json?t=' + Date.now())
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(d => {
+      if (!Array.isArray(d)) throw new Error('Data is not an array');
+      data = d.map(recalc);
+      localStorage.setItem(LS_KEY, JSON.stringify(data));
+      applyFilters();
+      const chartSel = document.getElementById('chart-person');
+      if (chartSel && typeof drawAllCharts === 'function') drawAllCharts();
+      setSyncMsg('Loaded ' + data.length + ' personnel from site.', true);
+    })
+    .catch(err => {
+      setSyncMsg('Load failed: ' + (err.message || err), false);
+    });
+}
+
 document.querySelectorAll('nav button').forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -624,6 +646,9 @@ const chartPerson = document.getElementById('chart-person');
 if (chartPerson) {
   chartPerson.onchange = () => drawAllCharts();
 }
+
+const btnLoad = document.getElementById('btn-load');
+if (btnLoad) btnLoad.onclick = loadSiteData;
 
 localStorage.removeItem(LS_KEY);
 fetch('iso_class1_data.json?t=' + Date.now())
