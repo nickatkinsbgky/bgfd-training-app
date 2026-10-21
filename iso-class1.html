@@ -359,16 +359,52 @@ function populateSelects() {
 
 function showPerson(name) {
   const detail = document.getElementById('person-detail');
+  if (!detail) return;
   if (!name) { detail.innerHTML = ''; return; }
   const p = data.find(r => `${r.Last_Name}, ${r.First_Name}` === name);
   if (!p) { detail.innerHTML = '<p class="muted">Not found.</p>'; return; }
-  detail.innerHTML = `<h3>${name}</h3><p>Rank: ${p.Rank||''} • Shift: ${p.Shift||''} • Station: ${p.Station||''} • Battalion: ${p.Battalion||''}</p>
+
+  const eng = isEngineerRank(p.Rank);
+  const off = isOfficerRank(p.Rank);
+  const driverNeed = eng ? 12 : 0;
+  const officerNeed = off ? 12 : 0;
+
+  const row = (label, raw, short, extra = '') => {
+    const s = Number(short || 0);
+    const shortTxt = s > 0 ? `<span class="short">${s.toFixed(1)} short</span>` : `<span class="ok">Met</span>`;
+    return `<tr><td style="text-align:left">${label}</td><td>${Number(raw||0).toFixed(1)}</td><td>${shortTxt}</td><td style="text-align:left">${extra}</td></tr>`;
+  };
+
+  detail.innerHTML = `
+    <h3 style="margin:0 0 6px">${name}</h3>
+    <p class="muted">Rank: ${p.Rank||'—'} • Shift: ${p.Shift||'—'} • Station: ${p.Station||'—'} • Battalion: ${p.Battalion||'—'}</p>
     <div class="kpis">
       <div class="kpi"><b>${Number(p.Effective_Company_Hours||0).toFixed(1)}</b>Effective Company</div>
       <div class="kpi"><b>${Number(p.Company_Short_to_192||0).toFixed(1)}</b>Short to 192</div>
       <div class="kpi"><b>${Number(p.Facility_Short||0).toFixed(1)}</b>Facility Short</div>
       <div class="kpi"><b>${Number(p.HazMat_Short||0).toFixed(1)}</b>HazMat Short</div>
-    </div>`;
+    </div>
+    <div class="table-wrap" style="margin-top:10px">
+      <table>
+        <thead><tr><th>Category</th><th>Hours</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          ${row('Company Training (raw)', p.Company_Raw, 0, 'Base hours')}
+          ${row('Physical Fitness', p.Fitness_Raw, 0, `Max 48 → Company (${Number(p.Fitness_to_Company||0).toFixed(1)} applied)`)}
+          ${row('Facility Training', p.Facility_Raw, p.Facility_Short, `Target 18; overage → Company (${Number(p.Facility_to_Company||0).toFixed(1)})`)}
+          ${row('Driver Operator', p.Driver_Op_Raw, p.Driver_Op_Short, eng ? 'Engineer / Training Instructor target 12' : 'Not required for rank')}
+          ${row('Officer Training', p.Officer_Raw, p.Officer_Short, off ? 'Captain / Chief target 12' : 'Not required for rank')}
+          ${row('HazMat', p.HazMat_Raw, p.HazMat_Short, 'Target 6; overage stays')}
+          <tr style="font-weight:600">
+            <td style="text-align:left">Effective Company Hours</td>
+            <td>${Number(p.Effective_Company_Hours||0).toFixed(1)}</td>
+            <td>${Number(p.Company_Short_to_192||0) > 0 ? `<span class="short">${Number(p.Company_Short_to_192).toFixed(1)} short</span>` : '<span class="ok">At/above 192</span>'}</td>
+            <td style="text-align:left">Company + applied overages</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Applied to Company: Fitness ${Number(p.Fitness_to_Company||0).toFixed(1)} + Facility overage ${Number(p.Facility_to_Company||0).toFixed(1)} + Driver ${Number(p.Driver_Op_to_Company||0).toFixed(1)} + Officer ${Number(p.Officer_to_Company||0).toFixed(1)} = ${Number(p.Total_Overage_Added_to_Company||0).toFixed(1)} total added.</p>
+  `;
 }
 
 function drawDeptChart() {
@@ -407,6 +443,11 @@ document.querySelectorAll('nav button').forEach(btn => {
   const el = document.getElementById(id);
   if (el) el.onchange = applyFilters;
 });
+
+const personSelect = document.getElementById('person-select');
+if (personSelect) {
+  personSelect.onchange = () => showPerson(personSelect.value);
+}
 
 localStorage.removeItem(LS_KEY);
 fetch('iso_class1_data.json?t=' + Date.now())
