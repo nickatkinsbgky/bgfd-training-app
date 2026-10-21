@@ -39,6 +39,10 @@
   tr:hover td { background:rgba(255,255,255,.03); }
   tr:hover td:nth-child(-n+6) { background:#1c2330; }
   .short { color:#f85149; font-weight:600; }
+  .row-btn { background:transparent; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:3px 8px; font-size:11px; font-weight:600; cursor:pointer; margin-right:4px; }
+  .row-btn:hover { border-color:var(--gold); color:var(--gold); }
+  .row-btn.danger:hover { border-color:#f85149; color:#f85149; }
+  td.actions { text-align:left !important; white-space:nowrap; min-width:120px; }
   .ok { color:var(--green); }
   .muted, .note { color:var(--muted); font-size:13px; }
   .kpis { display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 12px; }
@@ -94,8 +98,6 @@
 
 <div class="sync-bar">
   <button class="btn" id="btn-add" type="button">Add Personnel</button>
-  <button class="btn ghost" id="btn-edit" type="button">Edit Selected</button>
-  <button class="btn ghost" id="btn-delete" type="button">Delete Selected</button>
   <button class="btn ghost" id="btn-save-local" type="button">Save Local</button>
   <button class="btn ghost" id="btn-load" type="button">Load Site Data</button>
   <button class="btn ghost" id="btn-push" type="button">Upload to Site</button>
@@ -298,10 +300,16 @@ function fmt(v, key) {
 function renderTable(rows) {
   const thead = document.getElementById('thead');
   const tbody = document.getElementById('tbody');
-  thead.innerHTML = '<tr>' + cols.map(c => `<th>${c[1]}</th>`).join('') + '</tr>';
-  tbody.innerHTML = rows.map((r) =>
-    `<tr data-idx="${data.indexOf(r)}">` + cols.map(c => `<td>${fmt(r[c[0]], c[0])}</td>`).join('') + '</tr>'
-  ).join('');
+  thead.innerHTML = '<tr>' + cols.map(c => `<th>${c[1]}</th>`).join('') + '<th>Actions</th></tr>';
+  tbody.innerHTML = rows.map((r) => {
+    const idx = data.indexOf(r);
+    return `<tr data-idx="${idx}">` +
+      cols.map(c => `<td>${fmt(r[c[0]], c[0])}</td>`).join('') +
+      `<td class="actions">
+         <button class="row-btn" type="button" data-act="edit" data-idx="${idx}">Edit</button>
+         <button class="row-btn danger" type="button" data-act="delete" data-idx="${idx}">Delete</button>
+       </td></tr>`;
+  }).join('');
   const meeting = rows.filter(r => Number(r.Effective_Company_Hours) >= 192).length;
   const avg = rows.reduce((s,r) => s + Number(r.Effective_Company_Hours||0), 0) / (rows.length||1);
   document.getElementById('kpis').innerHTML = `
@@ -310,11 +318,12 @@ function renderTable(rows) {
     <div class="kpi"><b>${meeting}</b>At/Above 192</div>
     <div class="kpi"><b>${rows.filter(r=>Number(r.Company_Short_to_192)>0).length}</b>Short on Company</div>
   `;
-  tbody.querySelectorAll('tr').forEach(tr => {
-    tr.onclick = () => {
-      tbody.querySelectorAll('tr').forEach(x => x.style.outline = '');
-      tr.style.outline = '2px solid #d4a017';
-      editingIndex = Number(tr.dataset.idx);
+  tbody.querySelectorAll('button[data-act]').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const idx = Number(btn.dataset.idx);
+      if (btn.dataset.act === 'edit') openEdit(idx);
+      else if (btn.dataset.act === 'delete') deletePerson(idx);
     };
   });
 }
@@ -592,9 +601,95 @@ function renderTopLists() {
   `;
 }
 function exportPDF() { document.getElementById('export-msg').textContent = 'PDF export not fully wired in this snapshot.'; }
-function openModal() { document.getElementById('edit-modal').classList.add('show'); }
-function deleteSelected() {}
-function savePerson() {}
+function openModal(title) {
+  document.getElementById('modal-title').textContent = title || 'Edit Personnel';
+  document.getElementById('modal-msg').textContent = '';
+  document.getElementById('edit-modal').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('edit-modal').classList.remove('show');
+  editingIndex = -1;
+}
+function fillModal(p) {
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v == null ? '' : v; };
+  set('e-last', p.Last_Name);
+  set('e-first', p.First_Name);
+  set('e-rank', p.Rank);
+  set('e-shift', p.Shift);
+  set('e-station', p.Station);
+  set('e-battalion', p.Battalion);
+  set('e-company', p.Company_Raw);
+  set('e-fitness', p.Fitness_Raw);
+  set('e-driver', p.Driver_Op_Raw);
+  set('e-facility', p.Facility_Raw);
+  set('e-hazmat', p.HazMat_Raw);
+  set('e-officer', p.Officer_Raw);
+}
+function openEdit(idx) {
+  if (idx < 0 || idx >= data.length) return;
+  editingIndex = idx;
+  fillModal(data[idx]);
+  openModal('Edit Personnel');
+}
+function openAdd() {
+  editingIndex = -1;
+  fillModal({});
+  openModal('Add Personnel');
+}
+function readModal() {
+  const g = (id) => (document.getElementById(id)?.value || '').trim();
+  const n = (id) => {
+    const v = document.getElementById(id)?.value;
+    const num = Number(v);
+    return isNaN(num) ? 0 : num;
+  };
+  return {
+    Last_Name: g('e-last'),
+    First_Name: g('e-first'),
+    Rank: g('e-rank'),
+    Shift: g('e-shift'),
+    Station: g('e-station'),
+    Battalion: g('e-battalion'),
+    Company_Raw: n('e-company'),
+    Fitness_Raw: n('e-fitness'),
+    Driver_Op_Raw: n('e-driver'),
+    Facility_Raw: n('e-facility'),
+    HazMat_Raw: n('e-hazmat'),
+    Officer_Raw: n('e-officer')
+  };
+}
+function savePerson() {
+  const raw = readModal();
+  if (!raw.Last_Name || !raw.First_Name) {
+    document.getElementById('modal-msg').textContent = 'Last and First name are required.';
+    return;
+  }
+  const rec = recalc(raw);
+  if (editingIndex >= 0 && editingIndex < data.length) {
+    data[editingIndex] = rec;
+  } else {
+    data.push(rec);
+    editingIndex = data.length - 1;
+  }
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+  closeModal();
+  applyFilters();
+  setSyncMsg('Saved locally. Use Upload to Site to push changes.', true);
+}
+function deletePerson(idx) {
+  if (idx < 0 || idx >= data.length) return;
+  const p = data[idx];
+  const name = `${p.Last_Name}, ${p.First_Name}`;
+  if (!confirm(`Delete ${name}? This cannot be undone until you reload site data.`)) return;
+  data.splice(idx, 1);
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+  applyFilters();
+  setSyncMsg(`Deleted ${name}. Saved locally.`, true);
+}
+function saveLocal() {
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+  setSyncMsg('Saved ' + data.length + ' records locally.', true);
+}
 function pushToGitHub() {}
 function setSyncMsg(msg, ok) { const el = document.getElementById('sync-msg'); if (el) { el.textContent = msg; el.className = ok ? 'ok' : 'no'; } }
 
@@ -649,6 +744,22 @@ if (chartPerson) {
 
 const btnLoad = document.getElementById('btn-load');
 if (btnLoad) btnLoad.onclick = loadSiteData;
+
+const btnAdd = document.getElementById('btn-add');
+if (btnAdd) btnAdd.onclick = openAdd;
+
+const btnSaveLocal = document.getElementById('btn-save-local');
+if (btnSaveLocal) btnSaveLocal.onclick = saveLocal;
+
+const btnSavePerson = document.getElementById('btn-save-person');
+if (btnSavePerson) btnSavePerson.onclick = savePerson;
+
+const btnCancel = document.getElementById('btn-cancel');
+if (btnCancel) btnCancel.onclick = closeModal;
+
+document.getElementById('edit-modal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'edit-modal') closeModal();
+});
 
 localStorage.removeItem(LS_KEY);
 fetch('iso_class1_data.json?t=' + Date.now())
