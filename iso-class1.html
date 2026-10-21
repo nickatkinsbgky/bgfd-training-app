@@ -690,7 +690,58 @@ function saveLocal() {
   localStorage.setItem(LS_KEY, JSON.stringify(data));
   setSyncMsg('Saved ' + data.length + ' records locally.', true);
 }
-function pushToGitHub() {}
+function getToken() {
+  const input = document.getElementById('sync-token');
+  const typed = (input && input.value && !input.value.includes('•')) ? input.value.trim() : '';
+  return typed || localStorage.getItem(TOKEN_KEY) || '';
+}
+function saveToken() {
+  const input = document.getElementById('sync-token');
+  const val = (input && input.value && !input.value.includes('•')) ? input.value.trim() : '';
+  if (!val) { setSyncMsg('Enter a GitHub token first.', false); return; }
+  localStorage.setItem(TOKEN_KEY, val);
+  if (input) input.value = '••••••••••••';
+  setSyncMsg('Token saved in this browser.', true);
+}
+async function pushToGitHub() {
+  const token = getToken();
+  if (!token) { setSyncMsg('Enter and save a GitHub token first.', false); return; }
+  if (!data.length) { setSyncMsg('No data to upload.', false); return; }
+  const owner = 'nickatkinsbgky';
+  const repo = 'bgfd-training-app';
+  const path = 'iso_class1_data.json';
+  const api = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  setSyncMsg('Uploading…', true);
+  try {
+    const head = await fetch(api, { headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' } });
+    if (!head.ok) throw new Error('Could not read file (check token permissions). HTTP ' + head.status);
+    const meta = await head.json();
+    const sha = meta.sha;
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    const body = {
+      message: 'Update ISO Class 1 data from site',
+      content,
+      sha,
+      branch: 'main'
+    };
+    const put = await fetch(api, {
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!put.ok) {
+      const err = await put.json().catch(() => ({}));
+      throw new Error(err.message || ('HTTP ' + put.status));
+    }
+    setSyncMsg('Uploaded ' + data.length + ' personnel to GitHub.', true);
+  } catch (err) {
+    setSyncMsg('Upload failed: ' + (err.message || err), false);
+  }
+}
 function setSyncMsg(msg, ok) { const el = document.getElementById('sync-msg'); if (el) { el.textContent = msg; el.className = ok ? 'ok' : 'no'; } }
 
 function loadSiteData() {
@@ -744,6 +795,12 @@ if (chartPerson) {
 
 const btnLoad = document.getElementById('btn-load');
 if (btnLoad) btnLoad.onclick = loadSiteData;
+
+const btnPush = document.getElementById('btn-push');
+if (btnPush) btnPush.onclick = pushToGitHub;
+
+const btnSaveToken = document.getElementById('btn-save-token');
+if (btnSaveToken) btnSaveToken.onclick = saveToken;
 
 const btnAdd = document.getElementById('btn-add');
 if (btnAdd) btnAdd.onclick = openAdd;
