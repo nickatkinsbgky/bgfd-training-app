@@ -26,6 +26,46 @@
     if (typeof window.setEmsDb === "function") window.setEmsDb(remote);
     else localStorage.setItem(KEY, JSON.stringify(remote));
   }
+  function getFullSeed() {
+    var seed = window.EMS_RECERT_SEED || { people: [], records: [] };
+    // Ensure Stine, Cameron is included
+    var hasStine = seed.people && seed.people.some(function(p) { return p.name === "Stine, Cameron"; });
+    if (!hasStine) {
+      seed.people = seed.people || [];
+      seed.people.push({
+        name: "Stine, Cameron",
+        kemsisId: "",
+        expDate: "2026-12-31",
+        certificationLevel: "Paramedic"
+      });
+      var stineRecords = [
+        {"name":"Stine, Cameron","date":"2026-07-06","category":"Cardiovascular","standard":"KBEMS | Cardiovascular | Cardiovascular","hours":1.5,"course":"Pediatric Emergencies & Pediatric Assessment (3742018)","pediatric":true},
+        {"name":"Stine, Cameron","date":"2026-07-01","category":"Trauma","standard":"KBEMS | Trauma | Trauma","hours":1.5,"course":"Orthopeadic Trauma (3742079)"},
+        {"name":"Stine, Cameron","date":"2026-07-01","category":"Medical","standard":"KBEMS | Medical | Medical","hours":1,"course":"Poisoning & Antidotes (3742082)"},
+        {"name":"Stine, Cameron","date":"2026-06-29","category":"Medical","standard":"KBEMS | Medical | Medical","hours":1,"course":"Hyperthermia/Hypothermay (3706333)"},
+        {"name":"Stine, Cameron","date":"2026-05-06","category":"Airway","standard":"KBEMS | Airway | Airway","hours":1,"course":"Pulmonary Embolism (3444915)"},
+        {"name":"Stine, Cameron","date":"2026-05-06","category":"Medical","standard":"KBEMS | Medical | Medical","hours":1.5,"course":"Pain Management & Medication Review (3444920)"},
+        {"name":"Stine, Cameron","date":"2026-04-27","category":"Trauma","standard":"KBEMS | Trauma | Trauma","hours":1,"course":"Traumatic Brain Injury (3410723)"},
+        {"name":"Stine, Cameron","date":"2026-04-27","category":"Medical","standard":"KBEMS | Medical | Medical","hours":1.5,"course":"Altered Mental Status & Coma (3322376)"},
+        {"name":"Stine, Cameron","date":"2026-04-15","category":"CPR/AED","standard":"KBEMS | CPR/AED | CPR/AED","hours":1,"course":"BLS CPR (3355738)"},
+        {"name":"Stine, Cameron","date":"2026-04-03","category":"Trauma","standard":"KBEMS | Trauma | Trauma","hours":1,"course":"Traumatic Brain Injury (3322371)"},
+        {"name":"Stine, Cameron","date":"2026-04-03","category":"Medical","standard":"KBEMS | Medical | Medical","hours":1.5,"course":"Altered Mental Status & Coma (3322376)"},
+        {"name":"Stine, Cameron","date":"2026-03-26","category":"Trauma","standard":"KBEMS | Trauma | Trauma","hours":1,"course":"Crush Injuries & Crush Syndrome (3213888)"},
+        {"name":"Stine, Cameron","date":"2026-03-26","category":"Airway","standard":"KBEMS | Airway | Airway","hours":1.5,"course":"Airway & Ventilation (3213881)"},
+        {"name":"Stine, Cameron","date":"2026-02-26","category":"Medical","standard":"KBEMS | Medical | Medical","hours":1,"course":"Pharmacology (3129205)"},
+        {"name":"Stine, Cameron","date":"2026-02-26","category":"Operations","standard":"KBEMS | Operations | Operations","hours":1.5,"course":"Patient Refusals / Evidence Preservation (3129170)"},
+        {"name":"Stine, Cameron","date":"2026-02-13","category":"Medical","standard":"KBEMS | Medical | Medical","hours":1,"course":"EMS Adrenal Insufficiency (3021873)"},
+        {"name":"Stine, Cameron","date":"2026-02-02","category":"Medical","standard":"KBEMS | Medical | Medical","hours":1,"course":"EMS Adrenal Insufficiency (3021870)"},
+        {"name":"Stine, Cameron","date":"2026-02-02","category":"Airway","standard":"KBEMS | Airway | Airway","hours":1,"course":"Cyano Kit (3033434)"},
+        {"name":"Stine, Cameron","date":"2026-01-26","category":"Airway","standard":"KBEMS | Airway | Airway","hours":2,"course":"Cardiac 12 Lead EKG's (3033266)"},
+        {"name":"Stine, Cameron","date":"2026-01-12","category":"Trauma","standard":"KBEMS | Trauma | Trauma","hours":1,"course":"Cyano Kit (3033434)"},
+        {"name":"Stine, Cameron","date":"2026-01-09","category":"Medical","standard":"KBEMS | Medical | Medical","hours":0.5,"course":"OB/GYM (3033277)"}
+      ];
+      seed.records = seed.records || [];
+      seed.records = seed.records.concat(stineRecords);
+    }
+    return seed;
+  }
   async function latestSha(api, headers) {
     var meta = await fetch(api + "?ref=" + REMOTE.branch + "&t=" + Date.now(), { headers: headers, cache: "no-store" });
     if (!meta.ok) return null;
@@ -36,9 +76,18 @@
     setSyncMsg("Loading site data…");
     try {
       var res = await fetch("https://raw.githubusercontent.com/" + REMOTE.owner + "/" + REMOTE.repo + "/" + REMOTE.branch + "/" + REMOTE.path + "?t=" + Date.now(), { cache: "no-store" });
-      if (!res.ok) { setSyncMsg("No site copy yet. Save, then upload."); return; }
-      var remote = await res.json();
-      if (!remote || !remote.people || !remote.people.length) {
+      var remote = null;
+      if (res.ok) {
+        remote = await res.json();
+      }
+      // If site data is incomplete (fewer than 50 people), fall back to full seed
+      if (!remote || !remote.people || remote.people.length < 50) {
+        var seed = getFullSeed();
+        applyRemote(seed);
+        setSyncMsg("Site data incomplete. Loaded full department seed with Stine, Cameron (" + seed.people.length + " people, " + seed.records.length + " classes).", true);
+        return;
+      }
+      if (!remote.people.length) {
         setSyncMsg("Site copy is empty. Kept this device.");
         return;
       }
