@@ -1,6 +1,18 @@
 {
   "people": [
     {
+      "name": "=COUNTIFS($A$8:$A$210,\"<>\",$C$8:$C$210,\"<>\",F8:F210,\"<\"&Requirements!B5)",
+      "kemsisId": "=COUNTIFS($A$8:$A$210,\"<>\",$C$8:$C$210,\"<>\",G8:G210,\"<\"&Requirements!B6)",
+      "expDate": "=COUNTIFS(",
+      "certificationLevel": "EMT"
+    },
+    {
+      "name": "=Requirements!A5",
+      "kemsisId": "=Requirements!A6",
+      "expDate": "=Requireme",
+      "certificationLevel": "EMT"
+    },
+    {
       "name": "Abell, Jeremy",
       "kemsisId": "1118034",
       "expDate": "2026-12-31",
@@ -241,7 +253,7 @@
       "certificationLevel": "EMT"
     },
     {
-      "name": "Daniels, Dalton Loye",
+      "name": "Daniels, Dalton",
       "kemsisId": "1130706",
       "expDate": "2027-12-31",
       "certificationLevel": "EMT"
@@ -481,7 +493,7 @@
       "certificationLevel": "EMT"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "kemsisId": "1129075",
       "expDate": "2026-12-31",
       "certificationLevel": "EMT"
@@ -685,7 +697,7 @@
       "certificationLevel": "EMT"
     },
     {
-      "name": "Nickel, Dakota Austin",
+      "name": "Nickel, Dakota",
       "kemsisId": "1129626",
       "expDate": "2026-12-31",
       "certificationLevel": "EMT"
@@ -715,9 +727,15 @@
       "certificationLevel": "EMT"
     },
     {
-      "name": "Parsley, William Dane",
+      "name": "Parsley, William",
       "kemsisId": "1130362",
       "expDate": "2027-12-31",
+      "certificationLevel": "EMT"
+    },
+    {
+      "name": "People short in this category",
+      "kemsisId": "",
+      "expDate": "",
       "certificationLevel": "EMT"
     },
     {
@@ -841,7 +859,7 @@
       "certificationLevel": "EMT"
     },
     {
-      "name": "Smith, Jon Fisher",
+      "name": "Smith, Jon",
       "kemsisId": "1130564",
       "expDate": "2027-12-31",
       "certificationLevel": "EMT"
@@ -851,6 +869,12 @@
       "kemsisId": "1123836",
       "expDate": "2026-12-31",
       "certificationLevel": "EMT"
+    },
+    {
+      "name": "Stine, Cameron",
+      "kemsisId": "",
+      "expDate": "2026-12-31",
+      "certificationLevel": "Paramedic"
     },
     {
       "name": "Stivaletti, Kristina",
@@ -983,66 +1007,6 @@
       "kemsisId": "",
       "expDate": "",
       "certificationLevel": "EMT"
-    },
-    {
-      "name": "People short in this category",
-      "kemsisId": "",
-      "expDate": "",
-      "certificationLevel": "EMT"
-    },
-    {
-      "name": "=Requirements!A5",
-      "kemsisId": "=Requirements!A6",
-      "expDate": "=Requireme",
-      "certificationLevel": "EMT"
-    },
-    {
-      "name": "=COUNTIFS($A$8:$A$210,\"<>\",$C$8:$C$210,\"<>\",F8:F210,\"<\"&Requirements!B5)",
-      "kemsisId": "=COUNTIFS($A$8:$A$210,\"<>\",$C$8:$C$210,\"<>\",G8:G210,\"<\"&Requirements!B6)",
-      "expDate": "=COUNTIFS(",
-      "certificationLevel": "EMT"
-    },
-    {
-      "name": "Stine, Cameron",
-      "kemsisId": "",
-      "expDate": "2026-12-31",
-      "certificationLevel": "Paramedic"
-    },
-    {
-      "name": "Daniels, Dalton",
-      "kemsisId": "",
-      "expDate": "",
-      "certificationLevel": ""
-    },
-    {
-      "name": "Johnston, James",
-      "kemsisId": "",
-      "expDate": "",
-      "certificationLevel": ""
-    },
-    {
-      "name": "Mccarty, Ben",
-      "kemsisId": "",
-      "expDate": "",
-      "certificationLevel": ""
-    },
-    {
-      "name": "Nickel, Dakota",
-      "kemsisId": "",
-      "expDate": "",
-      "certificationLevel": ""
-    },
-    {
-      "name": "Parsley, William",
-      "kemsisId": "",
-      "expDate": "",
-      "certificationLevel": ""
-    },
-    {
-      "name": "Smith, Jon",
-      "kemsisId": "",
-      "expDate": "",
-      "certificationLevel": ""
     }
   ],
   "records": [
@@ -6415,7 +6379,7 @@
       "course": "KBEMS Trauma"
     },
     {
-      "name": "Daniels, Dalton Loye",
+      "name": "Daniels, Dalton",
       "date": "2025-10-31",
       "category": "CPR/AED",
       "standard": "KBEMS | CPR/AED | CPR/AED",
@@ -6423,7 +6387,7 @@
       "course": "CPR/AED"
     },
     {
-      "name": "Daniels, Dalton Loye",
+      "name": "Daniels, Dalton",
       "date": "2026-06-11",
       "category": "Medical",
       "standard": "KBEMS | Medical | Medical",
@@ -6431,7 +6395,7 @@
       "course": "EMS: Medical"
     },
     {
-      "name": "Daniels, Dalton Loye",
+      "name": "Daniels, Dalton",
       "date": "2026-09-09",
       "category": "Medical",
       "standard": "KBEMS | Medical | Medical",
@@ -6439,7 +6403,7 @@
       "course": "KBEMS Medical"
     },
     {
-      "name": "Daniels, Dalton Loye",
+      "name": "Daniels, Dalton",
       "date": "2025-10-31",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -6447,7 +6411,7 @@
       "course": "First Aid"
     },
     {
-      "name": "Daniels, Dalton Loye",
+      "name": "Daniels, Dalton",
       "date": "2026-08-10",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -6455,7 +6419,7 @@
       "course": "KBEMS Operations"
     },
     {
-      "name": "Daniels, Dalton Loye",
+      "name": "Daniels, Dalton",
       "date": "2026-04-15",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -6463,7 +6427,7 @@
       "course": "Bleeding and Shock"
     },
     {
-      "name": "Daniels, Dalton Loye",
+      "name": "Daniels, Dalton",
       "date": "2026-07-14",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -6471,7 +6435,7 @@
       "course": "KBEMS Trauma"
     },
     {
-      "name": "Daniels, Dalton Loye",
+      "name": "Daniels, Dalton",
       "date": "2026-08-07",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -11703,7 +11667,7 @@
       "course": "KBEMS Trauma"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-02-11",
       "category": "Airway",
       "standard": "KBEMS | Airway | Airway/Respiration/Ventilation",
@@ -11711,7 +11675,7 @@
       "course": "CPR/AED"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-09-21",
       "category": "Airway",
       "standard": "KBEMS | Airway | Airway/Respiration/Ventilation",
@@ -11719,7 +11683,7 @@
       "course": "KBEMS Airway"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2025-12-05",
       "category": "CPR/AED",
       "standard": "KBEMS | CPR/AED | CPR/AED",
@@ -11727,7 +11691,7 @@
       "course": "CPR/AED"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-02-23",
       "category": "Cardiovascular",
       "standard": "KBEMS | Cardiovascular | Cardiovascular",
@@ -11735,7 +11699,7 @@
       "course": "Firefighter CPR"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-09-21",
       "category": "Cardiovascular",
       "standard": "KBEMS | Cardiovascular | Cardiovascular",
@@ -11743,7 +11707,7 @@
       "course": "KBEMS Cardiovascular"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-02-11",
       "category": "Medical",
       "standard": "KBEMS | Medical | Medical",
@@ -11751,7 +11715,7 @@
       "course": "First Aid"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-07-08",
       "category": "Medical",
       "standard": "KBEMS | Medical | Medical",
@@ -11759,7 +11723,7 @@
       "course": "KBEMS Medical"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-07-29",
       "category": "Medical",
       "standard": "KBEMS | Medical | Medical",
@@ -11767,7 +11731,7 @@
       "course": "KBEMS Medical"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-09-21",
       "category": "Medical",
       "standard": "KBEMS | Medical | Medical",
@@ -11775,7 +11739,7 @@
       "course": "KBEMS Medical"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-08-10",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -11783,7 +11747,7 @@
       "course": "KBEMS Operations"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-04-15",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -11791,7 +11755,7 @@
       "course": "Bleeding and Shock"
     },
     {
-      "name": "Johnston, James Norris",
+      "name": "Johnston, James",
       "date": "2026-07-14",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -16311,7 +16275,7 @@
       "course": "KBEMS Trauma"
     },
     {
-      "name": "Nickel, Dakota Austin",
+      "name": "Nickel, Dakota",
       "date": "2025-10-31",
       "category": "CPR/AED",
       "standard": "KBEMS | CPR/AED | CPR/AED",
@@ -16319,7 +16283,7 @@
       "course": "CPR/AED"
     },
     {
-      "name": "Nickel, Dakota Austin",
+      "name": "Nickel, Dakota",
       "date": "2026-07-01",
       "category": "Medical",
       "standard": "KBEMS | Medical | Medical",
@@ -16327,7 +16291,7 @@
       "course": "EMS - Medical"
     },
     {
-      "name": "Nickel, Dakota Austin",
+      "name": "Nickel, Dakota",
       "date": "2025-10-31",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -16335,7 +16299,7 @@
       "course": "First Aid"
     },
     {
-      "name": "Nickel, Dakota Austin",
+      "name": "Nickel, Dakota",
       "date": "2026-08-12",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -16343,7 +16307,7 @@
       "course": "KBEMS Operations"
     },
     {
-      "name": "Nickel, Dakota Austin",
+      "name": "Nickel, Dakota",
       "date": "2026-04-20",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -16847,7 +16811,7 @@
       "course": "KBEMS Trauma"
     },
     {
-      "name": "Parsley, William Dane",
+      "name": "Parsley, William",
       "date": "2025-10-31",
       "category": "CPR/AED",
       "standard": "KBEMS | CPR/AED | CPR/AED",
@@ -16855,7 +16819,7 @@
       "course": "CPR/AED"
     },
     {
-      "name": "Parsley, William Dane",
+      "name": "Parsley, William",
       "date": "2025-10-31",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -16863,7 +16827,7 @@
       "course": "First Aid"
     },
     {
-      "name": "Parsley, William Dane",
+      "name": "Parsley, William",
       "date": "2026-08-10",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -16871,7 +16835,7 @@
       "course": "KBEMS Operations"
     },
     {
-      "name": "Parsley, William Dane",
+      "name": "Parsley, William",
       "date": "2026-09-09",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -16879,7 +16843,7 @@
       "course": "KBEMS Operations"
     },
     {
-      "name": "Parsley, William Dane",
+      "name": "Parsley, William",
       "date": "2026-04-27",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -16887,7 +16851,7 @@
       "course": "Bleeding and Shock"
     },
     {
-      "name": "Parsley, William Dane",
+      "name": "Parsley, William",
       "date": "2026-07-14",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -19895,7 +19859,7 @@
       "course": "KBEMS Trauma"
     },
     {
-      "name": "Smith, Jon Fisher",
+      "name": "Smith, Jon",
       "date": "2025-10-31",
       "category": "CPR/AED",
       "standard": "KBEMS | CPR/AED | CPR/AED",
@@ -19903,7 +19867,7 @@
       "course": "CPR/AED"
     },
     {
-      "name": "Smith, Jon Fisher",
+      "name": "Smith, Jon",
       "date": "2026-07-08",
       "category": "Medical",
       "standard": "KBEMS | Medical | Medical",
@@ -19911,7 +19875,7 @@
       "course": "KBEMS Medical"
     },
     {
-      "name": "Smith, Jon Fisher",
+      "name": "Smith, Jon",
       "date": "2025-10-31",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -19919,7 +19883,7 @@
       "course": "First Aid"
     },
     {
-      "name": "Smith, Jon Fisher",
+      "name": "Smith, Jon",
       "date": "2026-08-12",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -19927,7 +19891,7 @@
       "course": "KBEMS Operations"
     },
     {
-      "name": "Smith, Jon Fisher",
+      "name": "Smith, Jon",
       "date": "2026-09-27",
       "category": "Operations",
       "standard": "KBEMS | Operations | Operations",
@@ -19935,7 +19899,7 @@
       "course": "KBEMS Operations"
     },
     {
-      "name": "Smith, Jon Fisher",
+      "name": "Smith, Jon",
       "date": "2026-04-14",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -19943,7 +19907,7 @@
       "course": "Bleeding and Shock"
     },
     {
-      "name": "Smith, Jon Fisher",
+      "name": "Smith, Jon",
       "date": "2026-06-28",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -19951,7 +19915,7 @@
       "course": "KBEMS Trauma"
     },
     {
-      "name": "Smith, Jon Fisher",
+      "name": "Smith, Jon",
       "date": "2026-07-16",
       "category": "Trauma",
       "standard": "KBEMS | Trauma | Trauma",
@@ -23552,7 +23516,7 @@
       "course": "KBEMS Sexual Violence Awareness Course"
     },
     {
-      "name": "Nickel, Dakota Austin",
+      "name": "Nickel, Dakota",
       "date": "2026-10-23",
       "category": "Airway",
       "standard": "KBEMS | Airway | Airway/Respiration/Ventilation",
@@ -23752,7 +23716,7 @@
       "course": "KBEMS Cardiovascular"
     },
     {
-      "name": "Mccarty, Ben",
+      "name": "McCarty, Ben",
       "date": "2026-09-09",
       "category": "Medical",
       "standard": "KBEMS | Medical",
@@ -23760,7 +23724,7 @@
       "course": "KBEMS Medical"
     },
     {
-      "name": "Mccarty, Ben",
+      "name": "McCarty, Ben",
       "date": "2026-10-24",
       "category": "Operations",
       "standard": "KBEMS | Operations",
