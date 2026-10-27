@@ -1007,6 +1007,42 @@
       "kemsisId": "",
       "expDate": "2026-12-31",
       "certificationLevel": "Paramedic"
+    },
+    {
+      "name": "Daniels, Dalton",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": ""
+    },
+    {
+      "name": "Johnston, James",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": ""
+    },
+    {
+      "name": "Mccarty, Ben",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": ""
+    },
+    {
+      "name": "Nickel, Dakota",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": ""
+    },
+    {
+      "name": "Parsley, William",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": ""
+    },
+    {
+      "name": "Smith, Jon",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": ""
     }
   ],
   "records": [
@@ -23658,6 +23694,110 @@
       "standard": "KBEMS | Medical | Medical",
       "hours": 4.0,
       "course": "KBEMS Medical"
+    },
+    {
+      "name": "Akins, Brad",
+      "date": "2026-09-29",
+      "category": "Medical",
+      "standard": "KBEMS | Medical",
+      "hours": 4.0,
+      "course": "KBEMS Medical"
+    },
+    {
+      "name": "Daniels, Dalton",
+      "date": "2026-09-09",
+      "category": "Medical",
+      "standard": "KBEMS | Medical",
+      "hours": 1.0,
+      "course": "KBEMS Medical"
+    },
+    {
+      "name": "Gentry, Justin",
+      "date": "2026-10-26",
+      "category": "PAHT",
+      "standard": "KBEMS | PAHT",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course"
+    },
+    {
+      "name": "Hawthorne, Bryce",
+      "date": "2026-10-26",
+      "category": "PAHT",
+      "standard": "KBEMS | PAHT",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course"
+    },
+    {
+      "name": "Johnston, James",
+      "date": "2026-09-21",
+      "category": "Airway",
+      "standard": "KBEMS | Airway",
+      "hours": 1.0,
+      "course": "KBEMS Airway"
+    },
+    {
+      "name": "Johnston, James",
+      "date": "2026-09-21",
+      "category": "Medical",
+      "standard": "KBEMS | Medical",
+      "hours": 1.0,
+      "course": "KBEMS Medical"
+    },
+    {
+      "name": "Johnston, James",
+      "date": "2026-09-21",
+      "category": "Cardiovascular",
+      "standard": "KBEMS | Cardiovascular",
+      "hours": 1.0,
+      "course": "KBEMS Cardiovascular"
+    },
+    {
+      "name": "Mccarty, Ben",
+      "date": "2026-09-09",
+      "category": "Medical",
+      "standard": "KBEMS | Medical",
+      "hours": 1.0,
+      "course": "KBEMS Medical"
+    },
+    {
+      "name": "Mccarty, Ben",
+      "date": "2026-10-24",
+      "category": "Operations",
+      "standard": "KBEMS | Operations",
+      "hours": 1.0,
+      "course": "KBEMS Operations"
+    },
+    {
+      "name": "Meredith, Justin",
+      "date": "2026-10-27",
+      "category": "Operations",
+      "standard": "KBEMS | Operations",
+      "hours": 1.0,
+      "course": "KBEMS Operations"
+    },
+    {
+      "name": "Nickel, Dakota",
+      "date": "2026-10-23",
+      "category": "Airway",
+      "standard": "KBEMS | Airway",
+      "hours": 1.0,
+      "course": "KBEMS Airway"
+    },
+    {
+      "name": "Parsley, William",
+      "date": "2026-09-09",
+      "category": "Operations",
+      "standard": "KBEMS | Operations",
+      "hours": 1.0,
+      "course": "KBEMS Operations"
+    },
+    {
+      "name": "Smith, Jon",
+      "date": "2026-09-27",
+      "category": "Operations",
+      "standard": "KBEMS | Operations",
+      "hours": 1.0,
+      "course": "KBEMS Operations"
     }
   ]
 }
