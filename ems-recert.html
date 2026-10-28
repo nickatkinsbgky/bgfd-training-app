@@ -105,12 +105,17 @@
 
   #bracketView[hidden] { display:none; }
   #bracketView { padding:16px 20px 40px; }
-  .bracket-wrap { display:flex; gap:16px; overflow:auto; padding:8px 0; }
-  .bracket-col { min-width:200px; display:flex; flex-direction:column; gap:6px; }
-  .bracket-col.champ { border-left:2px solid #2ecc71; padding-left:12px; }
-  .bracket-slot { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:13px; }
-  .bracket-slot.ready { border-color:#2ecc71; background:#163326; }
-  .bracket-slot small { display:block; color:var(--muted); font-size:11px; }
+  .race-track { margin:10px 0; padding:8px 0; border-bottom:1px dashed var(--line); }
+  .race-lane { display:grid; grid-template-columns:140px 1fr 70px; gap:10px; align-items:center; margin:6px 0; }
+  .race-name { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .track { position:relative; height:28px; background:#1c2330; border-radius:14px; border:1px solid var(--line); overflow:hidden; }
+  .horse { position:absolute; left:0; top:0; height:100%; background:linear-gradient(90deg,#c62828,#d4a017); border-radius:14px; transition:width .6s ease; display:flex; align-items:center; justify-content:flex-end; padding-right:6px; font-size:18px; min-width:28px; }
+  .horse.done { background:linear-gradient(90deg,#2e7d4f,#7dcea0); }
+  .race-pct { text-align:right; font-weight:700; color:var(--gold); font-size:13px; }
+  .winners-circle { margin-top:20px; padding:16px; background:#163326; border:2px solid #2ecc71; border-radius:14px; }
+  .winners-circle h3 { margin:0 0 10px; color:#7dcea0; }
+  .winner { display:inline-block; background:#1e3a2f; border:1px solid #2ecc71; border-radius:8px; padding:6px 10px; margin:4px; font-size:13px; }
+  .finish-line { text-align:center; font-weight:700; color:var(--gold); margin:8px 0 4px; letter-spacing:.1em; }
 
   button, .btn, a.choice, a.back, a.exit, nav button, .home-link {
     border-radius: 8px !important;
@@ -163,7 +168,7 @@
     <button class="gold" id="landRoster" type="button" style="margin-top:8px">View full roster</button>
     <button class="gold" id="landDept" type="button" style="margin-top:8px">Department averages</button>
     <button class="red" id="landFocus" type="button" style="margin-top:8px">Training focus</button>
-    <button class="gold" id="landBracket" type="button" style="margin-top:8px">Race to Recertify bracket</button>
+    <button class="gold" id="landBracket" type="button" style="margin-top:8px">Race to Recertify</button>
     <a class="ready" href="https://kemsis.ky.gov" target="_blank" rel="noopener noreferrer">Ready for Recertification? CLICK HERE</a>
   </div>
 </section>
@@ -173,7 +178,7 @@
     <a class="back" href="#" id="bracketBack">Back to landing</a>
   </div>
   <h2 style="margin:0 0 4px">Race to Recertify</h2>
-  <p class="muted">NCAA-style bracket ranked by percent of required categories met. The finish line is fully ready to recertify.</p>
+  <p class="muted">Each personnel is a horse racing down the track. Closer to the finish line means closer to recertifying. Fully complete personnel are in the winners circle.</p>
   <div id="bracket-out"></div>
 </section>
 
