@@ -1,4 +1,24 @@
 (function () {
+  // Inject race styles
+  if (!document.getElementById('race-styles')) {
+    const style = document.createElement('style');
+    style.id = 'race-styles';
+    style.textContent = `
+      .race-container { display:flex; gap:20px; flex-wrap:wrap; }
+      .track-wrap { flex:1; min-width:400px; position:relative; background:linear-gradient(#2a4a2a,#1a3a1a); border-radius:10px; padding:20px 40px 20px 20px; overflow-x:auto; }
+      .track { position:relative; height:40px; background:repeating-linear-gradient(90deg,#4a3a2a 0 10px,#5a4a3a 10px 20px); border:2px solid #8b7355; border-radius:4px; margin:8px 0; }
+      .horse { position:absolute; top:-10px; font-size:28px; transform:translateX(-50%); transition:left 0.5s ease; white-space:nowrap; }
+      .horse span { position:absolute; bottom:-18px; left:50%; transform:translateX(-50%); font-size:10px; background:rgba(0,0,0,.7); padding:1px 4px; border-radius:3px; white-space:nowrap; }
+      .finish { position:absolute; right:0; top:0; bottom:0; width:4px; background:#fff; box-shadow:0 0 8px #fff; }
+      .finish::after { content:"🏁"; position:absolute; right:-10px; top:-20px; font-size:20px; }
+      .winners-circle { min-width:220px; background:var(--panel2); border:2px solid var(--gold); border-radius:12px; padding:16px; text-align:center; }
+      .winners-circle h3 { margin:0 0 12px; color:var(--gold); }
+      .winner { display:flex; align-items:center; gap:8px; margin:6px 0; font-size:13px; }
+      .winner .horse-icon { font-size:24px; }
+    `;
+    document.head.appendChild(style);
+  }
+
   function esc(s) {
     return String(s == null ? '' : s)
       .replace(/&/g, '&')
@@ -39,7 +59,7 @@
     html += '<div class="track-wrap">';
     html += '<h3 style="margin:0 0 8px;color:var(--gold)">The Track</h3>';
     if (racing.length) {
-      racing.forEach((p, i) => {
+      racing.forEach((p) => {
         const left = Math.max(2, Math.min(98, p.avg));
         html += '<div class="track" style="margin-bottom:28px">';
         html += '<div class="horse" style="left:' + left + '%">🐴<span>' + esc(p.name) + ' (' + p.avg + '%)</span></div>';
