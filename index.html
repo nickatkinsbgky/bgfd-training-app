@@ -105,12 +105,16 @@
       <a class="choice" href="national-data.html?v=20261008-3">National Data<small>Rescue Survey</small></a>
       <a class="choice alt" href="neris-reports.html">NERIS Reports<small>Casualty-Rescue Civilian</small></a>
       <a class="choice" href="iso-class1.html">ISO Class 1 Hours<small>Company Training Analysis</small></a>
+      <a class="choice alt" href="#" id="vfis-btn">VFIS Completion<small>Placeholder</small></a>
       <button class="owner" id="owner-btn" type="button">Owner sign-in</button>
       <p class="owner-note" id="owner-note">Sign in here before editing Personnel Performance.</p>
     </div>
   </div>
 <script>
 (function () {
+  var vfis = document.getElementById("vfis-btn");
+  if (vfis) vfis.addEventListener("click", function (e) { e.preventDefault(); alert("VFIS Completion — coming soon"); });
+
   var SESSION = 'bgfd-owner-unlock';
   var PASS = 'Bomberonick5606!';
   var btn = document.getElementById('owner-btn');
