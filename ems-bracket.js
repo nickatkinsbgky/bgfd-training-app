@@ -24,7 +24,11 @@
     return { pct: 0, met: 0, total: 0, ready: false };
   }
   function allPeople() {
-    return (window.db && window.db.people) ? window.db.people.slice() : [];
+    var list = (window.db && window.db.people) ? window.db.people.slice() : [];
+    return list.filter(function (p) {
+      var n = String(p.name || '');
+      return n && n.charAt(0) !== '=' && n.indexOf('COUNTIFS') < 0;
+    });
   }
   function availableYears() {
     var years = {};
@@ -33,8 +37,7 @@
       if (y >= 2026) years[y] = 1;
     });
     var list = Object.keys(years).map(Number).sort(function (a, b) { return a - b; });
-    if (!list.length) list = [2026];
-    // Ensure at least 2026 is present and extend a couple years forward for future cycles
+    if (!list.length) list = [2026, 2027];
     var max = Math.max.apply(null, list);
     for (var y = 2026; y <= Math.max(max, 2028); y++) {
       if (list.indexOf(y) < 0) list.push(y);
@@ -42,11 +45,13 @@
     return list.sort(function (a, b) { return a - b; });
   }
   function buildRace(year) {
+    year = Number(year);
     return allPeople().map(function (p) {
       var r = readiness(p);
-      return { name: p.name, year: expYear(p), pct: r.pct, met: r.met, total: r.total, ready: r.ready };
+      return { name: p.name, year: expYear(p), exp: p.expDate || p.exp || '', pct: r.pct, met: r.met, total: r.total, ready: r.ready };
     }).filter(function (p) {
-      return p.total > 0 && p.year === Number(year);
+      // Match expiration year: 2026 → exp 12/31/2026, 2027 → exp 12/31/2027, etc.
+      return p.year === year && p.total > 0;
     }).sort(function (a, b) {
       return b.pct - a.pct || a.name.localeCompare(b.name);
     });
@@ -57,7 +62,8 @@
     var years = availableYears();
     var current = sel.value || String(years[0] || 2026);
     sel.innerHTML = years.map(function (y) {
-      return '<option value="' + y + '"' + (String(y) === current ? ' selected' : '') + '>' + y + '</option>';
+      var label = y + ' (Exp 12/31/' + y + ')';
+      return '<option value="' + y + '"' + (String(y) === current ? ' selected' : '') + '>' + label + '</option>';
     }).join('');
     if (![].some.call(sel.options, function (o) { return o.value === current; })) {
       sel.value = String(years[0] || 2026);
@@ -69,8 +75,9 @@
     fillYearSelect();
     var year = document.getElementById('raceYear') ? document.getElementById('raceYear').value : '2026';
     var ranked = buildRace(year);
+    var label = year + ' (Exp 12/31/' + year + ')';
     if (!ranked.length) {
-      box.innerHTML = '<p class="muted">No personnel with cycle data for ' + esc(year) + ' yet.</p>';
+      box.innerHTML = '<p class="muted">No personnel with an expiration date of 12/31/' + esc(year) + ' and cycle data loaded yet.</p>';
       return;
     }
     var winners = ranked.filter(function (p) { return p.ready; });
@@ -79,13 +86,13 @@
     var html = '';
     if (winners.length) {
       html += '<div class="winners-circle">';
-      html += '<h3>🏆 Winners Circle — Hours Completed (' + esc(year) + ')</h3>';
+      html += '<h3>🏆 Winners Circle — Hours Completed (' + esc(label) + ')</h3>';
       winners.forEach(function (p) {
         html += '<span class="winner">🐴 ' + esc(p.name) + ' (100%)</span>';
       });
       html += '</div>';
     } else {
-      html += '<p class="muted">No one has crossed the finish line for ' + esc(year) + ' yet. Keep racing!</p>';
+      html += '<p class="muted">No one with exp 12/31/' + esc(year) + ' has crossed the finish line yet. Keep racing!</p>';
     }
 
     html += '<div class="finish-line">FINISH LINE →</div>';
@@ -103,7 +110,7 @@
       html += '<p class="muted">Everyone is in the winners circle!</p>';
     }
     html += '</div>';
-    html += '<p class="muted" style="margin-top:12px">' + esc(year) + ' cycle. Horses move closer to the finish line as more required categories are met. 100% = fully ready to recertify.</p>';
+    html += '<p class="muted" style="margin-top:12px">Showing personnel with expiration date 12/31/' + esc(year) + '. Horses move closer to the finish line as more required categories are met. 100% = fully ready to recertify.</p>';
     box.innerHTML = html;
   }
   function wire() {
