@@ -1,12 +1,11 @@
 (function () {
   function esc(s) {
     return String(s == null ? '' : s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+      .replace(/&/g, '&')
+      .replace(/</g, '<')
+      .replace(/>/g, '>');
   }
   function readiness(person) {
-    // Approximate readiness: % of categories met. Relies on global helpers if present.
     try {
       if (typeof window.emsPersonReport === 'function') {
         var rep = window.emsPersonReport(person.name);
@@ -19,58 +18,54 @@
     } catch (e) {}
     return { pct: 0, met: 0, total: 0, ready: false };
   }
-  function buildBracket() {
+  function buildRace() {
     var people = (window.db && window.db.people) ? window.db.people.slice() : [];
-    var ranked = people.map(function (p) {
+    return people.map(function (p) {
       var r = readiness(p);
       return { name: p.name, exp: p.exp || '', pct: r.pct, met: r.met, total: r.total, ready: r.ready };
     }).filter(function (p) { return p.total > 0; }).sort(function (a, b) {
       return b.pct - a.pct || a.name.localeCompare(b.name);
     });
-    return ranked;
   }
   function renderBracket() {
     var box = document.getElementById('bracket-out');
     if (!box) return;
-    var ranked = buildBracket();
+    var ranked = buildRace();
     if (!ranked.length) {
       box.innerHTML = '<p class="muted">No personnel with cycle data loaded yet.</p>';
       return;
     }
-    var ready = ranked.filter(function (p) { return p.ready; });
-    var notReady = ranked.filter(function (p) { return !p.ready; });
-    var html = '<div class="bracket-wrap">';
-    html += '<div class="bracket-col">';
-    html += '<h3 style="color:var(--gold);margin:0 0 8px">Field</h3>';
-    notReady.slice(0, 16).forEach(function (p) {
-      html += '<div class="bracket-slot">' + esc(p.name) + '<small>' + p.pct + '% · ' + p.met + '/' + p.total + '</small></div>';
-    });
-    if (notReady.length > 16) html += '<div class="bracket-slot muted">+' + (notReady.length - 16) + ' more</div>';
-    html += '</div>';
-    html += '<div class="bracket-col">';
-    html += '<h3 style="color:var(--gold);margin:0 0 8px">In the hunt</h3>';
-    notReady.slice(0, 8).forEach(function (p) {
-      html += '<div class="bracket-slot">' + esc(p.name) + '<small>' + p.pct + '%</small></div>';
-    });
-    html += '</div>';
-    html += '<div class="bracket-col">';
-    html += '<h3 style="color:var(--gold);margin:0 0 8px">Final four</h3>';
-    notReady.slice(0, 4).forEach(function (p) {
-      html += '<div class="bracket-slot">' + esc(p.name) + '<small>' + p.pct + '%</small></div>';
-    });
-    html += '</div>';
-    html += '<div class="bracket-col champ">';
-    html += '<h3 style="color:#7dcea0;margin:0 0 8px">Ready to Recertify</h3>';
-    if (ready.length) {
-      ready.forEach(function (p) {
-        html += '<div class="bracket-slot ready">' + esc(p.name) + '<small>100%</small></div>';
+    var winners = ranked.filter(function (p) { return p.ready; });
+    var racing = ranked.filter(function (p) { return !p.ready; });
+
+    var html = '';
+    if (winners.length) {
+      html += '<div class="winners-circle">';
+      html += '<h3>🏆 Winners Circle — Hours Completed</h3>';
+      winners.forEach(function (p) {
+        html += '<span class="winner">🐴 ' + esc(p.name) + ' (100%)</span>';
       });
+      html += '</div>';
     } else {
-      html += '<div class="bracket-slot muted">No one fully ready yet</div>';
+      html += '<p class="muted">No one has crossed the finish line yet. Keep racing!</p>';
+    }
+
+    html += '<div class="finish-line">FINISH LINE →</div>';
+    html += '<div class="race-track">';
+    racing.forEach(function (p) {
+      var width = Math.max(4, Math.min(100, p.pct));
+      var horseClass = p.pct >= 100 ? 'horse done' : 'horse';
+      html += '<div class="race-lane">';
+      html += '<div class="race-name" title="' + esc(p.name) + '">' + esc(p.name) + '</div>';
+      html += '<div class="track"><div class="' + horseClass + '" style="width:' + width + '%">🐴</div></div>';
+      html += '<div class="race-pct">' + p.pct + '%</div>';
+      html += '</div>';
+    });
+    if (!racing.length) {
+      html += '<p class="muted">Everyone is in the winners circle!</p>';
     }
     html += '</div>';
-    html += '</div>';
-    html += '<p class="muted" style="margin-top:12px">Ranked by percent of required categories met in the current cycle. Top of the field are closest to the finish line.</p>';
+    html += '<p class="muted" style="margin-top:12px">Horses move closer to the finish line as more required categories are met. 100% = fully ready to recertify.</p>';
     box.innerHTML = html;
   }
   function wire() {
@@ -81,7 +76,8 @@
         document.getElementById('personView').hidden = true;
         document.getElementById('focusView').hidden = true;
         document.getElementById('deptView').hidden = true;
-        document.getElementById('app').hidden = true;
+        var app = document.getElementById('app');
+        if (app) app.hidden = true;
         var view = document.getElementById('bracketView');
         if (view) { view.hidden = false; renderBracket(); }
       };
@@ -97,6 +93,5 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  // Also try after a short delay in case EMS script loads later
-  setTimeout(wire, 1500);
+  setTimeout(wire, 800);
 })();
