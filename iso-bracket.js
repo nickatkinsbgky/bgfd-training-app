@@ -1,9 +1,9 @@
 (function () {
   function esc(s) {
     return String(s == null ? '' : s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+      .replace(/&/g, '&')
+      .replace(/</g, '<')
+      .replace(/>/g, '>');
   }
   function pct(have, need) {
     if (!need) return 100;
@@ -33,34 +33,36 @@
       return;
     }
     const complete = people.filter(p => p.complete);
-    const rest = people.filter(p => !p.complete);
-    let html = '<div class="bracket-wrap">';
-    html += '<div class="bracket-col"><h3 style="color:var(--gold)">Field</h3>';
-    rest.slice(0, 16).forEach(p => {
-      html += '<div class="bracket-slot">' + esc(p.name) + '<small>' + p.avg + '% avg</small></div>';
-    });
-    if (rest.length > 16) html += '<div class="bracket-slot muted">+' + (rest.length - 16) + ' more</div>';
-    html += '</div>';
-    html += '<div class="bracket-col"><h3 style="color:var(--gold)">Closing in</h3>';
-    rest.slice(0, 8).forEach(p => {
-      html += '<div class="bracket-slot">' + esc(p.name) + '<small>' + p.avg + '%</small></div>';
-    });
-    html += '</div>';
-    html += '<div class="bracket-col"><h3 style="color:var(--gold)">Final four</h3>';
-    rest.slice(0, 4).forEach(p => {
-      html += '<div class="bracket-slot">' + esc(p.name) + '<small>' + p.avg + '%</small></div>';
-    });
-    html += '</div>';
-    html += '<div class="bracket-col champ"><h3 style="color:#7dcea0">All categories complete</h3>';
-    if (complete.length) {
-      complete.forEach(p => {
-        html += '<div class="bracket-slot ready">' + esc(p.name) + '<small>100%</small></div>';
+    const racing = people.filter(p => !p.complete);
+
+    let html = '<div class="race-container">';
+    html += '<div class="track-wrap">';
+    html += '<h3 style="margin:0 0 8px;color:var(--gold)">The Track</h3>';
+    if (racing.length) {
+      racing.forEach((p, i) => {
+        const left = Math.max(2, Math.min(98, p.avg));
+        html += '<div class="track" style="margin-bottom:28px">';
+        html += '<div class="horse" style="left:' + left + '%">🐴<span>' + esc(p.name) + ' (' + p.avg + '%)</span></div>';
+        html += '<div class="finish"></div>';
+        html += '</div>';
       });
     } else {
-      html += '<div class="bracket-slot muted">No one fully complete yet</div>';
+      html += '<p class="muted">All horses have finished!</p>';
+    }
+    html += '</div>';
+
+    html += '<div class="winners-circle">';
+    html += '<h3>🏆 Winners Circle</h3>';
+    if (complete.length) {
+      complete.forEach(p => {
+        html += '<div class="winner"><span class="horse-icon">🐴</span><span>' + esc(p.name) + '</span></div>';
+      });
+    } else {
+      html += '<p class="muted">No finishers yet — keep racing!</p>';
     }
     html += '</div></div>';
-    html += '<p class="muted" style="margin-top:12px">Ranked by average percent complete across applicable categories (Company 192, Facility 18, Driver Op if required, Officer if required, HazMat 6). Finish line = all applicable categories met.</p>';
+
+    html += '<p class="muted" style="margin-top:12px">Horses are positioned by average percent complete across applicable categories (Company 192, Facility 18, Driver Op if required, Officer if required, HazMat 6). Finish line = all applicable categories met.</p>';
     box.innerHTML = html;
   }
   function wire() {
