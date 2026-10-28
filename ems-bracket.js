@@ -10,25 +10,36 @@
     var m = String(raw).match(/(\d{4})/);
     return m ? Number(m[1]) : 0;
   }
+  function peopleSource() {
+    try {
+      if (typeof window.getEmsDb === 'function') {
+        var db = window.getEmsDb();
+        if (db && db.people && db.people.length) return db.people;
+      }
+    } catch (e) {}
+    if (window.db && window.db.people && window.db.people.length) return window.db.people;
+    if (window.EMS_RECERT_SEED && window.EMS_RECERT_SEED.people) return window.EMS_RECERT_SEED.people;
+    return [];
+  }
+  function allPeople() {
+    return peopleSource().filter(function (p) {
+      var n = String(p.name || '');
+      return n && n.charAt(0) !== '=' && n.indexOf('COUNTIFS') < 0 && n.indexOf('Requirements') < 0;
+    });
+  }
   function readiness(person) {
     try {
       if (typeof window.emsPersonReport === 'function') {
         var rep = window.emsPersonReport(person.name);
-        if (rep && rep.cats) {
-          var total = rep.cats.length;
-          var met = rep.cats.filter(function (c) { return c.earned >= c.need; }).length;
+        var cats = (rep && (rep.categories || rep.cats)) || [];
+        if (cats.length) {
+          var total = cats.length;
+          var met = cats.filter(function (c) { return Number(c.earned) >= Number(c.need); }).length;
           return { pct: total ? Math.round(100 * met / total) : 0, met: met, total: total, ready: met === total && total > 0 };
         }
       }
     } catch (e) {}
     return { pct: 0, met: 0, total: 0, ready: false };
-  }
-  function allPeople() {
-    var list = (window.db && window.db.people) ? window.db.people.slice() : [];
-    return list.filter(function (p) {
-      var n = String(p.name || '');
-      return n && n.charAt(0) !== '=' && n.indexOf('COUNTIFS') < 0;
-    });
   }
   function availableYears() {
     var years = {};
@@ -48,10 +59,10 @@
     year = Number(year);
     return allPeople().map(function (p) {
       var r = readiness(p);
-      return { name: p.name, year: expYear(p), exp: p.expDate || p.exp || '', pct: r.pct, met: r.met, total: r.total, ready: r.ready };
+      return { name: p.name, year: expYear(p), exp: p.expDate || '', pct: r.pct, met: r.met, total: r.total, ready: r.ready };
     }).filter(function (p) {
-      // Match expiration year: 2026 → exp 12/31/2026, 2027 → exp 12/31/2027, etc.
-      return p.year === year && p.total > 0;
+      // 2026 → exp 12/31/2026, 2027 → exp 12/31/2027, etc.
+      return p.year === year;
     }).sort(function (a, b) {
       return b.pct - a.pct || a.name.localeCompare(b.name);
     });
@@ -77,7 +88,7 @@
     var ranked = buildRace(year);
     var label = year + ' (Exp 12/31/' + year + ')';
     if (!ranked.length) {
-      box.innerHTML = '<p class="muted">No personnel with an expiration date of 12/31/' + esc(year) + ' and cycle data loaded yet.</p>';
+      box.innerHTML = '<p class="muted">No personnel with an expiration date of 12/31/' + esc(year) + ' found. Check that the EMS data has loaded.</p>';
       return;
     }
     var winners = ranked.filter(function (p) { return p.ready; });
@@ -110,7 +121,7 @@
       html += '<p class="muted">Everyone is in the winners circle!</p>';
     }
     html += '</div>';
-    html += '<p class="muted" style="margin-top:12px">Showing personnel with expiration date 12/31/' + esc(year) + '. Horses move closer to the finish line as more required categories are met. 100% = fully ready to recertify.</p>';
+    html += '<p class="muted" style="margin-top:12px">' + ranked.length + ' personnel with expiration date 12/31/' + esc(year) + '. Horses move closer to the finish line as more required categories are met. 100% = fully ready to recertify.</p>';
     box.innerHTML = html;
   }
   function wire() {
