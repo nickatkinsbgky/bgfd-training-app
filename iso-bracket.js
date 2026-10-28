@@ -1,9 +1,17 @@
 (function () {
-  // Inject race styles — track fits width, vertical scroll for all horses
+  // Inject race styles — track spans full screen width
   if (!document.getElementById('race-styles')) {
     const style = document.createElement('style');
     style.id = 'race-styles';
     style.textContent = `
+      #iso-bracket-out {
+        width: 100vw;
+        max-width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        padding: 0 16px;
+        box-sizing: border-box;
+      }
       .race-container {
         display: flex;
         gap: 16px;
@@ -71,8 +79,8 @@
         font-size: 18px;
       }
       .winners-circle {
-        flex: 0 0 220px;
-        max-width: 220px;
+        flex: 0 0 200px;
+        max-width: 200px;
         background: var(--panel2);
         border: 2px solid var(--gold);
         border-radius: 12px;
