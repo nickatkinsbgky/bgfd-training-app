@@ -1,5 +1,5 @@
 (function () {
-  // Inject race styles — track spans full screen width
+  // Inject race styles — track and winners circle fill the entire viewing window
   if (!document.getElementById('race-styles')) {
     const style = document.createElement('style');
     style.id = 'race-styles';
@@ -9,23 +9,23 @@
         max-width: 100vw;
         margin-left: calc(50% - 50vw);
         margin-right: calc(50% - 50vw);
-        padding: 0 16px;
+        padding: 0 8px;
         box-sizing: border-box;
       }
       .race-container {
         display: flex;
-        gap: 16px;
+        gap: 12px;
         align-items: flex-start;
         width: 100%;
         max-width: 100%;
         box-sizing: border-box;
       }
       .track-wrap {
-        flex: 1 1 auto;
+        flex: 1 1 0;
         min-width: 0;
         background: linear-gradient(#2a4a2a, #1a3a1a);
         border-radius: 10px;
-        padding: 16px 28px 16px 16px;
+        padding: 16px 24px 16px 16px;
         box-sizing: border-box;
         overflow-x: hidden;
       }
@@ -79,8 +79,8 @@
         font-size: 18px;
       }
       .winners-circle {
-        flex: 0 0 200px;
-        max-width: 200px;
+        flex: 0 0 280px;
+        max-width: 320px;
         background: var(--panel2);
         border: 2px solid var(--gold);
         border-radius: 12px;
@@ -93,7 +93,7 @@
       .winners-circle h3 { margin: 0 0 10px; color: var(--gold); font-size: 15px; }
       .winner { display: flex; align-items: center; gap: 6px; margin: 5px 0; font-size: 12px; justify-content: center; }
       .winner .horse-icon { font-size: 20px; }
-      @media (max-width: 800px) {
+      @media (max-width: 900px) {
         .race-container { flex-direction: column; }
         .winners-circle {
           flex: 1 1 auto;
@@ -104,7 +104,7 @@
         .horse { font-size: 22px; }
         .horse span { font-size: 9px; max-width: 100px; }
         .track { height: 32px; margin-bottom: 20px; }
-        .track-wrap { padding: 12px 24px 12px 12px; }
+        .track-wrap { padding: 12px 20px 12px 12px; }
       }
     `;
     document.head.appendChild(style);
