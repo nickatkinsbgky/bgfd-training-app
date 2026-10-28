@@ -47,6 +47,15 @@
   function render() {
     const box = document.getElementById('iso-bracket-out');
     if (!box) return;
+    // Update title and description dynamically
+    const section = box.closest('section');
+    if (section) {
+      const h2 = section.querySelector('h2');
+      if (h2) h2.textContent = 'Horse Race to Complete ISO Hours';
+      const muted = section.querySelector('p.muted');
+      if (muted) muted.textContent = 'Every person is a horse racing toward the finish line — 100% of required training hours across all applicable categories. Horses that reach the finish line move to the Winners Circle.';
+    }
+
     const people = (typeof data !== 'undefined' && Array.isArray(data)) ? data.map(personProgress).sort((a, b) => b.avg - a.avg || a.name.localeCompare(b.name)) : [];
     if (!people.length) {
       box.innerHTML = '<p class="muted">No ISO data loaded.</p>';
