@@ -342,7 +342,7 @@
   fetch('national-data/records.json')
     .then(function (r) { if (!r.ok) throw new Error('Could not load records.json'); return r.json(); })
     .then(function (json) {
-      data = json;
+      data = Array.isArray(json) ? json : (json.records || []);
       document.getElementById('status').textContent = data.length + ' records loaded';
       fillSelect(room, countBy(data, loc));
       fillSelect(out, countBy(data, function (r) { return r.out; }));
