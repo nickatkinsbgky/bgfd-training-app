@@ -384,8 +384,153 @@ function showPerson(name) {
     `<p>Driver Op: ${Number(p.Driver_Op_Raw||0).toFixed(1)} | Officer: ${Number(p.Officer_Raw||0).toFixed(1)} | HazMat: ${Number(p.HazMat_Raw||0).toFixed(1)}</p>`;
 }
 
+function destroyCharts() {
+  [deptChart, categoryCompletionChart, categoryCountChart, personChart].forEach(c => { if (c) c.destroy(); });
+  deptChart = categoryCompletionChart = categoryCountChart = personChart = null;
+}
+
 function drawAllCharts() {
-  console.log('Charts redrawn');
+  destroyCharts();
+  const sel = document.getElementById('chart-person');
+  const name = sel ? sel.value : '';
+  const deptBox = document.getElementById('charts-dept');
+  const personBox = document.getElementById('charts-person');
+  if (name) {
+    if (deptBox) deptBox.style.display = 'none';
+    if (personBox) personBox.style.display = 'block';
+    drawPersonChart(name);
+  } else {
+    if (deptBox) deptBox.style.display = 'block';
+    if (personBox) personBox.style.display = 'none';
+    drawDeptCharts();
+  }
+  renderTopLists();
+}
+
+function drawDeptCharts() {
+  if (!data.length) return;
+
+  const buckets = [0, 50, 100, 150, 192, 250, 9999];
+  const bucketLabels = ['0–49', '50–99', '100–149', '150–191', '192–249', '250+'];
+  const bucketCounts = bucketLabels.map(() => 0);
+  data.forEach(r => {
+    const v = Number(r.Effective_Company_Hours) || 0;
+    for (let i = 0; i < buckets.length - 1; i++) {
+      if (v >= buckets[i] && v < buckets[i + 1]) { bucketCounts[i]++; break; }
+    }
+  });
+  const ctx1 = document.getElementById('dept-chart');
+  if (ctx1) {
+    deptChart = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: bucketLabels,
+        datasets: [{ label: 'Personnel', data: bucketCounts, backgroundColor: '#d4a017' }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { title: { display: true, text: 'Department — Effective Company Hours Distribution', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } },
+        scales: { x: { ticks: { color: '#8b949e' } }, y: { ticks: { color: '#8b949e' }, beginAtZero: true, title: { display: true, text: 'Number of personnel', color: '#8b949e' } } }
+      }
+    });
+  }
+
+  const cats = [
+    { label: 'Company ≥192', met: r => Number(r.Effective_Company_Hours) >= 192 },
+    { label: 'Facility ≥18', met: r => Number(r.Facility_Raw) >= 18 },
+    { label: 'Driver Op (req.)', met: r => !isEngineerRank(r.Rank) || Number(r.Driver_Op_Raw) >= 12 },
+    { label: 'Officer (req.)', met: r => !isOfficerRank(r.Rank) || Number(r.Officer_Raw) >= 12 },
+    { label: 'HazMat ≥6', met: r => Number(r.HazMat_Raw) >= 6 }
+  ];
+  const rates = cats.map(c => Math.round(100 * data.filter(c.met).length / data.length));
+  const ctx2 = document.getElementById('category-completion-chart');
+  if (ctx2) {
+    categoryCompletionChart = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: cats.map(c => c.label),
+        datasets: [{ label: '% Meeting Target', data: rates, backgroundColor: '#3fb950' }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { title: { display: true, text: 'Department — % Meeting Each Category Target', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } },
+        scales: { x: { ticks: { color: '#8b949e' } }, y: { ticks: { color: '#8b949e' }, beginAtZero: true, max: 100, title: { display: true, text: '% of personnel', color: '#8b949e' } } }
+      }
+    });
+  }
+
+  const counts = cats.map(c => data.filter(c.met).length);
+  const ctx3 = document.getElementById('category-count-chart');
+  if (ctx3) {
+    categoryCountChart = new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: cats.map(c => c.label),
+        datasets: [{ label: 'Personnel Meeting Target', data: counts, backgroundColor: '#c62828' }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { title: { display: true, text: 'Personnel Completing Each Category', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } },
+        scales: { x: { ticks: { color: '#8b949e' } }, y: { ticks: { color: '#8b949e' }, beginAtZero: true, title: { display: true, text: 'Count', color: '#8b949e' } } }
+      }
+    });
+  }
+}
+
+function drawPersonChart(name) {
+  const p = data.find(r => (r.Last_Name + ', ' + r.First_Name) === name);
+  const note = document.getElementById('person-chart-note');
+  if (!p) {
+    if (note) note.textContent = 'Person not found.';
+    return;
+  }
+  const eng = isEngineerRank(p.Rank);
+  const off = isOfficerRank(p.Rank);
+  const items = [
+    { label: 'Company (192)', have: Number(p.Effective_Company_Hours)||0, need: 192 },
+    { label: 'Facility (18)', have: Number(p.Facility_Raw)||0, need: 18 },
+    { label: eng ? 'Driver Op (12)' : 'Driver Op (n/a)', have: Number(p.Driver_Op_Raw)||0, need: eng ? 12 : 0 },
+    { label: off ? 'Officer (12)' : 'Officer (n/a)', have: Number(p.Officer_Raw)||0, need: off ? 12 : 0 },
+    { label: 'HazMat (6)', have: Number(p.HazMat_Raw)||0, need: 6 }
+  ].filter(i => i.need > 0 || i.have > 0);
+
+  const ctx = document.getElementById('person-chart');
+  if (ctx) {
+    personChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: items.map(i => i.label),
+        datasets: [
+          { label: 'Hours', data: items.map(i => i.have), backgroundColor: '#d4a017' },
+          { label: 'Target', data: items.map(i => i.need), backgroundColor: 'rgba(139,148,158,0.4)', borderColor: '#8b949e', borderWidth: 1 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { title: { display: true, text: name + ' — Hours vs Target', color: '#e6edf3' }, legend: { labels: { color: '#e6edf3' } } },
+        scales: { x: { ticks: { color: '#8b949e' } }, y: { ticks: { color: '#8b949e' }, beginAtZero: true } }
+      }
+    });
+  }
+  if (note) {
+    const short = Number(p.Company_Short_to_192)||0;
+    note.textContent = short > 0
+      ? `Short ${short.toFixed(1)} hours to the 192 Company target. Facility short: ${Number(p.Facility_Short||0).toFixed(1)}, HazMat short: ${Number(p.HazMat_Short||0).toFixed(1)}.`
+      : `At or above the 192 Company target (Effective: ${Number(p.Effective_Company_Hours||0).toFixed(1)}).`;
+  }
+}
+
+function renderTopLists() {
+  const box = document.getElementById('top-lists');
+  if (!box) return;
+  const sorted = [...data].sort((a,b) => (Number(b.Effective_Company_Hours)||0) - (Number(a.Effective_Company_Hours)||0));
+  const top = sorted.slice(0, 8);
+  const bottom = sorted.slice(-8).reverse();
+  const li = (arr) => arr.map(r => `<li>${r.Last_Name}, ${r.First_Name} — ${Number(r.Effective_Company_Hours||0).toFixed(1)}</li>`).join('');
+  box.innerHTML = `
+    <div class="top-list"><h3>Highest Effective Company</h3><ol>${li(top)}</ol></div>
+    <div class="top-list"><h3>Lowest Effective Company</h3><ol>${li(bottom)}</ol></div>
+  `;
 }
 
 function openEdit(idx) {
