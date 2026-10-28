@@ -177,7 +177,7 @@
 
   <section id="tab-bracket" class="card" hidden>
     <h2>Race to Complete ISO Categories</h2>
-    <p class="muted">Ranked by average percent complete across applicable categories. Finish line = all required categories met (Company 192, Facility 18, Driver Op if required, Officer if required, HazMat 6).</p>
+    <p class="muted">Each personnel is a horse racing down the track. Closer to the finish line means closer to completing all required ISO categories. Fully complete personnel are in the winners circle.</p>
     <div id="iso-bracket-out"></div>
   </section>
 </main>
@@ -698,6 +698,6 @@ fetch('iso_class1_data.json?t=' + Date.now())
 const tokenInput = document.getElementById('sync-token');
 if (tokenInput && localStorage.getItem(TOKEN_KEY)) tokenInput.value = '••••••••••••';
 </script>
-<script src="iso-bracket.js?v=20261028-8"></script>
+<script src="iso-bracket.js?v=20261028-race"></script>
 </body>
 </html>
