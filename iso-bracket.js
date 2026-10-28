@@ -1,20 +1,96 @@
 (function () {
-  // Inject race styles
+  // Inject race styles — responsive so the track fits the viewing window
   if (!document.getElementById('race-styles')) {
     const style = document.createElement('style');
     style.id = 'race-styles';
     style.textContent = `
-      .race-container { display:flex; gap:20px; flex-wrap:wrap; }
-      .track-wrap { flex:1; min-width:400px; position:relative; background:linear-gradient(#2a4a2a,#1a3a1a); border-radius:10px; padding:20px 40px 20px 20px; overflow-x:auto; }
-      .track { position:relative; height:40px; background:repeating-linear-gradient(90deg,#4a3a2a 0 10px,#5a4a3a 10px 20px); border:2px solid #8b7355; border-radius:4px; margin:8px 0; }
-      .horse { position:absolute; top:-10px; font-size:28px; transform:translateX(-50%); transition:left 0.5s ease; white-space:nowrap; }
-      .horse span { position:absolute; bottom:-18px; left:50%; transform:translateX(-50%); font-size:10px; background:rgba(0,0,0,.7); padding:1px 4px; border-radius:3px; white-space:nowrap; }
-      .finish { position:absolute; right:0; top:0; bottom:0; width:4px; background:#fff; box-shadow:0 0 8px #fff; }
-      .finish::after { content:"🏁"; position:absolute; right:-10px; top:-20px; font-size:20px; }
-      .winners-circle { min-width:220px; background:var(--panel2); border:2px solid var(--gold); border-radius:12px; padding:16px; text-align:center; }
-      .winners-circle h3 { margin:0 0 12px; color:var(--gold); }
-      .winner { display:flex; align-items:center; gap:8px; margin:6px 0; font-size:13px; }
-      .winner .horse-icon { font-size:24px; }
+      .race-container {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        max-width: 100%;
+      }
+      .track-wrap {
+        flex: 1 1 0;
+        min-width: 0;
+        width: 100%;
+        position: relative;
+        background: linear-gradient(#2a4a2a, #1a3a1a);
+        border-radius: 10px;
+        padding: 16px 36px 16px 16px;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+      .track {
+        position: relative;
+        height: 36px;
+        background: repeating-linear-gradient(90deg, #4a3a2a 0 10px, #5a4a3a 10px 20px);
+        border: 2px solid #8b7355;
+        border-radius: 4px;
+        margin: 6px 0 24px;
+        box-sizing: border-box;
+      }
+      .horse {
+        position: absolute;
+        top: -8px;
+        font-size: 26px;
+        transform: translateX(-50%);
+        transition: left 0.5s ease;
+        white-space: nowrap;
+        line-height: 1;
+      }
+      .horse span {
+        position: absolute;
+        bottom: -16px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        background: rgba(0,0,0,.75);
+        padding: 1px 4px;
+        border-radius: 3px;
+        white-space: nowrap;
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .finish {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #fff;
+        box-shadow: 0 0 8px #fff;
+      }
+      .finish::after {
+        content: "\ud83c\udfc1";
+        position: absolute;
+        right: -8px;
+        top: -18px;
+        font-size: 18px;
+      }
+      .winners-circle {
+        flex: 0 0 200px;
+        max-width: 100%;
+        background: var(--panel2);
+        border: 2px solid var(--gold);
+        border-radius: 12px;
+        padding: 14px;
+        text-align: center;
+        box-sizing: border-box;
+      }
+      .winners-circle h3 { margin: 0 0 10px; color: var(--gold); font-size: 15px; }
+      .winner { display: flex; align-items: center; gap: 6px; margin: 5px 0; font-size: 12px; justify-content: center; }
+      .winner .horse-icon { font-size: 20px; }
+      @media (max-width: 700px) {
+        .race-container { flex-direction: column; }
+        .track-wrap { padding: 12px 28px 12px 12px; }
+        .winners-circle { flex: 1 1 auto; width: 100%; }
+        .horse { font-size: 22px; }
+        .horse span { font-size: 8px; max-width: 90px; }
+        .track { height: 32px; margin-bottom: 20px; }
+      }
     `;
     document.head.appendChild(style);
   }
@@ -47,7 +123,6 @@
   function render() {
     const box = document.getElementById('iso-bracket-out');
     if (!box) return;
-    // Update title and description dynamically
     const section = box.closest('section');
     if (section) {
       const h2 = section.querySelector('h2');
@@ -70,8 +145,8 @@
     if (racing.length) {
       racing.forEach((p) => {
         const left = Math.max(2, Math.min(98, p.avg));
-        html += '<div class="track" style="margin-bottom:28px">';
-        html += '<div class="horse" style="left:' + left + '%">🐴<span>' + esc(p.name) + ' (' + p.avg + '%)</span></div>';
+        html += '<div class="track">';
+        html += '<div class="horse" style="left:' + left + '%">\ud83d\udc34<span>' + esc(p.name) + ' (' + p.avg + '%)</span></div>';
         html += '<div class="finish"></div>';
         html += '</div>';
       });
@@ -81,10 +156,10 @@
     html += '</div>';
 
     html += '<div class="winners-circle">';
-    html += '<h3>🏆 Winners Circle</h3>';
+    html += '<h3>\ud83c\udfc6 Winners Circle</h3>';
     if (complete.length) {
       complete.forEach(p => {
-        html += '<div class="winner"><span class="horse-icon">🐴</span><span>' + esc(p.name) + '</span></div>';
+        html += '<div class="winner"><span class="horse-icon">\ud83d\udc34</span><span>' + esc(p.name) + '</span></div>';
       });
     } else {
       html += '<p class="muted">No finishers yet — keep racing!</p>';
