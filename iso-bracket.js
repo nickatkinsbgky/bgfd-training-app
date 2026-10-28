@@ -1,5 +1,5 @@
 (function () {
-  // Inject race styles — responsive so the track fits the viewing window
+  // Inject race styles — track fits width, vertical scroll for all horses
   if (!document.getElementById('race-styles')) {
     const style = document.createElement('style');
     style.id = 'race-styles';
@@ -7,20 +7,19 @@
       .race-container {
         display: flex;
         gap: 16px;
-        flex-wrap: wrap;
         align-items: flex-start;
+        width: 100%;
         max-width: 100%;
+        box-sizing: border-box;
       }
       .track-wrap {
-        flex: 1 1 0;
+        flex: 1 1 auto;
         min-width: 0;
-        width: 100%;
-        position: relative;
         background: linear-gradient(#2a4a2a, #1a3a1a);
         border-radius: 10px;
-        padding: 16px 36px 16px 16px;
-        overflow: hidden;
+        padding: 16px 28px 16px 16px;
         box-sizing: border-box;
+        overflow-x: hidden;
       }
       .track {
         position: relative;
@@ -30,6 +29,7 @@
         border-radius: 4px;
         margin: 6px 0 24px;
         box-sizing: border-box;
+        width: 100%;
       }
       .horse {
         position: absolute;
@@ -45,12 +45,12 @@
         bottom: -16px;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 9px;
+        font-size: 10px;
         background: rgba(0,0,0,.75);
         padding: 1px 4px;
         border-radius: 3px;
         white-space: nowrap;
-        max-width: 120px;
+        max-width: 140px;
         overflow: hidden;
         text-overflow: ellipsis;
       }
@@ -66,30 +66,37 @@
       .finish::after {
         content: "\ud83c\udfc1";
         position: absolute;
-        right: -8px;
+        right: -6px;
         top: -18px;
         font-size: 18px;
       }
       .winners-circle {
-        flex: 0 0 200px;
-        max-width: 100%;
+        flex: 0 0 220px;
+        max-width: 220px;
         background: var(--panel2);
         border: 2px solid var(--gold);
         border-radius: 12px;
         padding: 14px;
         text-align: center;
         box-sizing: border-box;
+        position: sticky;
+        top: 12px;
       }
       .winners-circle h3 { margin: 0 0 10px; color: var(--gold); font-size: 15px; }
       .winner { display: flex; align-items: center; gap: 6px; margin: 5px 0; font-size: 12px; justify-content: center; }
       .winner .horse-icon { font-size: 20px; }
-      @media (max-width: 700px) {
+      @media (max-width: 800px) {
         .race-container { flex-direction: column; }
-        .track-wrap { padding: 12px 28px 12px 12px; }
-        .winners-circle { flex: 1 1 auto; width: 100%; }
+        .winners-circle {
+          flex: 1 1 auto;
+          max-width: 100%;
+          position: static;
+          margin-top: 12px;
+        }
         .horse { font-size: 22px; }
-        .horse span { font-size: 8px; max-width: 90px; }
+        .horse span { font-size: 9px; max-width: 100px; }
         .track { height: 32px; margin-bottom: 20px; }
+        .track-wrap { padding: 12px 24px 12px 12px; }
       }
     `;
     document.head.appendChild(style);
