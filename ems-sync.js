@@ -111,7 +111,10 @@
     if (!payload || !payload.people) { setSyncMsg("Nothing to upload yet.", false); return; }
     if (typeof window.saveEms === "function") payload = window.saveEms();
     else localStorage.setItem(KEY, JSON.stringify(payload));
-    if (!tok) { setSyncMsg("Saved on this device. Paste a GitHub token, then upload."); return; }
+    if (!tok) {
+      setSyncMsg("Saved on this device. Owner login allows all changes locally.", true);
+      return;
+    }
     setSyncMsg("Uploading to the site…");
     var api = "https://api.github.com/repos/" + REMOTE.owner + "/" + REMOTE.repo + "/contents/" + REMOTE.path;
     var headers = { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" };
@@ -138,19 +141,6 @@
       setSyncMsg("Upload failed: " + err.message, false);
     }
   }
-  var input = document.getElementById("sync-token");
-  if (input) input.value = getToken() ? "••••••••••••" : "";
-  var saveToken = document.getElementById("btn-save-token");
-  if (saveToken) saveToken.onclick = function () {
-    var val = (input.value || "").trim();
-    if (!val || val.indexOf("•") === 0) {
-      setSyncMsg(getToken() ? "Token already saved on this device." : "Paste a token first.", !!getToken());
-      return;
-    }
-    localStorage.setItem(TOKEN_KEY, val);
-    input.value = "••••••••••••";
-    setSyncMsg("Token saved on this device.", true);
-  };
   var saveAll = document.getElementById("btn-save-all");
   if (saveAll) saveAll.onclick = function () {
     if (typeof window.saveEms === "function") window.saveEms();
