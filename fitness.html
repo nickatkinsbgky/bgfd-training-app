@@ -24,6 +24,7 @@
   .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px 14px; }
   .btn { background:var(--red); color:#fff; border:0; border-radius:6px; padding:9px 16px; font-weight:700; cursor:pointer; }
   .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); }
+  .btn.gold { background:var(--gold); color:#1a1200; }
   .row-actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
   table { width:100%; border-collapse:collapse; font-size:13px; }
   th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; }
@@ -76,6 +77,7 @@
   <button class="btn" id="btn-save-all" type="button">Save</button>
   <button class="btn ghost" id="btn-load" type="button">Load site data</button>
   <button class="btn ghost" id="btn-push" type="button">Upload to site</button>
+  <button class="btn gold" id="btn-pdf" type="button">Generate PDF</button>
   <input id="sync-token" type="password" autocomplete="off" placeholder="GitHub token (same as training)" />
   <button class="btn ghost" id="btn-save-token" type="button">Save token</button>
   <span class="note" id="sync-msg"></span>
@@ -206,5 +208,8 @@
 <script src="fitness-sync.js?v=20261001-13"></script>
 <script src="fitness-export.js?v=20261001-14"></script>
 <script src="share.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
+<script src="fitness-pdf.js?v=20261029-1"></script>
 </body>
 </html>
