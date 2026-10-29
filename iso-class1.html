@@ -612,7 +612,7 @@ function saveToken() {
   setSyncMsg('Token saved', true);
 }
 
-function loadSiteData() {
+function loadSiteData() { window.loadSiteData = loadSiteData;
   setSyncMsg('Loading...', true);
   fetch('iso_class1_data.json?t=' + Date.now())
     .then(r => r.json())
@@ -829,5 +829,6 @@ const tokenInput = document.getElementById('sync-token');
 if (tokenInput && localStorage.getItem(TOKEN_KEY)) tokenInput.value = '••••••••••••';
 </script>
 <script src="iso-bracket.js?v=20261028-race"></script>
+<script src="share.js?v=20261029-1"></script>
 </body>
 </html>
