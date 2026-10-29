@@ -142,13 +142,17 @@ function isShaError(msg) {
 
 async function pushRemote() {
   const tok = getToken();
-  if (!tok) {
-    setSyncMsg('Saved on this device. Paste a GitHub token to publish.');
-    return;
-  }
   const payload = getDb();
   if (!payload) {
     setSyncMsg('Upload failed: app data is not ready.', false);
+    return;
+  }
+  // Always save locally
+  try {
+    localStorage.setItem(typeof KEY !== 'undefined' ? KEY : 'bgfd-training-app-v2', JSON.stringify(payload));
+  } catch (e) {}
+  if (!tok) {
+    setSyncMsg('Saved on this device. Owner login allows all changes locally.', true);
     return;
   }
   if (pushing) {
@@ -202,22 +206,8 @@ async function pushRemote() {
 }
 
 function bindSyncUi() {
-  const input = document.getElementById('sync-token');
-  const saveBtn = document.getElementById('btn-save-token');
   const pullBtn = document.getElementById('btn-pull');
   const pushBtn = document.getElementById('btn-push');
-  if (input) input.value = getToken() ? '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022' : '';
-  if (saveBtn) saveBtn.onclick = function () {
-    const val = (input.value || '').trim();
-    if (!val || val.indexOf('\u2022') === 0) {
-      setSyncMsg(getToken() ? 'Token already saved on this device.' : 'Paste a token first.', !!getToken());
-      return;
-    }
-    localStorage.setItem(TOKEN_KEY, val);
-    input.value = '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022';
-    setSyncMsg('Token saved on this device.', true);
-    pushRemote();
-  };
   if (pullBtn) pullBtn.onclick = pullRemote;
   if (pushBtn) pushBtn.onclick = pushRemote;
   const saveAll = document.getElementById('btn-save-all');
