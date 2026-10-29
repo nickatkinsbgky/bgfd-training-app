@@ -5,6 +5,11 @@ const REMOTE = {
   branch: 'main'
 };
 const TOKEN_KEY = 'bgfd-gh-token';
+const SESSION = 'bgfd-owner-unlock';
+
+function ownerUnlocked() {
+  return sessionStorage.getItem(SESSION) === '1';
+}
 
 function getToken() {
   return (localStorage.getItem(TOKEN_KEY) || '').trim();
@@ -79,6 +84,10 @@ function setDb(next) {
 }
 
 async function pullRemote() {
+  if (!ownerUnlocked()) {
+    setSyncMsg('Sign in as owner to load site data.');
+    return;
+  }
   setSyncMsg('Loading shared data from the site\u2026');
   try {
     const url = 'https://raw.githubusercontent.com/' + REMOTE.owner + '/' + REMOTE.repo + '/' + REMOTE.branch + '/' + REMOTE.path + '?t=' + Date.now();
@@ -141,6 +150,10 @@ function isShaError(msg) {
 }
 
 async function pushRemote() {
+  if (!ownerUnlocked()) {
+    setSyncMsg('Sign in as owner to upload to the site.');
+    return;
+  }
   const tok = getToken();
   const payload = getDb();
   if (!payload) {
@@ -152,7 +165,7 @@ async function pushRemote() {
     localStorage.setItem(typeof KEY !== 'undefined' ? KEY : 'bgfd-training-app-v2', JSON.stringify(payload));
   } catch (e) {}
   if (!tok) {
-    setSyncMsg('Saved on this device. Owner login allows all changes locally.', true);
+    setSyncMsg('Saved on this device. Paste a GitHub token (owner only) to upload to the site.', true);
     return;
   }
   if (pushing) {
@@ -206,12 +219,31 @@ async function pushRemote() {
 }
 
 function bindSyncUi() {
+  const input = document.getElementById('sync-token');
+  const saveBtn = document.getElementById('btn-save-token');
   const pullBtn = document.getElementById('btn-pull');
   const pushBtn = document.getElementById('btn-push');
+  if (input) input.value = getToken() ? '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022' : '';
+  if (saveBtn) saveBtn.onclick = function () {
+    if (!ownerUnlocked()) return;
+    const val = (input.value || '').trim();
+    if (!val || val.indexOf('\u2022') === 0) {
+      setSyncMsg(getToken() ? 'Token already saved on this device.' : 'Paste a token first.', !!getToken());
+      return;
+    }
+    localStorage.setItem(TOKEN_KEY, val);
+    input.value = '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022';
+    setSyncMsg('Token saved on this device. You can now upload to the site.', true);
+    pushRemote();
+  };
   if (pullBtn) pullBtn.onclick = pullRemote;
   if (pushBtn) pushBtn.onclick = pushRemote;
   const saveAll = document.getElementById('btn-save-all');
   if (saveAll) saveAll.onclick = function () {
+    if (!ownerUnlocked()) {
+      setSyncMsg('Sign in as owner to save.');
+      return;
+    }
     try {
       const data = (typeof getDb === 'function') ? getDb() : window.db;
       if (data) localStorage.setItem(typeof KEY !== 'undefined' ? KEY : 'bgfd-training-app-v2', JSON.stringify(data));
@@ -227,10 +259,10 @@ if (typeof save === 'function' && !save._bgfdWrapped) {
   save = function (data) {
     if (data) window.db = data;
     _save(data);
-    schedulePush();
+    if (ownerUnlocked()) schedulePush();
   };
   save._bgfdWrapped = true;
 }
 
 bindSyncUi();
-pullRemote();
+if (ownerUnlocked()) pullRemote();
