@@ -4,7 +4,8 @@
     'btn-save', 'btn-reset', 'btn-delete',
     'btn-add-person', 'btn-reset-person', 'btn-delete-person',
     'btn-add-task', 'btn-reset-task', 'btn-delete-task',
-    'btn-add-cat'
+    'btn-add-cat',
+    'btn-save-all', 'btn-push', 'btn-pull'
   ];
   const PASS = 'Bomberonick5606!';
 
@@ -19,6 +20,7 @@
       const el = document.getElementById(id);
       if (el) el.hidden = !on;
     });
+    // Also hide the whole sync-bar message area controls if needed, but buttons above cover it
     const formGrid = document.querySelector('#tab-input .grid');
     if (formGrid) formGrid.style.display = on ? '' : 'none';
     const rosterForms = document.querySelectorAll('#tab-roster .grid');
@@ -26,14 +28,20 @@
     const catGrid = document.querySelector('#tab-cats .grid');
     if (catGrid) catGrid.style.display = on ? '' : 'none';
     const hint = document.getElementById('form-hint');
-    if (hint && !on) hint.textContent = 'View only. Sign in as owner to add or change records. Use Restore original data or Import JSON anytime.';
-    if (hint && on) hint.textContent = 'Pick a member and task, then enter status and times. Saved in this browser.';
+    if (hint && !on) hint.textContent = 'View only. Sign in as owner to add or change records and sync with the site.';
+    if (hint && on) hint.textContent = 'Pick a member and task, then enter status and times. Saved in this browser. Use Upload to site to publish.';
     const btn = document.getElementById('owner-btn');
     if (btn) btn.textContent = on ? 'Owner signed in' : 'Owner sign-in';
     const imp = document.getElementById('btn-import');
     if (imp) imp.hidden = false;
     const rest = document.getElementById('btn-restore-original');
     if (rest) rest.hidden = false;
+
+    // Show/hide token input if we re-add it later; for now sync buttons are gated
+    const tokenInput = document.getElementById('sync-token');
+    const saveTokenBtn = document.getElementById('btn-save-token');
+    if (tokenInput) tokenInput.hidden = !on;
+    if (saveTokenBtn) saveTokenBtn.hidden = !on;
   }
 
   function signIn() {
