@@ -67,8 +67,13 @@
   }
   async function pushRemote() {
     var tok = getToken();
-    if (!tok) { setSyncMsg('Saved on this device. Paste a GitHub token, then upload.'); return; }
     if (pushing) { scheduleFitnessPush(); return; }
+    // Always save locally
+    if (typeof window.saveFitness === 'function') window.saveFitness(db(), { silent: true });
+    if (!tok) {
+      setSyncMsg('Saved on this device. Owner login allows all changes locally.', true);
+      return;
+    }
     pushing = true;
     setSyncMsg('Uploading to the site…');
     var api = 'https://api.github.com/repos/' + REMOTE.owner + '/' + REMOTE.repo + '/contents/' + REMOTE.path;
@@ -91,16 +96,6 @@
     } finally { pushing = false; }
   }
   window.pushFitness = pushRemote;
-  var input = document.getElementById('sync-token');
-  if (input) input.value = getToken() ? '••••••••••••' : '';
-  var saveToken = document.getElementById('btn-save-token');
-  if (saveToken) saveToken.onclick = function () {
-    var val = (input.value || '').trim();
-    if (!val || val.indexOf('•') === 0) { setSyncMsg(getToken() ? 'Token already saved on this device.' : 'Paste a token first.', !!getToken()); return; }
-    localStorage.setItem(TOKEN_KEY, val);
-    input.value = '••••••••••••';
-    setSyncMsg('Token saved on this device.', true);
-  };
   var saveAll = document.getElementById('btn-save-all');
   if (saveAll) saveAll.onclick = function () {
     if (typeof window.saveFitness === 'function') window.saveFitness(db(), { silent: true });
