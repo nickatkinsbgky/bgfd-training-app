@@ -90,6 +90,7 @@
   <button class="btn" id="btn-save-all" type="button">Save</button>
   <button class="btn ghost" id="btn-push" type="button">Upload to site</button>
   <button class="btn ghost" id="btn-pull" type="button">Load site data</button>
+  <button class="btn gold" id="btn-pdf" type="button">Generate PDF</button>
   <input id="sync-token" type="password" autocomplete="off" placeholder="GitHub token (owner only)" />
   <button class="btn ghost" id="btn-save-token" type="button">Save token</button>
   <span class="note" id="sync-msg"></span>
@@ -251,5 +252,8 @@
 <script src="lock.js?v=20261029-3"></script>
 <script src="sync.js?v=20261029-3"></script>
 <script src="share.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
+<script src="performance-pdf.js?v=20261029-1"></script>
 </body>
 </html>
