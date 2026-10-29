@@ -1,6 +1,11 @@
 (function () {
   var params = new URLSearchParams(location.search);
   var isView = params.has('view') || params.has('share') || params.has('standalone');
+  var path = (location.pathname || '').toLowerCase();
+  var isIso = path.indexOf('iso-class1') >= 0;
+  var isFitness = path.indexOf('fitness') >= 0;
+  var isTraining = path.indexOf('training') >= 0;
+  var isEms = path.indexOf('ems-recert') >= 0;
 
   function hideEl(el) {
     if (el) el.style.display = 'none';
@@ -9,12 +14,10 @@
   function lockViewMode() {
     if (!isView) return;
 
-    // Hide home link
     document.querySelectorAll('a.home-link[href="index.html"], a[href="index.html"]').forEach(function (el) {
       hideEl(el);
     });
 
-    // Hide sync / edit bar controls
     var syncBar = document.querySelector('.sync-bar');
     if (syncBar) {
       Array.prototype.forEach.call(syncBar.querySelectorAll('button, input'), function (el) {
@@ -27,56 +30,80 @@
       }
     }
 
-    // Hide add / edit / delete / save / import / reset controls
     [
       'addPerson', 'exportBtn', 'importBtn', 'importFile', 'resetBtn',
       'savePerson', 'deletePerson', 'addClass', 'sumEdit', 'drawerPdf',
-      'btn-save-all', 'btn-push', 'btn-pull', 'btn-save-token', 'sync-token',
-      'landOpen' // keep landing usable but open is view
+      'btn-save-all', 'btn-push', 'btn-pull', 'btn-load', 'btn-save-token', 'sync-token',
+      'btn-add', 'btn-save-local', 'landOpen'
     ].forEach(function (id) {
       hideEl(document.getElementById(id));
     });
 
-    // Hide action buttons in tables
-    document.querySelectorAll('button.tiny, button.del, button.edit-class, td.actions, th.actions').forEach(function (el) {
+    document.querySelectorAll('button.tiny, button.del, button.edit-class, button.row-btn, td.actions, th.actions').forEach(function (el) {
       hideEl(el);
     });
 
-    // Disable form inputs inside drawers and edit areas
-    document.querySelectorAll('#drawer input, #drawer select, #drawer button, #editName, #editId, #editCert, #editExp, #newDate, #newCat, #newHours, #newCourse, #newPeds').forEach(function (el) {
+    document.querySelectorAll('#drawer input, #drawer select, #drawer button, #edit-modal input, #edit-modal select, #edit-modal button').forEach(function (el) {
       el.disabled = true;
     });
 
-    // Hide the drawer if it opens
     var drawer = document.getElementById('drawer');
     if (drawer) drawer.style.display = 'none';
+    var modal = document.getElementById('edit-modal');
+    if (modal) modal.style.display = 'none';
 
-    // Mark page as view-only
     document.body.classList.add('view-only');
     var style = document.createElement('style');
-    style.textContent = '.view-only .sync-bar button, .view-only .sync-bar input { display:none !important; } .view-only #drawer, .view-only button.tiny, .view-only #addPerson, .view-only #savePerson, .view-only #deletePerson, .view-only #addClass { display:none !important; }';
+    style.textContent = [
+      '.view-only .sync-bar button, .view-only .sync-bar input { display:none !important; }',
+      '.view-only #drawer, .view-only #edit-modal, .view-only button.tiny, .view-only button.row-btn,',
+      '.view-only #addPerson, .view-only #savePerson, .view-only #deletePerson, .view-only #addClass,',
+      '.view-only #btn-add, .view-only #btn-save-local, .view-only td.actions, .view-only th.actions { display:none !important; }'
+    ].join(' ');
     document.head.appendChild(style);
   }
 
   function forceLoadLatest() {
     if (!isView) return;
-    // Prefer the public raw site data so viewers always see the latest uploaded copy
-    var url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/ems-recert-data.json?t=' + Date.now();
+    var url = null;
+    if (isEms) {
+      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/ems-recert-data.json?t=' + Date.now();
+    } else if (isIso) {
+      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/iso_class1_data.json?t=' + Date.now();
+    } else if (isFitness) {
+      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/fitness-data.json?t=' + Date.now();
+    }
+    if (!url) return;
+
     fetch(url, { cache: 'no-store' })
       .then(function (res) { return res.ok ? res.json() : null; })
       .then(function (remote) {
-        if (!remote || !remote.people || !remote.people.length) return;
-        if (typeof window.setEmsDb === 'function') {
-          window.setEmsDb(remote);
-        } else {
-          try { localStorage.setItem('bgfd-ems-recert-excel-v1', JSON.stringify(remote)); } catch (e) {}
-        }
+        if (!remote) return;
         var msg = document.getElementById('sync-msg');
-        if (msg) {
-          msg.textContent = 'View-only — showing latest site data (' + remote.people.length + ' people)';
-          msg.classList.add('ok');
+        if (isEms && remote.people && remote.people.length) {
+          if (typeof window.setEmsDb === 'function') window.setEmsDb(remote);
+          else try { localStorage.setItem('bgfd-ems-recert-excel-v1', JSON.stringify(remote)); } catch (e) {}
+          if (msg) {
+            msg.textContent = 'View-only — showing latest site data (' + remote.people.length + ' people)';
+            msg.classList.add('ok');
+          }
+        } else if (isIso && Array.isArray(remote) && remote.length) {
+          try { localStorage.setItem('iso-class1-data', JSON.stringify(remote)); } catch (e) {}
+          if (typeof window.applyFilters === 'function') {
+            // data is global in iso-class1.html; trigger reload path if exposed
+          }
+          if (msg) {
+            msg.textContent = 'View-only — showing latest site data (' + remote.length + ' personnel)';
+            msg.classList.add('ok');
+          }
+          // Force a fresh load by re-triggering the page's fetch path if possible
+          if (typeof window.loadSiteData === 'function') window.loadSiteData();
+        } else if (isFitness) {
+          if (msg) {
+            msg.textContent = 'View-only — latest site data';
+            msg.classList.add('ok');
+          }
         }
-        // Trigger a refresh if the app exposes one
         if (typeof window.render === 'function') window.render();
         else if (typeof window.applyFilters === 'function') window.applyFilters();
       })
@@ -87,6 +114,14 @@
     window.prompt('Copy this view-only share link:', link);
   }
 
+  function appLabel() {
+    if (isIso) return 'ISO Class 1 Hours';
+    if (isFitness) return 'Personnel Fitness';
+    if (isTraining) return 'Personnel Performance';
+    if (isEms) return 'EMS Recertification';
+    return 'this app';
+  }
+
   function addShareButton() {
     var header = document.querySelector('header');
     if (!header || document.getElementById('shareBtn')) return;
@@ -94,7 +129,7 @@
     btn.id = 'shareBtn';
     btn.type = 'button';
     btn.textContent = 'Share';
-    btn.title = 'Copy a view-only link others can use to see the latest EMS data (no edits)';
+    btn.title = 'Copy a view-only link others can use to see the latest ' + appLabel() + ' data (no edits, this app only)';
     btn.style.cssText = 'background:#241c0c;color:#d4a017;border:1px solid #d4a017;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer;margin-left:8px;';
     var home = header.querySelector('a.home-link');
     if (home && home.parentNode) {
@@ -123,7 +158,6 @@
   function init() {
     addShareButton();
     lockViewMode();
-    // Load latest after the main app has had a chance to boot
     setTimeout(forceLoadLatest, 600);
     setTimeout(lockViewMode, 1200);
   }
