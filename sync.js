@@ -12,7 +12,6 @@ function ownerUnlocked() {
 }
 
 function getToken() {
-  // Prefer any previously saved token; otherwise empty (upload will only save locally until a token is embedded)
   return (localStorage.getItem(TOKEN_KEY) || '').trim();
 }
 
@@ -161,12 +160,11 @@ async function pushRemote() {
     setSyncMsg('Upload failed: app data is not ready.', false);
     return;
   }
-  // Always save locally
   try {
     localStorage.setItem(typeof KEY !== 'undefined' ? KEY : 'bgfd-training-app-v2', JSON.stringify(payload));
   } catch (e) {}
   if (!tok) {
-    setSyncMsg('Saved on this device. Owner password unlocked sync (site upload requires an embedded token).', true);
+    setSyncMsg('Saved on this device. Paste a GitHub token (owner only) to upload to the site.', true);
     return;
   }
   if (pushing) {
@@ -220,8 +218,26 @@ async function pushRemote() {
 }
 
 function bindSyncUi() {
+  const input = document.getElementById('sync-token');
+  const saveBtn = document.getElementById('btn-save-token');
   const pullBtn = document.getElementById('btn-pull');
   const pushBtn = document.getElementById('btn-push');
+  if (input) input.value = getToken() ? '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022' : '';
+  if (saveBtn) saveBtn.onclick = function () {
+    if (!ownerUnlocked()) {
+      setSyncMsg('Sign in as owner first.');
+      return;
+    }
+    const val = (input.value || '').trim();
+    if (!val || val.indexOf('\u2022') === 0) {
+      setSyncMsg(getToken() ? 'Token already saved on this device.' : 'Paste a token first.', !!getToken());
+      return;
+    }
+    localStorage.setItem(TOKEN_KEY, val);
+    input.value = '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022';
+    setSyncMsg('Token saved on this device. You can now upload to the site.', true);
+    pushRemote();
+  };
   if (pullBtn) pullBtn.onclick = pullRemote;
   if (pushBtn) pushBtn.onclick = pushRemote;
   const saveAll = document.getElementById('btn-save-all');
