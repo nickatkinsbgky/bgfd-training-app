@@ -30,12 +30,15 @@
       }
     }
 
-    [
+    var hideIds = [
       'addPerson', 'exportBtn', 'importBtn', 'importFile', 'resetBtn',
       'savePerson', 'deletePerson', 'addClass', 'sumEdit', 'drawerPdf',
       'btn-save-all', 'btn-push', 'btn-pull', 'btn-load', 'btn-save-token', 'sync-token',
-      'btn-add', 'btn-save-local', 'landOpen'
-    ].forEach(function (id) {
+      'btn-add', 'btn-save-local'
+    ];
+    // Keep Open record visible on EMS so shared users can select a name and view the person (read-only)
+    if (!isEms) hideIds.push('landOpen');
+    hideIds.forEach(function (id) {
       hideEl(document.getElementById(id));
     });
 
@@ -46,6 +49,10 @@
     document.querySelectorAll('#drawer input, #drawer select, #drawer button, #edit-modal input, #edit-modal select, #edit-modal button').forEach(function (el) {
       el.disabled = true;
     });
+
+    // Disable certification level change in person view for shared users
+    var sumCert = document.getElementById('sumCert');
+    if (sumCert) sumCert.disabled = true;
 
     var drawer = document.getElementById('drawer');
     if (drawer) drawer.style.display = 'none';
