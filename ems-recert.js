@@ -490,10 +490,13 @@
     selected = db.people.filter(function (p) { return p.name === name; })[0];
     if (!selected) return;
     var s = statusOf(selected);
-    document.getElementById("landing").hidden = true;
+    // Keep the main personnel list visible; show the record under it
+    document.getElementById("landing").hidden = false;
     document.getElementById("app").hidden = true;
     document.getElementById("deptView").hidden = true;
     document.getElementById("focusView").hidden = true;
+    var bracket = document.getElementById("bracketView");
+    if (bracket) bracket.hidden = true;
     document.getElementById("personView").hidden = false;
     document.getElementById("sumName").textContent = selected.name;
     var cycle = s.win ? s.win.start + " through " + s.win.end : "Set an expiration date to start the cycle";
@@ -534,6 +537,7 @@
   document.getElementById("landOpen").onclick = openFromLanding;
   document.getElementById("landRoster").onclick = function () {
     document.getElementById("landing").hidden = true;
+    document.getElementById("personView").hidden = true;
     document.getElementById("deptView").hidden = true;
     document.getElementById("focusView").hidden = true;
     var bracket = document.getElementById("bracketView");
@@ -857,6 +861,31 @@
   };
 
   rollExpirations();
+
+  // Back buttons for the separate views
+  function goHome(ev) {
+    if (ev) ev.preventDefault();
+    document.getElementById("app").hidden = true;
+    document.getElementById("personView").hidden = true;
+    document.getElementById("deptView").hidden = true;
+    document.getElementById("focusView").hidden = true;
+    var bracket = document.getElementById("bracketView");
+    if (bracket) bracket.hidden = true;
+    document.getElementById("landing").hidden = false;
+    var search = document.getElementById("landSearch");
+    if (search) { search.value = ""; search.focus(); }
+    fillLanding();
+  }
+  var rosterBack = document.getElementById("rosterBack");
+  if (rosterBack) rosterBack.onclick = goHome;
+  var deptBack = document.getElementById("deptBack");
+  if (deptBack) deptBack.onclick = goHome;
+  var focusBack = document.getElementById("focusBack");
+  if (focusBack) focusBack.onclick = goHome;
+  // Header "Find personnel" also returns to main
+  var headerBack = document.getElementById("backLanding");
+  if (headerBack) headerBack.onclick = goHome;
+
   fillLanding();
   render();
 })();
