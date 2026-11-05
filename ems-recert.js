@@ -147,3 +147,26 @@
     alert("EMS tracker did not load. Refresh the page. " + err.message);
   });
 })();
+
+// Fallback: ensure View Full Roster button always switches to the roster page
+document.addEventListener("DOMContentLoaded", function () {
+  function showRoster() {
+    var landing = document.getElementById("landing");
+    var dept = document.getElementById("deptView");
+    var focus = document.getElementById("focusView");
+    var person = document.getElementById("personView");
+    var bracket = document.getElementById("bracketView");
+    var app = document.getElementById("app");
+    if (landing) landing.hidden = true;
+    if (dept) dept.hidden = true;
+    if (focus) focus.hidden = true;
+    if (person) person.hidden = true;
+    if (bracket) bracket.hidden = true;
+    if (app) app.hidden = false;
+    if (typeof render === "function") render();
+  }
+  var land = document.getElementById("landRoster");
+  if (land) land.onclick = showRoster;
+  var sum = document.getElementById("sumRoster");
+  if (sum) sum.onclick = showRoster;
+});
