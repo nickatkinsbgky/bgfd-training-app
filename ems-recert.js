@@ -101,7 +101,7 @@
       "      if (r.name !== name || !isPediatric(r)) return;",
       "      if (win && (r.date < win.start || r.date > win.end)) return;",
       "      total += Number(r.hours) || 0;",
-      "    });",
+      "    });
       "    return Math.round(total * 100) / 100;",
       "  }",
       "  function reqRows(level) {",
@@ -148,9 +148,9 @@
   });
 })();
 
-// Fallback: ensure View Full Roster button always switches to the roster page
+// View Full Roster: open the full roster on its own page
 document.addEventListener("DOMContentLoaded", function () {
-  function showRoster() {
+  function showRosterInPlace() {
     var landing = document.getElementById("landing");
     var dept = document.getElementById("deptView");
     var focus = document.getElementById("focusView");
@@ -165,8 +165,31 @@ document.addEventListener("DOMContentLoaded", function () {
     if (app) app.hidden = false;
     if (typeof render === "function") render();
   }
+
+  // If this page was opened with ?roster=1, show the roster immediately
+  if (new URLSearchParams(location.search).has("roster")) {
+    showRosterInPlace();
+    // Keep trying until data/render is ready
+    var tries = 0;
+    var timer = setInterval(function () {
+      tries += 1;
+      if (typeof render === "function") {
+        showRosterInPlace();
+        clearInterval(timer);
+      } else if (tries > 40) {
+        clearInterval(timer);
+      }
+    }, 100);
+  }
+
   var land = document.getElementById("landRoster");
-  if (land) land.onclick = showRoster;
+  if (land) {
+    land.onclick = function () {
+      var url = location.pathname + "?roster=1";
+      window.open(url, "_blank", "noopener");
+    };
+  }
+
   var sum = document.getElementById("sumRoster");
-  if (sum) sum.onclick = showRoster;
+  if (sum) sum.onclick = showRosterInPlace;
 });
