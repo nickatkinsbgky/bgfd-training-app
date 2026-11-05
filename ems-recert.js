@@ -490,8 +490,8 @@
     selected = db.people.filter(function (p) { return p.name === name; })[0];
     if (!selected) return;
     var s = statusOf(selected);
-    // Keep the main personnel list visible; show the record under it
-    document.getElementById("landing").hidden = false;
+    // Open the person record as its own full page
+    document.getElementById("landing").hidden = true;
     document.getElementById("app").hidden = true;
     document.getElementById("deptView").hidden = true;
     document.getElementById("focusView").hidden = true;
@@ -568,8 +568,7 @@
     openPerson(selected.name);
     document.getElementById("drawer").scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  var sumRoster = document.getElementById("sumRoster");
-  if (sumRoster) sumRoster.onclick = function () {
+  document.getElementById("sumRoster").onclick = function () {
     document.getElementById("personView").hidden = true;
     document.getElementById("deptView").hidden = true;
     document.getElementById("focusView").hidden = true;
@@ -785,13 +784,13 @@
   document.getElementById("focusYear").onchange = renderFocus;
   document.getElementById("focusCat").onchange = renderFocus;
   document.getElementById("landFocus").onclick = showFocus;
-  var sumFocus = document.getElementById("sumFocus"); if (sumFocus) sumFocus.onclick = showFocus;
+  document.getElementById("sumFocus").onclick = showFocus;
   document.getElementById("rosterFocus").onclick = showFocus;
 
   document.getElementById("deptYear").onchange = renderDept;
   document.getElementById("landDept").onclick = showDept;
   document.getElementById("rosterDept").onclick = showDept;
-  var sumDept = document.getElementById("sumDept"); if (sumDept) sumDept.onclick = showDept;
+  document.getElementById("sumDept").onclick = showDept;
 
   document.getElementById("backLanding").onclick = function (ev) {
     ev.preventDefault();
@@ -883,6 +882,8 @@
   if (deptBack) deptBack.onclick = goHome;
   var focusBack = document.getElementById("focusBack");
   if (focusBack) focusBack.onclick = goHome;
+  var personBack = document.getElementById("personBack");
+  if (personBack) personBack.onclick = goHome;
   // Header "Find personnel" also returns to main
   var headerBack = document.getElementById("backLanding");
   if (headerBack) headerBack.onclick = goHome;
