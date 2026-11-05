@@ -568,7 +568,8 @@
     openPerson(selected.name);
     document.getElementById("drawer").scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  document.getElementById("sumRoster").onclick = function () {
+  var sumRoster = document.getElementById("sumRoster");
+  if (sumRoster) sumRoster.onclick = function () {
     document.getElementById("personView").hidden = true;
     document.getElementById("deptView").hidden = true;
     document.getElementById("focusView").hidden = true;
@@ -784,13 +785,13 @@
   document.getElementById("focusYear").onchange = renderFocus;
   document.getElementById("focusCat").onchange = renderFocus;
   document.getElementById("landFocus").onclick = showFocus;
-  document.getElementById("sumFocus").onclick = showFocus;
+  var sumFocus = document.getElementById("sumFocus"); if (sumFocus) sumFocus.onclick = showFocus;
   document.getElementById("rosterFocus").onclick = showFocus;
 
   document.getElementById("deptYear").onchange = renderDept;
   document.getElementById("landDept").onclick = showDept;
   document.getElementById("rosterDept").onclick = showDept;
-  document.getElementById("sumDept").onclick = showDept;
+  var sumDept = document.getElementById("sumDept"); if (sumDept) sumDept.onclick = showDept;
 
   document.getElementById("backLanding").onclick = function (ev) {
     ev.preventDefault();
