@@ -140,6 +140,20 @@
 
   a.home-link { background:transparent; color:var(--text, #e6edf3); border:1px solid var(--gold, #d4a017); border-radius:8px; padding:8px 14px; font-weight:600; text-decoration:none; min-height:36px; display:inline-flex; align-items:center; margin-right:8px; }
   a.home-link:hover { filter:brightness(1.1); }
+
+  /* Split layout: left search panel + right person detail */
+  #mainLayout { display:flex; min-height:calc(100vh - 140px); }
+  #leftPanel { width:340px; min-width:300px; max-width:380px; background:var(--panel); border-right:1px solid var(--line); padding:16px; overflow-y:auto; }
+  #leftPanel h2 { margin:0 0 4px; font-size:18px; }
+  #leftPanel .muted { margin:0 0 12px; font-size:13px; }
+  #leftPanel input, #leftPanel select { width:100%; margin-bottom:8px; }
+  #leftPanel button { width:100%; margin-top:4px; }
+  #rightPanel { flex:1; padding:16px 20px 40px; overflow-y:auto; }
+  #rightPanel[hidden], #leftPanel[hidden] { display:none; }
+  @media (max-width:860px) {
+    #mainLayout { flex-direction:column; }
+    #leftPanel { width:100%; max-width:none; border-right:none; border-bottom:1px solid var(--line); }
+  }
 </style>
 </head>
 <body>
@@ -168,7 +182,8 @@
   <span id="sync-msg"></span>
 </div>
 
-<section class="landing" id="landing">
+<div id="mainLayout">
+<section id="leftPanel">
   <div class="landing-card">
     <h2>EMS Recertification Tracker</h2>
     <p>Search and select personnel</p>
@@ -181,8 +196,8 @@
     <a class="ready" href="https://kemsis.ky.gov" target="_blank" rel="noopener noreferrer">Ready for Recertification? CLICK HERE</a>
   </div>
 </section>
-
-<section id="personView" hidden>
+<section id="rightPanel" hidden>
+<section id="personView">
   <div class="bar"><a class="back" href="#" id="personBack">Back to EMS Tracker</a></div>
   <aside class="color-key">
     <strong>Color key</strong>
@@ -214,6 +229,8 @@
     <button class="gold" id="sumEdit" type="button">Edit person</button>
   </div>
 </section>
+</section>
+</div>
 
 <section id="bracketView" hidden>
   <div class="bar">
