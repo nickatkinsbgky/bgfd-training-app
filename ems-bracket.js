@@ -1,3 +1,4 @@
+
 (function () {
   function esc(s) {
     return String(s == null ? '' : s)
@@ -61,7 +62,6 @@
       var r = readiness(p);
       return { name: p.name, year: expYear(p), exp: p.expDate || '', pct: r.pct, met: r.met, total: r.total, ready: r.ready };
     }).filter(function (p) {
-      // 2026 → exp 12/31/2026, 2027 → exp 12/31/2027, etc.
       return p.year === year;
     }).sort(function (a, b) {
       return b.pct - a.pct || a.name.localeCompare(b.name);
@@ -129,12 +129,15 @@
     if (btn && !btn._raceWired) {
       btn._raceWired = true;
       btn.onclick = function () {
-        document.getElementById('landing').hidden = true;
+        var main = document.getElementById('mainLayout');
+        if (main) main.hidden = true;
         document.getElementById('personView').hidden = true;
         document.getElementById('focusView').hidden = true;
         document.getElementById('deptView').hidden = true;
         var app = document.getElementById('app');
         if (app) app.hidden = true;
+        var vector = document.getElementById('vectorView');
+        if (vector) vector.hidden = true;
         var view = document.getElementById('bracketView');
         if (view) { view.hidden = false; renderBracket(); }
       };
@@ -145,7 +148,8 @@
       back.onclick = function (e) {
         e.preventDefault();
         document.getElementById('bracketView').hidden = true;
-        document.getElementById('landing').hidden = false;
+        var main = document.getElementById('mainLayout');
+        if (main) main.hidden = false;
       };
     }
     var yearSel = document.getElementById('raceYear');
