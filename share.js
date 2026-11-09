@@ -16,15 +16,14 @@
     var id = (el.id || '').toLowerCase();
     var cls = (el.className || '').toLowerCase();
     var text = (el.textContent || '').trim().toLowerCase();
-    // Explicit mutate IDs
     var mutateIds = ['addperson','saveperson','deleteperson','addclass','sumedit','btn-save-all','btn-push','btn-pull','btn-load','btn-save-token','btn-add','btn-save-local','resetbtn','importbtn','importfile'];
     if (mutateIds.indexOf(id) >= 0) return true;
-    // Classes / text that mean change
     if (/\b(edit|del|delete|remove|save|add|import|reset)\b/.test(cls) || /\b(edit|delete|remove|save|add|import|reset)\b/.test(text)) return true;
-    // PDF / export are view-only safe
     if (/pdf|export/.test(cls) || /pdf|export/.test(text)) return false;
     return false;
   }
+
+  var keepVisibleIds = ['landRoster', 'landDept', 'landFocus', 'landVector', 'landBracket'];
 
   function lockViewMode() {
     if (!isView) return;
@@ -36,6 +35,7 @@
     var syncBar = document.querySelector('.sync-bar');
     if (syncBar) {
       Array.prototype.forEach.call(syncBar.querySelectorAll('button, input'), function (el) {
+        if (keepVisibleIds.indexOf(el.id) >= 0) return;
         hideEl(el);
       });
       var msg = document.getElementById('sync-msg');
@@ -45,12 +45,10 @@
       }
     }
 
-    // Hide only buttons that can make changes. Viewing, navigation, and export (PDF/JSON) stay available.
     document.querySelectorAll('button').forEach(function (btn) {
       if (isMutateButton(btn)) hideEl(btn);
     });
 
-    // Explicit list for known mutate controls (belt and suspenders)
     ['addPerson', 'importBtn', 'importFile', 'resetBtn',
      'savePerson', 'deletePerson', 'addClass', 'sumEdit', 'drawerPdf',
      'btn-save-all', 'btn-push', 'btn-pull', 'btn-load', 'btn-save-token', 'sync-token',
@@ -58,7 +56,6 @@
       hideEl(document.getElementById(id));
     });
 
-    // Hide row action cells that only contain edit/delete (PDF buttons are allowed and will show)
     document.querySelectorAll('button.edit, button.del, button.edit-class, button.row-btn').forEach(function (el) {
       hideEl(el);
     });
@@ -67,7 +64,6 @@
       el.disabled = true;
     });
 
-    // Disable any selects/inputs that could change data in view mode
     var sumCert = document.getElementById('sumCert');
     if (sumCert) sumCert.disabled = true;
 
@@ -80,11 +76,11 @@
     var style = document.createElement('style');
     style.textContent = [
       '.view-only .sync-bar button, .view-only .sync-bar input { display:none !important; }',
+      '.view-only #landRoster, .view-only #landDept, .view-only #landFocus, .view-only #landVector, .view-only #landBracket { display:inline-block !important; }',
       '.view-only #drawer, .view-only #edit-modal { display:none !important; }',
       '.view-only button.edit, .view-only button.del, .view-only button.edit-class, .view-only button.row-btn { display:none !important; }',
       '.view-only #addPerson, .view-only #savePerson, .view-only #deletePerson, .view-only #addClass,',
       '.view-only #btn-add, .view-only #btn-save-local, .view-only #sumEdit { display:none !important; }',
-      // Keep PDF buttons visible
       '.view-only button.pdf, .view-only button.tiny.pdf, .view-only #sumPdf, .view-only #exportBtn { display:inline-block !important; }'
     ].join(' ');
     document.head.appendChild(style);
@@ -116,7 +112,6 @@
           }
         } else if (isIso && Array.isArray(remote) && remote.length) {
           try { localStorage.setItem('iso-class1-data', JSON.stringify(remote)); } catch (e) {}
-          if (typeof window.applyFilters === 'function') {}
           if (msg) {
             msg.textContent = 'View-only — showing latest site data (' + remote.length + ' personnel)';
             msg.classList.add('ok');
