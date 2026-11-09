@@ -487,7 +487,6 @@
   }
 
   function showSummary(name) {
-   function showSummary(name) {
   selected = db.people.filter(function (p) { return p.name === name; })[0];
   if (!selected) return;
   var s = statusOf(selected);
