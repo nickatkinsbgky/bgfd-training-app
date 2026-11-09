@@ -1,3 +1,4 @@
+
 (function () {
   function ensureTables() {
     if (!document.getElementById("emrReqStyle")) {
@@ -927,3 +928,37 @@ if (new URLSearchParams(location.search).has("roster")) {
   if (app) app.hidden = false;
   if (typeof render === "function") render();
 }
+
+
+// Force Race to Recertify button to work with the split layout
+(function () {
+  function showRace() {
+    var main = document.getElementById("mainLayout");
+    if (main) main.hidden = true;
+    var person = document.getElementById("personView");
+    if (person) person.hidden = true;
+    var focus = document.getElementById("focusView");
+    if (focus) focus.hidden = true;
+    var dept = document.getElementById("deptView");
+    if (dept) dept.hidden = true;
+    var app = document.getElementById("app");
+    if (app) app.hidden = true;
+    var vector = document.getElementById("vectorView");
+    if (vector) vector.hidden = true;
+    var view = document.getElementById("bracketView");
+    if (view) {
+      view.hidden = false;
+      if (typeof window.renderBracket === "function") window.renderBracket();
+    }
+  }
+  function bind() {
+    var btn = document.getElementById("landBracket");
+    if (btn) {
+      btn.onclick = showRace;
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+  else bind();
+  setTimeout(bind, 1000);
+  setTimeout(bind, 2500);
+})();
