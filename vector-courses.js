@@ -1,3 +1,4 @@
+
 (function () {
   var courses = [];
   function esc(s) {
@@ -59,7 +60,8 @@
     loadCourses(function () {
       fillCategories();
       applyFilter();
-      document.getElementById('landing').hidden = true;
+      var main = document.getElementById('mainLayout');
+      if (main) main.hidden = true;
       document.getElementById('personView').hidden = true;
       document.getElementById('focusView').hidden = true;
       document.getElementById('deptView').hidden = true;
@@ -83,7 +85,8 @@
       back.onclick = function (e) {
         e.preventDefault();
         document.getElementById('vectorView').hidden = true;
-        document.getElementById('landing').hidden = false;
+        var main = document.getElementById('mainLayout');
+        if (main) main.hidden = false;
       };
     }
     ['vectorName', 'vectorId', 'vectorCat'].forEach(function (id) {
