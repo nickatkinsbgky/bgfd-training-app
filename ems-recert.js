@@ -540,12 +540,15 @@
   document.getElementById("landSelect").ondblclick = openFromLanding;
   document.getElementById("landOpen").onclick = openFromLanding;
   document.getElementById("landRoster").onclick = function () {
-    document.getElementById("landing").hidden = true;
+    var main = document.getElementById("mainLayout");
+    if (main) main.hidden = true;
     document.getElementById("personView").hidden = true;
     document.getElementById("deptView").hidden = true;
     document.getElementById("focusView").hidden = true;
     var bracket = document.getElementById("bracketView");
     if (bracket) bracket.hidden = true;
+    var vector = document.getElementById("vectorView");
+    if (vector) vector.hidden = true;
     document.getElementById("app").hidden = false;
     if (typeof render === "function") render();
   };
@@ -876,6 +879,12 @@
     document.getElementById("focusView").hidden = true;
     var bracket = document.getElementById("bracketView");
     if (bracket) bracket.hidden = true;
+    var vector = document.getElementById("vectorView");
+    if (vector) vector.hidden = true;
+    var main = document.getElementById("mainLayout");
+    if (main) main.hidden = false;
+    var right = document.getElementById("rightPanel");
+    if (right) right.hidden = true;
     var vector = document.getElementById("vectorView");
     if (vector) vector.hidden = true;
     document.getElementById("landing").hidden = false;
