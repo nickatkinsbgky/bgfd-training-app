@@ -1043,6 +1043,48 @@
       "kemsisId": "",
       "expDate": "",
       "certificationLevel": "EMT"
+    },
+    {
+      "name": "Hudson, David",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": "EMT"
+    },
+    {
+      "name": "Oliver, Dominic",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": "EMT"
+    },
+    {
+      "name": "Parsley, Dane",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": "EMT"
+    },
+    {
+      "name": "Stafford, Chris",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": "EMT"
+    },
+    {
+      "name": "Stringer, Travis",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": "EMT"
+    },
+    {
+      "name": "Updegraff, Adam",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": "EMT"
+    },
+    {
+      "name": "Woods, Zachary",
+      "kemsisId": "",
+      "expDate": "",
+      "certificationLevel": "EMT"
     }
   ],
   "records": [
@@ -26564,6 +26606,1030 @@
       "hours": 1.0,
       "course": "CPR Recert",
       "standard": "Brady Emergency Care, 14th Ed., Ch. 21 Resuscitation"
+    },
+    {
+      "name": "Hamilton, Sean",
+      "date": "2026-09-16",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Hamilton, Sean",
+      "date": "2026-11-08",
+      "category": "Cardiovascular",
+      "hours": 2.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Hampton, Kyle",
+      "date": "2026-10-25",
+      "category": "Trauma",
+      "hours": 2.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Harbin, Joe",
+      "date": "2026-11-08",
+      "category": "Airway",
+      "hours": 1.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 9 Airway Management"
+    },
+    {
+      "name": "Harbin, Joe",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 1.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation"
+    },
+    {
+      "name": "Harbin, Joe",
+      "date": "2026-10-17",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Harbin, Joe",
+      "date": "2026-11-07",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Harbin, Joe",
+      "date": "2026-11-08",
+      "category": "Cardiovascular",
+      "hours": 1.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Harrell, Jonathan",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Harrell, Jonathan",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Harrell, Jonathan",
+      "date": "2026-08-23",
+      "category": "Trauma",
+      "hours": 2.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Harrell, Jonathan",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Hawkins, Dylan",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Hawkins, Dylan",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Hawkins, Dylan",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Hawthorne, Bryce",
+      "date": "2026-10-26",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Hurt, Ben",
+      "date": "2026-09-02",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Ibarra, Mario",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Ibarra, Mario",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Ibarra, Mario",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Justis, Dakota",
+      "date": "2026-10-31",
+      "category": "Airway",
+      "hours": 4.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Justis, Dakota",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Justis, Dakota",
+      "date": "2026-08-17",
+      "category": "Medical",
+      "hours": 0.5,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Justis, Dakota",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Justis, Dakota",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Keown, Travis",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Keown, Travis",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Keown, Travis",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Lashley, Kevin",
+      "date": "2026-10-05",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Mahaney, Corey",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Mahaney, Corey",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Mahaney, Corey",
+      "date": "2026-11-06",
+      "category": "SVAT",
+      "hours": 1.0,
+      "course": "KBEMS Sexual Violence Awareness Course",
+      "standard": "EMS: Sexual Violence Awareness Training"
+    },
+    {
+      "name": "Mahaney, Corey",
+      "date": "2026-11-06",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Mahaney, Corey",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Martin, Sean",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Martin, Sean",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Martin, Sean",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Maynard, Jeremy",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Maynard, Jeremy",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Maynard, Jeremy",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "McGuire, Jared",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "McGuire, Jared",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "McGuire, Jared",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "McKee, Chase",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "McKee, Chase",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "McKee, Chase",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Meisel, Jason",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Meisel, Jason",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Meisel, Jason",
+      "date": "2026-10-29",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Meisel, Jason",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Michael, Mason",
+      "date": "2026-11-01",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Miller, Micheal",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Miller, Micheal",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Miller, Micheal",
+      "date": "2026-06-23",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "PAHT",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Miller, Micheal",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Mitchell, Kris",
+      "date": "2026-08-23",
+      "category": "SVAT",
+      "hours": 2.0,
+      "course": "KBEMS Sexual Violence Awareness Course",
+      "standard": "EMS: Sexual Violence Awareness Training"
+    },
+    {
+      "name": "Mitchell, Kris",
+      "date": "2026-08-23",
+      "category": "Trauma",
+      "hours": 2.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Montelli, Dylan",
+      "date": "2026-06-05",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Provider Pediatric Abusive Head Trauma",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Moyers, Jon",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Moyers, Jon",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Moyers, Jon",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Muniz-Allgeier, Samuel",
+      "date": "2026-11-01",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Muniz-Allgeier, Samuel",
+      "date": "2026-11-07",
+      "category": "Cardiovascular",
+      "hours": 1.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Pitchford, Brett",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Pitchford, Brett",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Pitchford, Brett",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Potter, John",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Potter, John",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Potter, John",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Reynolds, Matt",
+      "date": "2026-10-21",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Rhoton, Luke",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Rhoton, Luke",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Rhoton, Luke",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Rich, Brittany",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Rich, Brittany",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Rich, Brittany",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Rodgers, Roy",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Rodgers, Roy",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Rodgers, Roy",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Ross, TJ",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Ross, TJ",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Ross, TJ",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Scott, Eric",
+      "date": "2026-07-14",
+      "category": "Trauma",
+      "hours": 4.0,
+      "course": "KBEMS Trauma",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 34 Multisystem Trauma"
+    },
+    {
+      "name": "Scott, Eric",
+      "date": "2026-08-16",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Scott, Josh",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Scott, Josh",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Scott, Josh",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Shehan, Scotty",
+      "date": "2026-08-06",
+      "category": "Medical",
+      "hours": 1.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Shuffett, Zach",
+      "date": "2026-11-08",
+      "category": "Airway",
+      "hours": 1.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 9 Airway Management"
+    },
+    {
+      "name": "Shuffett, Zach",
+      "date": "2026-11-01",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Spainhoward, Griffin",
+      "date": "2026-11-08",
+      "category": "Airway",
+      "hours": 4.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation"
+    },
+    {
+      "name": "Spainhoward, Griffin",
+      "date": "2026-11-08",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Trauma",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 30 Soft-Tissue Trauma, Brady Emergency Care, 14th Ed., Ch. 31 Chest & Abdominal Trau"
+    },
+    {
+      "name": "Spainhoward, Griffin",
+      "date": "2026-11-08",
+      "category": "Operations",
+      "hours": 2.0,
+      "course": "KBEMS Operations",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 38 EMS Operations"
+    },
+    {
+      "name": "Spainhoward, Griffin",
+      "date": "2026-11-08",
+      "category": "Cardiovascular",
+      "hours": 5.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Storey, Ben",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Storey, Ben",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Storey, Ben",
+      "date": "2026-11-06",
+      "category": "Cardiovascular",
+      "hours": 1.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Storey, Ben",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Vance, Joshua",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Vance, Joshua",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Vance, Joshua",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Wallace, Cameron",
+      "date": "2026-07-11",
+      "category": "Medical",
+      "hours": 0.5,
+      "course": "Fluid Resuscitation",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 18 General Pharmacology"
+    },
+    {
+      "name": "Wehr, Larry Lee",
+      "date": "2026-11-09",
+      "category": "SVAT",
+      "hours": 1.0,
+      "course": "KBEMS Sexual Violence Awareness Course",
+      "standard": "EMS: Sexual Violence Awareness Training"
+    },
+    {
+      "name": "Wehr, Larry Lee",
+      "date": "2026-11-09",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Weisbrodt, Wade",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Weisbrodt, Wade",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Weisbrodt, Wade",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Wilson, Adam",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Wilson, Adam",
+      "date": "2026-08-11",
+      "category": "Medical",
+      "hours": 0.5,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Wilson, Adam",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Wilson, Adam",
+      "date": "2026-11-03",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Wilson, Adam",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Wolf, Dennis",
+      "date": "2026-11-03",
+      "category": "Airway",
+      "hours": 1.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 9 Airway Management"
+    },
+    {
+      "name": "Wolf, Dennis",
+      "date": "2026-11-03",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Trauma",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 33 Trauma to the Head, Neck, and Spine"
+    },
+    {
+      "name": "Wolf, Dennis",
+      "date": "2026-10-31",
+      "category": "SVAT",
+      "hours": 1.0,
+      "course": "KBEMS Sexual Violence Awareness Course",
+      "standard": "EMS: Sexual Violence Awareness Training"
+    },
+    {
+      "name": "Wolf, Dennis",
+      "date": "2026-07-30",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Wolf, Dennis",
+      "date": "2026-11-03",
+      "category": "Cardiovascular",
+      "hours": 1.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Nickel, Dakota",
+      "date": "2026-11-04",
+      "category": "Trauma",
+      "hours": 1.0,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Parsley, Dane",
+      "date": "2026-07-14",
+      "category": "Trauma",
+      "hours": 2.0,
+      "course": "KBEMS Trauma",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 34 Multisystem Trauma"
+    },
+    {
+      "name": "Parsley, Dane",
+      "date": "2026-08-10",
+      "category": "Operations",
+      "hours": 1.0,
+      "course": "KBEMS Operations",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 38 EMS Operations"
+    },
+    {
+      "name": "Parsley, Dane",
+      "date": "2026-09-09",
+      "category": "Operations",
+      "hours": 1.0,
+      "course": "KBEMS Operations",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 38 EMS Operations"
+    },
+    {
+      "name": "Smith, Jon",
+      "date": "2026-11-09",
+      "category": "Airway",
+      "hours": 3.0,
+      "course": "KBEMS Airway",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 10 Respiration and Artificial Ventilation, Brady Emergency Care, 14th Ed., Ch. 21 Re"
+    },
+    {
+      "name": "Smith, Jon",
+      "date": "2026-11-09",
+      "category": "Medical",
+      "hours": 2.0,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Smith, Jon",
+      "date": "2026-11-09",
+      "category": "Cardiovascular",
+      "hours": 3.0,
+      "course": "KBEMS Cardiovascular",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 20 Cardiac Emergencies"
+    },
+    {
+      "name": "Stafford, Chris",
+      "date": "2026-07-27",
+      "category": "Medical",
+      "hours": 0.5,
+      "course": "KBEMS Medical",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 13 Vital Signs & Monitoring Devices"
+    },
+    {
+      "name": "Stafford, Chris",
+      "date": "2026-07-15",
+      "category": "Trauma",
+      "hours": 2.0,
+      "course": "KBEMS Trauma",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 34 Multisystem Trauma"
+    },
+    {
+      "name": "Stafford, Chris",
+      "date": "2026-08-11",
+      "category": "Operations",
+      "hours": 1.0,
+      "course": "KBEMS Operations",
+      "standard": "Brady Emergency Care, 14th Ed., Ch. 38 EMS Operations"
+    },
+    {
+      "name": "Stafford, Chris",
+      "date": "2026-10-07",
+      "category": "Trauma",
+      "hours": 1.5,
+      "course": "KBEMS Pediatric Abusive Head Trauma Course",
+      "standard": "EMS: Pediatric Abusive Head Trauma"
     }
   ]
 }
