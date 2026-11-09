@@ -92,6 +92,14 @@
   .pace .ahead b { color:#7dcea0; }
   #focusCallout { background:#211810; border:1px solid var(--gold); border-radius:12px; padding:12px 14px; }
 
+  #vectorView[hidden] { display:none; }
+  #vectorView { padding:16px 20px 40px; }
+  .vector-results { display:flex; flex-direction:column; gap:12px; margin-top:12px; }
+  .vector-card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .vector-card h3 { margin:0 0 6px; font-size:17px; color:var(--gold); }
+  .vector-card .meta { margin:0 0 8px; font-size:13px; color:var(--muted); }
+  .vector-card .desc { margin:0; white-space:pre-wrap; line-height:1.5; }
+
   #deptView[hidden] { display:none; }
   #deptView { padding:16px 20px 40px; }
   .meter { height:10px; background:#30363d; border-radius:99px; overflow:hidden; min-width:110px; display:inline-block; vertical-align:middle; width:120px; }
@@ -155,6 +163,7 @@
   <button class="gold" id="landRoster" type="button">View full roster</button>
   <button class="gold" id="landDept" type="button">Department averages</button>
   <button class="gold" id="landFocus" type="button">Training focus</button>
+  <button class="gold" id="landVector" type="button">Vector Solutions Online Class & Descriptions</button>
   <button class="gold" id="landBracket" type="button">Race to Recertify</button>
   <span id="sync-msg"></span>
 </div>
@@ -218,8 +227,6 @@
   <div id="bracket-out"></div>
 </section>
 
-
-
 <section id="focusView" hidden>
   <div class="bar"><a class="back" href="#" id="focusBack">Back to EMS Tracker</a></div>
   <h2 style="margin:0 0 4px">Training focus</h2>
@@ -255,6 +262,30 @@
       <tbody id="focusPeople"></tbody>
     </table>
   </div>
+</section>
+
+<section id="vectorView" hidden>
+  <div class="bar"><a class="back" href="#" id="vectorBack">Back to EMS Tracker</a></div>
+  <h2 style="margin:0 0 4px">Vector Solutions Online Class & Descriptions</h2>
+  <p class="muted">Search CAPCE-accredited Vector Solutions EMS courses by name, identification number, or NREMT category. Click a category to filter, or enter an ID to find the exact course.</p>
+  <div class="bar">
+    <div>
+      <label for="vectorName">Course Name</label>
+      <input id="vectorName" placeholder="Search course name" autocomplete="off" />
+    </div>
+    <div>
+      <label for="vectorId">Identification Number</label>
+      <input id="vectorId" placeholder="CAPCE ID" autocomplete="off" />
+    </div>
+    <div>
+      <label for="vectorCat">Category</label>
+      <select id="vectorCat">
+        <option value="">All categories</option>
+      </select>
+    </div>
+  </div>
+  <p class="muted" id="vectorCount"></p>
+  <div id="vectorResults" class="vector-results"></div>
 </section>
 
 <section id="deptView" hidden>
@@ -352,17 +383,16 @@
       <button id="deletePerson" type="button">Delete person</button>
       <button class="gold" id="addClass" type="button">Add class</button>
     </div>
-    <div class="wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Standard</th><th>Hours</th><th>Course</th><th></th></tr></thead><tbody id="classBody"></tbody></table></div>
+    <div class="wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Standard</th><th>Hours</th><th>Course</th><th></th></tr></thead><tbody id="editClasses"></tbody></table></div>
   </section>
 </main>
 
-<script src="vendor/jspdf.umd.min.js"></script>
-<script src="vendor/jspdf.plugin.autotable.min.js"></script>
-<script src="ems-recert-data.js?v=20261106-hours"></script>
-<script src="ems-recert.js?v=20261105-btnsfix"></script>
-<script src="ems-pdf.js?v=20261006-aemt"></script>
-<script src="ems-sync.js?v=20261022-fallback"></script>
-<script src="ems-bracket.js?v=20261028-fix"></script>
-<script src="share.js?v=20261028-view"></script>
+<script src="ems-recert-data.js?v=20261028-fix"></script>
+<script src="ems-recert.js?v=20261028-fix"></script>
+<script src="ems-sync.js?v=20261028-fix"></script>
+<script src="ems-pdf.js?v=20261028-fix"></script>
+<script src="ems-bracket.js"></script>
+<script src="vector-courses.js?v=20261028-fix"></script>
+<script src="share.js?v=20261028-views"></script>
 </body>
 </html>
