@@ -1,4 +1,3 @@
-
 (function () {
   function ensureTables() {
     if (!document.getElementById("emrReqStyle")) {
@@ -529,7 +528,7 @@
       var req = CATS.filter(function (c) { return c.key === r.category; })[0];
       var earned = req && s.hours ? s.hours[req.key] : 0;
       var cls = req ? tone(earned, req.need) : "";
-      return "<tr class='" + cls + "'><td>" + esc(r.date) + "</td><td class='cat'>" + esc(r.category) + "</td><td>" + esc(r.standard || r.category) + "</td><td>" + r.hours + "</td><td>" + esc(r.course || "") + "</td></tr>";
+      return "<tr class='" + cls + "' data-idx='" + db.records.indexOf(r) + "'><td>" + esc(r.date) + "</td><td class='cat'>" + esc(r.category) + "</td><td>" + esc(r.standard || r.category) + "</td><td>" + r.hours + "</td><td>" + esc(r.course || "") + "</td><td class='actions'><button class='tiny edit-class' type='button'>Edit</button><button class='tiny del del-class' type='button'>Delete</button></td></tr>";
     }).join("") : "<tr><td colspan='5'>No classes in this cycle.</td></tr>";
   }
   function openFromLanding() {
@@ -915,6 +914,70 @@
   var headerBack = document.getElementById("backLanding");
   if (headerBack) headerBack.onclick = goHome;
 
+  
+  function addCourse() {
+    if (!selected) return;
+    var date = prompt("Date (YYYY-MM-DD):", new Date().toISOString().slice(0,10));
+    if (!date) return;
+    var cat = prompt("Category (Airway, Cardiovascular, Trauma, Medical, Operations, PAHT, SVAT, CPR/AED):", "Medical");
+    if (!cat) return;
+    var hours = prompt("Hours:", "1");
+    if (!hours) return;
+    var course = prompt("Course name:", "");
+    db.records.push({ name: selected.name, date: date, category: cat, hours: Number(hours)||0, course: course||"" });
+    save();
+    showSummary(selected.name);
+  }
+  function editCourse(idx) {
+    var r = db.records[idx];
+    if (!r) return;
+    var date = prompt("Date (YYYY-MM-DD):", r.date);
+    if (date === null) return;
+    var cat = prompt("Category:", r.category);
+    if (cat === null) return;
+    var hours = prompt("Hours:", r.hours);
+    if (hours === null) return;
+    var course = prompt("Course name:", r.course||"");
+    if (course === null) return;
+    r.date = date; r.category = cat; r.hours = Number(hours)||0; r.course = course;
+    save();
+    showSummary(selected.name);
+  }
+  function deleteCourse(idx) {
+    if (!confirm("Delete this course?")) return;
+    db.records.splice(idx, 1);
+    save();
+    showSummary(selected.name);
+  }
+  function bindCourseButtons() {
+    var box = document.getElementById("sumClasses");
+    if (!box) return;
+    Array.prototype.forEach.call(box.querySelectorAll("button.edit-class"), function (btn) {
+      btn.onclick = function () {
+        var tr = btn.closest("tr");
+        var idx = Number(tr.getAttribute("data-idx"));
+        editCourse(idx);
+      };
+    });
+    Array.prototype.forEach.call(box.querySelectorAll("button.del-class"), function (btn) {
+      btn.onclick = function () {
+        var tr = btn.closest("tr");
+        var idx = Number(tr.getAttribute("data-idx"));
+        deleteCourse(idx);
+      };
+    });
+  }
+  // Hook into showSummary to bind buttons after render
+  var origShow = showSummary;
+  showSummary = function (name) {
+    origShow(name);
+    setTimeout(bindCourseButtons, 50);
+  };
+
+  
+  var addBtn = document.getElementById(addCourseBtn);
+  if (addBtn) addBtn.onclick = addCourse;
+
   fillLanding();
   render();
 })();
@@ -928,37 +991,3 @@ if (new URLSearchParams(location.search).has("roster")) {
   if (app) app.hidden = false;
   if (typeof render === "function") render();
 }
-
-
-// Force Race to Recertify button to work with the split layout
-(function () {
-  function showRace() {
-    var main = document.getElementById("mainLayout");
-    if (main) main.hidden = true;
-    var person = document.getElementById("personView");
-    if (person) person.hidden = true;
-    var focus = document.getElementById("focusView");
-    if (focus) focus.hidden = true;
-    var dept = document.getElementById("deptView");
-    if (dept) dept.hidden = true;
-    var app = document.getElementById("app");
-    if (app) app.hidden = true;
-    var vector = document.getElementById("vectorView");
-    if (vector) vector.hidden = true;
-    var view = document.getElementById("bracketView");
-    if (view) {
-      view.hidden = false;
-      if (typeof window.renderBracket === "function") window.renderBracket();
-    }
-  }
-  function bind() {
-    var btn = document.getElementById("landBracket");
-    if (btn) {
-      btn.onclick = showRace;
-    }
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
-  else bind();
-  setTimeout(bind, 1000);
-  setTimeout(bind, 2500);
-})();
