@@ -1,1 +1,1346 @@
-[{"name":"CAPCE Abdominal Trauma","id":"1575424","category":"Trauma","hours":1,"description":"Test description."}]
+[
+  {
+    "name": "CAPCE Abdominal Trauma",
+    "id": "1575424",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Abdominal trauma patients make up a significant volume of emergencies presented to the prehospital healthcare provider and are associated with significantly high morbidity and mortality when delays in surgical interventions arise. The goal of this course is to increase knowledge and awareness, as well as to present concepts and care for all Basic Life Support (BLS) and Advanced Life Support (ALS) personnel. This course provides an ideal refresher for trained individuals currently working in the field of prehospital care and in location-based settings. The details provided in this course revolve around the abdominal trauma patient population and incidents, management, and care of those conditions and situations."
+  },
+  {
+    "name": "CAPCE Acute Coronary Syndromes",
+    "id": "655151",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "Acute Coronary Syndromes encompass a range of cardiovascular diseases and conditions that can affect patients of various ages and health statuses. This interactive online course is designed to equip healthcare professionals with a comprehensive understanding of this critical condition, which is a leading cause of death in the United States. This course delves into the prevalence of ACS in the U.S., risk factors, pathophysiology, and classic signs and symptoms, while also addressing potential mimics. Moreover, it covers the interpretation of 12-lead ECGs for triage, evidence-based treatment strategies, and best practices for patient transport and hospital selection. Upon completing this course, you will gain the tools needed to confidently respond to ACS cases, although hands-on training is also recommended for a well-rounded skill set."
+  },
+  {
+    "name": "CAPCE Acute Respiratory Distress Syndrome",
+    "id": "2476167",
+    "category": "Airway",
+    "hours": 1,
+    "description": "The Acute Respiratory Distress Syndrome course provides essential knowledge and skills for healthcare providers in identifying and managing acute respiratory distress syndrome (ARDS). Participants will learn to distinguish ARDS from other conditions, recognize its symptoms in patients, and effectively manage ARDS cases in the field. Given the critical nature of ARDS, this training is crucial for improving patient outcomes and increasing the chances of survival."
+  },
+  {
+    "name": "CAPCE Advanced Airways: Intubation and Beyond",
+    "id": "2547241",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Every patient must have a patent airway to survive. As a result, airway management and ventilation are the most critical skills in the prehospital environment. This interactive online course is designed for advanced emergency responders, delving into advanced airway control in the prehospital setting. It explores a range of advanced procedures, from endotracheal intubation to surgical cricothyrotomy. You will gain a comprehensive understanding of when and how to employ these techniques, including indications, contraindications, advantages, disadvantages, and detailed procedural insights."
+  },
+  {
+    "name": "CAPCE Advanced Allergic Reaction Management",
+    "id": "2434391",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Advanced Allergic Reaction Management course provides EMS providers with the knowledge and skills necessary to respond effectively to allergic reactions and anaphylaxis, which can be life-threatening emergencies. Participants will learn about the physiology of allergic reactions and anaphylaxis, enabling them to recognize the signs and symptoms across various levels of severity. The course emphasizes the procedures for emergency medical treatment, equipping providers to intervene promptly and appropriately to ensure the best possible outcomes for patients experiencing allergic reactions or anaphylaxis."
+  },
+  {
+    "name": "CAPCE Advanced Cervical Spinal Injuries: Special Considerations for Athletics",
+    "id": "655081",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Athletic activities can result in serious cervical spine injuries that may lead to paralysis or death if not properly managed. Understanding proper assessment and treatment of suspected c-spine injuries is critical for healthcare providers and first responders working with athletes. This interactive online course will teach you how to recognize cervical spine anatomy, identify mechanisms of injury, and develop evidence-based treatment plans for suspected c-spine injuries in athletic settings. Additionally, you will learn special considerations for managing athletic equipment, proper immobilization techniques, and current Inter-Association Task Force (IATF) recommendations for caring for athletes with suspected cervical spine injuries."
+  },
+  {
+    "name": "CAPCE Altitude Emergencies",
+    "id": "2619438",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Altitude Emergencies course provides comprehensive knowledge and skills for managing altitude-related medical emergencies. Ascent into high altitude puts the body in danger in several ways. With altitude illness, hypothermia, and frostbite being significant risks at high altitudes, this course covers the pathophysiology, signs, symptoms, and appropriate care for each condition. Participants will gain a deep understanding of the prevention and treatment of altitude illness, as well as the assessment and management of patients with hypothermia and frostbite. By the end of the course, participants will be equipped to recognize and provide prompt and effective care for altitude-related emergencies, ensuring the best possible outcomes for patients in these challenging environments."
+  },
+  {
+    "name": "CAPCE Amputation Injuries",
+    "id": "3196074",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Every year over 30,000 traumatic amputations take place, and 75% of pediatric amputations are due to traumatic accidents. In traumatic amputations, the potential for success in reattaching the amputated body part is highly contingent upon the quality of the prehospital care provided. For this reason, EMS providers play a significant role in the survival and recovery of patients who experience traumatic amputations. This course provides a general overview of amputation injuries and discusses assessment strategies and patient management considerations. The course also surveys the various types of amputation injuries that may be encountered, the pathophysiology of such injuries and strategies for hemorrhage control and for providing the optimal chance for survival and for successful reattachment."
+  },
+  {
+    "name": "CAPCE Aquatic Emergencies",
+    "id": "2612534",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Aquatic Emergencies course focuses on the unique challenges and high-pressure situations that emergency responders face when dealing with aquatic emergencies. With drowning incidents being a common occurrence, it is crucial for responders to have a deep understanding of the pathophysiology of drowning, including the protective function of hypothermia, and to recognize the signs and symptoms of a drowning victim. The course also covers water-related traumatic injuries, watercraft accidents, the laws of pressure and gases in SCUBA diving, and the pathophysiology and appropriate care for diving emergencies such as decompression sickness. By completing this course, participants will gain the knowledge and skills necessary to effectively respond to and manage various aquatic emergencies, ensuring the best possible outcomes for the victims involved."
+  },
+  {
+    "name": "CAPCE Assessing the Patient with Major Trauma",
+    "id": "3070309",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Traumatic injuries affect millions of Americans annually, with proper assessment being crucial for preventing death and permanent disability in patients with major trauma. This interactive online course will teach you how to conduct a thorough scene size-up and primary assessment to quickly identify life-threatening conditions like airway compromise, inadequate breathing, and severe hemorrhage. Additionally, you will learn how to perform targeted secondary assessments for specific trauma types including head injuries, spinal trauma, chest injuries, and abdominal trauma. You will also discover how to apply the 2021 National Field Triage Guidelines to determine appropriate transport decisions and trauma center selection based on your assessment findings."
+  },
+  {
+    "name": "CAPCE Assessment and Treatment of Altered Mental Status",
+    "id": "2861508",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Patients with altered mental status are a common encounter for EMS clinicians, and a wide range of underlying conditions can contribute to these changes, some of which may not be immediately obvious. While certain causes, like hypoglycemia, can be quickly reversed in the field, others, such as sepsis, require immediate intervention as part of a larger continuum of care. This interactive online course explores the meaning and causes of altered mental status, the frequency of common etiologies, and strategies for assessment and treatment in the prehospital setting. By the end, participants will be equipped to effectively assess and manage patients presenting with altered mental status."
+  },
+  {
+    "name": "CAPCE Assessment and Treatment of Foot Injuries",
+    "id": "2459058",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "The Assessment and Treatment of Foot Injuries course provides essential knowledge for clinicians and responders to effectively evaluate and treat foot injuries. With a focus on maintaining mobility and overall health, this course emphasizes the significance of proper foot care. Participants will gain insights into foot anatomy, injury patterns, risk factors, and evidence-based treatment approaches, ultimately enabling them to better address foot injuries and promote overall well-being."
+  },
+  {
+    "name": "CAPCE Assessment and Treatment of Sexual Assault Patients",
+    "id": "2363823",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This course focuses on preparing EMS workers to effectively respond to incidents of drug-facilitated sexual assault, which can pose numerous challenges for responders. The course covers the incidence, effects, and characteristics of these types of emergencies, as well as patient management procedures and treatment interventions. Through this course, EMS workers will gain cultural competence for victims of sexual assault, and learn how to approach these types of calls with empathy and respect."
+  },
+  {
+    "name": "CAPCE Assessment and Treatment of Submersion Injuries",
+    "id": "2717652",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "This interactive online course provides essential knowledge for pre-hospital care personnel on the assessment and treatment of submersion injuries, which are a major cause of accidental death globally, especially in children. You will learn the latest science and evidence-based guidelines, following current NHTSA standards, to reduce mortality and morbidity associated with drowning incidents. The course covers definitions and classifications of drowning, the pathophysiology of drowning and submersion injuries, and modern prevention methods. By the end of this course, you will be able to identify factors leading to drowning, apply effective treatment and prevention strategies, and mitigate personal risk during rescue operations."
+  },
+  {
+    "name": "CAPCE Assessment, Treatment and Transport of Morbidly Obese Patients",
+    "id": "655117",
+    "category": "Medical",
+    "hours": 1,
+    "description": "More than 2 in 5 adults in the US have obesity. This interactive online course delves into the complex issue of obesity, focusing particularly on morbid obesity and its implications for emergency medical services providers. You will learn to define terms like overweight, obese, and severely obese, understand the causes and health consequences of obesity, and explore assessment challenges and treatment strategies specific to obese and severely obese patients. Additionally, the course covers lifting, moving, and extrication complications associated with caring for these patients while emphasizing the importance of respecting their dignity and maintaining the standard of care."
+  },
+  {
+    "name": "CAPCE Asthma Advanced",
+    "id": "3069845",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Asthma affects 25 million Americans and causes approximately 3,500 deaths annually, with EMS crews responding to thousands of severe asthma attacks each day. This interactive online course will teach you the complex pathophysiology of asthma attacks, including bronchoconstriction, inflammation, and mucus production that lead to airway obstruction and potential respiratory failure. Additionally, you will learn advanced assessment strategies such as peak expiratory flow rate measurement and capnography interpretation to determine the severity of asthma exacerbations."
+  },
+  {
+    "name": "CAPCE Back Injury Prevention",
+    "id": "2755653",
+    "category": "Operations",
+    "hours": 1,
+    "description": "The back is the most injury-prone part of the body. Back problems can result in pain, lost work time, inconvenience, and possible disability. Back injury incidents rank near the top of all occupational work injuries and head the list of injuries to EMS personnel. In large part, all back injuries are preventable. This course reviews data surrounding back injuries, how they happen, where they occur, and why they happen. Moreover, it reviews exercises, lifestyle modifications, posture, lifting, rea"
+  },
+  {
+    "name": "CAPCE Bariatric Patients",
+    "id": "2420423",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Bariatric Patients course addresses the unique challenges and considerations involved in providing care to bariatric patients in the prehospital setting. With obesity rates on the rise, EMS personnel need to be prepared to respond effectively to incidents involving morbidly obese individuals. This course covers topics such as the challenges posed by obesity, the etiologies of obesity, pharmacokinetics in obese patients, pathophysiological effects and comorbidities of obesity, injury prevention strategies, and special accommodations required to properly manage bariatric patients."
+  },
+  {
+    "name": "CAPCE Basic Airway Management Through Case Studies",
+    "id": "",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Emergency Medical Technicians frequently encounter patients with compromised airways that require immediate intervention to prevent hypoxia, aspiration, and potentially fatal outcomes. Effective basic airway management skills can mean the difference between life and death, as brain cells begin dying within minutes of oxygen deprivation. This interactive online course will teach EMT personnel to recognize airway compromise in various patient presentations and apply appropriate BLS airway techniques using proper equipment and decision-making protocols. Additionally, you will learn to select and correctly use airway adjuncts, provide effective ventilation with bag-valve-mask devices, and make critical airway management decisions based on patient age, condition, and environmental factors through realistic field scenarios."
+  },
+  {
+    "name": "CAPCE Basic Airway Skills and Adjuncts",
+    "id": "2547254",
+    "category": "Airway",
+    "hours": 1,
+    "description": "First responders need to know how to manage a patient\u2019s airway, no matter what level of training they have. This interactive online course provides comprehensive training for first responders in managing patient airways. Focusing on airway physiology, oxygenation principles, and assessment skills, you will learn to swiftly\u00c2\u00a0identify\u00c2\u00a0and address airway issues, distinguishing between ventilation and oxygenation problems. By delving into airway anatomy, basic adjuncts, suctioning techniques, and s"
+  },
+  {
+    "name": "CAPCE Basic Allergic Reaction Management",
+    "id": "2434371",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Basic Allergic Reaction Management course provides EMS providers with the knowledge and skills necessary to effectively respond to allergic reactions and anaphylaxis, which can be life-threatening emergencies. Participants will learn about the physiology of allergic reactions and anaphylaxis, enabling them to recognize the signs and symptoms of mild, moderate, and severe cases. The course emphasizes the importance of emergency medical treatment for these conditions, equipping providers to respond swiftly and appropriately to ensure the best possible outcomes for patients."
+  },
+  {
+    "name": "CAPCE Basics of Arrhythmias: Tachy-arrhythmias and Fibrillation",
+    "id": "2305833",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "EMS personnel frequently encounter patients with tachyarrhythmias and fibrillation, which can lead to serious complications and death if not properly identified and treated. Understanding the characteristics and causes of various cardiac rhythms is crucial for providing appropriate emergency care and improving patient outcomes. This interactive online course will teach you how to identify different types of tachyarrhythmias and fibrillation through ECG interpretation, understand their pathophysi"
+  },
+  {
+    "name": "CAPCE Basics of Cardiac Arrhythmias and Premature Complex Rhythms",
+    "id": "2305830",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "Every year, thousands of patients are brought to emergency departments across the country for treatment for rhythm disturbances and the health complications with which they are associated. Additionally, over 800,000 patients are admitted to hospitals each year for treatment for arrhythmias. Yet countless more individuals in apparently good health also experience irregular heart rhythms and suffer no apparent adverse health effects."
+  },
+  {
+    "name": "CAPCE Behavioral Emergencies",
+    "id": "2918424",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Emergency services personnel frequently encounter patients experiencing behavioral emergencies, which can stem from mental health issues, substance use, acute illnesses, or injuries. Mental health disorders are among the most common causes of incapacitation, affecting 1 in 5 American adults annually, with underlying mental illness contributing to up to 80% of frequent EMS calls. However, it is critical to approach these situations without bias, as behavioral symptoms may mask other medical emerg"
+  },
+  {
+    "name": "CAPCE Bleeding and Shock",
+    "id": "1611459",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Time is critical when responding to patients suffering from blood loss or shock. This course focuses on the importance of the circulatory system in relation to blood loss and shock. You will learn how to identify and treat various forms of external and internal bleeding, as well as recognize the signs and symptoms of shock. The course covers the structures and functions of the circulatory system, how to take a blood pressure measurement, and the steps for controlling bleeding."
+  },
+  {
+    "name": "CAPCE Bloodborne Pathogens Safety",
+    "id": "2189251",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Bloodborne pathogen (BBP) exposures occur every day, and you may not even notice. Workers who frequently handle blood, bodily fluids, materials contaminated with blood or bodily fluids, and medical waste are exposed to BBP infections at a higher rate than the general working population."
+  },
+  {
+    "name": "CAPCE Burn Management",
+    "id": "2018140",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Nearly half a million severe burn injuries are treated each year at hospitals throughout the United States. Burn injuries are a form of trauma that can be very distracting to you as an EMS provider because of the look and smell of the burn. These injuries have high mortality rates and can result in lengthy rehabilitation, cosmetic disfigurement, psychosocial problems, and permanent physical disabilities for the patient. When providing emergency care for these types of injuries, it is vital to focus on the treatment of life-threatening injuries, if they are present, even though the burn may consume your attention. In the interactive online course you will learn how about the classifications and characteristics of burns and how to identify the severity will aid in your medical care of the burns."
+  },
+  {
+    "name": "CAPCE CPR Academic",
+    "id": "",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "Are you ready to respond effectively in a cardiac emergency? As a potential first responder, your ability to recognize and react to cardiac arrest can mean the difference between life and death for someone in crisis. This interactive online course is designed to help you understand the essential skills of cardiopulmonary resuscitation (CPR), including how to perform chest compressions, deliver rescue breaths, and use automated external defibrillators (AEDs) for adults, children, and infants. You will learn the complete chain of survival, proper techniques for different age groups, and critical best practices that align with the American Heart Association\u2019s latest guidelines, empowering you with the knowledge needed to act confidently and effectively during a cardiac emergency."
+  },
+  {
+    "name": "CAPCE Capnography",
+    "id": "3041816",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Capnography is a vital diagnostic tool that measures carbon dioxide levels in exhaled air to assess patient status in emergency medical situations. While initially used primarily to confirm proper endotracheal tube placement, capnography has evolved to become an essential monitoring device that provides critical information about a patient\u2019s ventilation, perfusion, and metabolism. This interactive online course will teach you the fundamentals of capnography, including how to interpret waveforms,"
+  },
+  {
+    "name": "CAPCE Carbon Monoxide Poisoning",
+    "id": "106464",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Carbon monoxide is one of the most inhaled toxins. Because of this, treating patients with carbon monoxide poisoning is an emergency situation that EMS responders often face. Because of its common symptoms, carbon monoxide is often misdiagnosed. EMTs and paramedics need to have a thorough comprehension of assessment benchmarks, and the evidence-based best practices when treating patients suffering from carbon monoxide poisoning all the while protecting themselves in the process. This course reviews how carbon monoxide poisons its victims, detailing the effects of carbon monoxide exposure, symptoms of exposure and treatment procedures for patients with carbon monoxide poisoning."
+  },
+  {
+    "name": "CAPCE Carbon Monoxide Poisoning in EMS: Field Recognition, Treatment, and Responder Safety",
+    "id": "3278554",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Carbon monoxide is one of the most inhaled toxins. Because of this, treating patients with carbon monoxide poisoning is an emergency situation that EMS responders often face. Because of its common symptoms, carbon monoxide is often misdiagnosed. EMTs and paramedics need to have a thorough comprehension of assessment benchmarks, and the evidence-based best practices when treating patients suffering from carbon monoxide poisoning all the while protecting themselves in the process. This course reviews how carbon monoxide poisons its victims, detailing the effects of carbon monoxide exposure, symptoms of exposure and treatment procedures for patients with carbon monoxide poisoning."
+  },
+  {
+    "name": "CAPCE Cardiac Arrest for the EMT",
+    "id": "3244536",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "EMTs are often the first medical professionals to respond to cardiac arrest emergencies, where immediate recognition and intervention can mean the difference between life and death for patients. Research shows that high-quality CPR performed within the first few minutes of cardiac arrest significantly improves survival rates, yet many cardiac arrest patients don\u2019t present with textbook symptoms, leading to delayed recognition and treatment. This interactive online course will teach you how to re"
+  },
+  {
+    "name": "CAPCE Cardiac Emergencies",
+    "id": "1347044",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "More than 600,000 patients die each year from cardiovascular diseases, with half of these deaths occurring before patients reach the hospital. This interactive online course covers the assessment and emergency medical care for patients experiencing various cardiac conditions, including angina pectoris, myocardial infarction, heart failure, cardiac tamponade, hypertensive emergency, and cardiogenic shock. The course teaches healthcare providers how to identify major structures of the cardiovascular system, function in organized pit crew style cardiac arrest resuscitation efforts, and properly use automated external defibrillators (AEDs)."
+  },
+  {
+    "name": "CAPCE Cardiac Emergencies for the EMT",
+    "id": "3246072",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "More than 600,000 patients die each year from cardiovascular diseases, with half of these deaths occurring before patients reach the hospital. This interactive online course covers the assessment and emergency medical care for patients experiencing various cardiac conditions, including angina pectoris, myocardial infarction, heart failure, cardiac tamponade, hypertensive emergency, and cardiogenic shock. The course teaches healthcare providers how to identify major structures of the cardiovascular system, function in organized pit crew style cardiac arrest resuscitation efforts, and properly use automated external defibrillators (AEDs)."
+  },
+  {
+    "name": "CAPCE Cardiovascular Anatomy & Physiology",
+    "id": "2197686",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "Cardiovascular disease has been the leading cause of death in the United States for over 80 years, affecting more than 80 million Americans and making it essential for EMS personnel to understand heart and vascular system function. This interactive online course will teach you the complex anatomy of the heart\u2019s chambers, valves, and electrical conduction system that enables it to pump approximately 2,000 gallons of blood daily throughout the body. Additionally, you will learn how to interpret ECG waveforms and understand how they relate to specific events in the cardiac cycle. You will also discover how various internal and external factors can alter cardiac output and how to apply this knowledge when assessing patients with cardiovascular conditions."
+  },
+  {
+    "name": "CAPCE Central Nervous System (CNS) Injuries",
+    "id": "2475920",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "The Central Nervous System (CNS) Injuries course offers a comprehensive understanding of brain, skull, and spinal cord injuries, which are critical concerns in emergency medical services. With insights into the anatomy of the spine and the central nervous system, participants will learn to assess and provide medical care for patients with CNS injuries effectively. Special emphasis is placed on minimizing the risk of further injury by mastering spinal-motion restriction techniques using short and long backboards. This course is essential for EMS providers, helping them navigate the complexities of CNS injury assessment and care while adhering to the latest EMS education standards."
+  },
+  {
+    "name": "CAPCE Child Abuse: An EMS Professionals Role & Responsibilities",
+    "id": "655155",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Despite extensive training in various medical emergencies, child abuse recognition is often underemphasized. This interactive online course aims to fill that gap by equipping EMS personnel with the knowledge to identify and respond to child abuse, which is linked to severe long-term health issues. This course serves as a primer for EMS professionals on recognizing, reporting, and addressing child abuse. By understanding child abuse patterns, appropriate responses, and reporting procedures, EMS professionals can play a crucial role in mitigating abuse and its long-term consequences."
+  },
+  {
+    "name": "CAPCE Clinical Decision-Making",
+    "id": "250880",
+    "category": "Operations",
+    "hours": 1,
+    "description": "This course is designed to help EMS providers develop strong clinical decision-making skills in the pre-hospital environment. Providers must be able to gather and synthesize information quickly and develop patient management plans in changing conditions. The course covers factors that influence medical care in the pre-hospital environment, benefits and shortfalls of different scopes of practice, differentiation of patient conditions, critical thinking processes, and mental health factors that may impact an EMS worker\u2019s ability to think critically on scenes. Upon completion, providers should be able to apply critical thinking elements and make effective decisions in the pre-hospital environment."
+  },
+  {
+    "name": "CAPCE Clinical Decision-Making in the Field",
+    "id": "3326244",
+    "category": "Operations",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE Common Infectious Pathogens",
+    "id": "2856496",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Infection can occur with just one exposure, making it crucial for emergency medical care providers to take necessary precautions to prevent disease transmission. This interactive online course covers essential knowledge about infectious diseases and emphasizes the importance of protecting yourself from exposure in the field. Participants will learn about common diseases such as Hepatitis, Tuberculosis, Meningitis, and MRSA, as well as the role of PPE in preventing the spread of infections. Addit"
+  },
+  {
+    "name": "CAPCE Communication and Documentation",
+    "id": "2285",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Communications is at the center of what and how, we, as emergency responders fulfill our professional responsibilities. How we listen and interact with 9-1-1 calling parties, dispatchers, co-responding agencies, allied health professionals, and others will determine whether those interactions are positive and successful or negative opportunities. Communications isn\u2019t related solely to the verbal realm. There is also non-verbal and written communication that will also be a part of every response that we go to. When we assess and treat a patient, the care that was provided can potentially go for naught if we fail to communicate all that we saw, did, and why we did those things to the staff at the patient\u2019s receiving facility. For fire rescue and EMS, communications begin when the call comes into the public safety access point or PSAP for 9-1-1. It continues during the pre-dispatch scripted questioning, during the dispatch/response phase and well after the call has actually ended. Therefore, knowing that communications lie at the heart of what we do professionally, fire rescue, EMS, and first responders of all stripes must have excellent communication skills now more than ever before. Communications link everything that we do. How we communicate has professional and potentially even personal outcomes. Helping you to be more effective and efficient in this vital skill is the goal of this course."
+  },
+  {
+    "name": "CAPCE Communication and Documentation",
+    "id": "3426118",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Communications is at the center of what and how, we, as emergency responders fulfill our professional responsibilities. How we listen and interact with 9-1-1 calling parties, dispatchers, co-responding agencies, allied health professionals, and others will determine whether those interactions are positive and successful or negative opportunities. Communications isn\u2019t related solely to the verbal realm. There is also non-verbal and written communication that will also be a part of every response that we go to. When we assess and treat a patient, the care that was provided can potentially go for naught if we fail to communicate all that we saw, did, and why we did those things to the staff at the patient\u2019s receiving facility. For fire rescue and EMS, communications begin when the call comes into the public safety access point or PSAP for 9-1-1. It continues during the pre-dispatch scripted questioning, during the dispatch/response phase and well after the call has actually ended. Therefore, knowing that communications lie at the heart of what we do professionally, fire rescue, EMS, and first responders of all stripes must have excellent communication skills now more than ever before. Communications link everything that we do. How we communicate has professional and potentially even personal outcomes. Helping you to be more effective and efficient in this vital skill is the goal of this course."
+  },
+  {
+    "name": "CAPCE Complementary and Alternative Medicine",
+    "id": "2272607",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Complementary and alternative medicine (CAM) is a collection of diverse medical and health care systems, practices, and products that are used by millions of Americans to treat or lessen disease. This course explores common CAM treatments, their impact on EMS, and the adverse effects of some CAM treatments and supplements."
+  },
+  {
+    "name": "CAPCE Confined Space Awareness",
+    "id": "3122394",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Your most important concern when approaching the scene of an emergency is safety \u2013 for you, your crew members, and others on the scene. There are a variety of hazards you may encounter, including crash scenes, hazardous materials, crime scenes, or unstable surfaces. This training course is focused on the hazards associated with confined space entry. Confined spaces may seem harmless but can be extremely dangerous, even fatal. According to NIOSH, 60% of all fatalities associated with confined spaces are would-be rescuers. Recognizing confined spaces and the hazards that may be encountered in them is the first step in avoiding serious injury and death."
+  },
+  {
+    "name": "CAPCE Crime Scene Awareness",
+    "id": "2554192",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Do you know what to do when arriving at a crime scene? When responding to incidents involving criminal acts, your first priority is personal safety and scene security. This interactive online course covers crime scene awareness, including navigation, evidence preservation, and personal safety. You will learn how to seamlessly integrate your medical knowledge with criminal investigation principles, all while adhering to the EMS principle of do no further harm."
+  },
+  {
+    "name": "CAPCE Death and Dying",
+    "id": "3433937",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Death and Dying course prepares EMS personnel to navigate emotionally charged situations involving death and dying. It addresses the implications of patient death, provides insights into the reactions of survivors and patients, and explores comfort measures for both. The course also covers considerations for termination of care, the application of DNR orders, and the decision not to transport a patient. By completing this course, participants will gain the knowledge and skills necessary to handle these sensitive situations with empathy and professionalism."
+  },
+  {
+    "name": "CAPCE Death and Dying",
+    "id": "655141",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Death and Dying course prepares EMS personnel to navigate emotionally charged situations involving death and dying. It addresses the implications of patient death, provides insights into the reactions of survivors and patients, and explores comfort measures for both. The course also covers considerations for termination of care, the application of DNR orders, and the decision not to transport a patient. By completing this course, participants will gain the knowledge and skills necessary to handle these sensitive situations with empathy and professionalism."
+  },
+  {
+    "name": "CAPCE Dementia: Overview, Assessment, and Care",
+    "id": "2841231",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Dementia is not actually a specific disease. It\u0092s a collection of symptoms and can be caused by a number of disorders that affect the brain. The true incidence of dementia is not known because many patients with early dementia avoid medical assessment and cover their symptoms well. Additionally, early behaviors or memory loss may be considered normal for aging or due to other conditions. This interactive online course provides comprehensive insights into dementia, covering its definition, sympto"
+  },
+  {
+    "name": "CAPCE Detailed Physical Exam",
+    "id": "",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Trauma is one of the leading causes of death in the United States for individuals under age 50. Excessive forces applied to the body cause traumatic injuries, but, not all forces break the skin and cause bleeding. Some leave no signs at all initially, but cause damage beneath the surface that can be just as severe. The detailed physical exam is an integral part of competent and complete patient care. Sometimes called the focused physical exam or rapid trauma scan, it is typically performed after the initial assessment, usually while en-route to the most appropriate receiving medical facility. This course focuses on the steps necessary to perform a complete detailed physical exam. The properly conducted detailed physical exam provides considerable information about the patient\u2019s injuries or medical condition but can be time consuming. This detailed physical exam is performed only after an initial assessment is completed and all life threats are controlled."
+  },
+  {
+    "name": "CAPCE Diet & Nutrition",
+    "id": "2276",
+    "category": "Operations",
+    "hours": 1,
+    "description": "This course on Diet and Nutrition offers valuable insights for EMS professionals. With a focus on the physical demands of the emergency response role, this course highlights the importance of proper nutrition and exercise to maintain a healthy and effective lifestyle. Participants will gain knowledge about nutrition, weight management, fitness principles, and the relationship between diet, exercise, and chronic conditions. By completing this course, learners will enhance their understanding of the role of diet in overall well-being, enabling them to better care for themselves and, in turn, effectively serve their communities."
+  },
+  {
+    "name": "CAPCE Distracted Driving for Emergency Vehicle Operators",
+    "id": "3196109",
+    "category": "Operations",
+    "hours": 1,
+    "description": "A brief gaze at a vehicle accident, a turn of the neck to look into the backseat, a routine cell phone conversation \u2014 these all have the potential to cause a deadly motor vehicle accident. According to the National Highway Traffic Safety Administration, 6 to 8.3 million drivers crashed in the past five years as a result of being distracted. Distracted driving is receiving increasing attention from both the media and legislators, but there is still a long way to go before drivers are fully aware of the hazards involved. On average, drivers require about 3/4 of a second to react. When a driver\u2019s attention is diverted from the roadway ahead of the vehicle, that reaction time can be drastically increased, and traumatic injury or fatality can be the tragic end result. This course examines the problem of distracted driving and offers solutions and prevention measures for avoiding accidents due to distracted driving. Recent case studies are also presented along with a discussion of the lessons that can be learned from each."
+  },
+  {
+    "name": "CAPCE Driving Safety",
+    "id": "3088492",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Traffic accidents are a leading cause of incidental deaths among US workers. This training course presents information to aid employees in operating vehicles safely. This program could save your life or that of a coworker!"
+  },
+  {
+    "name": "CAPCE EMS HIV/AIDS Awareness",
+    "id": "3434588",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The HIV/AIDS Awareness course is designed to equip EMS personnel with the knowledge and skills necessary to prevent exposure to HIV and effectively respond to patients with HIV/AIDS. With HIV/AIDS being a significant public health concern globally, this course provides an understanding of how HIV infections occur and the most significant modes of transmission. It emphasizes the importance of controlling exposure through proper personal protective equipment and clothing and provides guidance on reporting exposure incidents. Additionally, the course covers emergency care for patients with HIV/AIDS and highlights the relevant laws related to HIV/AIDS. By completing this course, participants will be able to effectively mitigate the risks of exposure to HIV and provide appropriate care to patients with HIV/AIDS, ensuring the safety of both them and their patients."
+  },
+  {
+    "name": "CAPCE Emergency Responder Rehabilitation",
+    "id": "2424273",
+    "category": "Operations",
+    "hours": 1,
+    "description": "The Emergency Responder Rehabilitation course is designed to provide EMS personnel with a comprehensive understanding of the National Fire Protection Association (NFPA) Standard 1584, which guides emergency responder rehabilitation protocols. This course emphasizes the requirements outlined in the standard from an EMS perspective, covering topics such as positional requirements, heat and cold stress, medical monitoring, common injuries, assessment and treatment in the rehab area, and the key com"
+  },
+  {
+    "name": "CAPCE Emergency Response to Terrorism (Mod #1)",
+    "id": "3426352",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Increasingly, terror related activities are becoming more prevalent and are affecting everyday life for Americans. Whether homegrown or affiliated with an organization that is aligned with a known terror group, such events are becoming more and more normalized in our society. While by no means an everyday event, and hopefully a less than once in a career event, rescuers must be prepared and ready to respond if and when the need arises. This four-module program for first responders is essential for anyone who may be among the first to arrive at an incident of suspicious origin. It is intended to be a general introduction to \u201cawareness level\u201d concepts for first-responders arriving at the scene of a potential terrorist incident. (Module 1 of 4)"
+  },
+  {
+    "name": "CAPCE Emergency Response to Terrorism (Mod #2)",
+    "id": "3426363",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Increasingly, terror related activities are becoming more prevalent and are affecting everyday life for Americans. Whether homegrown or affiliated with an organization that is aligned with a known terror group, such events are becoming more and more normalized in our society. While by no means an everyday event, and hopefully a less than once in a career event, rescuers must be prepared and ready to respond if and when the need arises. This four-module program for first responders is essential for anyone who may be among the first to arrive at an incident of suspicious origin. It is intended to be a general introduction to \u201cawareness level\u201d concepts for first-responders arriving at the scene of a potential terrorist incident. (Module 2 of 4)"
+  },
+  {
+    "name": "CAPCE Emergency Response to Terrorism (Mod #3)",
+    "id": "3426366",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Increasingly, terror related activities are becoming more prevalent and are affecting everyday life for Americans. Whether homegrown or affiliated with an organization that is aligned with a known terror group, such events are becoming more and more normalized in our society. While by no means an everyday event, and hopefully a less than once in a career event, rescuers must be prepared and ready to respond if and when the need arises. This four-module program for first responders is essential for anyone who may be among the first to arrive at an incident of suspicious origin. It is intended to be a general introduction to \u201cawareness level\u201d concepts for first-responders arriving at the scene of a potential terrorist incident. (Module 3 of 4)"
+  },
+  {
+    "name": "CAPCE Emergency Response to Terrorism (Mod #4)",
+    "id": "3426371",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Increasingly, terror related activities are becoming more prevalent and are affecting everyday life for Americans. Whether homegrown or affiliated with an organization that is aligned with a known terror group, such events are becoming more and more normalized in our society. While by no means an everyday event, and hopefully a less than once in a career event, rescuers must be prepared and ready to respond if and when the need arises. This four-module program for first responders is essential for anyone who may be among the first to arrive at an incident of suspicious origin. It is intended to be a general introduction to \u201cawareness level\u201d concepts for first-responders arriving at the scene of a potential terrorist incident. (Module 4 of 4)"
+  },
+  {
+    "name": "CAPCE Emergency Response to Terrorism - Module 1",
+    "id": "2379",
+    "category": "Operations",
+    "hours": 1,
+    "description": "First responders face unprecedented threats from terrorist activities that are becoming increasingly common and can result in mass casualties, structural damage, and significant risks to emergency personnel. Many responders lack the specialized training needed to recognize and safely respond to terrorist incidents involving biological, nuclear, incendiary, chemical, or explosive threats. This interactive online course will teach you how to define terrorism, recognize attack vulnerability factors, and identify the five categories of potential terrorist threats and their fundamental attributes. Additionally, you will learn to distinguish terrorist incidents from normal emergencies and understand the critical importance of situational awareness and proper response protocols when facing these high-risk, low-frequency events. (Module 1)"
+  },
+  {
+    "name": "CAPCE Emergency Response to Terrorism - Module 2",
+    "id": "2380",
+    "category": "Operations",
+    "hours": 1,
+    "description": "First responders face significant risks when responding to terrorist incidents, which are classified as High Acuity Low Frequency Events (HALFEs) that can cause mass casualties, structural damage, and compromise crime scene evidence if not handled properly. Many emergency personnel lack the specialized training needed to recognize suspicious incidents, preserve critical evidence, and differentiate between threat assessment and risk assessment at potential terrorism crime scenes. This interactive online course will teach you how to recognize various indicators of terrorism-related incidents and identify appropriate scene-specific responder activities and considerations for biological, nuclear, incendiary, chemical, and explosive (B-NICE) threats. Additionally, you will learn to identify outward warning signs of lethal agents, preserve physical evidence that may be crucial for prosecution, and understand when to delay entry while waiting for specialized personnel to ensure both responder safety and investigative integrity. (Module 2)"
+  },
+  {
+    "name": "CAPCE Emergency Response to Terrorism - Module 3",
+    "id": "2381",
+    "category": "Operations",
+    "hours": 1,
+    "description": "This Introductory Guide for First Responders is essential to those who may be among the first to arrive at an incident of suspicious origin. It is intended to be a general introduction to the basic concepts for first responder awareness at the scene of a potential terrorist incident. After successfully completing this course, learners will be able to: 1) Identify characteristics of the six common types of personal threats to your safety; 2) Contrast the value of different self-protective measures in dealing with the six common types of personal threats; 3) Differentiate among the hazards that can occur at various incidents; 4) Relate the protective measures of time, distance and shielding to various incidents. (Module 3)"
+  },
+  {
+    "name": "CAPCE Emergency Response to Terrorism - Module 4",
+    "id": "2382",
+    "category": "Operations",
+    "hours": 1,
+    "description": "First responders face overwhelming challenges when managing terrorist incidents, which require complex coordination of multiple agencies, specialized equipment, and mass casualty protocols while preserving critical crime scene evidence. Many emergency personnel lack adequate training in the Incident Command System (ICS) and systematic response models needed to effectively control chaotic terrorist scenes involving hazardous materials and mass casualties. This interactive online course will teach you the essential components of ICS and the systematic steps for responding to terrorist incidents, including scene size-up, strategic goal setting, and tactical implementation. Additionally, you will learn the GEDAPER model for hazardous materials incidents, proper coordination and notification procedures, and how to balance life safety priorities with evidence preservation requirements at terrorist crime scenes. (Module 4)"
+  },
+  {
+    "name": "CAPCE Emergency Vehicle Operations",
+    "id": "3222025",
+    "category": "Operations",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE Endocrine Emergencies for the EMT",
+    "id": "3249336",
+    "category": "Medical",
+    "hours": 1,
+    "description": "EMTs are subject to misdiagnosis, inappropriate treatment, and sometimes fatal patient outcomes due to inadequate assessment of endocrine emergencies. Many diabetic emergencies present with subtle or atypical symptoms that can be easily misinterpreted, particularly in elderly patients, children, and those with concurrent medical conditions. This interactive online course will teach you how to recognize the clinical signs and symptoms of hypoglycemia, hyperglycemia, and other endocrine emergencies in real-world field presentations. Additionally, you will learn proper glucometer use and troubleshooting techniques, appropriate BLS interventions including oral glucose administration, and when to activate ALS backup."
+  },
+  {
+    "name": "CAPCE Endocrine System Emergencies",
+    "id": "2540916",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The endocrine system is responsible for regulating growth, development, and metabolism through hormone secretion. Issues with the endocrine system, including hormonal imbalances, can have major health consequences. This interactive online course provides essential knowledge and skills for EMS responders to effectively assess and manage patients experiencing endocrine emergencies. You will learn to recognize and respond to various endocrinologic conditions, including hypoglycemia, hyperglycemia, diabetic ketoacidosis, thyrotoxicosis, myxedema, Cushing\u2019s syndrome, and adrenal insufficiency, gaining a comprehensive understanding of the associated risk factors, anatomy, physiology, and appropriate management strategies. Upon successful completion, participants will be well-equipped to make informed decisions that prioritize their patients\u2019 well-being and deliver effective care."
+  },
+  {
+    "name": "CAPCE Environmental Emergencies",
+    "id": "2918851",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Environmental emergencies arise from exposure to extreme temperatures, aquatic incidents, or high altitudes, challenging the body's ability to regulate temperature and perform vital functions. Conditions such as hypothermia, frostbite, heat exhaustion, heatstroke, dehydration, drowning, diving injuries, and altitude illnesses require prompt recognition and intervention by EMS personnel. Although the frequency of specific incidents like diving or altitude-related emergencies varies by region, EMS providers must be prepared to respond effectively when these situations occur. This interactive online course equips participants with the knowledge and skills to assess and manage environmental emergencies."
+  },
+  {
+    "name": "CAPCE Epilepsy and Other Seizure Disorders",
+    "id": "2938264",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This interactive online course provides essential knowledge for recognizing, assessing, and managing seizure patients in the prehospital setting. You will learn about seizure epidemiology, pathophysiology, and the different types and phases of seizures. The course also covers patient behavior, restraint considerations, and high-priority interventions, including the management of status epilepticus. Understanding proper assessment and treatment strategies will help responders minimize risks and improve patient outcomes."
+  },
+  {
+    "name": "CAPCE Ethics for EMS Providers",
+    "id": "2484293",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Have you ever found yourself in situations where you had to make critical decisions about patient care, determine what can or cannot be done, or weigh the ethical considerations of your actions? In the fast-paced world of Emergency Medical Services (EMS), these dilemmas are all too common. This interactive online course covers essential skills to navigate complex ethical challenges. Topics include understanding ethics terminology, identifying personal and professional codes of ethics, recognizing ethical dilemmas, and implementing effective problem-solving strategies. As EMS technology evolves rapidly, this course empowers providers to make sound ethical judgments, even in the absence of specific laws or rules."
+  },
+  {
+    "name": "CAPCE Femur Fractures",
+    "id": "2476103",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "The Femur Fractures course provides a comprehensive understanding of femur fractures, focusing on the longest and strongest bone in the body. Participants will learn about the types of femoral fractures, their assessment findings, and the critical prehospital management techniques required for these injuries. Special considerations and potential complications following a femur fracture are also discussed, equipping healthcare providers with the knowledge and skills needed to effectively assess, treat, and manage femur fracture emergencies."
+  },
+  {
+    "name": "CAPCE Functional Approach to Physical Fitness",
+    "id": "2627867",
+    "category": "Operations",
+    "hours": 1,
+    "description": "A recent study showed that, in one year alone, there were over 65,000 injuries to Fire and EMS personnel while on duty. This interactive online course delves into the critical importance of functional fitness for first responders, highlighting its role in injury prevention amidst the physically demanding nature of emergency response work. By exploring the distinction between functional training and traditional fitness regimens, you will gain insights into how to tailor exercise routines to better prepare for the practical challenges encountered on the job. Through demonstrations of core strengthening, flexibility exercises, and functional fitness techniques tailored to emergency responder tasks, attendees will emerge equipped with the knowledge and tools to enhance their physical preparedness for the rigors of duty, ultimately reducing the risk of line-of-duty injuries and fatalities."
+  },
+  {
+    "name": "CAPCE Functional Communication Between EMS Clinicians and Patients",
+    "id": "2777297",
+    "category": "Operations",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE Fundamentals of 12 Lead ECG Operation and Interpretation",
+    "id": "46780",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "This course offers a comprehensive introduction and refresher on interpreting 12-lead ECGs in the field of Advanced Level EMS. As a standard of care, understanding ECGs is crucial in mobilizing specialized hospital teams efficiently, particularly in ST-segment elevated myocardial infarctions (STEMIs). Covering electrode placement, autonomic nervous system impact, heart rate determination, and more, this course prepares both new learners and experienced professionals for real-world situations. Upon completion, participants will possess the skills needed for effective ECG analysis, enabling them to contribute to enhanced patient care and faster response times."
+  },
+  {
+    "name": "CAPCE Geriatric Assessment Challenges",
+    "id": "655134",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Every EMS encounter begins with an assessment, and certain populations, such as geriatrics, require specific strategies due to underlying challenges. While it is important to consider potential challenges like hearing impairments and chronic health conditions, assumptions based solely on age can lead to inadequate assessments and poor patient outcomes. This interactive online course is designed to address the physical, environmental, and mental health challenges that often complicate the assessment of geriatric patients, along with techniques and communication strategies to improve interactions and outcomes. By discussing the challenges and techniques of geriatric assessment, this course aims to enhance the skills necessary for more effective and positive patient encounters."
+  },
+  {
+    "name": "CAPCE Geriatric Behavioral Emergencies",
+    "id": "2717839",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Understanding geriatric behavioral emergencies is crucial for EMS responders to ensure that these incidents are not dismissed as normal age-related changes, leading to a lack of essential care. This interactive online course equips responders with the knowledge to recognize and properly treat behavioral emergencies in elderly patients. By covering the causes of behavioral changes, differentiating between disorders, and discussing medical and legal considerations, the course prepares responders to manage these emergencies effectively. Techniques for assessing, calming, and treating geriatric patients with behavioral issues, including handling potentially suicidal or violent situations, are also emphasized."
+  },
+  {
+    "name": "CAPCE Geriatric Emergencies",
+    "id": "2540912",
+    "category": "Medical",
+    "hours": 1,
+    "description": "It is estimated that by 2030, geriatric patients will comprise 22% of the population and account for 70% of ambulance transports. As the geriatric population continues to expand, understanding the nuances and subtleties of geriatric care is crucial for achieving successful patient outcomes. The interactive online course is designed to equip EMS personnel with the knowledge and skills required to provide effective care to the aging population. The course delves into the physiological and psychological changes that occur with aging and how they affect the assessment and treatment of geriatric patients."
+  },
+  {
+    "name": "CAPCE Grey Area Calls",
+    "id": "1134114",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This unique course is geared to paramedics and advanced level EMS providers. It delves into what can be described as fuzzy, blurry, or grey areas that comprise modern fire rescue and EMS medical calls for service. When EMTs and paramedics are trained, the latest textbooks and simulators are used to create a vivid backdrop that is intended to resemble how an actual patient presents to rescuers in the field. This training focuses on the patient\u2019s vital signs, symptoms, and complaints, given a literal textbook rendition of each malady. However, the patients that 9-1-1 responds to have not studied these same textbooks. Often, their complaints and symptoms can be far less clear than the textbook version. This course will address grey area concepts in many medical, trauma, and psychiatric patient subsets."
+  },
+  {
+    "name": "CAPCE Gunshot Wounds and Bomb Blast Injuries",
+    "id": "2407009",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "EMS providers at all levels are often faced with the challenge of responding to scenes of targeted violence and treating patients with gunshot wounds or blast injuries. Penetrating trauma caused by firearms presents a unique challenge for EMS personnel due to potential severity of gunshot injuries to the human body, complex implications in patient care, and the unpredictability of the scene during and after a violent incident has taken place. These dynamic and often volatile scenes create new and unique challenges for the responder. This course will help prepare you for this response, by providing insight into the unique attributes of a bomb blast situation, and the injuries you might encounter."
+  },
+  {
+    "name": "CAPCE H1N1 (Swine Flu)",
+    "id": "",
+    "category": "Medical",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE HIPAA Awareness",
+    "id": "3088740",
+    "category": "Operations",
+    "hours": 1,
+    "description": "The Health Insurance Portability and Accountability Act (HIPAA) establishes federal standards to protect patients' health information from being improperly used or disclosed. This interactive online course explains HIPAA regulations and the responsibilities required of all EMS personnel and agencies to safeguard Protected Health Information (PHI). Students will learn about patients' rights under HIPAA, when PHI may be legally disclosed, and the potential consequences of HIPAA violations. Additionally, the course covers practical safeguards for handling patient information, breach notification requirements, and how to maintain HIPAA compliance in emergency situations."
+  },
+  {
+    "name": "CAPCE HIV/AIDS Awareness",
+    "id": "2283",
+    "category": "Medical",
+    "hours": 1,
+    "description": "According to the Center for Disease Control and Prevention, 2012 ended with over 35 million people worldwide living with HIV, the virus that causes AIDS. Each year, around 2.7 million people become infected with HIV and 2 million die of AIDS. The AIDS epidemic continues to be a serious public health problem with profound consequences for our society, as there is no vaccine or cure for this disease. This course provides information regarding this devastating disease as well as ways to protect yourself and your employees from this and other bloodborne pathogens."
+  },
+  {
+    "name": "CAPCE HazMat Medical Emergencies",
+    "id": "823560",
+    "category": "Medical",
+    "hours": 1,
+    "description": "In the HazMat Medical Emergencies course, ALS personnel will explore advanced concepts and care related to hazardous materials (HazMat) incidents. This course serves as both an introduction and a refresher for ALS-trained individuals working in the HazMat specialty. Prior knowledge of Advanced Life Support (ALS) medical terminology and a basic understanding of chemical, biological, radiological, nuclear, and high yield explosives (CBRNE) concepts are prerequisites for this course. By the end, participants will have the ability to discuss advanced concepts of care, recall essential terminology and historical data, identify toxidromes, describe the physiological effects of toxic agents, and discuss pharmacology in HazMat medical emergencies."
+  },
+  {
+    "name": "CAPCE HazMat Medical Emergencies for ALS Providers",
+    "id": "3427894",
+    "category": "Medical",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE Hazard Communication",
+    "id": "2210803",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Exposure to hazardous chemicals can present numerous dangers to workers. More than 30 million workers are exposed to one or more chemical hazards across various industrial sectors. Hundreds of new hazardous chemicals are being introduced annually, in addition to the approximately 389,000 chemical substances tracked by the Chemical Abstract Services database (2019). Knowing that chemical products may cause harm, the risk is increasing every year. OSHA\u2019s Hazard Communication Standard is designed t"
+  },
+  {
+    "name": "CAPCE Health and Wellness",
+    "id": "2498937",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Did you know that over 70% of firefighters are overweight or obese? Providing emergency medical care is a physically and emotionally demanding task for first responders and prioritizing self-care and overall wellness is crucial for delivering quality care to patients. This interactive course covers key components of health and wellness including mental health, stress management, nutrition, physical activity, and sleep. Just as first responders continually train to excel in their professions, striving for better health and wellness are essential for the job. Neglecting either aspect can jeopardize lives, making health and wellness best practices essential for both professional and personal well-being."
+  },
+  {
+    "name": "CAPCE Health and Wellness in Public Safety",
+    "id": "2086961",
+    "category": "Operations",
+    "hours": 1,
+    "description": "According to a study conducted by Harvard School of Public Health and Cambridge Health Alliance, law enforcement officers are 30\u201370 times more likely to be at risk for a sudden cardiac event. In addition, the life spans for first responders are approximately 15 years less than those of other professions. Shift work, stress, poor relaxation techniques, chemical imbalances, and poor diet have all been listed as primary causal factors. It has been suggested that first responders make small efforts to become more educated and aware of their individual health and wellness needs. This course seeks to educate first responders with some terms, techniques, and lifestyle habits that can lead to a more healthy and productive life."
+  },
+  {
+    "name": "CAPCE Heat Illness and Emergencies",
+    "id": "91057",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Body temperature is an integral part of our body's function. Like most of our body systems, we live in a narrow range of temperatures. Moving outside this range can have adverse effects. Several factors, both internal and external, can raise and lower our temperature and can have severe consequences. These conditions can result from environmental heat (heat produced outside the body) in extreme temperatures, as well as extreme exercise and pathological or drug-induced fevers. For the scope of this course, extreme temperatures will be defined as temperatures significantly higher than normal body temperatures."
+  },
+  {
+    "name": "CAPCE Heat Illness and Emergency Response in EMS",
+    "id": "3326233",
+    "category": "Medical",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE Hematology",
+    "id": "3222370",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Hematology allows you to understand how the organs in the body interact to ensure the body\u2019s normal balance, or homeostasis. The study of hematology allows for a better understanding of the body\u2019s functioning. And while pre-hospital care of hematological disorders is mostly supportive, an understanding of these diseases can guide you in your assessment and care of these patients. Rescuers who understand how hematology and hematological dysfunction affect the body\u2019s systems can perform more studied assessments across the patient care continuum and provide better treatment to patients. After completing this course, you will have a broadened set of skills from which to draw upon during hands-on training or real-world calls for service. This course prepares you from the cognitive side. Further hands-on training will round out what you acquire from this course."
+  },
+  {
+    "name": "CAPCE Hip and Pelvic Injuries",
+    "id": "2462398",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "The Hip and Pelvic Injuries course equips emergency care providers with essential assessment tools and contemporary treatment strategies for effectively managing hip and pelvic injuries. With a focus on recognizing key anatomical features, understanding injury mechanisms, and identifying risk factors, participants will gain the skills to assess and treat these injuries more effectively. Given the significant impact of hip and pelvic injuries, particularly among the elderly and younger population, this course emphasizes early recognition and evidence-based treatment, preparing healthcare providers to address these challenges in the field."
+  },
+  {
+    "name": "CAPCE Human Trafficking Basics for First Responders",
+    "id": "2074527",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Human trafficking is one of the world's most appalling crimes against our social and moralistic beliefs, and it continues to degrade our society as it persists and spreads. In this course, we seek to discuss and analyze the topic of human trafficking and how you, the first responder, can assist in identifying and investigating such incidents."
+  },
+  {
+    "name": "CAPCE Human Trafficking Prevention",
+    "id": "3200416",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Human trafficking is one of the world\u2019s most appalling crimes against our social and moralistic beliefs, and it continues to degrade our society as it persists and spreads. In this course, we seek to discuss and analyze the topic of human trafficking and how you, the first responder, can assist in identifying and investigating such incidents."
+  },
+  {
+    "name": "CAPCE Hypothermia Assessment and Treatment",
+    "id": "655144",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Hypothermia is a medical illness which has impacted the condition of people\u2019s health for several centuries. Advancements in assessments, treatments, education, and technology have dramatically improved and now provide modern medical professionals with the ability to accurately and effectively treat patients diagnosed with a hypothermic condition. This interactive online course delves into the complexities of hypothermia and its various medical implications, providing a comprehensive understandin"
+  },
+  {
+    "name": "CAPCE Immunology and Immunological Emergencies",
+    "id": "2717708",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This interactive online course offers a comprehensive overview of immunology, emphasizing the functions of the immune system and their critical role in health and disease. You will learn to recognize and manage immunodeficiency and infectious diseases, understand the mechanisms of immune responses, and address immune-related conditions like anaphylaxis and autoimmune disorders. The course will cover the distinction between various pathogens, the anatomy involved in immune function, and the implications for treatment and safety in prehospital care. By the end, you will be equipped to identify immune-related symptoms and make informed treatment decisions."
+  },
+  {
+    "name": "CAPCE Incident Command System (ICS): with Applications for EMS",
+    "id": "3222368",
+    "category": "Operations",
+    "hours": 1,
+    "description": "In the aftermath of the 9/11 attacks on the World Trade Center, Pentagon, and in Pennsylvania, the Incident Command System (ICS) was implemented across the United States to enable multiple responding agencies to better function as a unified force within the complicated and demanding environments of large-scale and mass-casualty incidents. This course provides an overview of the incident command system with an emphasis on EMS operations."
+  },
+  {
+    "name": "CAPCE Infectious Disease Control",
+    "id": "2721955",
+    "category": "Operations",
+    "hours": 1,
+    "description": "This interactive online course addresses the inevitable exposure to infectious diseases EMS providers face, from basic first aid to inserting an IV catheter, focusing on bloodborne pathogens like HBV, HCV, and HIV. You will learn to recognize, prevent, and protect against the spread of these pathogens and viral hemorrhagic fevers through the proper use of PPE and understanding national standards. Additionally, the course covers preventing needlestick injuries, exposure therapies, and the role of EMS in public health initiatives to control infectious outbreaks."
+  },
+  {
+    "name": "CAPCE Injuries and Infections of the Eye",
+    "id": "86533",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The human eye is a delicate and crucial organ, and understanding its anatomy, terminology, common injuries, and infections is vital to provide fast, appropriate care. Injuries and infections can lead to extreme pain and lifelong vision problems, making prompt and proper care a priority. This interactive online course provides essential knowledge for EMS responders to accurately assess and treat patients with eye injuries and infections. This course covers the anatomy of the eye, various eye injuries, common infections, assessment techniques, and management of patients with injuries, foreign bodies, burns, or blunt trauma to the eye. By the end of the course, you will be well-prepared to handle eye-related emergencies with the care and attention they require."
+  },
+  {
+    "name": "CAPCE Interactions with Individuals with Disabilities",
+    "id": "",
+    "category": "Medical",
+    "hours": 1,
+    "description": "People with disabilities may move, behave, or speak differently from what first responders may expect. This can result in first responders assuming that the person is intoxicated or uncooperative instead of considering if they may have a disability. This interactive online course will provide you with effective methods of engaging with individuals who have intellectual and/or developmental disabilities during emergency response situations. Addressing various disabilities such as autism spectrum disorder, ADHD, Down syndrome, and fetal alcohol spectrum disorder, this course offers insights into recognizing signs, understanding behaviors, and employing specialized approaches for these individuals. You will learn to navigate potential communication barriers, assess situations calmly, and tactically reposition yourself to ensure a non-threatening and appropriate response, enhancing your ability to serve the diverse needs of individuals with disabilities."
+  },
+  {
+    "name": "CAPCE Intraosseous Infusion",
+    "id": "2668085",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Intraosseous infusion (IO) is an advanced medical procedure that allows for medications, fluids, and blood products to be directly injected into the bone marrow space. This interactive online course delves into the critical skill of intraosseous infusion, a method of vascular access vital for administering fluids and medications when standard intravenous access is challenging or unavailable. You will gain a comprehensive understanding of the history, anatomy, indications, contraindications, complications, and equipment associated with intraosseous cannulation. By the course\u2019s conclusion, you will be proficient in recognizing when and how to perform intraosseous infusion effectively, making it an essential aspect of emergency medical care for both pediatric and adult patients, particularly in critical scenarios such as cardiac arrest."
+  },
+  {
+    "name": "CAPCE Introduction to Hazardous Materials",
+    "id": "2659874",
+    "category": "Operations",
+    "hours": 1,
+    "description": "The Introduction to Hazardous Materials course is tailored for emergency medical service personnel, providing them with essential knowledge and skills to effectively handle patients in hazardous materials incidents. By comprehending hazardous materials terminology, safety strategies, personal protective equipment, and decontamination processes, participants will be better equipped to respond to such incidents. Upon completion, learners will possess the ability to define hazardous materials, understand their effects, classify them, identify appropriate personal protective equipment, explain the decontamination process, and appreciate the pivotal roles EMS personnel play in responding to hazardous materials incidents."
+  },
+  {
+    "name": "CAPCE Ketamine in the Prehospital Setting",
+    "id": "2907775",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Widely recognized for its rapid onset and diverse applications, ketamine is instrumental in pain management, sedation, and handling psychiatric emergencies in the field. This interactive online course delves into the evolving role of ketamine as a versatile pharmacologic tool for EMS clinicians. You will explore ketamine\u2019s history, pharmacologic principles, clinical applications, and essential considerations for its safe and effective use. By understanding ketamine\u2019s mechanisms, potential adverse effects, and legal and ethical guidelines, EMS professionals will be better equipped to enhance patient outcomes in dynamic and high-pressure environments."
+  },
+  {
+    "name": "CAPCE Kinematics of Trauma",
+    "id": "3417972",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Trauma patients represent a significant portion of medical emergencies that healthcare providers encounter and are associated with high morbidity and mortality when delays in surgical interventions occur. Emergency Medical Services personnel can reduce trauma-related deaths by applying knowledge of kinematics to predict the type and degree of a patient's injury based upon the mechanism of injury and forces involved in an accident. This interactive online course will teach Basic Life Support and Advanced Life Support personnel how to use the physics of trauma to develop a high index of suspicion and identify potential hidden internal injuries. Additionally, you will learn to analyze injury patterns associated with vehicle collisions, falls, and penetrating trauma while understanding how energy transfer affects tissue damage in specific body systems. Traumatic injury is the leading cause of death of Americans, especially in persons under the age of 45, causing 214,000 deaths every year."
+  },
+  {
+    "name": "CAPCE Kinematics of Trauma",
+    "id": "93836",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Trauma patients represent a significant portion of medical emergencies that healthcare providers encounter and are associated with high morbidity and mortality when delays in surgical interventions occur. Emergency Medical Services personnel can reduce trauma-related deaths by applying knowledge of kinematics to predict the type and degree of a patient's injury based upon the mechanism of injury and forces involved in an accident. This interactive online course will teach Basic Life Support and Advanced Life Support personnel how to use the physics of trauma to develop a high index of suspicion and identify potential hidden internal injuries. Additionally, you will learn to analyze injury patterns associated with vehicle collisions, falls, and penetrating trauma while understanding how energy transfer affects tissue damage in specific body systems. Traumatic injury is the leading cause of death of Americans, especially in persons under the age of 45, causing 214,000 deaths every year."
+  },
+  {
+    "name": "CAPCE MRSA Infections",
+    "id": "2862137",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Methicillin-resistant Staphylococcus aureus (MRSA) bacteria have become endemic in hospitals and long-term care facilities and are becoming increasingly common in non-healthcare settings as well. This poses a considerable threat to emergency responders. Recent studies have found MRSA bacteria on many surfaces in fire stations and ambulances. This course provides an overview of MRSA and discusses key topics of particular concern to emergency responders. Through this course, providers will gain a better understanding of the risks of MRSA, how it is transmitted, how to identify infection, how MRSA patients are managed, and how transmission can be prevented."
+  },
+  {
+    "name": "CAPCE Managing Cardiac Arrest: During and After Resuscitation",
+    "id": "3410573",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "As a professional rescuer, you need to prepare for an emergency in advance. In addition, you need to be physically and mentally prepared to provide emergency care. Managing cardiac arrest requires skill and knowledge on the part of the emergency responder. A patient suffering from cardiac arrest has a very small window of time before brain damage occurs, and responders have an equally small window of time in which resuscitation will be successful. Therefore, it is essential for EMS responders to have a firm grasp on cardiac arrest and management techniques for this emergency situation. Coronary artery disease (or CAD) is a common trigger for out of hospital cardiac arrest, especially in the case of shockable rhythms. Teamwork is key: you need to collaborate, communicate, and coordinate the care of a cardiac arrest patient. This course discusses the appropriate care for patients suffering from cardiac arrest, including post-resuscitation management techniques."
+  },
+  {
+    "name": "CAPCE Managing Cardiac Arrest: During and After Resuscitation",
+    "id": "57315",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "As a professional rescuer, you need to prepare for an emergency in advance. In addition, you need to be physically and mentally prepared to provide emergency care. Managing cardiac arrest requires skill and knowledge on the part of the emergency responder. A patient suffering from cardiac arrest has a very small window of time before brain damage occurs, and responders have an equally small window of time in which resuscitation will be successful. Therefore, it is essential for EMS responders to have a firm grasp on cardiac arrest and management techniques for this emergency situation. Coronary artery disease (or CAD) is a common trigger for out of hospital cardiac arrest, especially in the case of shockable rhythms. Teamwork is key: you need to collaborate, communicate, and coordinate the care of a cardiac arrest patient. This course discusses the appropriate care for patients suffering from cardiac arrest, including post-resuscitation management techniques."
+  },
+  {
+    "name": "CAPCE Managing Chronic Care Patients",
+    "id": "333243",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This course provides a general overview for basic and advanced level EMTs and paramedics on the issues and considerations relevant to managing chronic care patients. Topics discussed include the various kinds of medical devices that may be encountered, the specific complications most commonly found in such patients, and the unique assessment and management strategies involved in caring for chronic care patients. Chronic care patients present unique challenges including complex medical devices, weakened immune systems, and complications from conditions such as heart failure, COPD, and neurological disorders. You will learn how to identify and manage various medical devices used in home health care settings, recognize device complications and chronic care emergencies, and assess patients with tracheostomies, ventilators, LVADs, and other life-sustaining equipment."
+  },
+  {
+    "name": "CAPCE Managing Chronic Care Patients",
+    "id": "3399601",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This course provides a general overview for basic and advanced level EMTs and paramedics on the issues and considerations relevant to managing chronic care patients. Topics discussed include the various kinds of medical devices that may be encountered, the specific complications most commonly found in such patients, and the unique assessment and management strategies involved in caring for chronic care patients. Chronic care patients present unique challenges including complex medical devices, weakened immune systems, and complications from conditions such as heart failure, COPD, and neurological disorders. You will learn how to identify and manage various medical devices used in home health care settings, recognize device complications and chronic care emergencies, and assess patients with tracheostomies, ventilators, LVADs, and other life-sustaining equipment."
+  },
+  {
+    "name": "CAPCE Managing Multiple Casualty Incidents",
+    "id": "2291334",
+    "category": "Operations",
+    "hours": 1,
+    "description": "EMS providers respond to varying emergencies, along with fire department and law enforcement personnel, on a regular basis. From time to time, large-scale events occur that require a greater number of first responders and specialty personnel to assist at the incident which will tax local resources and require mutual aid. These events may be a multiple alarm fire or an uncontrolled wildland fire. They may result from transportation accidents involving passenger vehicles, vehicles carrying freight"
+  },
+  {
+    "name": "CAPCE Managing Obstetrical Emergencies in the Prehospital Setting",
+    "id": "3041468",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Pregnancy-related emergencies can lead to life-threatening complications for both mother and child, with the WHO reporting that 95% of maternal deaths are preventable. Prehospital emergency care providers are often the first and sometimes only medical contact for patients experiencing obstetrical emergencies, making their assessment and treatment decisions crucial for patient outcomes. This interactive scenario-based course will teach you how to identify and manage common obstetrical emergencies, including ectopic pregnancy, pre-eclampsia, and emergency delivery, using a systematic assessment approach. Additionally, you will learn how to adapt your standard patient assessment techniques to account for the physiologic changes of pregnancy, prioritize interventions for optimal maternal and fetal outcomes, and make critical transport decisions based on patient presentation and available resources."
+  },
+  {
+    "name": "CAPCE Maternal Considerations and Emergencies",
+    "id": "2959632",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This interactive online course explores the physiological changes that occur during pregnancy and the complications that can arise, leading to emergencies and potential maternal or fetal death if not properly managed. It examines how these changes can mimic or conceal serious conditions, challenging advanced providers in diagnosis and treatment. The course also addresses socio-economic factors impacting maternal health, particularly in urban areas with high emergency service usage. Participants will learn to anticipate diagnostic changes, prioritize patient management, and apply the latest treatment modalities for optimal maternal and newborn care."
+  },
+  {
+    "name": "CAPCE Mechanics of Breathing",
+    "id": "3041818",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Understanding the mechanics of breathing is essential for healthcare providers, as respiratory function is a cornerstone of patient care and typically takes precedence in nearly every patient interaction. This interactive online course provides a comprehensive overview of respiratory anatomy and physiology, including the upper and lower airways, gas exchange processes, and both voluntary and involuntary breathing controls. You will learn how to assess normal respiratory parameters, understand co"
+  },
+  {
+    "name": "CAPCE Medical Extrication and Rescue",
+    "id": "2268707",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Rescue and extrication operations can be very difficult for responding EMS personnel. These calls are often time-consuming, highly technical, stressful, and time-sensitive. Paramedics should possess the skills to remain calm while determining the best method for rescuing the patient, requesting additional resources, and executing their plan. This course will discuss the phases of a rescue operation, the hazards involved with various types of rescues, and the strategies for a successful outcome. While rescue operations can be highly specialized in specific locations, terrains, and situations, this course focuses on the main principles common to all rescue and extrication operations."
+  },
+  {
+    "name": "CAPCE Medical, Ethical, and Legal Issues",
+    "id": "2280",
+    "category": "Operations",
+    "hours": 1,
+    "description": "A guiding principle in emergency medical care is to first do no harm; acting in good faith and following local protocols and standards of care reduces the risk of legal action. This interactive online course addresses the ethical and legal issues that EMS clinicians encounter on the job, emphasizing the importance of awareness for the safety and wellbeing of both patients and providers. Recognizing these issues is crucial to preventing civil and criminal liabilities. This course covers key topics including scope of practice, standards of care, negligence, battery, consent, and documentation, and emphasizes the importance of seeking legal advice as protocols vary by state and county."
+  },
+  {
+    "name": "CAPCE Medication Administration for EMTs",
+    "id": "3285246",
+    "category": "Medical",
+    "hours": 1,
+    "description": "EMTs regularly encounter situations requiring medication administration and assistance that can significantly impact patient outcomes when performed correctly, but may cause harm or legal complications when done improperly. Medication errors, inappropriate administration, and failure to recognize contraindications can lead to patient deterioration, adverse reactions, and liability issues for EMT providers. This interactive online course will teach you proper medication administration techniques,"
+  },
+  {
+    "name": "CAPCE Medication Errors",
+    "id": "334129",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Have you ever made an EMS medication dosing error? What constitutes a dosing error? What should you do if you make a mistake or see a colleague make one? These are essential considerations that will be discussed in this course, along with the science behind why these medication errors can occur in the first place. From data reviews to near-miss reporting, this course on EMS Medication Errors takes a hard look at human fallibility as it relates to the administration of medications by EMS providers. When a medication error occurs in the prehospital setting, the consequences can be serious."
+  },
+  {
+    "name": "CAPCE Medication Errors",
+    "id": "3433939",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Have you ever made an EMS medication dosing error? What constitutes a dosing error? What should you do if you make a mistake or see a colleague make one? These are essential considerations that will be discussed in this course, along with the science behind why these medication errors can occur in the first place. From data reviews to near-miss reporting, this course on EMS Medication Errors takes a hard look at human fallibility as it relates to the administration of medications by EMS providers. When a medication error occurs in the prehospital setting, the consequences can be serious."
+  },
+  {
+    "name": "CAPCE Mental Health for Emergency Responders",
+    "id": "2604697",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Emergency responders work at a high level of uncertainty, a high potential for interpersonal tension, and a high frequency of seeing human tragedy. All of these are stressors that can take a toll on your mental health. This interactive online course provides a realistic exploration of life as an EMS provider, challenging the common media portrayal of constant heroic and adrenaline-filled events. You will dive into the beliefs and stereotypes surrounding EMS providers that may hinder them from seeking necessary support, along with strategies to change or reframe these beliefs. The course also addresses the signs and symptoms of stress in EMS providers, offering resources and methods to protect mental health and obtain help when needed. By the course\u2019s conclusion, you will be equipped to navigate the unique aspects of an EMS career and foster a supportive workplace culture."
+  },
+  {
+    "name": "CAPCE Methamphetamine",
+    "id": "2633464",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Methamphetamine abuse is a serious problem. According to one national survey, approximately 12.3 million people, ages twelve and older, in the U.S. have tried methamphetamine at least once. And due to its highly addictive nature, the number of these who have become addicted is likely significant. The consequences of meth abuse are devastating and wide-ranging, affecting the medical, psychological, and social arenas. Not surprisingly, first responders often find themselves on the front lines, confronting the most severe symptoms and effects of the methamphetamine problem. This course aims to provide EMS personnel with an understanding of the methamphetamine problem, its impact on users, and its associated hazards for EMS workers."
+  },
+  {
+    "name": "CAPCE Musculoskeletal Injuries",
+    "id": "2363828",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Musculoskeletal injuries are one of the most common types of injuries encountered by EMS professionals. These injuries are largely not life-threatening in nature; however, there may be some instances where the injury can be life-threatening. Prompt identification and treatment of musculoskeletal injuries are crucial in reducing pain, preventing further injury, and minimizing permanent damage. This course covers musculoskeletal injuries as they apply to fractures, strains, sprains, and dislocations. It also covers specific types of injuries, patient treatment, and splinting procedures."
+  },
+  {
+    "name": "CAPCE Myths and Realities of Drug-Seeking Behavior",
+    "id": "2598876",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The motivations behind drug-seeking behavior are intricate, arising from an interplay of biological, psychological, and social factors. This interactive online course aims to dispel common myths surrounding drug-seeking behavior through contemporary research, empowering EMS providers to assess and treat patients exhibiting such behavior with compassion and non-judgmental care. In this course, you will gain a comprehensive understanding of substance use disorders and drug-seeking behaviors. Key concepts such as drug dependence, tolerance, and addiction will be defined, and commonly abused medications sought by drug seekers will be explored. By the course\u2019s conclusion, you will be well-equipped to navigate challenging encounters and reduce the stigma associated with drug-seeking behavior in the prehospital setting."
+  },
+  {
+    "name": "CAPCE Narcotics Overdose",
+    "id": "2543138",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Narcotics overdose deaths have been on the rise in the U.S. for the last several years. This course provides a comprehensive understanding of prehospital considerations for narcotic overdose and misuse, tracing the historical evolution from natural sources to the modern era's potent synthetics. Delving into the mechanisms of narcotics, it explores their diverse routes of administration, effects on the body, and the nuanced dynamics of tolerance, dependence, and withdrawal. Through this, you will gain crucial insights into recognizing signs, implementing safety measures, and delivering appropriate responses as an EMS clinician."
+  },
+  {
+    "name": "CAPCE Neonatology",
+    "id": "1988905",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This is a critical course for personnel who must understand and manage emergency care for newborns in their first 28 days of life. This comprehensive training covers essential topics including neonatal physiology, assessment techniques, common complications, and proper resuscitation procedures that can mean the difference between life and death for these tiny patients. Modern neonatal care requires specialized knowledge of equipment, medication dosing, and rapid intervention techniques that diff"
+  },
+  {
+    "name": "CAPCE Non-Traumatic Abdominal Emergencies",
+    "id": "3326237",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Abdominal pain is a common complaint and results in over eight million emergency department visits each year. It can result from a variety of conditions with similar symptoms and it can be very difficult to diagnose. Patient response to abdominal pain varies widely and the examinations can be difficult to perform, especially in the prehospital environment. You do NOT need to diagnose the specific cause of non-traumatic abdominal pain in the field; however, you must recognize that acute abdominal pain may be a symptom of a life-threatening condition. An understanding of common causes of abdominal pain will help the provider determine the best transport destination for the patient and may help identify appropriate treatment. This course reviews the anatomy and physiology of the abdomen, the steps to assess a patient with acute abdominal pain, and the appropriate emergency medical care."
+  },
+  {
+    "name": "CAPCE Non-Traumatic Abdominal Injuries",
+    "id": "2519",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Abdominal pain is a common complaint and results in over eight million emergency department visits each year. It can result from a variety of conditions with similar symptoms and it can be very difficult to diagnose. Patient response to abdominal pain varies widely and the examinations can be difficult to perform, especially in the prehospital environment. You do NOT need to diagnose the specific cause of non-traumatic abdominal pain in the field; however, you must recognize that acute abdominal pain may be a symptom of a life-threatening condition. An understanding of common causes of abdominal pain will help the provider determine the best transport destination for the patient and may help identify appropriate treatment. This course reviews the anatomy and physiology of the abdomen, the steps to assess a patient with acute abdominal pain, and the appropriate emergency medical care."
+  },
+  {
+    "name": "CAPCE Non-Traumatic Chest Pain",
+    "id": "3041821",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "Non-traumatic chest pain is a common and potentially life-threatening emergency that requires rapid assessment and intervention, as more than half of ST-elevation myocardial infarction deaths occur in the prehospital environment. This interactive online course provides comprehensive coverage of the various causes of chest pain, from cardiovascular conditions like coronary artery disease and myocardial infarction to other sources such as pulmonary, gastrointestinal, and psychosomatic origins. You will learn how to perform thorough patient assessments using the OPQRST method, interpret ECG readings, and implement appropriate interventions according to current emergency care protocols. Through detailed examination of patient presentation patterns and management strategies, this course will enhance your ability to quickly recognize and respond to potentially life-threatening conditions in patients experiencing non-traumatic chest pain."
+  },
+  {
+    "name": "CAPCE Obstetrical Emergencies",
+    "id": "2501624",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Have you encountered an emergency involving a pregnant person or even had to deliver an infant in an ambulance? Although childbirth usually occurs in the hospital setting, there are instances where EMS personnel may need to assist with delivering an infant in the prehospital setting. This interactive online course covers the anatomy and physiology of the female reproductive system and the body\u2019s changes during pregnancy that will help you provide the best care for a patient who is pregnant. You will also see the specific signs and symptoms of labor and delivery and what constitutes an abnormal delivery. This course also covers maternal trauma emergencies and medical conditions that complicate pregnancy."
+  },
+  {
+    "name": "CAPCE Operating an AED",
+    "id": "14065",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "Every year, approximately 350,000 Americans experience sudden cardiac arrest, a condition often marked by sudden and unexpected collapse. In these dire moments, rapid defibrillation can be the difference between life and death. In this course, we address the critical importance of automated external defibrillators (AEDs) in increasing survival rates for cardiac arrest victims. This interactive online course will provide a comprehensive understanding of AED technology, proper usage procedures, special considerations, and maintenance practices. It also highlights how advancements have made AEDs accessible to EMS providers and citizen rescuers through public access defibrillation initiatives."
+  },
+  {
+    "name": "CAPCE Opioid Overdose & Naloxone Administration",
+    "id": "1393595",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Opioid overdoses have risen to epidemic proportions in recent years. According to the Centers for Disease Control (CDC), 130 Americans die every day from an opioid overdose. As a common and life-threatening emergency, EMS providers of all levels must be prepared to recognize and effectively treat patients experiencing an opioid overdose. This course describes assessments and interventions that may be authorized at different provider levels in different jurisdictions. Providers must operate withi"
+  },
+  {
+    "name": "CAPCE Pain Management",
+    "id": "2252934",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Emergency Medical Service providers regularly encounter patients experiencing pain, which remains one of the most common complaints in emergency medical care. This interactive course explores the pathophysiology of pain, various pain classification systems, and evidence-based approaches to pain assessment and management in the prehospital setting. Students will learn how to effectively use different pain assessment tools, overcome common assessment challenges across diverse patient populations, and implement appropriate pain management strategies ranging from non-pharmacological interventions to medication administration. The course emphasizes the importance of treating pain as a vital sign while considering patient safety, documenting pain assessments accurately, and following proper protocols for pain management in emergency medical services."
+  },
+  {
+    "name": "CAPCE Pain Transmission, Perception, and Assessment",
+    "id": "2518176",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Pain is a prevalent complaint in emergency medicine, and patients expect effective pain assessment and treatment as a priority. This interactive online course is designed to address the critical issue of under-treated pain, especially within prehospital clinical settings. This course delves into the pathophysiology of pain, different classification methods, and the importance of understanding pain as a subjective experience. By the end of this course, you will be equipped to methodically assess and manage pain in diverse clinical situations, ensuring not only patient satisfaction but also improved outcomes and effective communication of symptoms."
+  },
+  {
+    "name": "CAPCE Patient Abuse and Assault",
+    "id": "2968960",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The prevalence of abuse and assault incidents is increasing nationwide, making it essential for emergency responders to understand how to handle these sensitive situations professionally and effectively. This interactive online course is designed to help EMS personnel recognize, assess, and manage cases of partner abuse, elder abuse, child abuse, and sexual assault while maintaining appropriate legal and documentation standards. It provides emergency responders with practical guidance on identifying characteristics of abusers and at-risk victims, implementing proper care protocols, and understanding the importance of preserving evidence and connecting victims with support resources. The course will inform EMS providers on the \u201cdos\u201d and \u201cdon\u2019ts,\u201d procedures, and considerations for providing compassionate care while maintaining professional boundaries and following mandatory reporting requirements in abuse and assault cases."
+  },
+  {
+    "name": "CAPCE Patient Assessment",
+    "id": "2601879",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Emergency scenes can be calm or chaotic. Developing an efficient system for analyzing a scene and patient in the prehospital setting ensures critical issues are not overlooked. This interactive online course is designed to equip healthcare professionals with a structured and efficient method for patient assessment in prehospital settings. You will learn key components such as scene size-up, ensuring scene safety, forming a general patient impression, and mastering the crucial elements of airway, breathing, and circulation. The course covers primary and secondary assessments, gathering pertinent patient history, and ongoing assessments."
+  },
+  {
+    "name": "CAPCE Patient Care Report Essentials",
+    "id": "655125",
+    "category": "Operations",
+    "hours": 1,
+    "description": "PCRs are the mechanism by which all care and treatments are recorded and conveyed to hospitals, your agency, and other local, state, and federal stakeholders. Furthermore, PCRs are the means by which your agency gets reimbursed for EMS activations, response, treatment, and patient transport to an appropriate facility. In addition to supplying data, the PCR is a legal document that articulates your observations, your assessment findings, and why you chose to perform or not perform an intervention or treatment. This document lives on, often in perpetuity, in accordance with your agency\u2019s and your state\u2019s recordkeeping requirements. This course reviews important aspects and considerations regarding EMS patient care reports. Along with these fundamentals, you will view various case studies, both real and fictional, that look at what can result from delayed, inaccurate, and/or poor documentation. The course also touches upon legal requirements for you as an EMS professional, and important considerations regarding the various data elements that comprise all PCRs."
+  },
+  {
+    "name": "CAPCE Patient Lifting, Moving, and Transport",
+    "id": "2610070",
+    "category": "Operations",
+    "hours": 1,
+    "description": "In today\u2019s environment, responding to emergency calls and providing high-quality patient care has become increasingly more demanding and strenuous on EMS personnel than ever before. As a result of this systemic pressure for improved patient care, both EMS and healthcare industries are reflecting a rising need for continuous training on patient lifting, moving, and transportation. For the purpose of this course, the term EMS responder refers to all levels of emergency medical personnel involved in incident response, including emergency medical technicians (EMTs), paramedics, and other personnel who perform similar duties. While many EMS responders are cross-trained as an EMT and firefighter, this specific course on patient lifting and transportation applies to these workers only when they are functioning as an EMS responder."
+  },
+  {
+    "name": "CAPCE Patient Refusal",
+    "id": "2914049",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Understanding patient refusal in Emergency Medical Services (EMS) is critical for balancing patient rights with the legal and ethical responsibilities of EMS providers. While it can be concerning when patients decline care, adhering to your scope of practice, local protocols, and state laws helps mitigate the risk of legal action. This interactive online course explores key aspects of patient refusal, including informed consent, mental competence versus mental capacity, and the legal duty to act. It also covers best practices for assessing a patient\u2019s ability to refuse care, the steps EMS providers should take in such situations, and the importance of thorough documentation. By building knowledge in these areas, you\u2019ll gain the confidence to navigate patient refusals effectively and ensure compliance with regulations while respecting patient autonomy."
+  },
+  {
+    "name": "CAPCE Patient Restraint for EMS Providers",
+    "id": "2649587",
+    "category": "Operations",
+    "hours": 1,
+    "description": "EMS providers encounter patients who are combative or violent but require medical treatment and transportation. Frequently, these types of situations include a component of alcohol or substance, mental health issues, or some combination of those factors. This interactive online course delves into the complexities of patient restraint for EMS providers when encountering combative or violent patients requiring medical attention. Emphasizing the importance of empathy, composure, and careful decision-making, participants will learn about the various types of restraint, indications for their use, and ongoing care for restrained patients. Additionally, legal and ethical considerations surrounding patient restraint, including potential negative outcomes and liability issues, are explored to ensure patients\u2019 and providers\u2019 safety and well-being."
+  },
+  {
+    "name": "CAPCE Patients with Special Challenges",
+    "id": "2374",
+    "category": "Medical",
+    "hours": 1,
+    "description": "When called to the scene of an emergency, you may encounter patients who require special considerations for communication, care, and transport. This course is designed to equip healthcare providers with the knowledge and skills necessary to effectively address the unique challenges presented by patients with various physical, mental, developmental, or culturally diverse needs. You will learn how to assess and manage patients with conditions such as hearing or visual impairments, paraplegia, quadriplegia, mental illnesses, developmental disabilities, and more. This course emphasizes the importance of providing professional, respectful, and inclusive care to all patients, ensuring that their specific needs are met throughout the assessment and treatment process."
+  },
+  {
+    "name": "CAPCE Pediatric Airway Management",
+    "id": "2290004",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Few calls produce more anxiety for the EMS professional than the appropriate management of the pediatric airway. We must be confident in our knowledge of the airway along with airway management tools and their use. In this course, we will review the anatomy of the pediatric airway, devices to use in managing the pediatric airway, and the use of pulse oximetry and capnography. We will also look at endotracheal intubation, an advanced airway management technique."
+  },
+  {
+    "name": "CAPCE Pediatric Assessment",
+    "id": "43533",
+    "category": "Medical",
+    "hours": 1,
+    "description": "More than 20,000 children die each year in the United States due to traumatic incidents and injuries. It is crucial that EMS providers understand how to assess the pediatric patient and determine if potential life threatening conditions exist. An organized and well-developed assessment of the pediatric patient serves as a valuable tool for the provision of care. Because a pediatric patient\u2019s condition can change quickly, the assessment process continues throughout the time spent with a patient."
+  },
+  {
+    "name": "CAPCE Pediatric Cardiac Arrest",
+    "id": "2517399",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "Each year in the United States, more than 20,000 infants and children suffer cardiac arrest. On average, prehospital emergency care providers are called to treat out-of-hospital cardiac arrest in more than 7,000 infants and children. Of these, 11.4% survive to hospital discharge. This interactive online course covers major concepts of cardiac arrest in infants and children, the AHA guidelines for treatment of children in cardiac arrest, and post-cardiac arrest care. Pediatric cardiac arrest can be one of the most stressful situations for any prehospital care provider."
+  },
+  {
+    "name": "CAPCE Pediatric Cardiac Emergencies",
+    "id": "2680382",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "More than 600,000 patients die each year from cardiovascular diseases, with half of these deaths occurring before patients reach the hospital. This interactive online course covers the assessment and emergency medical care for patients experiencing various cardiac conditions, including angina pectoris, myocardial infarction, heart failure, cardiac tamponade, hypertensive emergency, and cardiogenic shock. The course teaches healthcare providers how to identify major structures of the cardiovascular system, function in organized pit crew style cardiac arrest resuscitation efforts, and properly use automated external defibrillators (AEDs)."
+  },
+  {
+    "name": "CAPCE Pediatric Emergencies Part 1",
+    "id": "2353131",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This course focuses on the unique aspects of providing emergency medical care to pediatric patients. It addresses the differences in anatomy, physiology, and development between adults and children, and emphasizes the importance of modifying the approach to suit the needs of pediatric patients. The course also covers assessment strategies for both the child and their parent or caregiver, and provides an overview of treatment methods for pediatric respiratory emergencies. By completing this course, participants will gain the knowledge and skills necessary to effectively handle common emergencies involving pediatric patients."
+  },
+  {
+    "name": "CAPCE Pediatric Emergencies Part 2",
+    "id": "2404625",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This course focuses on the unique aspects of providing emergency medical care to pediatric patients. It addresses the differences in anatomy, physiology, and development between adults and children, and emphasizes the importance of modifying the approach to suit the needs of pediatric patients. The course also covers assessment strategies for both the child and their parent or caregiver, and provides an overview of treatment methods for pediatric respiratory emergencies. By completing this course, participants will gain the knowledge and skills necessary to effectively handle common emergencies involving pediatric patients."
+  },
+  {
+    "name": "CAPCE Pediatric Fever",
+    "id": "2543145",
+    "category": "Medical",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE Pediatric Ingestions",
+    "id": "2417498",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Pediatric Ingestion course is designed to equip prehospital care providers with the knowledge and skills necessary to assess and manage pediatric patients with known or suspected poisoning. With ingestion being the primary cause of pediatric poisoning cases, this course emphasizes the rapid assessment and identification of toxic agents, as well as the utilization of available resources for patient care. The course covers both Basic Life Support (BLS) and Advanced Life Support (ALS) interventions, and participants are encouraged to follow their local EMS protocols and scope of practice. By the end of the course, participants will be able to discuss prehospital considerations for pediatric ingestions, access the poison control center appropriately, identify common toxidromes, describe interventions for single-dose agent overdoses, recognize dangerous foreign body ingestions, and stay informed about emerging poisoning threats to the pediatric population."
+  },
+  {
+    "name": "CAPCE Pediatric Ingestions",
+    "id": "3434599",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Pediatric Ingestion course is designed to equip prehospital care providers with the knowledge and skills necessary to assess and manage pediatric patients with known or suspected poisoning. With ingestion being the primary cause of pediatric poisoning cases, this course emphasizes the rapid assessment and identification of toxic agents, as well as the utilization of available resources for patient care. The course covers both Basic Life Support (BLS) and Advanced Life Support (ALS) interventions, and participants are encouraged to follow their local EMS protocols and scope of practice. By the end of the course, participants will be able to discuss prehospital considerations for pediatric ingestions, access the poison control center appropriately, identify common toxidromes, describe interventions for single-dose agent overdoses, recognize dangerous foreign body ingestions, and stay informed about emerging poisoning threats to the pediatric population."
+  },
+  {
+    "name": "CAPCE Pediatric Respiratory Emergencies: Upper and Lower Airway for the First Responder",
+    "id": "1318498",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Although pediatric patients typically make up only about ten percent of all EMS calls, breathing difficulty is a common chief complaint. This interactive online course delves into the complexities of pediatric respiratory emergencies, offering insights into their causes, pathophysiology, and management. You will learn to navigate the unique challenges posed by respiratory distress in pediatric patients, including the importance of accurate assessment and interpretation of caregiver input. By the end of the course, you will be equipped to identify primary causes of cardiac arrest in pediatric patients, explain respiratory distress pathophysiology, and describe the assessment and management of pediatric respiratory emergencies in both the upper and lower airways."
+  },
+  {
+    "name": "CAPCE Pediatric Seizures",
+    "id": "1890122",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Seizures are encountered commonly when treating pediatric patients, and proper management of pediatric seizures is critically important. This course discusses how to identify types of pediatric seizures, how to manage the airway and breath, what neurological and circulatory status to check for, steps for managing different types of seizures, and more."
+  },
+  {
+    "name": "CAPCE Pediatric Shock",
+    "id": "2527437",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This course covers the different types and stages of shock in pediatric patients, which is responsible for millions of deaths each year. The course discusses how delays in recognizing and treating shock can lead to irreversible organ failure and death. The course also covers the signs and symptoms of shock in infants and children, the different types of shock, and management strategies for treating pediatric shock. After completing this course, students will be able to conduct initial and secondary assessments, identify special considerations for pediatric shock, and understand the important terms associated with pediatric shock."
+  },
+  {
+    "name": "CAPCE Pediatric Trauma",
+    "id": "2189189",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Traumatic injury is the leading cause of death in young children and adolescents, with approximately 90% of pediatric injuries resulting from blunt trauma. This interactive course discusses the prevalence and causes of pediatric injury, anatomical differences between children and adults, and specialized assessment strategies for pediatric trauma patients. You will learn how to effectively manage specific categories of pediatric trauma including head and neck injuries, abdominal trauma, chest trauma, spinal trauma, extremity trauma, burns, drowning incidents, and shock. Additionally, the course covers important considerations for pain management and proper transport techniques using child safety seats."
+  },
+  {
+    "name": "CAPCE Pharmacology Special Considerations",
+    "id": "2675810",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Understanding the nuances of medication administration across diverse patient demographics is paramount. Special populations, including pediatric, geriatric, and obstetric patients, present unique challenges due to their distinctive physiological and anatomical characteristics. This interactive online course delves into the intricacies of medication administration for special patient populations, including pediatric, geriatric, and obstetrical patients. You will explore the critical anatomical and physiological differences that influence pharmacokinetics and pharmacodynamics in these groups, enabling them to adjust medication dosing, administration, and monitoring effectively. By understanding the complexities of drug administration in special populations and developing communication strategies for discussing medication management with patients and caregivers, you will enhance your ability to ensure safe and effective treatment outcomes while considering legal and ethical considerations in pharmacology."
+  },
+  {
+    "name": "CAPCE Poisoning and Overdose",
+    "id": "2336142",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Thousands of children are poisoned every year as they explore their environments. Many adults overdose on medication, either accidentally or deliberately. Individuals can be inadvertently poisoned in their homes by any number of chemical hazards. Accidental and incidental exposures can present in a distinctive manner, but also very well hidden in plain sight. With early prehospital management, the vast majority of these patients have better outcomes. This course highlights how poisons enter the"
+  },
+  {
+    "name": "CAPCE Polypharmacy Awareness in Geriatric Calls",
+    "id": "3254396",
+    "category": "Medical",
+    "hours": 1,
+    "description": "EMS providers are subject to missed diagnoses, medication errors, and sometimes fatal patient outcomes due to inadequate recognition of polypharmacy complications in geriatric patients. Most medication-related emergencies in older adults can be identified and properly managed when providers understand the signs of drug interactions, toxicity, and adverse effects. This interactive online course will teach you how to recognize environmental and clinical indicators of medication-related complications, identify common high-risk medication types and their associated complications, and gather and communicate medication information effectively to receiving facilities. Additionally, you will learn to differentiate between medication side effects and underlying disease processes, apply appropriate field interventions for suspected drug-related emergencies, and use systematic assessment approaches to analyze clinical data for adverse drug events. You will also learn proper documentation strategies and when to escalate care for complex polypharmacy situations in geriatric emergency calls."
+  },
+  {
+    "name": "CAPCE Prehospital Considerations for Burn Treatment",
+    "id": "2676697",
+    "category": "Trauma",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE Prehospital Considerations for Diversity, Equity and Inclusion in EMS",
+    "id": "2480961",
+    "category": "Operations",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE Prehospital Pharmacology and Drug Administration",
+    "id": "2743769",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Pharmacology is an integral part of what an EMS clinician needs to know to be effective in the field. Administering the proper medications can greatly improve patient outcomes, but there are inherent risks, as inappropriate administration can cause harm or even death. A comprehensive understanding of prehospital pharmacology is essential for safe and effective treatment. This interactive online course introduces medications commonly used in the prehospital environment and covers legal considerations, the Six Rights of Medication Administration, routes of administration, special considerations, and various drug profiles."
+  },
+  {
+    "name": "CAPCE Prehospital Pulmonary Embolism Care",
+    "id": "2862125",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Pulmonary embolism (PE) is a critical emergency, affecting over 400,000 individuals annually in the U.S. and causing more than 100,000 deaths. For EMS providers, identifying PE can be complex due to symptoms that overlap with other cardiovascular conditions like heart attacks and heart failure, especially as chest pain and shortness of breath present in millions of emergency cases each year. Early recognition is crucial, as untreated PE has a high mortality rate, with rapid death in 25% of cases. This course interactive online course provides EMS clinicians with the essential skills for early PE identification, supportive prehospital care, and efficient patient transport to improve survival rates."
+  },
+  {
+    "name": "CAPCE Protecting Yourself From Influenza",
+    "id": "3001092",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Emergency Medical Service (EMS) providers are at high risk of exposure to influenza due to their frequent contact with infected patients, which can lead to illness, lost work time, and potential transmission to others. The Centers for Disease Control and Prevention (CDC) estimates that flu results in millions of illnesses and thousands of deaths annually, with healthcare workers being particularly vulnerable. This interactive online course will teach EMS providers about the different types of influenza viruses, their transmission methods, and proper prevention techniques including vaccination, personal protective equipment usage, and infection control protocols. Additionally, you will learn how to recognize emergency warning signs, understand vaccine recommendations, and implement best practices for protecting yourself and your patients from influenza exposure."
+  },
+  {
+    "name": "CAPCE Rapid Trauma Secondary Assessment",
+    "id": "3041823",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Accidental injuries are the leading cause of death for children and adults under 44 years of age, and patients with severe trauma pose a significant challenge in the prehospital environment. Rapid Secondary Assessment plays a critical role in the care of such patients. For trauma patients with a significant mechanism of injury, it provides a more thorough means of assessing the patient\u2019s injuries and condition. When performed properly, rapid secondary assessment is both thorough and quick, and provides the EMS provider with a better understanding of the patient\u2019s injuries and their severity so that he or she can make better informed decisions about patient care. This course provides an overview of rapid secondary assessment. It aims to give EMS providers a better understanding of the importance and method of performing a rapid secondary assessment over each major body section. Also included in the course are sectional case studies that allow the learner to apply their knowledge."
+  },
+  {
+    "name": "CAPCE Respiratory Emergencies",
+    "id": "2914080",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Respiratory emergencies are among the most critical scenarios EMS providers face, requiring rapid assessment and intervention to prevent life-threatening outcomes. This interactive online course aims to strengthen your knowledge and skills in managing respiratory distress by providing a comprehensive understanding of respiratory anatomy, physiology, and pathophysiology. You will learn to identify the signs and symptoms of common respiratory emergencies, distinguish between upper and lower airway"
+  },
+  {
+    "name": "CAPCE Respiratory System Anatomy and Physiology Review",
+    "id": "3043305",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Healthcare providers must understand respiratory system anatomy and physiology to properly diagnose, treat, and manage patients in both clinical and field settings. The mechanical act of breathing (ventilation) and the physiologic process of gas exchange (respiration) are vital functions required to sustain life, and failure to recognize respiratory distress can lead to severe complications or death. This interactive online course will teach you the essential components and functions of the resp"
+  },
+  {
+    "name": "CAPCE Retention and Recruitment in the Fire Service and EMS",
+    "id": "2278374",
+    "category": "Operations",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE STEMI Mimics and Pitfalls in 12-Lead ECG Interpretation",
+    "id": "3285264",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "Paramedics regularly encounter patients with chest pain and ECG changes that can mimic ST-elevation myocardial infarction, leading to inappropriate STEMI activations, unnecessary procedures, and delayed recognition of actual cardiac emergencies. Studies show that up to 25% of STEMI activations involve non-STEMI conditions, while true posterior and right ventricular MIs are frequently missed due to subtle ECG presentations. This interactive online course will teach you how to differentiate between true STEMIs and common mimics using advanced ECG interpretation techniques and clinical integration skills. Additionally, you will learn to recognize posterior and right ventricular MI patterns, utilize serial ECG monitoring for dynamic assessment, and make appropriate transport decisions that optimize patient outcomes while efficiently utilizing healthcare resources."
+  },
+  {
+    "name": "CAPCE Safe Transportation of the Pediatric Patient",
+    "id": "2764209",
+    "category": "Operations",
+    "hours": 1,
+    "description": ""
+  },
+  {
+    "name": "CAPCE Sepsis",
+    "id": "2861511",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This interactive online course provides essential knowledge on identifying, managing, and treating sepsis, a critical condition in emergency medical care. It covers the pathophysiology of sepsis, early recognition, and current treatment protocols, along with prevention and patient education strategies. The course is designed to improve patient outcomes and is valuable for both new and seasoned professionals in the field. Upon completion, participants will be equipped to recognize at-risk populations, understand infection pathways, and implement effective sepsis management."
+  },
+  {
+    "name": "CAPCE Shock and Shock Management",
+    "id": "2596873",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Shock is a crucial concept in healthcare and understanding the patient's health. Shock is a true emergency and, simply put, is the process of dying. This online interactive course delves into the critical concept of shock in healthcare. You will gain a comprehensive understanding of how the body utilizes and transports oxygen to cells, exploring compensatory mechanisms designed to address oxygen delivery issues. By identifying the stages and types of shock, assessing patients for shock, and developing treatment plans, you will be well-equipped to anticipate the clinical progression of shock and effectively manage this life-threatening condition."
+  },
+  {
+    "name": "CAPCE Slips, Trips, and Falls",
+    "id": "2856499",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Falling at work may not seem very dangerous, but falls are the leading cause of workplace injuries. They commonly cause cuts, bruises, broken bones, back injuries, sprains, and strains. Hazards that cause slips, trips, and falls can be controlled and eliminated if they are identified, reported, and corrected. This course describes common causes of slips, trips, and falls, how they can be prevented, and first aid procedures for fall injuries."
+  },
+  {
+    "name": "CAPCE Special Challenges in Patient Assessment",
+    "id": "2659876",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Emergency scenes can be calm or chaotic. Developing an efficient system for analyzing a scene and patient in the prehospital setting ensures critical issues are not overlooked. This interactive online course is designed to equip healthcare professionals with a structured and efficient method for patient assessment in prehospital settings. You will learn key components such as scene size-up, ensuring scene safety, forming a general patient impression, and mastering the crucial elements of airway, breathing, and circulation. The course covers primary and secondary assessments, gathering pertinent patient history, and ongoing assessments."
+  },
+  {
+    "name": "CAPCE Special Needs Patients",
+    "id": "",
+    "category": "Medical",
+    "hours": 1,
+    "description": "In this presentation, we will introduce you to a number of chronic conditions or challenges which you may face when caring for special needs patients. Additionally, we will review some of the common out-of-hospital care treatment plans and medical equipment you may encounter when responding to this category of patients. Finally, we\u2019ll discuss prehospital assessment and treatment strategies which might work well with these complex patients."
+  },
+  {
+    "name": "CAPCE Spinal Cord Injuries",
+    "id": "3222361",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "The spinal column provides key structural support to the head and pelvis. In addition, the spinal cord provides for communication between the brain and muscles through a rich network of ascending and descending nerve pathways. Because of the vital functions it provides, any injury to the spinal cord has the potential to cause serious short- and long-term adverse effects on patient health and well-being. However, spinal cord injuries are not always easy to assess or confirm in the pre-hospital environment. Also, the presence of distracting injuries can cause the spinal cord to be overlooked. This course furnishes EMS providers with an overview of the anatomy and physiology of spinal cord structures, and takes an in depth look at assessing and managing spinal injuries. An understanding of spinal cord injuries, coupled with proper handling, is crucial to the prevention of long-term injury."
+  },
+  {
+    "name": "CAPCE Spinal Cord Injuries",
+    "id": "335268",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "The spinal column provides key structural support to the head and pelvis. In addition, the spinal cord provides for communication between the brain and muscles through a rich network of ascending and descending nerve pathways. Because of the vital functions it provides, any injury to the spinal cord has the potential to cause serious short- and long-term adverse effects on patient health and well-being. However, spinal cord injuries are not always easy to assess or confirm in the pre-hospital environment. Also, the presence of distracting injuries can cause the spinal cord to be overlooked. This course furnishes EMS providers with an overview of the anatomy and physiology of spinal cord structures, and takes an in depth look at assessing and managing spinal injuries. An understanding of spinal cord injuries, coupled with proper handling, is crucial to the prevention of long-term injury."
+  },
+  {
+    "name": "CAPCE Stroke Assessment and Treatment",
+    "id": "2861513",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Over half of stroke patients fail to recognize their symptoms or activate EMS in time, making early intervention crucial for effective stroke management. The American Heart Association emphasizes the need for clear guidelines in emergent stroke care to improve outcomes. This interactive online course provides updated information on stroke assessment and treatment, based on the latest AHA guidelines for CPR and emergency cardiac care. By the end, participants will understand stroke epidemiology,"
+  },
+  {
+    "name": "CAPCE Stroke Recognition and Decision Making",
+    "id": "3285258",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Stroke patients face life-threatening emergencies where every minute of delay can result in permanent brain damage and lifelong disability. EMS providers are often the first medical professionals to evaluate potential stroke patients, making their assessment and transport decisions critical to patient outcomes. This interactive online course will teach experienced EMS personnel how to recognize atypical stroke presentations, distinguish strokes from common mimics, and make complex transport deci"
+  },
+  {
+    "name": "CAPCE Supplemental Oxygen",
+    "id": "3410616",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Few things are as ubiquitous to what we do in EMS as the role of oxygen. Throughout the various training levels first responders, EMTs, and paramedics go through, oxygen administration has always been a large part of the overall treatment landscape. By exploring human metabolism, we\u2019ve come to understand how oxygen arrives at the cellular level; from inhalation to cellular respiration, everything is interconnected. At sea level, inspired air has an oxygen concentration of approximately 21%. However, when atmospheric oxygen is insufficient or inaccessible to the patient, a supplemental source of oxygen is required. To compensate for breathing difficulties, disease complications, and a host of other considerations, it\u2019s necessary to understand how oxygen affects homeostasis and what dose of supplemental oxygen to provide the patient."
+  },
+  {
+    "name": "CAPCE Supplemental Oxygen",
+    "id": "91052",
+    "category": "Airway",
+    "hours": 1,
+    "description": "Few things are as ubiquitous to what we do in EMS as the role of oxygen. Throughout the various training levels first responders, EMTs, and paramedics go through, oxygen administration has always been a large part of the overall treatment landscape. By exploring human metabolism, we\u0092ve come to understand how oxygen arrives at the cellular level; from inhalation to cellular respiration, everything is interconnected. At sea level, inspired air has an oxygen concentration of approximately 21%. Howe"
+  },
+  {
+    "name": "CAPCE The Human Body Part 1 \u2013 Critical Systems",
+    "id": "655148",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Did you know that EMTs and paramedics who thoroughly understand human anatomy and physiology can provide more effective patient care and communicate more clearly with other healthcare providers? The human body\u2019s critical systems \u2013 cardiovascular, respiratory, and nervous \u2013 work together in complex ways to maintain life through homeostasis. This course explores standard anatomical references, the structure and function of these vital systems, and common problems that can affect them, using real-world patient scenarios to illustrate key concepts. Through this interactive online course, you\u2019ll learn how to use standardized medical terminology, understand the interrelationships between body systems, and recognize signs and symptoms of systemic problems like shock, respiratory distress, and neurological emergencies."
+  },
+  {
+    "name": "CAPCE The Human Body Part 2 \u2013 Other Systems",
+    "id": "655149",
+    "category": "Medical",
+    "hours": 1,
+    "description": "This course is the second offering in the two-part series: The Human Body. Both EMTs and paramedics must understand anatomy and physiology to varying degrees. Using accurate medical terminology is an absolute requirement in every verbal or written report. Furthermore, forming an impression on a patient requires an understanding of the body systems and processes that are affected by disease or traumatic injury. This series applies anatomy and physiology concepts in a way that EMTs and paramedics should find both insightful and useful. Part 1 of the series examined the structure, function, and common problems of the critical body systems, which included the circulatory system, respiratory system, and nervous system. It explored anatomy and physiology from a historic perspective, and addressed the medical terminology used to describe basic anatomical landmarks. Part 2 of the series reviews the structure, function and common problems of the other body systems, which include the musculoskeletal, integumentary, gastrointestinal, genitourinary, and endocrine systems. Medical terminology from Part 1 is reviewed."
+  },
+  {
+    "name": "CAPCE Thoracic Emergencies",
+    "id": "1611478",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "Understanding thoracic injuries is crucial for EMS professionals due to the chest\u2019s vital organs and the potential for life-threatening conditions. This interactive online course delves into the mechanisms, signs, and symptoms of both blunt and penetrating thoracic injuries, emphasizing their high fatality rates and the importance of timely, effective treatment. You will learn to identify and manage common and severe chest injuries, improving their ability to deliver the traumatized patient to definitive care."
+  },
+  {
+    "name": "CAPCE Thoracic and Abdominal Emergencies for the EMT",
+    "id": "3285240",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "EMTs regularly encounter thoracic and abdominal emergencies that can rapidly deteriorate from stable presentations to life-threatening conditions, making assessment skills and clinical judgment crucial for patient survival. These emergencies, including internal bleeding, cardiac events, penetrating trauma, and respiratory compromise, require immediate recognition and appropriate intervention to prevent fatal outcomes. This interactive online course will teach experienced EMTs advanced assessment techniques, critical decision-making skills, and proper treatment interventions for thoracic and abdominal emergencies. Additionally, you will learn when to escalate care, how to communicate effectively with receiving facilities, and how to optimize patient outcomes through expert-level emergency medical care."
+  },
+  {
+    "name": "CAPCE Toxicology and Substance Abuse",
+    "id": "2462339",
+    "category": "Medical",
+    "hours": 1,
+    "description": "The Toxicology and Substance Abuse course addresses the rising frequency of toxic substance-related emergencies, particularly in the context of substance abuse. This course provides comprehensive insights into various types of toxicological emergencies encountered in the field, offering assessment and patient management strategies tailored to different toxin exposures. With a focus on common causative agents and assessment findings, participants will gain the necessary knowledge to effectively h"
+  },
+  {
+    "name": "CAPCE Tracheostomies",
+    "id": "2223743",
+    "category": "Airway",
+    "hours": 1,
+    "description": "A tracheostomy is a surgical procedure that creates a tracheal stoma to facilitate respiration. In hospital settings, it is among the most common surgical procedures performed on critically ill patients. This means paramedics need to be prepared to respond to assist patients with tracheostomies by understanding the unique features of tracheostomy care so that they can provide effective suctioning, tube replacement, and ventilation when needed. Medical advances continue to provide ways for patients with upper airway injuries and impairments to maintain adequate respiration. As procedures such as tracheostomies become more common, it is increasingly likely that patients with tracheostomies will be encountered in the prehospital setting. It is essential that EMS providers prepare themselves to support such patients. Maintaining a patent airway is one of the top priorities in any EMS response and is especially critical when the patient\u2019s respiratory system is dependent upon a tracheostomy stoma."
+  },
+  {
+    "name": "CAPCE Trauma Assessment for Head and Neck Injuries",
+    "id": "1994469",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "This course covers how to recognize and treat head, facial, and neck trauma using a rapid trauma assessment approach. The course reviews the identification of various injuries that may occur in a traumatic event, starting from the top of the head to the neck. Students will learn when and how to perform a focused physical examination on a patient after completing a rapid trauma assessment. By the end of the course, students will be able to recognize different head, neck, and facial injuries and identify the necessary treatments for each injury."
+  },
+  {
+    "name": "CAPCE Trauma Stabilization Skills for the EMT",
+    "id": "3278526",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "EMT providers are often the first medical professionals to arrive at trauma scenes, where quick assessment and stabilization can mean the difference between life and death. Critical trauma patients require rapid, systematic interventions including spinal motion restriction, bleeding control, and proper patient packaging to optimize survival outcomes. This interactive online course will reinforce your existing EMT trauma skills through realistic case studies that emphasize clinical decision-making and field adaptability rather than basic procedural steps. You will enhance your ability to prioritize interventions, apply evidence-based trauma care techniques, and make sound clinical judgments under pressure while preparing patients for safe transport to definitive care."
+  },
+  {
+    "name": "CAPCE Traumatic Brain Injuries",
+    "id": "2321469",
+    "category": "Trauma",
+    "hours": 1,
+    "description": "This course focuses on educating first responders about head, brain, and neck injuries that may occur in traumatic events such as falls and sports injuries. The course covers the identification and treatment of these injuries, as well as potential complications and shocks that may occur. The course also emphasizes the importance of recognizing differences in populations when dealing with head/brain and neck injuries. By the end of the course, the learner will be able to identify different types of injuries and provide appropriate treatment while recognizing and managing potential complications."
+  },
+  {
+    "name": "CAPCE Tricyclic Antidepressant (TCA) Overdose",
+    "id": "2855062",
+    "category": "Medical",
+    "hours": 1,
+    "description": "Tricyclic antidepressants (TCAs) have been used for depression treatment for over 60 years and, despite newer drugs, remain in use today for various conditions. Due to their narrow therapeutic index, TCAs pose a higher risk for overdose, which can result in life-threatening situations such as serotonin syndrome. This interactive online course covers the pharmacology of TCAs, the recognition and treatment of serotonin syndrome, and the critical assessment and management of TCA overdose. By the en"
+  },
+  {
+    "name": "CAPCE Understanding Autism Spectrum Disorder for First Responders",
+    "id": "",
+    "category": "Medical",
+    "hours": 1,
+    "description": "In the US, it is estimated that 1 in 36 children have autism and 1 in 45 adults have autism. This interactive online course is designed to equip first responders with crucial insights into Autism Spectrum Disorder (ASD) to facilitate safer and more effective interactions. The course focuses on identifying ASD traits, understanding associated mental and physical issues that may coexist, and addressing potential difficulties in communication and behavior. It provides tools and approaches to navigate encounters with individuals with ASD in various public safety roles. You will learn how to recognize signs of ASD, approach situations calmly, and tactically reposition yourself to ensure appropriate and non-threatening interactions, ultimately enhancing your ability to assist and support individuals with ASD in emergency situations."
+  },
+  {
+    "name": "CAPCE Understanding Discrimination and Harassment in Fire and EMS",
+    "id": "2634800",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Discrimination and harassment have serious consequences for first responders as well as public safety and trust. Implicit biases and social norms perpetuate these behaviors as stereotypes subconsciously influence decision-making. This interactive online course addresses the critical issue of discrimination and harassment within Emergency Medical Services (EMS) and fire departments, recognizing the detrimental effects on team cohesion and individual well-being. You will gain a comprehensive understanding of various forms of discrimination, including systemic racism and microaggressions, along with their impact on workplace dynamics. Additionally, the course highlights the unique challenges faced by LGBTQIA+ individuals in these settings and provides strategies for creating an inclusive environment that fosters respect and equality for all personnel. Legal obligations and relevant laws are also discussed to guide Fire and EMS departments in preventing and addressing discrimination and harassment effectively."
+  },
+  {
+    "name": "CAPCE Understanding the Basics of ECGs",
+    "id": "2424228",
+    "category": "Cardiology",
+    "hours": 1,
+    "description": "The ECG Fundamentals course provides EMS personnel with essential knowledge and skills related to electrocardiogram (ECG) operation. ECGs are vital tools for diagnosing and treating various heart conditions, and both ALS and BLS providers must be proficient in their use. This course covers topics such as the principles of electrical conduction in the heart, the purpose and components of an ECG, interpretation of ECG graph paper, identification of ECG waves and leads, determination of heart rate,"
+  },
+  {
+    "name": "CAPCE Weapons of Mass Destruction",
+    "id": "2989916",
+    "category": "Operations",
+    "hours": 1,
+    "description": "First responders who understand weapons of mass destruction (WMDs) can make better tactical decisions and potentially save more lives during high-acuity low-occurrence events. WMDs, which include chemical, biological, radiological, nuclear, and explosive agents, require specific response protocols and safety measures to protect both responders and civilians. This interactive online course covers essential topics, including harm agent identification, delivery methods, terrorist tactics, and critical response procedures such as establishing control zones, decontamination protocols, and patient care considerations. Through detailed scenarios and real-world examples, you\u2019ll learn how to recognize WMD incidents, implement appropriate safety measures, and provide emergency care while coordinating with other agencies during these complex and challenging events."
+  },
+  {
+    "name": "CAPCE Workplace Stress",
+    "id": "2278",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Stress is a physical and psychological reaction to the increasing demands of life. When your brain perceives a threat, it signals your body to release a burst of hormones to fuel your response. This is called the \u201cfight-or-flight\u201d response. Once the threat is gone, your body should return to a relaxed state. However, the nonstop stress of modern life means that your alarm system rarely shuts off. As an emergency medical care provider, you face a variety of stressful situations in the workplace, such as inconsiderate coworkers, abuse calls, dying kids, forced overtime, and much more. In addition, you must deal compassionately with patients and victims who are experiencing stress. This course highlights some typical sources of stress, as well as methods of dealing with and reducing stress in your daily life. It is impossible to avoid stress completely, so learning to deal with it is necessary for your health and well-being."
+  },
+  {
+    "name": "CAPCE Workplace Stress",
+    "id": "3399381",
+    "category": "Operations",
+    "hours": 1,
+    "description": "Stress is a physical and psychological reaction to the increasing demands of life. When your brain perceives a threat, it signals your body to release a burst of hormones to fuel your response. This is called the \u201cfight-or-flight\u201d response. Once the threat is gone, your body should return to a relaxed state. However, the nonstop stress of modern life means that your alarm system rarely shuts off. As an emergency medical care provider, you face a variety of stressful situations in the workplace, such as inconsiderate coworkers, abuse calls, dying kids, forced overtime, and much more. In addition, you must deal compassionately with patients and victims who are experiencing stress. This course highlights some typical sources of stress, as well as methods of dealing with and reducing stress in your daily life. It is impossible to avoid stress completely, so learning to deal with it is necessary for your health and well-being."
+  },
+  {
+    "name": "Fleet Program Emergency Vehicle Operations - EMS",
+    "id": "",
+    "category": "Operations",
+    "hours": 1,
+    "description": ""
+  }
+]
