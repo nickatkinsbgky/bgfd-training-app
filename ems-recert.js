@@ -606,10 +606,15 @@
     return Math.round((1000 * part) / whole) / 10;
   }
   function showDept() {
-    document.getElementById("landing").hidden = true;
+    var main = document.getElementById("mainLayout");
+    if (main) main.hidden = true;
     document.getElementById("app").hidden = true;
     document.getElementById("personView").hidden = true;
     document.getElementById("focusView").hidden = true;
+    var bracket = document.getElementById("bracketView");
+    if (bracket) bracket.hidden = true;
+    var vector = document.getElementById("vectorView");
+    if (vector) vector.hidden = true;
     document.getElementById("deptView").hidden = false;
     var select = document.getElementById("deptYear");
     var years = cycleYears();
@@ -703,10 +708,15 @@
     return { bucket: bucket, fraction: fraction, expected: expected, daysLeft: daysLeft, elapsed: elapsed, total: total };
   }
   function showFocus() {
-    document.getElementById("landing").hidden = true;
+    var main = document.getElementById("mainLayout");
+    if (main) main.hidden = true;
     document.getElementById("app").hidden = true;
     document.getElementById("personView").hidden = true;
     document.getElementById("deptView").hidden = true;
+    var bracket = document.getElementById("bracketView");
+    if (bracket) bracket.hidden = true;
+    var vector = document.getElementById("vectorView");
+    if (vector) vector.hidden = true;
     document.getElementById("focusView").hidden = false;
     var select = document.getElementById("focusYear");
     var years = cycleYears();
