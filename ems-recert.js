@@ -487,17 +487,22 @@
   }
 
   function showSummary(name) {
-    selected = db.people.filter(function (p) { return p.name === name; })[0];
-    if (!selected) return;
-    var s = statusOf(selected);
-    // Open the person record as its own full page
-    document.getElementById("landing").hidden = true;
-    document.getElementById("app").hidden = true;
-    document.getElementById("deptView").hidden = true;
-    document.getElementById("focusView").hidden = true;
-    var bracket = document.getElementById("bracketView");
-    if (bracket) bracket.hidden = true;
-    document.getElementById("personView").hidden = false;
+   function showSummary(name) {
+  selected = db.people.filter(function (p) { return p.name === name; })[0];
+  if (!selected) return;
+  var s = statusOf(selected);
+  // Show person on the right panel, keep left search visible
+  var left = document.getElementById("leftPanel");
+  var right = document.getElementById("rightPanel");
+  if (left) left.hidden = false;
+  if (right) right.hidden = false;
+  document.getElementById("personView").hidden = false;
+  document.getElementById("app").hidden = true;
+  document.getElementById("deptView").hidden = true;
+  document.getElementById("focusView").hidden = true;
+  var bracket = document.getElementById("bracketView");
+  if (bracket) bracket.hidden = true;
+     document.getElementById("personView").hidden = false;
     document.getElementById("sumName").textContent = selected.name;
     var cycle = s.win ? s.win.start + " through " + s.win.end : "Set an expiration date to start the cycle";
     document.getElementById("sumMeta").textContent = "KEMSIS " + (selected.kemsisId || "—") + " · " + certLevel(selected) + " · Exp " + (selected.expDate || "not set") + " · " + cycle;
