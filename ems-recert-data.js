@@ -1,1 +1,1 @@
-PLACEHOLDER
+window.EMS_RECERT_SEED = {"people": [ ... full data ... ] };
