@@ -27630,6 +27630,30 @@
       "hours": 1.5,
       "course": "KBEMS Pediatric Abusive Head Trauma Course",
       "standard": "EMS: Pediatric Abusive Head Trauma"
+    },
+    {
+      "name": "Rich, Brittany",
+      "date": "2025-07-29",
+      "category": "Airway",
+      "standard": "KBEMS | Airway | Airway/Respiration/Ventilation",
+      "hours": 1.0,
+      "course": "EMS - Airway Class"
+    },
+    {
+      "name": "Rich, Brittany",
+      "date": "2025-11-24",
+      "category": "Medical",
+      "standard": "KBEMS | Medical | Medical",
+      "hours": 1.0,
+      "course": "Medical-Glucometer"
+    },
+    {
+      "name": "Rich, Brittany",
+      "date": "2025-11-24",
+      "category": "Medical",
+      "standard": "KBEMS | Medical | Medical",
+      "hours": 1.0,
+      "course": "Glucometers"
     }
   ]
 }
