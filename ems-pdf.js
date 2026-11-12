@@ -10,6 +10,10 @@
       alert("PDF library did not load. Refresh and try again.");
       return;
     }
+    if (typeof window.jspdf.jsPDF.prototype.autoTable !== "function" && !window.jspdf.autoTable) {
+      alert("PDF table plugin did not load. Refresh and try again.");
+      return;
+    }
     var report = window.emsPersonReport ? window.emsPersonReport(name) : null;
     if (!report) { alert("Select a person first."); return; }
     var doc = new window.jspdf.jsPDF({ unit: "pt", format: "letter" });
