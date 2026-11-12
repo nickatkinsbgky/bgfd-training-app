@@ -10,7 +10,7 @@
       alert("PDF library did not load. Refresh and try again.");
       return;
     }
-    if (typeof window.jspdf.jsPDF.prototype.autoTable !== "function" && !window.jspdf.autoTable) {
+    if (!window.jspdf.jsPDF.API || typeof window.jspdf.jsPDF.API.autoTable !== "function") {
       alert("PDF table plugin did not load. Refresh and try again.");
       return;
     }
