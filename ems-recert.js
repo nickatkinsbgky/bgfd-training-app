@@ -844,17 +844,39 @@
     if (!person) return null;
     var s = statusOf(person);
     var classes = db.records.filter(function (r) { return r.name === person.name; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    var categories = catsFor(person).map(function (c) {
+      var earned = s.win ? (s.hours[c.key] || 0) : 0;
+      var still = Math.round((c.need - earned) * 100) / 100;
+      var tone = !s.win ? "" : (earned > c.need ? "Ahead" : (earned >= c.need ? "Met" : "Short"));
+      return { key: c.key, label: c.label || c.key, need: c.need, earned: earned, still: still > 0 ? still : 0, tone: tone, standard: "KBEMS | " + c.key + " | " + c.key };
+    });
+    var pedsNeed = PEDS_NEED[certLevel(person)] || 0;
+    if (pedsNeed) {
+      var peds = s.hours.Pediatric || 0;
+      var stillP = Math.round((pedsNeed - peds) * 100) / 100;
+      categories.push({
+        key: "Pediatric",
+        label: "Pediatric content",
+        need: pedsNeed,
+        earned: peds,
+        still: stillP > 0 ? stillP : 0,
+        tone: !s.win ? "" : (peds > pedsNeed ? "Ahead" : (peds >= pedsNeed ? "Met" : "Short")),
+        standard: "Pediatric content within the total"
+      });
+    }
+    var needHours = 0, creditHours = 0;
+    categories.forEach(function (c) {
+      needHours += Number(c.need) || 0;
+      creditHours += Math.min(Number(c.earned) || 0, Number(c.need) || 0);
+    });
     return {
       person: person,
       status: s.status,
       needs: s.needs,
       win: s.win,
       hours: s.hours,
-      categories: CATS.map(function (c) {
-        var earned = s.win ? s.hours[c.key] : 0;
-        var tone = !s.win ? "" : (earned > c.need ? "Ahead" : (earned === c.need ? "Met" : "Short"));
-        return { key: c.key, need: c.need, earned: earned, still: Math.round((c.need - earned) * 100) / 100, tone: tone, standard: "KBEMS | " + c.key + " | " + c.key };
-      }),
+      categories: categories,
+      progress: needHours ? Math.round(1000 * creditHours / needHours) / 10 : 0,
       classes: classes
     };
   };

@@ -36,7 +36,10 @@
         if (cats.length) {
           var total = cats.length;
           var met = cats.filter(function (c) { return Number(c.earned) >= Number(c.need); }).length;
-          return { pct: total ? Math.round(100 * met / total) : 0, met: met, total: total, ready: met === total && total > 0 };
+          var pct = (rep && typeof rep.progress === "number")
+            ? Math.round(rep.progress)
+            : (total ? Math.round(100 * met / total) : 0);
+          return { pct: pct, met: met, total: total, ready: met === total && total > 0 };
         }
       }
     } catch (e) {}
@@ -112,7 +115,7 @@
       var width = Math.max(4, Math.min(100, p.pct));
       var horseClass = p.pct >= 100 ? 'horse done' : 'horse';
       html += '<div class="race-lane">';
-      html += '<div class="race-name" title="' + esc(p.name) + '">' + esc(p.name) + '</div>';
+      html += '<div class="race-name" title="' + esc(p.name) + ' — ' + p.met + '/' + p.total + ' categories">' + esc(p.name) + '</div>';
       html += '<div class="track"><div class="' + horseClass + '" style="width:' + width + '%">🐴</div></div>';
       html += '<div class="race-pct">' + p.pct + '%</div>';
       html += '</div>';
@@ -121,7 +124,7 @@
       html += '<p class="muted">Everyone is in the winners circle!</p>';
     }
     html += '</div>';
-    html += '<p class="muted" style="margin-top:12px">' + ranked.length + ' personnel with expiration date 12/31/' + esc(year) + '. Horses move closer to the finish line as more required categories are met. 100% = fully ready to recertify.</p>';
+    html += '<p class="muted" style="margin-top:12px">' + ranked.length + ' personnel with expiration date 12/31/' + esc(year) + '. Progress is based on required hours earned in the current cycle (capped per category). 100% = all required categories met and ready to recertify.</p>';
     box.innerHTML = html;
   }
   function wire() {
