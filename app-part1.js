@@ -51,8 +51,7 @@ function mergeOCourse(store) {
   store.assignments = store.assignments || [];
   let changed = 0;
   const drop = window.OC_DROP_NAMES || [
-    'Carlson, Evron','Chambers, Brian','Cornwell, Michael',
-    'Pardue, Shannon','Thomas, Brandon','Tutor, Nick','PLACEHOLDER'
+    'Carlson, Evron','Chambers, Brian','Thomas, Brandon','Tutor, Nick','PLACEHOLDER'
   ];
   const dropSet = new Set(drop);
   const before = store.assignments.length;
