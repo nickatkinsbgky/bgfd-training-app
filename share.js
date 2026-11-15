@@ -27,11 +27,9 @@
 
   function lockViewMode() {
     if (!isView) return;
-
     document.querySelectorAll('a.home-link[href="index.html"], a[href="index.html"]').forEach(function (el) {
       hideEl(el);
     });
-
     var syncBar = document.querySelector('.sync-bar');
     if (syncBar) {
       Array.prototype.forEach.call(syncBar.querySelectorAll('button, input'), function (el) {
@@ -44,34 +42,27 @@
         msg.classList.add('ok');
       }
     }
-
     document.querySelectorAll('button').forEach(function (btn) {
       if (isMutateButton(btn)) hideEl(btn);
     });
-
     ['addPerson', 'importBtn', 'importFile', 'resetBtn',
      'savePerson', 'deletePerson', 'addClass', 'sumEdit', 'drawerPdf',
      'btn-save-all', 'btn-push', 'btn-pull', 'btn-load', 'btn-save-token', 'sync-token',
      'btn-add', 'btn-save-local'].forEach(function (id) {
       hideEl(document.getElementById(id));
     });
-
     document.querySelectorAll('button.edit, button.del, button.edit-class, button.row-btn').forEach(function (el) {
       hideEl(el);
     });
-
     document.querySelectorAll('#drawer input, #drawer select, #drawer button, #edit-modal input, #edit-modal select, #edit-modal button').forEach(function (el) {
       el.disabled = true;
     });
-
     var sumCert = document.getElementById('sumCert');
     if (sumCert) sumCert.disabled = true;
-
     var drawer = document.getElementById('drawer');
     if (drawer) drawer.style.display = 'none';
     var modal = document.getElementById('edit-modal');
     if (modal) modal.style.display = 'none';
-
     document.body.classList.add('view-only');
     var style = document.createElement('style');
     style.textContent = [
@@ -86,11 +77,39 @@
     document.head.appendChild(style);
   }
 
+  function stripMiddleName(name) {
+    if (!name || name.indexOf(',') === -1) return name;
+    var parts = name.split(',');
+    var last = parts[0].trim();
+    var firstParts = parts.slice(1).join(',').trim().split(/\s+/);
+    var first = firstParts[0] || '';
+    return last + ', ' + first;
+  }
+  function cleanNames(data) {
+    if (!data || !data.people) return data;
+    var map = {};
+    data.people.forEach(function (p) {
+      var original = p.name;
+      var cleaned = stripMiddleName(original);
+      if (cleaned !== original) {
+        map[original] = cleaned;
+        p.name = cleaned;
+      }
+    });
+    if (data.records) {
+      data.records.forEach(function (r) {
+        if (map[r.name]) r.name = map[r.name];
+      });
+    }
+    return data;
+  }
+
   function forceLoadLatest() {
     if (!isView) return;
     var url = null;
     if (isEms) {
-      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/ems-recert-data.json?t=' + Date.now();
+      // Pull the November data set
+      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/0640eb47f15f2f908f0a69d6b34fa0a591dd2938/ems-recert-data.json?t=' + Date.now();
     } else if (isIso) {
       url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/iso_class1_data.json?t=' + Date.now();
     } else if (isFitness) {
@@ -102,12 +121,13 @@
       .then(function (res) { return res.ok ? res.json() : null; })
       .then(function (remote) {
         if (!remote) return;
+        if (isEms) remote = cleanNames(remote);
         var msg = document.getElementById('sync-msg');
         if (isEms && remote.people && remote.people.length) {
           if (typeof window.setEmsDb === 'function') window.setEmsDb(remote);
           else try { localStorage.setItem('bgfd-ems-recert-excel-v1', JSON.stringify(remote)); } catch (e) {}
           if (msg) {
-            msg.textContent = 'View-only — showing latest site data (' + remote.people.length + ' people)';
+            msg.textContent = 'View-only — November data (' + remote.people.length + ' people, ' + (remote.records ? remote.records.length : 0) + ' classes)';
             msg.classList.add('ok');
           }
         } else if (isIso && Array.isArray(remote) && remote.length) {
