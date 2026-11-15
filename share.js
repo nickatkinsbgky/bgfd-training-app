@@ -108,8 +108,8 @@
     if (!isView) return;
     var url = null;
     if (isEms) {
-      // Pull the November data set
-      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/0640eb47f15f2f908f0a69d6b34fa0a591dd2938/ems-recert-data.json?t=' + Date.now();
+      // Always pull the latest from main so uploads are immediately visible
+      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/ems-recert-data.json?t=' + Date.now();
     } else if (isIso) {
       url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/iso_class1_data.json?t=' + Date.now();
     } else if (isFitness) {
@@ -127,7 +127,7 @@
           if (typeof window.setEmsDb === 'function') window.setEmsDb(remote);
           else try { localStorage.setItem('bgfd-ems-recert-excel-v1', JSON.stringify(remote)); } catch (e) {}
           if (msg) {
-            msg.textContent = 'View-only — November data (' + remote.people.length + ' people, ' + (remote.records ? remote.records.length : 0) + ' classes)';
+            msg.textContent = 'View-only — latest site data (' + remote.people.length + ' people, ' + (remote.records ? remote.records.length : 0) + ' classes)';
             msg.classList.add('ok');
           }
         } else if (isIso && Array.isArray(remote) && remote.length) {
