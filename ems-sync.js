@@ -49,12 +49,13 @@
   async function pullRemote() {
     setSyncMsg("Loading site data…");
     try {
-      var url = "https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/0640eb47f15f2f908f0a69d6b34fa0a591dd2938/ems-recert-data.json?t=" + Date.now();
+      // Always pull the latest from main so uploads are immediately available
+      var url = "https://raw.githubusercontent.com/" + REMOTE.owner + "/" + REMOTE.repo + "/" + REMOTE.branch + "/" + REMOTE.path + "?t=" + Date.now();
       var res = await fetch(url, { cache: "no-store" });
       var remote = null;
       if (res.ok) remote = await res.json();
       if (!remote || !remote.people || remote.people.length < 50) {
-        setSyncMsg("Could not load the November data set.", false);
+        setSyncMsg("Could not load site data.", false);
         return;
       }
       remote = cleanNames(remote);
@@ -63,11 +64,11 @@
       var localRecords = local && local.records ? local.records.length : 0;
       var remoteRecords = remote.records ? remote.records.length : 0;
       if (localPeople && (localPeople !== remote.people.length || localRecords !== remoteRecords)) {
-        var ok = confirm("Replace this device copy with the November data set (" + remote.people.length + " people, " + remoteRecords + " classes)? Middle names will be removed.");
+        var ok = confirm("Replace this device copy with the latest site data (" + remote.people.length + " people, " + remoteRecords + " classes)? Middle names will be removed.");
         if (!ok) { setSyncMsg("Kept this device copy."); return; }
       }
       applyRemote(remote);
-      setSyncMsg("Loaded data (" + remote.people.length + " people, " + remoteRecords + " classes). Middle names removed.", true);
+      setSyncMsg("Loaded latest site data (" + remote.people.length + " people, " + remoteRecords + " classes). Middle names removed.", true);
     } catch (e) {
       setSyncMsg("Could not load the data. " + e.message, false);
     }
