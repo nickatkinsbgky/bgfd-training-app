@@ -1,1 +1,1 @@
-FULL_CONTENT_HERE
+$(cat /tmp/ems-recert-data-updated.js)
