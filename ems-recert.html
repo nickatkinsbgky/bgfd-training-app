@@ -118,6 +118,11 @@
   .horse.done { background:linear-gradient(90deg,#1f7a4d,#2ecc71); }
   .race-pct { width:48px; text-align:right; font-weight:700; }
 
+  .vector-card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .vector-card h3 { margin:0 0 4px; color:var(--gold); font-size:16px; }
+  .vector-card .meta { font-size:12px; color:var(--muted); margin:0 0 6px; }
+  .vector-card .desc { font-size:13px; margin:0; }
+
   #bracketView[hidden], #vectorView[hidden] { display:none; }
   #bracketView, #vectorView { padding:16px 20px 40px; }
 </style>
@@ -145,6 +150,7 @@
   <button id="landDept" type="button">Department averages</button>
   <button id="landFocus" type="button">Training focus</button>
   <button id="landBracket" type="button">Race to Recertify</button>
+  <button id="landVector" type="button">Vector Solutions courses</button>
 </div>
 
 <section id="landing" class="landing">
@@ -300,9 +306,15 @@
 </section>
 
 <section id="vectorView" hidden>
-  <div class="bar"><button type="button" onclick="document.getElementById('vectorView').hidden=true; document.getElementById('landing').hidden=false;">← Back to EMS Tracker</button></div>
-  <h2>Vector courses</h2>
-  <div id="vectorContent"></div>
+  <div class="bar"><button id="vectorBack" type="button">← Back to EMS Tracker</button></div>
+  <h2>Vector Solutions courses</h2>
+  <div class="focus-head">
+    <div><label>Name</label><input id="vectorName" type="search" placeholder="Search name" /></div>
+    <div><label>ID</label><input id="vectorId" type="search" placeholder="Course ID" /></div>
+    <div><label>Category</label><select id="vectorCat"></select></div>
+    <div style="align-self:flex-end"><span id="vectorCount" class="muted"></span></div>
+  </div>
+  <div id="vectorResults" class="focus-cards"></div>
 </section>
 
 <section id="drawer" class="drawer" hidden>
@@ -338,7 +350,7 @@
 <script src="ems-sync.js?v=20261119-restore"></script>
 <script src="ems-pdf.js?v=20261119-restore"></script>
 <script src="ems-bracket.js?v=20261119-race"></script>
-<script src="vector-courses.js?v=20261119-restore"></script>
+<script src="vector-courses.js?v=20261119-vector"></script>
 <script src="share.js?v=20261119-restore"></script>
 </body>
 </html>
