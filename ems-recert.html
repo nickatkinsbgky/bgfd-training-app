@@ -8,18 +8,18 @@
 <style>
   :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; --ok:#1f7a4d; --bad:#9b2c2c; }
   * { box-sizing:border-box; }
-  html,body { margin:0; background:var(--bg); color:var(--text); font:15px/1.4 "Segoe UI", system-ui, sans-serif; }
+  html,body { margin:0; background:var(--bg); color:var(--text); font:13px/1.35 "Segoe UI", system-ui, sans-serif; }
   header { display:flex; gap:16px; align-items:center; padding:16px 20px; background:linear-gradient(90deg,#3b0a0a,#161b22 55%); border-bottom:3px solid var(--gold); }
   header img { width:54px; height:54px; object-fit:contain; }
-  h1 { margin:0; font-size:26px; }
+  h1 { margin:0; font-size:22px; }
   header p { margin:2px 0 0; color:var(--gold); font-weight:700; }
   a.back, a.exit { color:var(--text); text-decoration:none; border:1px solid var(--gold); border-radius:10px; padding:8px 12px; font-weight:700; }
   a.back { margin-right:8px; }
   a.exit { background:#241c0c; color:var(--gold); }
   main { padding:16px 20px 40px; }
   .stats { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
-  .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:120px; }
-  .stat b { display:block; font-size:22px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:6px 10px; min-width:90px; }
+  .stat b { display:block; font-size:18px; }
   .stat.ok b { color:#7dcea0; } .stat.bad b { color:#f5b7b1; } .stat.warn b { color:var(--gold); }
   .bar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; align-items:center; }
   input, select, button { font:inherit; color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
@@ -27,8 +27,8 @@
   button.gold { background:#241c0c; color:var(--gold); border-color:var(--gold); }
   button.red { background:var(--red); border-color:#ff8a80; color:#fff; }
   .wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
-  table { width:100%; border-collapse:collapse; min-width:1100px; }
-  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:center; white-space:nowrap; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { padding:5px 6px; border-bottom:1px solid var(--line); text-align:center; white-space:normal; word-break:break-word; }
   td.actions, th.actions { text-align:right; }
   button.tiny { padding:4px 8px; margin-left:4px; font-size:13px; }
   button.tiny.del { background:#3a1c1c; border-color:#f5b7b1; color:#f5b7b1; }
@@ -37,7 +37,7 @@
   tr.short td.hrs { background:#3a1c1c; color:#f5b7b1; }
   tr.met td.hrs { background:#163326; color:#b7ebc6; }
   tr:hover td { filter:brightness(1.08); }
-  .need { text-align:left; white-space:normal; min-width:220px; color:#f5b7b1; }
+  .need { text-align:left; white-space:normal; max-width:220px; color:#f5b7b1; }
   .drawer { margin-top:14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; }
   .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
   .muted { color:var(--muted); }
@@ -116,7 +116,7 @@
   .finish-line { text-align:right; color:var(--gold); font-weight:700; margin:8px 0; letter-spacing:2px; }
   .race-track { margin:8px 0; }
   .race-lane { display:flex; align-items:center; gap:8px; margin:6px 0; }
-  .race-name { width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px; }
+  .race-name { width:140px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:12px; }
   .track { flex:1; height:22px; background:#1c2330; border-radius:11px; overflow:hidden; position:relative; }
   .horse { height:100%; background:linear-gradient(90deg,#c62828,#ef5350); border-radius:11px; display:flex; align-items:center; justify-content:flex-end; padding-right:4px; font-size:14px; min-width:22px; }
   .horse.done { background:linear-gradient(90deg,#1f7a4d,#2ecc71); }
@@ -363,7 +363,7 @@
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script src="ems-recert-data.js?v=20261119-restore"></script>
-<script src="ems-recert.js?v=20261119-left"></script>
+<script src="ems-recert.js?v=20261119-compact"></script>
 <script src="ems-sync.js?v=20261119-restore"></script>
 <script src="ems-pdf.js?v=20261119-restore"></script>
 <script src="ems-bracket.js?v=20261119-race"></script>
