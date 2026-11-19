@@ -3,45 +3,226 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EMS Recertification Tracker</title>
+<title>EMS Recertification Tracker — BGFD</title>
 <style>
-body{font-family:system-ui,sans-serif;margin:16px;background:#f6f1e7;color:#1c1917}
-table{width:100%;border-collapse:collapse;background:#fff}
-th,td{padding:6px 8px;border-bottom:1px solid #ddd;text-align:left}
-#stats{display:flex;gap:12px;margin-bottom:12px}
-.stat{padding:8px 12px;background:#fff;border-radius:6px}
-.hidden{display:none}
+:root {
+  --bg: #f6f1e7;
+  --ink: #1c1917;
+  --card: #fff;
+  --muted: #78716c;
+  --ok: #166534;
+  --bad: #991b1b;
+  --warn: #92400e;
+  --accent: #8e1d2c;
+  --brass: #a6843d;
+}
+* { box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, sans-serif; margin: 0; background: var(--bg); color: var(--ink); }
+.topbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: #1c1917; color: #f6f1e7; position: sticky; top: 0; z-index: 10; }
+.topbar button, .topbar input { font: inherit; padding: 6px 10px; border-radius: 6px; border: 1px solid #444; background: #2a2624; color: inherit; }
+.topbar button:hover { background: #3a3634; }
+.topbar .accent { background: var(--accent); border-color: var(--accent); }
+#sync-msg { font-size: 13px; margin-left: 8px; }
+#sync-msg.ok { color: #86efac; }
+#sync-msg.no { color: #fca5a5; }
+main { padding: 16px; max-width: 1400px; margin: 0 auto; }
+h1 { margin: 0 0 8px; font-size: 1.5rem; }
+.muted { color: var(--muted); font-size: 0.9rem; }
+.hidden, [hidden] { display: none !important; }
+#stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+.stat { background: var(--card); padding: 8px 14px; border-radius: 8px; min-width: 80px; text-align: center; }
+.stat b { display: block; font-size: 1.3rem; }
+.stat.ok { border-left: 4px solid var(--ok); }
+.stat.bad { border-left: 4px solid var(--bad); }
+.stat.warn { border-left: 4px solid var(--warn); }
+input[type=search], select, input[type=date], input[type=text], input[type=number] { padding: 6px 8px; border: 1px solid #d6d3d1; border-radius: 6px; font: inherit; }
+table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
+th, td { padding: 8px 10px; border-bottom: 1px solid #e7e5e4; text-align: left; vertical-align: top; }
+th { background: #fafaf9; font-weight: 600; }
+.hrs.met { color: var(--ok); font-weight: 600; }
+.hrs.short { color: var(--bad); font-weight: 600; }
+.actions button, .tiny { font-size: 12px; padding: 2px 6px; margin-right: 4px; }
+.req-wrap { margin: 16px 0; }
+.req-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+section { background: var(--card); padding: 12px 16px; border-radius: 8px; margin: 12px 0; }
+button.primary { background: var(--accent); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+button.primary:hover { filter: brightness(1.1); }
+.back { margin-bottom: 12px; }
 </style>
 </head>
 <body>
-<div id="landing" class="hidden"></div>
-<div id="app">
-  <div id="stats"></div>
-  <input id="q" type="search" placeholder="Search people">
-  <select id="statusFilter">
-    <option value="">All</option>
-    <option value="Met">Met</option>
-    <option value="Short">Short</option>
-    <option value="Set exp date">Needs exp date</option>
-  </select>
-  <table>
-    <thead id="head"></thead>
-    <tbody id="body"></tbody>
-  </table>
-  <div id="sumStatus"></div>
+<header class="topbar">
+  <strong>EMS Recertification Tracker</strong>
+  <button id="btn-save-all" type="button">Save</button>
+  <button id="btn-push" type="button" class="accent">Upload to site</button>
+  <button id="btn-pull" type="button">Load site data</button>
+  <input id="sync-token" type="password" placeholder="GitHub token" style="width:160px">
+  <button id="btn-save-token" type="button">Save token</button>
+  <span id="sync-msg"></span>
+  <span style="flex:1"></span>
+  <button id="landRoster" type="button">View full roster</button>
+  <button id="landDept" type="button">Department averages</button>
+  <button id="landFocus" type="button">Training focus</button>
+  <button id="landBracket" type="button">Race to Recertify</button>
+</header>
 
-  <!-- Edit person form (required by script) -->
-  <div id="editPanel" class="hidden">
-    <input id="editName">
-    <input id="editId">
-    <select id="editCert"><option>EMT</option><option>EMR</option><option>AEMT</option><option>Paramedic</option></select>
-    <input id="editExp" type="date">
-    <button id="savePerson" type="button">Save</button>
-    <button id="cancelEdit" type="button">Cancel</button>
+<main>
+  <!-- Landing / Find personnel -->
+  <div id="landing">
+    <h1>Find personnel</h1>
+    <p class="muted">Search and open a record, or use the buttons above for roster, averages, focus, or race.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0">
+      <input id="landSearch" type="search" placeholder="Search name or KEMSIS ID" style="min-width:240px">
+      <select id="landSelect" size="8" style="min-width:280px"></select>
+      <button id="landOpen" class="primary" type="button">Open record</button>
+    </div>
+    <p id="landSource" class="muted"></p>
   </div>
-</div>
+
+  <!-- Full roster (main app table) -->
+  <div id="app" hidden>
+    <div class="back"><button type="button" onclick="document.getElementById('landing').hidden=false; this.closest('#app').hidden=true;">← Back to EMS Tracker</button></div>
+    <h2>Full roster</h2>
+    <div id="stats"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <input id="q" type="search" placeholder="Search people">
+      <select id="statusFilter">
+        <option value="">All</option>
+        <option value="Met">Met</option>
+        <option value="Short">Short</option>
+        <option value="Set exp date">Needs exp date</option>
+      </select>
+      <button id="addPerson" type="button">Add person</button>
+      <button id="exportBtn" type="button">Export</button>
+      <button id="importBtn" type="button">Import</button>
+      <input id="importFile" type="file" accept=".xlsx,.xls" style="display:none">
+      <button id="resetBtn" type="button">Reset local</button>
+    </div>
+    <div class="wrap" style="overflow-x:auto">
+      <table>
+        <thead id="head"></thead>
+        <tbody id="body"></tbody>
+      </table>
+    </div>
+    <div id="sumStatus"></div>
+  </div>
+
+  <!-- Person record view -->
+  <div id="personView" hidden>
+    <div class="back"><button id="personBack" type="button">← Back to EMS Tracker</button></div>
+    <h2 id="sumName"></h2>
+    <p id="sumMeta" class="muted"></p>
+    <div style="display:flex;gap:8px;align-items:center;margin:8px 0">
+      <label>Certification: <select id="sumCert"></select></label>
+      <button id="sumPdf" type="button">PDF</button>
+      <button id="sumEdit" type="button">Edit details</button>
+    </div>
+    <div id="sumStatus"></div>
+    <div id="sumCats" style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0"></div>
+    <h3>Classes in cycle</h3>
+    <table><tbody id="sumClasses"></tbody></table>
+    <div style="margin-top:12px">
+      <h3>Add class</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:end">
+        <label>Date <input id="newDate" type="date"></label>
+        <label>Category <select id="newCat"></select></label>
+        <label>Hours <input id="newHours" type="number" step="0.25" min="0" value="1" style="width:70px"></label>
+        <label>Course <input id="newCourse" type="text" style="min-width:180px"></label>
+        <label><input id="newPeds" type="checkbox"> Pediatric</label>
+        <button id="addClass" type="button" class="primary">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Department averages -->
+  <div id="deptView" hidden>
+    <div class="back"><button id="deptBack" type="button">← Back to EMS Tracker</button></div>
+    <h2>Department averages</h2>
+    <label>Cycle year <select id="deptYear"></select></label>
+    <p id="deptWindow" class="muted"></p>
+    <div id="deptStats"></div>
+    <div id="deptCats"></div>
+    <div id="deptPeople"></div>
+  </div>
+
+  <!-- Training focus -->
+  <div id="focusView" hidden>
+    <div class="back"><button id="focusBack" type="button">← Back to EMS Tracker</button></div>
+    <h2>Training focus</h2>
+    <label>Year <select id="focusYear"></select></label>
+    <p id="focusWindow" class="muted"></p>
+    <div id="focusCallout"></div>
+    <div id="focusStats"></div>
+    <div id="focusCards"></div>
+    <div id="focusCat"></div>
+    <div id="focusPeople"></div>
+  </div>
+
+  <!-- Race to Recertify (bracket) -->
+  <div id="bracketView" hidden>
+    <div class="back"><button type="button" onclick="document.getElementById('bracketView').hidden=true; document.getElementById('landing').hidden=false;">← Back to EMS Tracker</button></div>
+    <h2>Race to Recertify</h2>
+    <div id="bracketContent"></div>
+  </div>
+
+  <!-- Drawer / edit panel used by openPerson -->
+  <div id="drawer" hidden style="position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:20;display:flex;align-items:center;justify-content:center">
+    <div style="background:var(--card);padding:20px;border-radius:12px;max-width:520px;width:90%">
+      <h3 id="drawerTitle"></h3>
+      <div style="display:grid;gap:8px">
+        <label>Name <input id="editName" type="text"></label>
+        <label>KEMSIS ID <input id="editId" type="text"></label>
+        <label>Certification <select id="editCert"><option>EMR</option><option>EMT</option><option>AEMT</option><option>Paramedic</option></select></label>
+        <label>Expiration <input id="editExp" type="date"></label>
+        <p id="editCycle" class="muted"></p>
+        <p id="editNeeds"></p>
+        <div>
+          <button id="savePerson" type="button" class="primary">Save</button>
+          <button id="cancelEdit" type="button">Cancel</button>
+          <button id="deletePerson" type="button" style="float:right;color:var(--bad)">Delete person</button>
+        </div>
+      </div>
+      <h4>Classes</h4>
+      <table><tbody id="classBody"></tbody></table>
+      <button id="drawerPdf" type="button">PDF</button>
+    </div>
+  </div>
+</main>
+
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="ems-recert-data.js"></script>
 <script src="ems-recert.js"></script>
+<script src="ems-sync.js"></script>
+<script src="ems-bracket.js"></script>
+<script src="ems-pdf.js"></script>
+<script>
+// Lightweight wiring for views that the main script toggles
+document.addEventListener('DOMContentLoaded', function () {
+  var landing = document.getElementById('landing');
+  var app = document.getElementById('app');
+  var person = document.getElementById('personView');
+  var dept = document.getElementById('deptView');
+  var focus = document.getElementById('focusView');
+  var bracket = document.getElementById('bracketView');
+
+  function showOnly(el) {
+    [landing, app, person, dept, focus, bracket].forEach(function (v) { if (v) v.hidden = true; });
+    if (el) el.hidden = false;
+  }
+
+  document.getElementById('landRoster').onclick = function () { showOnly(app); if (typeof render === 'function') render(); };
+  document.getElementById('landDept').onclick = function () { showOnly(dept); if (typeof showDept === 'function') showDept(); };
+  document.getElementById('landFocus').onclick = function () { showOnly(focus); if (typeof showFocus === 'function') showFocus(); };
+  document.getElementById('landBracket').onclick = function () { showOnly(bracket); if (window.renderBracket) window.renderBracket(); };
+
+  document.getElementById('personBack').onclick = function () { showOnly(landing); };
+  document.getElementById('deptBack').onclick = function () { showOnly(landing); };
+  document.getElementById('focusBack').onclick = function () { showOnly(landing); };
+
+  // Default to landing
+  showOnly(landing);
+  if (typeof fillLanding === 'function') fillLanding();
+});
+</script>
 </body>
 </html>
