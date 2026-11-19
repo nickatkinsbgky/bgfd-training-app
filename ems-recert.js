@@ -97,6 +97,23 @@
     if (record.category === "PAHT") return true;
     return /pediatr|peds|\bchild\b|infant/i.test(String(record.course || "") + " " + String(record.standard || ""));
   }
+
+  // Canonical key treats course/standard swaps and same-day dual-standard as one record.
+  function canonKey(r) {
+    var name = String(r.name || "").trim().toLowerCase();
+    var date = String(r.date || "");
+    var cat = String(r.category || "").trim().toLowerCase();
+    var hrs = String(Math.round((Number(r.hours) || 0) * 100) / 100);
+    var a = String(r.course || "").trim().toLowerCase();
+    var b = String(r.standard || "").trim().toLowerCase();
+    // Order-independent signature so a course/standard swap matches.
+    var sig = [a, b].filter(Boolean).sort().join("~");
+    return name + "|" + date + "|" + cat + "|" + hrs + "|" + sig;
+  }
+  function isDuplicate(rec, list) {
+    var k = canonKey(rec);
+    return (list || db.records).some(function (x) { return canonKey(x) === k; });
+  }
   function pediatricHours(name, win) {
     var total = 0;
     db.records.forEach(function (r) {
@@ -180,11 +197,12 @@
       // Topic Names column (K / index 10) is the standard.
       var standard = row[10] ? String(row[10]).trim() : "";
       if (!standard) standard = category;
-      // Deduplicate so the same attendee + date + topic name + hours is never recorded twice.
-      var key = name + "|" + date + "|" + standard + "|" + hours;
+      // Deduplicate including course/standard swaps.
+      var rec = { name: name, date: date, category: category, standard: standard, hours: hours };
+      var key = canonKey(rec);
       if (seen[key]) return;
       seen[key] = true;
-      records.push({ name: name, date: date, category: category, standard: standard, hours: hours });
+      records.push(rec);
     });
     return { people: people, records: records };
   }
@@ -469,7 +487,10 @@
     var date = document.getElementById("newDate").value;
     var hours = Number(document.getElementById("newHours").value);
     if (!date || !hours) { alert("Date and hours are required."); return; }
-    var cat = document.getElementById("newCat").value; var pedsBox = document.getElementById("newPeds"); db.records.push({ name: selected.name, date: date, category: cat, standard: "KBEMS | " + cat + " | " + cat, hours: hours, course: document.getElementById("newCourse").value.trim(), pediatric: !!(pedsBox && pedsBox.checked) }); if (pedsBox) pedsBox.checked = false;
+    var cat = document.getElementById("newCat").value; var pedsBox = document.getElementById("newPeds");
+    var newRec = { name: selected.name, date: date, category: cat, standard: "KBEMS | " + cat + " | " + cat, hours: hours, course: document.getElementById("newCourse").value.trim(), pediatric: !!(pedsBox && pedsBox.checked) };
+    if (isDuplicate(newRec)) { alert("That class is already on file for this person on that date."); return; }
+    db.records.push(newRec); if (pedsBox) pedsBox.checked = false;
     save(); render(); openPerson(selected.name);
   };
   document.getElementById("addPerson").onclick = function () {
@@ -979,7 +1000,9 @@
     var hours = prompt("Hours:", "1");
     if (!hours) return;
     var course = prompt("Course name:", "");
-    db.records.push({ name: selected.name, date: date, category: cat, hours: Number(hours)||0, course: course||"" });
+    var newRec = { name: selected.name, date: date, category: cat, hours: Number(hours)||0, course: course||"" };
+    if (isDuplicate(newRec)) { alert("That class is already on file for this person on that date."); return; }
+    db.records.push(newRec);
     save();
     showSummary(selected.name);
   }
