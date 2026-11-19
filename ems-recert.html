@@ -1,62 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EMS Recertification Tracker — BGFD</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EMS Recertification Tracker</title>
+<link rel="icon" href="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261119-restore" />
 <style>
-:root {
-  --bg: #f6f1e7;
-  --ink: #1c1917;
-  --card: #fff;
-  --muted: #78716c;
-  --ok: #166534;
-  --bad: #991b1b;
-  --warn: #92400e;
-  --accent: #8e1d2c;
-  --brass: #a6843d;
-}
-* { box-sizing: border-box; }
-body { font-family: system-ui, -apple-system, sans-serif; margin: 0; background: var(--bg); color: var(--ink); }
-.topbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: #1c1917; color: #f6f1e7; position: sticky; top: 0; z-index: 10; }
-.topbar button, .topbar input { font: inherit; padding: 6px 10px; border-radius: 6px; border: 1px solid #444; background: #2a2624; color: inherit; }
-.topbar button:hover { background: #3a3634; }
-.topbar .accent { background: var(--accent); border-color: var(--accent); }
-#sync-msg { font-size: 13px; margin-left: 8px; }
-#sync-msg.ok { color: #86efac; }
-#sync-msg.no { color: #fca5a5; }
-main { padding: 16px; max-width: 1400px; margin: 0 auto; }
-h1 { margin: 0 0 8px; font-size: 1.5rem; }
-.muted { color: var(--muted); font-size: 0.9rem; }
-.hidden, [hidden] { display: none !important; }
-#stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
-.stat { background: var(--card); padding: 8px 14px; border-radius: 8px; min-width: 80px; text-align: center; }
-.stat b { display: block; font-size: 1.3rem; }
-.stat.ok { border-left: 4px solid var(--ok); }
-.stat.bad { border-left: 4px solid var(--bad); }
-.stat.warn { border-left: 4px solid var(--warn); }
-input[type=search], select, input[type=date], input[type=text], input[type=number] { padding: 6px 8px; border: 1px solid #d6d3d1; border-radius: 6px; font: inherit; }
-table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
-th, td { padding: 8px 10px; border-bottom: 1px solid #e7e5e4; text-align: left; vertical-align: top; }
-th { background: #fafaf9; font-weight: 600; }
-.hrs.met { color: var(--ok); font-weight: 600; }
-.hrs.short { color: var(--bad); font-weight: 600; }
-.actions button, .tiny { font-size: 12px; padding: 2px 6px; margin-right: 4px; }
-.req-wrap { margin: 16px 0; }
-.req-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
-section { background: var(--card); padding: 12px 16px; border-radius: 8px; margin: 12px 0; }
-button.primary { background: var(--accent); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
-button.primary:hover { filter: brightness(1.1); }
-.back { margin-bottom: 12px; }
+  :root { --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --red:#c62828; --gold:#d4a017; --ok:#1f7a4d; --bad:#9b2c2c; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--text); font:15px/1.4 "Segoe UI", system-ui, sans-serif; }
+  header { display:flex; gap:16px; align-items:center; padding:16px 20px; background:linear-gradient(90deg,#3b0a0a,#161b22 55%); border-bottom:3px solid var(--gold); }
+  header img { width:54px; height:54px; object-fit:contain; }
+  h1 { margin:0; font-size:26px; }
+  header p { margin:2px 0 0; color:var(--gold); font-weight:700; }
+  a.back, a.exit { color:var(--text); text-decoration:none; border:1px solid var(--gold); border-radius:10px; padding:8px 12px; font-weight:700; }
+  a.back { margin-left:auto; }
+  a.exit { background:#241c0c; color:var(--gold); }
+  main { padding:16px 20px 40px; }
+  .stats { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:120px; }
+  .stat b { display:block; font-size:22px; }
+  .stat.ok b { color:#7dcea0; } .stat.bad b { color:#f5b7b1; } .stat.warn b { color:var(--gold); }
+  .bar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; align-items:center; }
+  input, select, button { font:inherit; color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
+  button { cursor:pointer; font-weight:700; }
+  button.gold { background:#241c0c; color:var(--gold); border-color:var(--gold); }
+  button.red { background:var(--red); border-color:#ff8a80; color:#fff; }
+  .wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
+  table { width:100%; border-collapse:collapse; min-width:1100px; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:center; white-space:nowrap; }
+  td.actions, th.actions { text-align:right; }
+  button.tiny { padding:4px 8px; margin-left:4px; font-size:13px; }
+  button.tiny.del { background:#3a1c1c; border-color:#f5b7b1; color:#f5b7b1; }
+  th { position:sticky; top:0; background:#211810; color:var(--gold); }
+  td.name, th.name { text-align:left; position:sticky; left:0; background:#161b22; }
+  tr.short td.hrs { background:#3a1c1c; color:#f5b7b1; }
+  tr.met td.hrs { background:#163326; color:#b7ebc6; }
+  tr:hover td { filter:brightness(1.08); }
+  .need { text-align:left; white-space:normal; min-width:220px; color:#f5b7b1; }
+  .drawer { margin-top:14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
+  .muted { color:var(--muted); }
+  .sync-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 20px; background:#10161d; border-bottom:1px solid var(--line); }
+  .sync-bar input { max-width:280px; width:min(280px, 100%); }
+  #sync-msg { color:var(--muted); }
+  #sync-msg.ok { color:#7dcea0; }
+  #sync-msg.no { color:#f5b7b1; }
+
+  .landing { display:flex; align-items:center; justify-content:center; padding:28px 16px; background:radial-gradient(circle at top, #3b0a0a 0%, #0d1117 46%); }
+  .landing-card { width:min(560px, 100%); text-align:center; background:var(--panel); border:1px solid var(--gold); border-radius:18px; padding:28px 22px; box-shadow:0 16px 30px rgba(0,0,0,.45); }
+  .landing-card h2 { margin:0 0 6px; font-size:28px; }
+  .landing-card p { margin:0 0 18px; color:var(--gold); font-weight:700; }
+  .landing-card input, .landing-card select { width:100%; margin-bottom:10px; font-size:16px; padding:12px; }
+  .landing-card button, .landing-card a.ready { width:100%; padding:12px; font-size:18px; }
+  .landing-card a.ready { display:block; margin-top:12px; text-decoration:none; font-weight:800; color:#fff; background:linear-gradient(160deg,#ef5350,#c62828 55%,#7f1212); border:1px solid #ff8a80; border-radius:8px; box-sizing:border-box; }
+  #app[hidden], #personView[hidden] { display:none; }
+
+  .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:8px; margin:12px 0; }
+  .summary div { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:10px; }
+  .summary b { display:block; font-size:20px; }
+  .summary .short { border-color:#e74c3c; background:#3a1c1c; color:#ffb4ab; }
+  .summary .met { border-color:#2ecc71; background:#163326; color:#b7ebc6; }
+  .summary .over { border-color:#5dade2; background:#163044; color:#d6eaf8; }
+  #personView { position:relative; padding:16px 20px 40px; }
+  .color-key { position:absolute; top:12px; right:20px; background:#211810; border:1px solid var(--gold); border-radius:12px; padding:10px 12px; min-width:210px; }
+  .color-key strong { display:block; color:var(--gold); margin-bottom:6px; }
+  .color-key span { display:flex; align-items:center; gap:8px; margin:4px 0; }
+  .swatch { width:14px; height:14px; border-radius:3px; display:inline-block; }
+  .swatch.short { background:#e74c3c; } .swatch.met { background:#2ecc71; } .swatch.over { background:#5dade2; }
+  tr.short td.cat { color:#ffb4ab; font-weight:700; }
+  tr.met td.cat { color:#b7ebc6; font-weight:700; }
+  tr.over td.cat { color:#d6eaf8; font-weight:700; }
+  @media (max-width:760px){ .color-key { position:static; margin-bottom:12px; } }
+
+  label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+
+  #focusView[hidden] { display:none; }
+  #focusView { padding:16px 20px 40px; }
+  .focus-head { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:12px; }
+  .focus-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:12px 0; }
+  .focus-card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .focus-card h3 { margin:0 0 6px; color:var(--gold); }
+  .focus-card .big { font-size:28px; font-weight:800; }
+  .focus-card .short { color:#f5b7b1; }
+  .focus-card .ontrack { color:#f7dc6f; }
+  .focus-card .ahead { color:#7dcea0; }
+  .callout { background:#241c0c; border:1px solid var(--gold); border-radius:12px; padding:12px 14px; margin:12px 0; }
+  .person-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:8px; }
+  .person-list button { text-align:left; background:var(--panel2); }
+
+  #deptView[hidden] { display:none; }
+  #deptView { padding:16px 20px 40px; }
+  .dept-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:8px; margin:12px 0; }
+  .dept-grid div { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px; text-align:center; }
+  .dept-grid b { display:block; font-size:22px; color:var(--gold); }
+
+  #bracketView[hidden], #vectorView[hidden] { display:none; }
+  #bracketView, #vectorView { padding:16px 20px 40px; }
 </style>
 </head>
 <body>
-<header class="topbar">
-  <strong>EMS Recertification Tracker</strong>
-  <button id="btn-save-all" type="button">Save</button>
-  <button id="btn-push" type="button" class="accent">Upload to site</button>
+<header>
+  <img src="https://www.joinbgky.org/wp-content/uploads/2022/01/logo-bg-fire.png?v=20261119-restore" alt="BGFD" />
+  <div>
+    <h1>EMS Recertification Tracker</h1>
+    <p>Bowling Green Fire Department · Kentucky EMS Cycle</p>
+  </div>
+  <a class="back" href="index.html">Home</a>
+  <a class="exit" id="exitStandalone" href="#" hidden>Exit standalone</a>
+</header>
+
+<div class="sync-bar">
+  <button class="gold" id="btn-save-all" type="button">Save</button>
+  <button class="red" id="btn-push" type="button">Upload to site</button>
   <button id="btn-pull" type="button">Load site data</button>
-  <input id="sync-token" type="password" placeholder="GitHub token" style="width:160px">
+  <input id="sync-token" type="password" placeholder="GitHub token" />
   <button id="btn-save-token" type="button">Save token</button>
   <span id="sync-msg"></span>
   <span style="flex:1"></span>
@@ -64,165 +122,141 @@ button.primary:hover { filter: brightness(1.1); }
   <button id="landDept" type="button">Department averages</button>
   <button id="landFocus" type="button">Training focus</button>
   <button id="landBracket" type="button">Race to Recertify</button>
-</header>
+</div>
 
-<main>
-  <!-- Landing / Find personnel -->
-  <div id="landing">
-    <h1>Find personnel</h1>
-    <p class="muted">Search and open a record, or use the buttons above for roster, averages, focus, or race.</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0">
-      <input id="landSearch" type="search" placeholder="Search name or KEMSIS ID" style="min-width:240px">
-      <select id="landSelect" size="8" style="min-width:280px"></select>
-      <button id="landOpen" class="primary" type="button">Open record</button>
-    </div>
-    <p id="landSource" class="muted"></p>
+<section id="landing" class="landing">
+  <div class="landing-card">
+    <h2>Find personnel</h2>
+    <p>Search, open a record, or jump to a department view</p>
+    <input id="landSearch" type="search" placeholder="Name or KEMSIS ID" autofocus />
+    <select id="landSelect" size="6"></select>
+    <button class="red" id="landOpen" type="button">Open record</button>
+    <p id="landSource" class="muted" style="margin-top:14px;font-size:13px"></p>
   </div>
+</section>
 
-  <!-- Full roster (main app table) -->
-  <div id="app" hidden>
-    <div class="back"><button type="button" onclick="document.getElementById('landing').hidden=false; this.closest('#app').hidden=true;">← Back to EMS Tracker</button></div>
-    <h2>Full roster</h2>
-    <div id="stats"></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-      <input id="q" type="search" placeholder="Search people">
-      <select id="statusFilter">
-        <option value="">All</option>
-        <option value="Met">Met</option>
-        <option value="Short">Short</option>
-        <option value="Set exp date">Needs exp date</option>
-      </select>
-      <button id="addPerson" type="button">Add person</button>
-      <button id="exportBtn" type="button">Export</button>
-      <button id="importBtn" type="button">Import</button>
-      <input id="importFile" type="file" accept=".xlsx,.xls" style="display:none">
-      <button id="resetBtn" type="button">Reset local</button>
-    </div>
-    <div class="wrap" style="overflow-x:auto">
-      <table>
-        <thead id="head"></thead>
-        <tbody id="body"></tbody>
-      </table>
-    </div>
-    <div id="sumStatus"></div>
+<main id="app" hidden>
+  <div class="bar">
+    <button type="button" onclick="document.getElementById('landing').hidden=false; document.getElementById('app').hidden=true;">← Back to EMS Tracker</button>
   </div>
-
-  <!-- Person record view -->
-  <div id="personView" hidden>
-    <div class="back"><button id="personBack" type="button">← Back to EMS Tracker</button></div>
-    <h2 id="sumName"></h2>
-    <p id="sumMeta" class="muted"></p>
-    <div style="display:flex;gap:8px;align-items:center;margin:8px 0">
-      <label>Certification: <select id="sumCert"></select></label>
-      <button id="sumPdf" type="button">PDF</button>
-      <button id="sumEdit" type="button">Edit details</button>
-    </div>
-    <div id="sumStatus"></div>
-    <div id="sumCats" style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0"></div>
-    <h3>Classes in cycle</h3>
-    <table><tbody id="sumClasses"></tbody></table>
-    <div style="margin-top:12px">
-      <h3>Add class</h3>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:end">
-        <label>Date <input id="newDate" type="date"></label>
-        <label>Category <select id="newCat"></select></label>
-        <label>Hours <input id="newHours" type="number" step="0.25" min="0" value="1" style="width:70px"></label>
-        <label>Course <input id="newCourse" type="text" style="min-width:180px"></label>
-        <label><input id="newPeds" type="checkbox"> Pediatric</label>
-        <button id="addClass" type="button" class="primary">Add</button>
-      </div>
-    </div>
+  <div id="stats" class="stats"></div>
+  <div class="bar">
+    <input id="q" type="search" placeholder="Search roster" />
+    <select id="statusFilter">
+      <option value="">All statuses</option>
+      <option value="Met">Met</option>
+      <option value="Short">Short</option>
+      <option value="Set exp date">Needs exp date</option>
+    </select>
+    <button id="addPerson" type="button">Add person</button>
+    <button id="exportBtn" type="button">Export</button>
+    <button id="importBtn" type="button">Import Excel</button>
+    <input id="importFile" type="file" accept=".xlsx,.xls" hidden />
+    <button id="resetBtn" type="button">Reset local data</button>
   </div>
-
-  <!-- Department averages -->
-  <div id="deptView" hidden>
-    <div class="back"><button id="deptBack" type="button">← Back to EMS Tracker</button></div>
-    <h2>Department averages</h2>
-    <label>Cycle year <select id="deptYear"></select></label>
-    <p id="deptWindow" class="muted"></p>
-    <div id="deptStats"></div>
-    <div id="deptCats"></div>
-    <div id="deptPeople"></div>
-  </div>
-
-  <!-- Training focus -->
-  <div id="focusView" hidden>
-    <div class="back"><button id="focusBack" type="button">← Back to EMS Tracker</button></div>
-    <h2>Training focus</h2>
-    <label>Year <select id="focusYear"></select></label>
-    <p id="focusWindow" class="muted"></p>
-    <div id="focusCallout"></div>
-    <div id="focusStats"></div>
-    <div id="focusCards"></div>
-    <div id="focusCat"></div>
-    <div id="focusPeople"></div>
-  </div>
-
-  <!-- Race to Recertify (bracket) -->
-  <div id="bracketView" hidden>
-    <div class="back"><button type="button" onclick="document.getElementById('bracketView').hidden=true; document.getElementById('landing').hidden=false;">← Back to EMS Tracker</button></div>
-    <h2>Race to Recertify</h2>
-    <div id="bracketContent"></div>
-  </div>
-
-  <!-- Drawer / edit panel used by openPerson -->
-  <div id="drawer" hidden style="position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:20;display:flex;align-items:center;justify-content:center">
-    <div style="background:var(--card);padding:20px;border-radius:12px;max-width:520px;width:90%">
-      <h3 id="drawerTitle"></h3>
-      <div style="display:grid;gap:8px">
-        <label>Name <input id="editName" type="text"></label>
-        <label>KEMSIS ID <input id="editId" type="text"></label>
-        <label>Certification <select id="editCert"><option>EMR</option><option>EMT</option><option>AEMT</option><option>Paramedic</option></select></label>
-        <label>Expiration <input id="editExp" type="date"></label>
-        <p id="editCycle" class="muted"></p>
-        <p id="editNeeds"></p>
-        <div>
-          <button id="savePerson" type="button" class="primary">Save</button>
-          <button id="cancelEdit" type="button">Cancel</button>
-          <button id="deletePerson" type="button" style="float:right;color:var(--bad)">Delete person</button>
-        </div>
-      </div>
-      <h4>Classes</h4>
-      <table><tbody id="classBody"></tbody></table>
-      <button id="drawerPdf" type="button">PDF</button>
-    </div>
-  </div>
+  <div class="wrap"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
+  <div id="sumStatus"></div>
 </main>
 
-<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
-<script src="ems-recert-data.js"></script>
-<script src="ems-recert.js"></script>
-<script src="ems-sync.js"></script>
-<script src="ems-bracket.js"></script>
-<script src="ems-pdf.js"></script>
-<script>
-// Lightweight wiring for views that the main script toggles
-document.addEventListener('DOMContentLoaded', function () {
-  var landing = document.getElementById('landing');
-  var app = document.getElementById('app');
-  var person = document.getElementById('personView');
-  var dept = document.getElementById('deptView');
-  var focus = document.getElementById('focusView');
-  var bracket = document.getElementById('bracketView');
+<section id="personView" hidden>
+  <div class="bar">
+    <button id="personBack" type="button">← Back to EMS Tracker</button>
+    <button id="sumPdf" type="button">PDF</button>
+    <button id="sumEdit" type="button">Edit</button>
+    <button id="sumRoster" type="button">Full roster</button>
+    <button id="sumDept" type="button">Dept averages</button>
+    <button id="sumFocus" type="button">Training focus</button>
+  </div>
+  <div class="color-key">
+    <strong>Hours color key</strong>
+    <span><i class="swatch short"></i> Short</span>
+    <span><i class="swatch met"></i> Met</span>
+    <span><i class="swatch over"></i> Over</span>
+  </div>
+  <h2 id="sumName" style="margin:8px 0"></h2>
+  <p id="sumMeta" class="muted"></p>
+  <label>Certification level</label>
+  <select id="sumCert"></select>
+  <p id="sumStatus"></p>
+  <div id="sumCats" class="summary"></div>
+  <h3>Classes in this cycle</h3>
+  <div class="wrap"><table><tbody id="sumClasses"></tbody></table></div>
+</section>
 
-  function showOnly(el) {
-    [landing, app, person, dept, focus, bracket].forEach(function (v) { if (v) v.hidden = true; });
-    if (el) el.hidden = false;
-  }
+<section id="deptView" hidden>
+  <div class="bar"><button id="deptBack" type="button">← Back to EMS Tracker</button></div>
+  <h2>Department averages</h2>
+  <div class="focus-head">
+    <label>Cycle year</label>
+    <select id="deptYear"></select>
+  </div>
+  <p id="deptWindow" class="muted"></p>
+  <div id="deptStats" class="stats"></div>
+  <div id="deptCats" class="dept-grid"></div>
+  <div id="deptPeople"></div>
+</section>
 
-  document.getElementById('landRoster').onclick = function () { showOnly(app); if (typeof render === 'function') render(); };
-  document.getElementById('landDept').onclick = function () { showOnly(dept); if (typeof showDept === 'function') showDept(); };
-  document.getElementById('landFocus').onclick = function () { showOnly(focus); if (typeof showFocus === 'function') showFocus(); };
-  document.getElementById('landBracket').onclick = function () { showOnly(bracket); if (window.renderBracket) window.renderBracket(); };
+<section id="focusView" hidden>
+  <div class="bar"><button id="focusBack" type="button">← Back to EMS Tracker</button></div>
+  <h2>Training focus</h2>
+  <div class="focus-head">
+    <label>Year</label>
+    <select id="focusYear"></select>
+  </div>
+  <p id="focusWindow" class="muted"></p>
+  <div id="focusCallout" class="callout"></div>
+  <div id="focusStats" class="stats"></div>
+  <div id="focusCards" class="focus-cards"></div>
+  <div id="focusCat"></div>
+  <div id="focusPeople" class="person-list"></div>
+</section>
 
-  document.getElementById('personBack').onclick = function () { showOnly(landing); };
-  document.getElementById('deptBack').onclick = function () { showOnly(landing); };
-  document.getElementById('focusBack').onclick = function () { showOnly(landing); };
+<section id="bracketView" hidden>
+  <div class="bar"><button type="button" onclick="document.getElementById('bracketView').hidden=true; document.getElementById('landing').hidden=false;">← Back to EMS Tracker</button></div>
+  <h2>Race to Recertify</h2>
+  <div id="bracketContent"></div>
+</section>
 
-  // Default to landing
-  showOnly(landing);
-  if (typeof fillLanding === 'function') fillLanding();
-});
-</script>
+<section id="vectorView" hidden>
+  <div class="bar"><button type="button" onclick="document.getElementById('vectorView').hidden=true; document.getElementById('landing').hidden=false;">← Back to EMS Tracker</button></div>
+  <h2>Vector courses</h2>
+  <div id="vectorContent"></div>
+</section>
+
+<section id="drawer" class="drawer" hidden>
+  <h2 id="drawerTitle" style="margin:0 0 8px"></h2>
+  <div class="grid">
+    <div><label>Name</label><input id="editName" /></div>
+    <div><label>KEMSIS ID</label><input id="editId" /></div>
+    <div><label>Certification Level</label><select id="editCert"><option>EMR</option><option>EMT</option><option>AEMT</option><option>Paramedic</option></select></div>
+    <div><label>Expiration date</label><input id="editExp" type="date" /></div>
+  </div>
+  <p class="muted" id="editCycle"></p>
+  <p class="muted" id="editNeeds"></p>
+  <h3>Add a class in this cycle</h3>
+  <div class="grid">
+    <div><label>Date</label><input id="newDate" type="date" /></div>
+    <div><label>Category</label><select id="newCat"></select></div>
+    <div><label>Hours</label><input id="newHours" type="number" min="0" step="0.25" value="1" /></div>
+    <div><label>Course</label><input id="newCourse" placeholder="Class name" /></div>
+  </div>
+  <div class="bar">
+    <button class="red" id="savePerson" type="button">Save changes</button>
+    <button class="gold" id="drawerPdf" type="button">Export printable PDF</button>
+    <button id="deletePerson" type="button">Delete person</button>
+    <button class="gold" id="addClass" type="button">Add class</button>
+  </div>
+  <div class="wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Standard</th><th>Hours</th><th>Course</th><th></th></tr></thead><tbody id="editClasses"></tbody></table></div>
+</section>
+
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
+<script src="ems-recert-data.js?v=20261119-restore"></script>
+<script src="ems-recert.js?v=20261119-restore"></script>
+<script src="ems-sync.js?v=20261119-restore"></script>
+<script src="ems-pdf.js?v=20261119-restore"></script>
+<script src="ems-bracket.js?v=20261119-restore"></script>
+<script src="vector-courses.js?v=20261119-restore"></script>
+<script src="share.js?v=20261119-restore"></script>
 </body>
 </html>
