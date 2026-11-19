@@ -1045,4 +1045,3 @@ if (new URLSearchParams(location.search).has("roster")) {
   if (typeof render === "function") render();
 }
 
-
