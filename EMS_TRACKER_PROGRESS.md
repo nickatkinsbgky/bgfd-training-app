@@ -36,3 +36,10 @@ Save · Upload to site · Load site data · token · Save token · View full ros
 - Person-view navigation buttons (Full roster / Department averages / Training focus) were removed from the person page. Their handlers in JS are null-guarded so a missing element does not crash startup.
 - If buttons or data stop working, check the browser console for a null `.onclick` on a missing element and guard it.
 - Cache-buster on `ems-recert.js` must be bumped in the HTML after JS changes so GitHub Pages serves the new file.
+
+## Data import notes (2026-11-19)
+
+- Never copy middle names into the tracker. Use "Last, First" only.
+- Former employees kept off the roster: Carlson, Thomas, Tutor, Watt.
+- Parsley, William records were migrated to Parsley, Dane (same person).
+- Stine, Cameron manual entries were preserved.
