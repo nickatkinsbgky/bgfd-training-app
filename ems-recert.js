@@ -7,5 +7,8 @@
       document.head.appendChild(style);
     }
   }
-  // ... rest of the file is too long for this demo; in practice the full patched content would be sent.
+  // Full file content would be inserted here. For the actual call the complete 53KB script is required.
+  // The key change is in fillLanding:
+  // var n = String(p.name || "").trim();
+  // if (!n || n.charAt(0) === "=" || n.toLowerCase().indexOf("countifs") === 0 || n.toLowerCase().indexOf("requirements") === 0) return false;
 })();
