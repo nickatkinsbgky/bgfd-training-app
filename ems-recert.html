@@ -41,7 +41,10 @@
   .drawer { margin-top:14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; }
   .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
   .muted { color:var(--muted); }
-  .sync-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 20px; background:#10161d; border-bottom:1px solid var(--line); }
+
+  .sync-bar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:10px 20px; background:#10161d; border-bottom:1px solid var(--line); }
+  .sync-left, .sync-right { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .sync-right { margin-left:auto; }
   .sync-bar input { max-width:280px; width:min(280px, 100%); }
   #sync-msg { color:var(--muted); }
   #sync-msg.ok { color:#7dcea0; }
@@ -139,18 +142,21 @@
 </header>
 
 <div class="sync-bar">
-  <button class="gold" id="btn-save-all" type="button">Save</button>
-  <button class="red" id="btn-push" type="button">Upload to site</button>
-  <button id="btn-pull" type="button">Load site data</button>
-  <input id="sync-token" type="password" placeholder="GitHub token" />
-  <button id="btn-save-token" type="button">Save token</button>
-  <span id="sync-msg"></span>
-  <span style="flex:1"></span>
-  <button id="landRoster" type="button">View full roster</button>
-  <button id="landDept" type="button">Department averages</button>
-  <button id="landFocus" type="button">Training focus</button>
-  <button id="landBracket" type="button">Race to Recertify</button>
-  <button id="landVector" type="button">Vector Solutions courses</button>
+  <div class="sync-left">
+    <button class="gold" id="btn-save-all" type="button">Save</button>
+    <button class="red" id="btn-push" type="button">Upload to site</button>
+    <button id="btn-pull" type="button">Load site data</button>
+    <input id="sync-token" type="password" placeholder="GitHub token" />
+    <button id="btn-save-token" type="button">Save token</button>
+    <span id="sync-msg"></span>
+  </div>
+  <div class="sync-right">
+    <button id="landRoster" type="button">View full roster</button>
+    <button id="landDept" type="button">Department averages</button>
+    <button id="landFocus" type="button">Training focus</button>
+    <button id="landBracket" type="button">Race to Recertify</button>
+    <button id="landVector" type="button">Vector Solutions courses</button>
+  </div>
 </div>
 
 <section id="landing" class="landing">
