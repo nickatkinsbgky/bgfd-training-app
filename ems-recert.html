@@ -51,12 +51,12 @@
   #sync-msg.no { color:#f5b7b1; }
 
   .landing { display:flex; align-items:flex-start; justify-content:flex-start; padding:20px; background:radial-gradient(circle at top left, #3b0a0a 0%, #0d1117 40%); min-height:calc(100vh - 140px); }
-  .landing-split { display:flex; gap:24px; width:100%; max-width:1200px; align-items:flex-start; }
-  .landing-card { width:340px; flex:0 0 340px; text-align:left; background:var(--panel); border:1px solid var(--gold); border-radius:18px; padding:22px 20px; box-shadow:0 16px 30px rgba(0,0,0,.45); }
+  .landing-split { display:flex; gap:24px; width:100%; max-width:1200px; align-items:stretch; }
+  .landing-card { width:340px; flex:0 0 340px; text-align:left; background:var(--panel); border:1px solid var(--gold); border-radius:18px; padding:22px 20px; box-shadow:0 16px 30px rgba(0,0,0,.45); min-height:360px; display:flex; flex-direction:column; }
   .landing-card h2 { margin:0 0 6px; font-size:24px; }
   .landing-card p { margin:0 0 14px; color:var(--gold); font-weight:700; font-size:14px; }
   .landing-card input, .landing-card select, .landing-card button { width:100%; margin-bottom:10px; font-size:16px; padding:12px; }
-  .landing-results { flex:1; min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px; min-height:320px; }
+  .landing-results { flex:1; min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px; min-height:360px; }
   .landing-results h3 { margin:0 0 10px; color:var(--gold); font-size:16px; }
   #landSelect { height:280px; }
 
@@ -363,7 +363,7 @@
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script src="ems-recert-data.js?v=20261119-restore"></script>
-<script src="ems-recert.js?v=20261119-compact"></script>
+<script src="ems-recert.js?v=20261119-uniform"></script>
 <script src="ems-sync.js?v=20261119-restore"></script>
 <script src="ems-pdf.js?v=20261119-restore"></script>
 <script src="ems-bracket.js?v=20261119-race"></script>
