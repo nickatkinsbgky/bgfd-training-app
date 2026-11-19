@@ -78,13 +78,20 @@
   #focusView[hidden] { display:none; }
   #focusView { padding:16px 20px 40px; }
   .focus-head { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:12px; }
-  .focus-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:12px 0; }
-  .focus-card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px; }
-  .focus-card h3 { margin:0 0 6px; color:var(--gold); }
-  .focus-card .big { font-size:28px; font-weight:800; }
+  .focus-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin:12px 0; }
+  .focus-card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .focus-card.short { border-color:#e74c3c; }
+  .focus-card.ontrack { border-color:#f7dc6f; }
+  .focus-card.ahead { border-color:#2ecc71; }
+  .focus-card h3 { margin:0 0 4px; color:var(--gold); font-size:18px; }
+  .focus-card .std { font-size:12px; color:var(--muted); margin-bottom:10px; line-height:1.3; }
+  .focus-card .pace { display:flex; gap:8px; justify-content:space-between; margin:8px 0; }
+  .focus-card .pace span { flex:1; text-align:center; background:var(--panel2); border-radius:8px; padding:8px 4px; font-size:12px; }
+  .focus-card .pace b { display:block; font-size:20px; line-height:1.1; }
   .focus-card .short { color:#f5b7b1; }
   .focus-card .ontrack { color:#f7dc6f; }
   .focus-card .ahead { color:#7dcea0; }
+  .focus-card p.muted { font-size:12px; margin:8px 0 0; }
   .callout { background:#241c0c; border:1px solid var(--gold); border-radius:12px; padding:12px 14px; margin:12px 0; }
   .person-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:8px; }
   .person-list button { text-align:left; background:var(--panel2); }
@@ -311,7 +318,7 @@
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script src="ems-recert-data.js?v=20261119-restore"></script>
-<script src="ems-recert.js?v=20261119-focusfix"></script>
+<script src="ems-recert.js?v=20261119-cards"></script>
 <script src="ems-sync.js?v=20261119-restore"></script>
 <script src="ems-pdf.js?v=20261119-restore"></script>
 <script src="ems-bracket.js?v=20261119-restore"></script>
