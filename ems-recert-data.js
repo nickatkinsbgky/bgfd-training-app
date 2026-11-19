@@ -1,1 +1,1 @@
-PLACEHOLDER_DATA
+window.EMS_RECERT_SEED = {"people":[{"name":"=COUNTIFS($A$8:$A$210, \"<>\",$C$8:$C$210,\"<>\",F8:F210,\"<\"&Requirements!B5)","kemsisId":"=COUNTIFS($A$8:$A$210,\"<>\",$C$8:$C$210,\"<>\",G8:G210,\"<\"&Requirements!B6)","expDate":"=COUNTIFS(","certificationLevel":"EMT"}],"records":[]};
