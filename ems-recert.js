@@ -873,6 +873,80 @@
     fillLanding();
     document.getElementById("landSearch").focus();
   };
+
+  // --- Sync buttons ---
+  var TOKEN_KEY = "bgfd-ems-github-token";
+  var REPO = "nickatkinsbgky/bgfd-training-app";
+  var DATA_FILE = "ems-recert-data.json";
+  var DATA_JS = "ems-recert-data.js";
+  var RAW_URL = "https://raw.githubusercontent.com/" + REPO + "/main/" + DATA_FILE;
+
+  function getToken() {
+    return localStorage.getItem(TOKEN_KEY) || "";
+  }
+  function setStatus(msg) {
+    var el = document.getElementById("landSource");
+    if (el) el.textContent = msg;
+  }
+
+  document.getElementById("btn-save-all").onclick = function () {
+    save();
+    setStatus("Saved to this browser.");
+  };
+
+  document.getElementById("btn-save-token").onclick = function () {
+    var t = (document.getElementById("sync-token").value || "").trim();
+    if (!t) { alert("Enter a GitHub token first."); return; }
+    localStorage.setItem(TOKEN_KEY, t);
+    document.getElementById("sync-token").value = "";
+    setStatus("Token saved.");
+  };
+
+  document.getElementById("btn-pull").onclick = function () {
+    setStatus("Loading site data…");
+    fetch(RAW_URL + "?t=" + Date.now())
+      .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
+      .then(function (data) {
+        if (!data || !data.people) throw new Error("Bad data");
+        db = data;
+        save();
+        ensureCertLevels();
+        migrateCprToCardiology();
+        fillReqTable();
+        render();
+        setStatus("Loaded site data (" + db.people.length + " people, " + db.records.length + " records).");
+      })
+      .catch(function (e) { setStatus("Load failed: " + e.message); });
+  };
+
+  document.getElementById("btn-push").onclick = function () {
+    var token = getToken();
+    if (!token) { alert("Save a GitHub token first."); return; }
+    setStatus("Uploading…");
+    var json = JSON.stringify(db);
+    var jsBody = "window.EMS_RECERT_SEED = " + json + ";\n";
+    function putFile(path, content, msg) {
+      return fetch("https://api.github.com/repos/" + REPO + "/contents/" + path, {
+        headers: { Authorization: "token " + token, Accept: "application/vnd.github+json" }
+      }).then(function (r) { return r.json(); }).then(function (info) {
+        var body = { message: msg, content: btoa(unescape(encodeURIComponent(content))) };
+        if (info.sha) body.sha = info.sha;
+        return fetch("https://api.github.com/repos/" + REPO + "/contents/" + path, {
+          method: "PUT",
+          headers: { Authorization: "token " + token, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+      });
+    }
+    putFile(DATA_FILE, json, "Update EMS data from tracker")
+      .then(function () { return putFile(DATA_JS, jsBody, "Update EMS data JS from tracker"); })
+      .then(function (r) { if (!r.ok) throw new Error("push failed"); setStatus("Uploaded to site. Share link will show this data."); })
+      .catch(function (e) { setStatus("Upload failed: " + e.message); });
+  };
+
+  // Restore token field hint
+  if (getToken()) document.getElementById("sync-token").placeholder = "Token saved";
+
   var source = document.getElementById("landSource");
   var saved = loadSaved();
   var seed = window.EMS_RECERT_SEED || { people: [], records: [] };
