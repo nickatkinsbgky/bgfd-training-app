@@ -50,14 +50,15 @@
   #sync-msg.ok { color:#7dcea0; }
   #sync-msg.no { color:#f5b7b1; }
 
-  .landing { display:flex; align-items:center; justify-content:center; padding:28px 16px; background:radial-gradient(circle at top, #3b0a0a 0%, #0d1117 46%); }
-  .landing-card { width:min(560px, 100%); text-align:center; background:var(--panel); border:1px solid var(--gold); border-radius:18px; padding:28px 22px; box-shadow:0 16px 30px rgba(0,0,0,.45); }
-  .landing-card h2 { margin:0 0 6px; font-size:28px; }
-  .landing-card p { margin:0 0 18px; color:var(--gold); font-weight:700; }
-  .landing-card input, .landing-card select { width:100%; margin-bottom:10px; font-size:16px; padding:12px; }
-  .landing-card button, .landing-card a.ready { width:100%; padding:12px; font-size:18px; }
-  .landing-card a.ready { display:block; margin-top:12px; text-decoration:none; font-weight:800; color:#fff; background:linear-gradient(160deg,#ef5350,#c62828 55%,#7f1212); border:1px solid #ff8a80; border-radius:8px; box-sizing:border-box; }
-  #app[hidden], #personView[hidden] { display:none; }
+  .landing { display:flex; align-items:flex-start; justify-content:flex-start; padding:20px; background:radial-gradient(circle at top left, #3b0a0a 0%, #0d1117 40%); min-height:calc(100vh - 140px); }
+  .landing-split { display:flex; gap:24px; width:100%; max-width:1200px; align-items:flex-start; }
+  .landing-card { width:340px; flex:0 0 340px; text-align:left; background:var(--panel); border:1px solid var(--gold); border-radius:18px; padding:22px 20px; box-shadow:0 16px 30px rgba(0,0,0,.45); }
+  .landing-card h2 { margin:0 0 6px; font-size:24px; }
+  .landing-card p { margin:0 0 14px; color:var(--gold); font-weight:700; font-size:14px; }
+  .landing-card input, .landing-card select, .landing-card button { width:100%; margin-bottom:10px; font-size:16px; padding:12px; }
+  .landing-results { flex:1; min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px; min-height:320px; }
+  .landing-results h3 { margin:0 0 10px; color:var(--gold); font-size:16px; }
+  #landSelect { height:280px; }
 
   .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:8px; margin:12px 0; }
   .summary div { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:10px; }
@@ -74,7 +75,7 @@
   tr.short td.cat { color:#ffb4ab; font-weight:700; }
   tr.met td.cat { color:#b7ebc6; font-weight:700; }
   tr.over td.cat { color:#d6eaf8; font-weight:700; }
-  @media (max-width:760px){ .color-key { position:static; margin-bottom:12px; } }
+  @media (max-width:760px){ .color-key { position:static; margin-bottom:12px; } .landing-split { flex-direction:column; } .landing-card { width:100%; flex:none; } }
 
   label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
 
@@ -160,13 +161,18 @@
 </div>
 
 <section id="landing" class="landing">
-  <div class="landing-card">
-    <h2>Find personnel</h2>
-    <p>Search, open a record, or jump to a department view</p>
-    <input id="landSearch" type="search" placeholder="Name or KEMSIS ID" autofocus />
-    <select id="landSelect" size="6"></select>
-    <button class="red" id="landOpen" type="button">Open record</button>
-    <p id="landSource" class="muted" style="margin-top:14px;font-size:13px"></p>
+  <div class="landing-split">
+    <div class="landing-card">
+      <h2>Find personnel</h2>
+      <p>Search and open a record</p>
+      <input id="landSearch" type="search" placeholder="Name or KEMSIS ID" autofocus />
+      <button class="red" id="landOpen" type="button">Open record</button>
+      <p id="landSource" class="muted" style="margin-top:14px;font-size:13px"></p>
+    </div>
+    <div class="landing-results">
+      <h3>Results</h3>
+      <select id="landSelect" size="10"></select>
+    </div>
   </div>
 </section>
 
@@ -357,7 +363,7 @@
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script src="ems-recert-data.js?v=20261119-restore"></script>
-<script src="ems-recert.js?v=20261119-cert"></script>
+<script src="ems-recert.js?v=20261119-left"></script>
 <script src="ems-sync.js?v=20261119-restore"></script>
 <script src="ems-pdf.js?v=20261119-restore"></script>
 <script src="ems-bracket.js?v=20261119-race"></script>
