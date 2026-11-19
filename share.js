@@ -28,39 +28,12 @@
   function lockViewMode() {
     if (!isView) return;
     document.querySelectorAll('a.home-link[href="index.html"], a[href="index.html"]').forEach(function (el) {
-      hideEl(el);
+      // keep home visible
     });
-    var syncBar = document.querySelector('.sync-bar');
-    if (syncBar) {
-      Array.prototype.forEach.call(syncBar.querySelectorAll('button, input'), function (el) {
-        if (keepVisibleIds.indexOf(el.id) >= 0) return;
-        hideEl(el);
-      });
-      var msg = document.getElementById('sync-msg');
-      if (msg) {
-        msg.textContent = 'View-only — latest site data';
-        msg.classList.add('ok');
-      }
-    }
-    document.querySelectorAll('button').forEach(function (btn) {
-      if (isMutateButton(btn)) hideEl(btn);
+    document.querySelectorAll('button, input, select').forEach(function (el) {
+      if (keepVisibleIds.indexOf(el.id) >= 0) return;
+      if (isMutateButton(el)) hideEl(el);
     });
-    ['addPerson', 'importBtn', 'importFile', 'resetBtn',
-     'savePerson', 'deletePerson', 'addClass', 'sumEdit', 'drawerPdf',
-     'btn-save-all', 'btn-push', 'btn-pull', 'btn-load', 'btn-save-token', 'sync-token',
-     'btn-add', 'btn-save-local'].forEach(function (id) {
-      hideEl(document.getElementById(id));
-    });
-    document.querySelectorAll('button.edit, button.del, button.edit-class, button.row-btn').forEach(function (el) {
-      hideEl(el);
-    });
-    document.querySelectorAll('#drawer input, #drawer select, #drawer button, #edit-modal input, #edit-modal select, #edit-modal button').forEach(function (el) {
-      el.disabled = true;
-    });
-    var sumCert = document.getElementById('sumCert');
-    if (sumCert) sumCert.disabled = true;
-    var drawer = document.getElementById('drawer');
-    if (drawer) drawer.style.display = 'none';
     var modal = document.getElementById('edit-modal');
     if (modal) modal.style.display = 'none';
     document.body.classList.add('view-only');
@@ -70,93 +43,23 @@
       '.view-only #landRoster, .view-only #landDept, .view-only #landFocus, .view-only #landVector, .view-only #landBracket { display:inline-block !important; }',
       '.view-only #drawer, .view-only #edit-modal { display:none !important; }',
       '.view-only button.edit, .view-only button.del, .view-only button.edit-class, .view-only button.row-btn { display:none !important; }',
-      '.view-only #addPerson, .view-only #savePerson, .view-only #deletePerson, .view-only #addClass,',
-      '.view-only #btn-add, .view-only #btn-save-local, .view-only #sumEdit { display:none !important; }',
-      '.view-only button.pdf, .view-only button.tiny.pdf, .view-only #sumPdf, .view-only #exportBtn { display:inline-block !important; }'
-    ].join(' ');
+      '.view-only #addPerson, .view-only #savePerson, .view-only #deletePerson, .view-only #addClass, .view-only #sumEdit, .view-only #btn-save-all, .view-only #btn-push, .view-only #btn-pull, .view-only #btn-save-token, .view-only #resetBtn, .view-only #importBtn { display:none !important; }'
+    ].join('\n');
     document.head.appendChild(style);
-  }
-
-  function stripMiddleName(name) {
-    if (!name || name.indexOf(',') === -1) return name;
-    var parts = name.split(',');
-    var last = parts[0].trim();
-    var firstParts = parts.slice(1).join(',').trim().split(/\s+/);
-    var first = firstParts[0] || '';
-    return last + ', ' + first;
-  }
-  function cleanNames(data) {
-    if (!data || !data.people) return data;
-    var map = {};
-    data.people.forEach(function (p) {
-      var original = p.name;
-      var cleaned = stripMiddleName(original);
-      if (cleaned !== original) {
-        map[original] = cleaned;
-        p.name = cleaned;
-      }
-    });
-    if (data.records) {
-      data.records.forEach(function (r) {
-        if (map[r.name]) r.name = map[r.name];
-      });
-    }
-    return data;
   }
 
   function forceLoadLatest() {
     if (!isView) return;
-    var url = null;
-    if (isEms) {
-      // Always pull the latest from main so uploads are immediately visible
-      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/ems-recert-data.json?t=' + Date.now();
-    } else if (isIso) {
-      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/iso_class1_data.json?t=' + Date.now();
-    } else if (isFitness) {
-      url = 'https://raw.githubusercontent.com/nickatkinsbgky/bgfd-training-app/main/fitness-data.json?t=' + Date.now();
+    var pull = document.getElementById('btn-pull');
+    if (pull && typeof pull.onclick === 'function') {
+      try { pull.onclick(); } catch (e) {}
     }
-    if (!url) return;
-
-    fetch(url, { cache: 'no-store' })
-      .then(function (res) { return res.ok ? res.json() : null; })
-      .then(function (remote) {
-        if (!remote) return;
-        if (isEms) remote = cleanNames(remote);
-        var msg = document.getElementById('sync-msg');
-        if (isEms && remote.people && remote.people.length) {
-          if (typeof window.setEmsDb === 'function') window.setEmsDb(remote);
-          else try { localStorage.setItem('bgfd-ems-recert-excel-v1', JSON.stringify(remote)); } catch (e) {}
-          if (msg) {
-            msg.textContent = 'View-only — latest site data (' + remote.people.length + ' people, ' + (remote.records ? remote.records.length : 0) + ' classes)';
-            msg.classList.add('ok');
-          }
-        } else if (isIso && Array.isArray(remote) && remote.length) {
-          try { localStorage.setItem('iso-class1-data', JSON.stringify(remote)); } catch (e) {}
-          if (msg) {
-            msg.textContent = 'View-only — showing latest site data (' + remote.length + ' personnel)';
-            msg.classList.add('ok');
-          }
-          if (typeof window.loadSiteData === 'function') window.loadSiteData();
-        } else if (isFitness) {
-          if (msg) {
-            msg.textContent = 'View-only — latest site data';
-            msg.classList.add('ok');
-          }
-        }
-        if (typeof window.render === 'function') window.render();
-        else if (typeof window.applyFilters === 'function') window.applyFilters();
-      })
-      .catch(function () {});
-  }
-
-  function fallback(link) {
-    window.prompt('Copy this view-only share link:', link);
   }
 
   function appLabel() {
-    if (isIso) return 'ISO Class 1 Hours';
-    if (isFitness) return 'Personnel Fitness';
-    if (isTraining) return 'Personnel Performance';
+    if (isIso) return 'ISO Class 1';
+    if (isFitness) return 'Fitness';
+    if (isTraining) return 'Training';
     if (isEms) return 'EMS Recertification';
     return 'this app';
   }
@@ -170,7 +73,7 @@
     btn.textContent = 'Share';
     btn.title = 'Copy a view-only link others can use to see the latest ' + appLabel() + ' data (no edits, this app only)';
     btn.style.cssText = 'background:#241c0c;color:#d4a017;border:1px solid #d4a017;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer;margin-left:8px;';
-    var home = header.querySelector('a.home-link');
+    var home = header.querySelector('a.home-link, a.back');
     if (home && home.parentNode) {
       home.parentNode.insertBefore(btn, home.nextSibling);
     } else {
@@ -194,6 +97,16 @@
     };
   }
 
+  function fallback(link) {
+    var ta = document.createElement('textarea');
+    ta.value = link;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    alert('Share link copied:\n' + link);
+  }
+
   function init() {
     addShareButton();
     lockViewMode();
@@ -201,9 +114,6 @@
     setTimeout(lockViewMode, 1200);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
