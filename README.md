@@ -63,3 +63,4 @@ Labeled National Data on the homepage. Loads the firefighter rescue survey file 
 Open https://nickatkinsbgky.github.io/bgfd-training-app/iso-class1.html
 
 Labeled ISO Class 1 Hours on the homepage. Calculates effective Company Training hours (target 192) by applying overage rules from Fitness (max 48), Facility (over 18), Driver Operator (rank-dependent; Engineers and Training Instructors keep 12), and Officer Training (rank-dependent; Captains and Chief titles keep 12). HazMat overage stays in place. Shows shortfalls by category and allows filtering by rank or shortfall type. Data files: iso_class1_data.json and iso_class1_data.csv.
+.
