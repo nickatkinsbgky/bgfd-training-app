@@ -94,6 +94,10 @@
   .dept-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:8px; margin:12px 0; }
   .dept-grid div { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px; text-align:center; }
   .dept-grid b { display:block; font-size:22px; color:var(--gold); }
+  .meter { display:inline-block; width:80px; height:8px; background:#30363d; border-radius:4px; overflow:hidden; vertical-align:middle; }
+  .meter span { display:block; height:100%; background:#2ecc71; }
+  .meter.short span { background:#e74c3c; }
+  .meter.met span { background:#2ecc71; }
 
   #bracketView[hidden], #vectorView[hidden] { display:none; }
   #bracketView, #vectorView { padding:16px 20px 40px; }
@@ -192,8 +196,41 @@
   </div>
   <p id="deptWindow" class="muted"></p>
   <div id="deptStats" class="stats"></div>
-  <div id="deptCats" class="dept-grid"></div>
-  <div id="deptPeople"></div>
+
+  <h3>Category summary</h3>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="left">Category</th>
+          <th>Required</th>
+          <th>Met / Total</th>
+          <th>% people met</th>
+          <th>Avg % of hours</th>
+          <th>Progress</th>
+        </tr>
+      </thead>
+      <tbody id="deptCats"></tbody>
+    </table>
+  </div>
+
+  <h3>Personnel</h3>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="left">Name</th>
+          <th>KEMSIS</th>
+          <th>Cert</th>
+          <th>Exp date</th>
+          <th>Categories met</th>
+          <th>%</th>
+          <th class="left">Still needed</th>
+        </tr>
+      </thead>
+      <tbody id="deptPeople"></tbody>
+    </table>
+  </div>
 </section>
 
 <section id="focusView" hidden>
@@ -252,7 +289,7 @@
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="vendor/jspdf.plugin.autotable.min.js"></script>
 <script src="ems-recert-data.js?v=20261119-restore"></script>
-<script src="ems-recert.js?v=20261119-restore"></script>
+<script src="ems-recert.js?v=20261119-deptfix"></script>
 <script src="ems-sync.js?v=20261119-restore"></script>
 <script src="ems-pdf.js?v=20261119-restore"></script>
 <script src="ems-bracket.js?v=20261119-restore"></script>
