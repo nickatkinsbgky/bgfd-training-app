@@ -27,23 +27,33 @@
 
   function lockViewMode() {
     if (!isView) return;
-    document.querySelectorAll('a.home-link[href="index.html"], a[href="index.html"]').forEach(function (el) {
-      // keep home visible
-    });
-    document.querySelectorAll('button, input, select').forEach(function (el) {
+    // Hide Home and Share in view-only mode
+    document.querySelectorAll('a.home-link, a.back, a[href="index.html"], #shareBtn').forEach(hideEl);
+    document.querySelectorAll('button, input, select, textarea').forEach(function (el) {
       if (keepVisibleIds.indexOf(el.id) >= 0) return;
       if (isMutateButton(el)) hideEl(el);
+      // Disable any remaining form controls that could change data
+      if (el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'TEXTAREA') {
+        if (el.id !== 'landSearch' && el.id !== 'landSelect') {
+          el.disabled = true;
+        }
+      }
     });
     var modal = document.getElementById('edit-modal');
     if (modal) modal.style.display = 'none';
+    var drawer = document.getElementById('drawer');
+    if (drawer) drawer.style.display = 'none';
     document.body.classList.add('view-only');
     var style = document.createElement('style');
     style.textContent = [
-      '.view-only .sync-bar button, .view-only .sync-bar input { display:none !important; }',
+      '.view-only .sync-bar .sync-left, .view-only .sync-bar button#btn-save-all, .view-only .sync-bar button#btn-push, .view-only .sync-bar button#btn-pull, .view-only .sync-bar input, .view-only .sync-bar button#btn-save-token { display:none !important; }',
       '.view-only #landRoster, .view-only #landDept, .view-only #landFocus, .view-only #landVector, .view-only #landBracket { display:inline-block !important; }',
+      '.view-only a.home-link, .view-only a.back, .view-only #shareBtn { display:none !important; }',
       '.view-only #drawer, .view-only #edit-modal { display:none !important; }',
-      '.view-only button.edit, .view-only button.del, .view-only button.edit-class, .view-only button.row-btn { display:none !important; }',
-      '.view-only #addPerson, .view-only #savePerson, .view-only #deletePerson, .view-only #addClass, .view-only #sumEdit, .view-only #btn-save-all, .view-only #btn-push, .view-only #btn-pull, .view-only #btn-save-token, .view-only #resetBtn, .view-only #importBtn { display:none !important; }'
+      '.view-only button.edit, .view-only button.del, .view-only button.edit-class, .view-only button.del-class, .view-only button.row-btn, .view-only button.tiny { display:none !important; }',
+      '.view-only #addPerson, .view-only #savePerson, .view-only #deletePerson, .view-only #addClass, .view-only #sumEdit, .view-only #btn-save-all, .view-only #btn-push, .view-only #btn-pull, .view-only #btn-save-token, .view-only #resetBtn, .view-only #importBtn { display:none !important; }',
+      '.view-only input, .view-only select, .view-only textarea { pointer-events:none; }',
+      '.view-only #landSearch, .view-only #landSelect { pointer-events:auto; }'
     ].join('\n');
     document.head.appendChild(style);
   }
@@ -65,6 +75,8 @@
   }
 
   function addShareButton() {
+    if (isView) return;
+
     var header = document.querySelector('header');
     if (!header || document.getElementById('shareBtn')) return;
     var btn = document.createElement('button');
